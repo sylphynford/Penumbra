@@ -2,8 +2,8 @@ GLOBAL_VAR(lordsurname)
 GLOBAL_LIST_EMPTY(lord_titles)
 
 /datum/job/roguetown/lord
-	title = "Grand Duke"
-	f_title = "Grand Duchess"
+	title = "Baron"
+	f_title = "Baroness"
 	flag = LORD
 	department_flag = NOBLEMEN
 	faction = "Station"
@@ -56,11 +56,11 @@ GLOBAL_LIST_EMPTY(lord_titles)
 		SSticker.rulermob = L
 		switch(L.pronouns)
 			if(SHE_HER)
-				SSticker.rulertype = "Grand Duchess"
+				SSticker.rulertype = "Baroness"
 			if(THEY_THEM_F)
-				SSticker.rulertype = "Grand Duchess"
+				SSticker.rulertype = "Baroness"
 			else
-				SSticker.rulertype = "Grand Duke"
+				SSticker.rulertype = "Baron"
 		to_chat(world, "<b><span class='notice'><span class='big'>[L.real_name] is [SSticker.rulertype] of Azure Peak.</span></span></b>")
 		if(STATION_TIME_PASSED() <= 10 MINUTES) //Late to the party? Stuck with default colors, sorry!
 			addtimer(CALLBACK(L, TYPE_PROC_REF(/mob, lord_color_choice)), 50)

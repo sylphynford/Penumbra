@@ -44,10 +44,10 @@
 	excludefromjob = list("Cook")
 
 /datum/objective_item/steal/rogue/crown
-	name = "the Lord's crown."
+	name = "the Barons crown."
 	targetitem = /obj/item/clothing/head/roguetown/crown/serpcrown
 	difficulty = 3
-	excludefromjob = list("Grand Duke", "Consort", "Royal Guard")
+	excludefromjob = list("Baron", "Consort", "Royal Guard")
 
 
 ////////////////////////////////////////////////////////////
