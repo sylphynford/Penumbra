@@ -75,11 +75,9 @@
 /area/rogue/under/cave)
 "aD" = (
 /obj/structure/bars/pipe{
-	dir = 1
+	dir = 8
 	},
-/turf/open/lava/acid{
-	name = "dirty coolant"
-	},
+/turf/open/floor/rogue/metal/barograte/open,
 /area/rogue/outdoors/woods)
 "aE" = (
 /obj/structure/fermenting_barrel/random/beer,
@@ -191,16 +189,22 @@
 /turf/open/floor/rogue/dirt,
 /area/rogue/outdoors/woods)
 "bw" = (
-/obj/structure/fence,
-/turf/open/floor/rogue/metal/barograte,
-/area/rogue/outdoors/woods)
+/turf/open/floor/rogue/metal{
+	dir = 1
+	},
+/area/rogue/under/town/basement)
 "bx" = (
 /obj/effect/decal/cobbleedge,
 /turf/open/floor/rogue/cobble/mossy,
 /area/rogue/indoors/shelter/woods)
 "by" = (
-/obj/structure/fence/corner,
-/turf/open/floor/rogue/metal/barograte,
+/obj/structure/bars/pipe{
+	dir = 1;
+	pixel_y = -8
+	},
+/turf/open/lava/acid{
+	name = "dirty coolant"
+	},
 /area/rogue/outdoors/woods)
 "bA" = (
 /obj/structure/closet/crate/chest/wicker,
@@ -250,7 +254,6 @@
 /area/rogue/indoors/shelter/woods)
 "bS" = (
 /turf/closed/wall/mineral/rogue/pipe{
-	dir = 4;
 	icon_state = "iron_line"
 	},
 /area/rogue/indoors)
@@ -283,12 +286,12 @@
 /turf/open/lava/acid,
 /area/rogue/under/cave/dungeon1/gethsmane)
 "cg" = (
-/obj/structure/bars/pipe{
+/obj/structure/stairs/stone{
 	dir = 1;
-	pixel_x = 25
+	icon_state = "stonestairs"
 	},
-/turf/open/transparent/openspace,
-/area/rogue/outdoors/mountains)
+/turf/open/floor/rogue/cobble,
+/area/rogue/outdoors/woods)
 "ci" = (
 /obj/structure/closet/crate/chest,
 /obj/item/reagent_containers/food/snacks/grown/onion/rogue,
@@ -386,18 +389,6 @@
 	},
 /turf/open/floor/rogue/greenstone,
 /area/rogue/under/cave/dungeon1/gethsmane/inner)
-"cE" = (
-/obj/structure/bars/pipe{
-	dir = 8
-	},
-/obj/structure/bars/pipe{
-	dir = 4
-	},
-/obj/structure/bars/pipe{
-	pixel_x = -11
-	},
-/turf/closed/wall/mineral/rogue/pipe,
-/area/rogue/under/town/basement)
 "cN" = (
 /obj/effect/decal/cobbleedge{
 	dir = 8
@@ -409,12 +400,9 @@
 /area/rogue/under/town/basement)
 "cR" = (
 /obj/structure/bars/pipe{
-	dir = 8;
-	pixel_x = 8
+	pixel_x = -11
 	},
-/turf/open/lava/acid{
-	name = "dirty coolant"
-	},
+/turf/open/floor/rogue/dirt,
 /area/rogue/outdoors/woods)
 "cT" = (
 /obj/structure/fluff/railing/border{
@@ -505,11 +493,10 @@
 /turf/open/water/swamp,
 /area/rogue/under/cavewet/bogcaves)
 "dJ" = (
-/obj/structure/bars/pipe{
-	dir = 1;
-	pixel_x = 25
+/obj/structure/fence{
+	dir = 4
 	},
-/turf/closed/wall/mineral/rogue/pipe,
+/turf/open/floor/rogue/metal/barograte,
 /area/rogue/outdoors/woods)
 "dN" = (
 /obj/machinery/conveyor/auto{
@@ -550,11 +537,11 @@
 /turf/open/floor/rogue/dirt,
 /area/rogue/outdoors/woods)
 "em" = (
-/obj/structure/bars/pipe{
-	dir = 8
+/turf/closed/wall/mineral/rogue/pipe{
+	dir = 4;
+	icon_state = "iron_corner"
 	},
-/turf/open/floor/rogue/metal/barograte,
-/area/rogue/outdoors/woods)
+/area/rogue/indoors)
 "en" = (
 /turf/open/floor/rogue/dirt,
 /area/rogue/under/cavewet/bogcaves)
@@ -668,10 +655,10 @@
 /area/rogue/under/cave/dungeon1/gethsmane/inner)
 "fo" = (
 /obj/structure/bars/pipe{
-	pixel_x = -11
+	dir = 8
 	},
-/turf/open/lava{
-	name = "molten slag"
+/turf/open/floor/rogue/metal{
+	dir = 1
 	},
 /area/rogue/under/town/basement)
 "fp" = (
@@ -795,10 +782,10 @@
 /turf/open/water/pond,
 /area/rogue/outdoors/woods)
 "fZ" = (
-/obj/structure/fluff/walldeco/innsign{
-	pixel_y = 22
+/obj/structure/bars/pipe{
+	pixel_x = -11
 	},
-/turf/open/floor/rogue/dirt,
+/turf/closed/mineral/random/rogue,
 /area/rogue/outdoors/woods)
 "ga" = (
 /obj/machinery/conveyor/auto{
@@ -875,9 +862,8 @@
 /turf/open/floor/rogue/ruinedwood,
 /area/rogue/indoors)
 "gA" = (
-/turf/open/lava/acid{
-	name = "dirty coolant"
-	},
+/obj/structure/fence,
+/turf/open/floor/rogue/metal/barograte,
 /area/rogue/outdoors/woods)
 "gC" = (
 /turf/open/water/river{
@@ -895,7 +881,7 @@
 /area/rogue/under/cave/dungeon1/gethsmane/inner)
 "gG" = (
 /turf/closed/wall/mineral/rogue/pipe{
-	icon_state = "iron_joint";
+	icon_state = "iron_corner";
 	dir = 8
 	},
 /area/rogue/outdoors/woods)
@@ -972,9 +958,8 @@
 /turf/open/floor/rogue/greenstone,
 /area/rogue/under/cave/dungeon1/gethsmane)
 "hw" = (
-/obj/machinery/light/rogue/smelter/great,
-/turf/open/floor/rogue/metal/barograte/open,
-/area/rogue/under/town/basement)
+/turf/closed/wall/mineral/rogue/pipe,
+/area/rogue/outdoors/mountains)
 "hx" = (
 /obj/structure/fluff/signage{
 	name = "AZURE PEAK - EAST"
@@ -1018,10 +1003,9 @@
 /turf/open/floor/rogue/twig,
 /area/rogue/indoors/shelter/woods)
 "hZ" = (
-/obj/structure/bars/pipe{
-	pixel_x = -11
+/turf/open/lava/acid{
+	name = "dirty coolant"
 	},
-/turf/closed/wall/mineral/rogue/pipe,
 /area/rogue/under/town/basement)
 "ii" = (
 /turf/open/water/river{
@@ -1066,6 +1050,9 @@
 	},
 /turf/open/floor/rogue/woodturned,
 /area/rogue/indoors/shelter/woods)
+"is" = (
+/turf/open/floor/rogue/concrete,
+/area/rogue/outdoors/mountains)
 "it" = (
 /obj/machinery/light/rogue/torchholder/r,
 /obj/structure/roguemachine/scomm/r,
@@ -1125,10 +1112,10 @@
 /turf/open/floor/rogue/ruinedwood/spiral,
 /area/rogue/outdoors/woods)
 "jq" = (
-/turf/closed/wall/mineral/rogue/pipe{
-	icon_state = "iron_corner"
+/turf/open/lava/acid{
+	name = "dirty coolant"
 	},
-/area/rogue/indoors)
+/area/rogue/outdoors/woods)
 "jr" = (
 /obj/structure/bars/pipe{
 	dir = 8
@@ -1146,17 +1133,12 @@
 /area/rogue/under/town/basement)
 "jw" = (
 /obj/structure/bars/pipe{
-	dir = 1;
-	pixel_x = 25
+	dir = 4
 	},
-/obj/structure/bars/pipe{
-	dir = 1;
-	pixel_x = 25
+/turf/open/floor/rogue/metal{
+	dir = 1
 	},
-/turf/open/lava/acid{
-	name = "dirty coolant"
-	},
-/area/rogue/outdoors/woods)
+/area/rogue/under/town/basement)
 "jx" = (
 /obj/structure/closet/dirthole/closed/loot,
 /obj/effect/spawner/lootdrop/roguetown/sewers,
@@ -1478,8 +1460,10 @@
 /obj/structure/bars/pipe{
 	pixel_x = -11
 	},
-/turf/closed/mineral/rogue/bedrock,
-/area/rogue/outdoors/woods)
+/turf/open/lava{
+	name = "molten slag"
+	},
+/area/rogue/under/town/basement)
 "lI" = (
 /obj/machinery/conveyor/auto{
 	dir = 8;
@@ -1568,11 +1552,19 @@
 /turf/closed/mineral/random/rogue/high,
 /area/rogue/under/cavewet/bogcaves)
 "mj" = (
-/turf/closed/wall/mineral/rogue/pipe{
-	icon_state = "iron_corner";
+/obj/structure/bars/pipe{
+	dir = 8
+	},
+/obj/structure/bars/pipe{
+	pixel_x = -11
+	},
+/obj/structure/bars/pipe{
 	dir = 4
 	},
-/area/rogue/outdoors/woods)
+/turf/open/lava{
+	name = "molten slag"
+	},
+/area/rogue/under/town/basement)
 "mk" = (
 /obj/structure/table/wood{
 	dir = 10;
@@ -1612,7 +1604,7 @@
 /obj/structure/bars/pipe{
 	pixel_x = -11
 	},
-/turf/closed/mineral/random/rogue,
+/turf/closed/mineral/rogue/bedrock,
 /area/rogue/outdoors/woods)
 "my" = (
 /obj/effect/decal/cobbleedge{
@@ -1904,11 +1896,15 @@
 /area/rogue/under/town/basement)
 "pv" = (
 /obj/structure/bars/pipe{
-	dir = 4;
-	icon_state = "pipe"
+	pixel_x = -11
 	},
-/turf/closed/wall/mineral/rogue/pipe,
-/area/rogue/outdoors/woods)
+/obj/structure/bars/pipe{
+	dir = 8
+	},
+/turf/open/lava{
+	name = "molten slag"
+	},
+/area/rogue/under/town/basement)
 "px" = (
 /obj/structure/chair/wood/rogue/chair3{
 	dir = 8
@@ -1995,12 +1991,10 @@
 /turf/open/floor/rogue/dirt/road,
 /area/rogue/under/town/basement)
 "qe" = (
-/obj/structure/bars/pipe{
-	dir = 4;
-	icon_state = "pipe"
+/turf/open/lava{
+	name = "molten slag"
 	},
-/turf/open/transparent/openspace,
-/area/rogue/outdoors/mountains)
+/area/rogue/under/town/basement)
 "qj" = (
 /turf/closed/wall/mineral/rogue/tent{
 	dir = 8
@@ -2164,11 +2158,11 @@
 /turf/closed/wall/mineral/rogue/decowood,
 /area/rogue/outdoors/beach/forest)
 "ry" = (
-/obj/structure/bars/pipe{
-	dir = 1
+/turf/closed/wall/mineral/rogue/pipe{
+	dir = 4;
+	icon_state = "iron_line"
 	},
-/turf/closed/mineral/random/rogue,
-/area/rogue/outdoors/woods)
+/area/rogue/indoors)
 "rz" = (
 /turf/closed/wall/mineral/rogue/wood,
 /area/rogue/indoors/shelter/woods)
@@ -2249,8 +2243,11 @@
 /turf/open/floor/rogue/twig,
 /area/rogue/outdoors/mountains)
 "se" = (
-/turf/closed/wall/mineral/rogue/pipe,
-/area/rogue/under/town/basement)
+/turf/closed/wall/mineral/rogue/pipe{
+	icon_state = "iron_corner";
+	dir = 4
+	},
+/area/rogue/outdoors/woods)
 "sh" = (
 /obj/structure/bars/pipe{
 	dir = 5;
@@ -2533,12 +2530,11 @@
 /turf/open/floor/rogue/dirt,
 /area/rogue/under/cave/dungeon1/gethsmane)
 "uu" = (
-/obj/structure/bars/pipe{
-	dir = 4;
-	icon_state = "pipe"
+/turf/closed/wall/mineral/rogue/pipe{
+	icon_state = "iron_corner";
+	dir = 8
 	},
-/turf/open/floor/rogue/metal,
-/area/rogue/outdoors/woods)
+/area/rogue/indoors)
 "uw" = (
 /obj/structure/chair/wood/rogue/chair3{
 	dir = 4
@@ -2660,10 +2656,15 @@
 /area/rogue/under/town/basement)
 "vn" = (
 /obj/structure/bars/pipe{
-	dir = 1
+	dir = 1;
+	pixel_x = 25
+	},
+/obj/structure/bars/pipe{
+	dir = 1;
+	pixel_x = 25
 	},
 /turf/closed/wall/mineral/rogue/pipe,
-/area/rogue/under/town/basement)
+/area/rogue/outdoors/woods)
 "vo" = (
 /turf/open/floor/rogue/dirt,
 /area/rogue/indoors/shelter/woods)
@@ -2680,18 +2681,10 @@
 /area/rogue/under/cave/dungeon1/gethsmane/inner)
 "vt" = (
 /obj/structure/bars/pipe{
-	pixel_y = 16
+	pixel_x = -11
 	},
-/obj/structure/bars/pipe,
-/obj/structure/bars/pipe{
-	dir = 9;
-	pixel_x = 19
-	},
-/obj/structure/bars/pipe{
-	dir = 10
-	},
-/turf/open/floor/rogue/metal/barograte/open,
-/area/rogue/indoors)
+/turf/closed/wall/mineral/rogue/pipe,
+/area/rogue/under/town/basement)
 "vu" = (
 /obj/structure/fermenting_barrel/water,
 /turf/open/floor/rogue/ruinedwood{
@@ -2767,7 +2760,13 @@
 /obj/structure/bars/pipe{
 	dir = 8
 	},
-/turf/open/floor/rogue/metal/barograte,
+/obj/structure/bars/pipe{
+	dir = 4
+	},
+/obj/structure/bars/pipe{
+	pixel_x = -11
+	},
+/turf/closed/wall/mineral/rogue/pipe,
 /area/rogue/under/town/basement)
 "ws" = (
 /obj/item/natural/stone{
@@ -2788,9 +2787,11 @@
 "wz" = (
 /obj/structure/bars/pipe{
 	dir = 1;
-	pixel_y = -8
+	pixel_x = 25
 	},
-/turf/closed/wall/mineral/rogue/pipe,
+/turf/open/lava/acid{
+	name = "dirty coolant"
+	},
 /area/rogue/outdoors/woods)
 "wA" = (
 /obj/structure/fluff/railing/wood{
@@ -2891,11 +2892,10 @@
 /turf/open/floor/rogue/dirt,
 /area/rogue/outdoors/woods)
 "xI" = (
-/obj/structure/bars/pipe{
-	dir = 8
+/turf/closed/wall/mineral/rogue/pipe{
+	icon_state = "iron_corner"
 	},
-/turf/closed/wall/mineral/rogue/pipe,
-/area/rogue/outdoors/woods)
+/area/rogue/indoors)
 "xO" = (
 /obj/item/natural/stone{
 	pixel_y = -16;
@@ -2958,12 +2958,12 @@
 /area/rogue/under/cave/dungeon1/gethsmane/inner)
 "ym" = (
 /obj/structure/bars/pipe{
-	dir = 4;
-	icon_state = "pipe"
+	dir = 1;
+	pixel_x = 25
 	},
 /obj/structure/bars/pipe{
-	dir = 6;
-	pixel_y = 16
+	dir = 1;
+	pixel_x = 25
 	},
 /turf/open/lava/acid{
 	name = "dirty coolant"
@@ -2979,11 +2979,12 @@
 /turf/closed/mineral/random/rogue/high,
 /area/rogue/outdoors/woods)
 "yB" = (
-/turf/closed/wall/mineral/rogue/pipe{
-	icon_state = "iron_joint";
-	dir = 8
+/obj/structure/bars/pipe{
+	dir = 1;
+	pixel_x = 25
 	},
-/area/rogue/indoors)
+/turf/closed/wall/mineral/rogue/pipe,
+/area/rogue/outdoors/woods)
 "yC" = (
 /obj/structure/stairs/stone{
 	dir = 8
@@ -3011,6 +3012,21 @@
 	},
 /turf/open/floor/rogue/cobble/mossy,
 /area/rogue/under/town/basement)
+"yN" = (
+/obj/structure/bars/pipe{
+	dir = 9
+	},
+/obj/structure/bars/pipe{
+	dir = 1;
+	pixel_x = 25
+	},
+/obj/structure/bars/pipe{
+	dir = 8
+	},
+/turf/open/lava/acid{
+	name = "dirty coolant"
+	},
+/area/rogue/outdoors/woods)
 "yO" = (
 /obj/structure/flora/newtree,
 /turf/open/floor/rogue/dirt,
@@ -3149,17 +3165,18 @@
 /area/rogue/outdoors/woods)
 "Ad" = (
 /obj/structure/bars/pipe{
-	dir = 4
+	dir = 8
 	},
 /obj/structure/bars/pipe{
-	dir = 8
+	dir = 4
 	},
 /obj/structure/bars/pipe{
 	pixel_x = -11
 	},
-/turf/open/lava{
-	name = "molten slag"
+/obj/structure/bars/pipe{
+	dir = 9
 	},
+/turf/open/floor/rogue/metal/barograte/open,
 /area/rogue/under/town/basement)
 "Af" = (
 /obj/item/book/rogue/fishing,
@@ -3179,13 +3196,10 @@
 /area/rogue/under/town/basement)
 "Ak" = (
 /obj/structure/bars/pipe{
-	pixel_x = -11
+	dir = 8
 	},
-/obj/structure/bars/pipe{
-	pixel_x = -11
-	},
-/turf/closed/wall/mineral/rogue/pipe,
-/area/rogue/under/town/basement)
+/turf/open/transparent/openspace,
+/area/rogue/outdoors/mountains)
 "Al" = (
 /obj/item/restraints/legcuffs/beartrap/armed/camouflage,
 /turf/open/water/swamp/deep,
@@ -3277,7 +3291,16 @@
 /obj/structure/bars/pipe{
 	dir = 8
 	},
-/turf/open/floor/rogue/metal/barograte/open,
+/obj/structure/bars/pipe{
+	dir = 9
+	},
+/obj/structure/bars/pipe{
+	dir = 1;
+	pixel_x = 25
+	},
+/turf/open/lava/acid{
+	name = "dirty coolant"
+	},
 /area/rogue/outdoors/woods)
 "AN" = (
 /obj/structure/table/wood{
@@ -3294,7 +3317,9 @@
 /area/rogue/under/cave/dungeon1/gethsmane/inner)
 "AV" = (
 /obj/structure/ladder,
-/turf/open/floor/rogue/cobble,
+/turf/open/floor/rogue/metal{
+	dir = 1
+	},
 /area/rogue/under/town/basement)
 "AW" = (
 /obj/structure/fluff/railing/border{
@@ -3318,8 +3343,16 @@
 /turf/open/floor/rogue/dirt/road,
 /area/rogue/under/town/basement)
 "Bb" = (
-/turf/open/floor/rogue/concrete,
-/area/rogue/outdoors/mountains)
+/obj/structure/bars/pipe{
+	dir = 4
+	},
+/obj/structure/bars/pipe{
+	dir = 8
+	},
+/turf/open/floor/rogue/metal{
+	dir = 1
+	},
+/area/rogue/under/town/basement)
 "Bf" = (
 /obj/machinery/light/rogue/firebowl/stump,
 /turf/open/floor/rogue/cobble,
@@ -3341,17 +3374,16 @@
 /turf/open/floor/rogue/blocks,
 /area/rogue/under/town/basement)
 "Bt" = (
-/turf/closed/wall/mineral/rogue/pipe{
-	icon_state = "iron_corner";
-	dir = 1
+/obj/machinery/light/roguestreet/midlamp{
+	pixel_y = 10
 	},
+/turf/open/floor/rogue/metal/barograte/open,
 /area/rogue/outdoors/woods)
 "Bv" = (
 /obj/structure/bars/pipe{
-	dir = 1;
-	pixel_y = -8
+	dir = 8
 	},
-/turf/open/floor/rogue/metal/barograte/open,
+/turf/open/floor/rogue/metal/barograte,
 /area/rogue/outdoors/woods)
 "Bx" = (
 /obj/machinery/light/rogue/torchholder/l,
@@ -3444,14 +3476,11 @@
 /area/rogue/outdoors/beach/forest)
 "BY" = (
 /obj/structure/bars/pipe{
-	dir = 1;
-	pixel_x = 25
+	dir = 1
 	},
-/obj/structure/bars/pipe{
-	dir = 1;
-	pixel_x = 25
+/turf/open/lava/acid{
+	name = "dirty coolant"
 	},
-/turf/closed/wall/mineral/rogue/pipe,
 /area/rogue/outdoors/woods)
 "Cc" = (
 /obj/item/natural/stone,
@@ -3473,9 +3502,14 @@
 /turf/open/floor/rogue/naturalstone,
 /area/rogue/under/town/basement)
 "Ci" = (
-/obj/structure/fence/corner,
-/turf/open/floor/rogue/metal/barograte,
-/area/rogue/indoors)
+/obj/structure/bars/pipe{
+	dir = 4
+	},
+/obj/structure/bars/pipe{
+	pixel_x = -11
+	},
+/turf/open/floor/rogue/metal/barograte/open,
+/area/rogue/under/town/basement)
 "Cn" = (
 /obj/structure/fluff/railing/border{
 	dir = 4
@@ -3535,11 +3569,8 @@
 /turf/open/floor/rogue/dirt,
 /area/rogue/under/cave/dungeon1/gethsmane/inner)
 "CL" = (
-/obj/structure/bars/pipe{
-	dir = 8
-	},
-/turf/open/transparent/openspace,
-/area/rogue/outdoors/mountains)
+/turf/open/floor/rogue/metal/barograte,
+/area/rogue/under/town/basement)
 "CM" = (
 /obj/effect/decal/cobbleedge{
 	dir = 9
@@ -3628,20 +3659,14 @@
 /turf/open/floor/rogue/ruinedwood,
 /area/rogue/indoors)
 "DI" = (
-/obj/structure/bars/pipe{
-	dir = 8
-	},
-/turf/closed/wall/mineral/rogue/pipe{
-	dir = 4;
-	icon_state = "iron_line"
-	},
-/area/rogue/indoors)
+/obj/machinery/light/rogue/smelter/great,
+/turf/open/floor/rogue/metal/barograte,
+/area/rogue/under/town/basement)
 "DL" = (
-/obj/structure/stairs/stone{
-	dir = 1;
-	icon_state = "stonestairs"
+/turf/closed/wall/mineral/rogue/pipe{
+	icon_state = "iron_corner";
+	dir = 1
 	},
-/turf/open/floor/rogue/cobble,
 /area/rogue/outdoors/woods)
 "DP" = (
 /obj/structure/bars/pipe,
@@ -3686,6 +3711,10 @@
 "Eg" = (
 /obj/structure/closet/dirthole/grave,
 /turf/open/floor/rogue/dirt/road,
+/area/rogue/outdoors/woods)
+"Ei" = (
+/obj/structure/fence/corner,
+/turf/open/floor/rogue/metal,
 /area/rogue/outdoors/woods)
 "Ek" = (
 /obj/structure/flora/newtree,
@@ -3782,8 +3811,12 @@
 /turf/open/floor/rogue/ruinedwood/spiral,
 /area/rogue/outdoors/woods)
 "Fg" = (
-/turf/open/floor/rogue/metal/barograte,
-/area/rogue/under/town/basement)
+/obj/structure/bars/pipe{
+	dir = 4;
+	icon_state = "pipe"
+	},
+/turf/closed/wall/mineral/rogue/pipe,
+/area/rogue/outdoors/mountains)
 "Fh" = (
 /obj/machinery/conveyor/auto{
 	dir = 4;
@@ -3872,13 +3905,15 @@
 /area/rogue/indoors/shelter/woods)
 "FJ" = (
 /obj/structure/bars/pipe{
-	dir = 8
+	dir = 1
 	},
 /obj/structure/bars/pipe{
-	dir = 4
+	dir = 8
 	},
-/turf/open/floor/rogue/metal/barograte,
-/area/rogue/under/town/basement)
+/turf/open/lava/acid{
+	name = "dirty coolant"
+	},
+/area/rogue/outdoors/woods)
 "FL" = (
 /obj/item/chair/stool/bar/rogue/crafted,
 /turf/open/floor/rogue/dirt/road,
@@ -3907,7 +3942,12 @@
 /turf/open/water/sewer,
 /area/rogue/under/cave/dungeon1/gethsmane/inner)
 "Ge" = (
-/turf/closed/wall/mineral/rogue/pipe,
+/obj/structure/bars/pipe{
+	dir = 5
+	},
+/turf/open/lava/acid{
+	name = "dirty coolant"
+	},
 /area/rogue/outdoors/woods)
 "Gi" = (
 /turf/open/transparent/openspace,
@@ -3931,8 +3971,9 @@
 /turf/open/floor/rogue/hexstone,
 /area/rogue/under/town/basement)
 "Gw" = (
-/obj/structure/fence/corner{
-	dir = 9
+/obj/structure/bars/pipe{
+	dir = 1;
+	pixel_y = -8
 	},
 /turf/open/floor/rogue/metal/barograte,
 /area/rogue/outdoors/woods)
@@ -3971,11 +4012,12 @@
 /turf/open/floor/rogue/greenstone,
 /area/rogue/under/town/basement)
 "GR" = (
+/obj/structure/fence,
 /obj/structure/bars/pipe{
-	dir = 4;
-	icon_state = "pipe"
+	dir = 1;
+	pixel_y = -8
 	},
-/turf/open/floor/rogue/metal/barograte,
+/turf/open/floor/rogue/metal,
 /area/rogue/outdoors/woods)
 "GT" = (
 /turf/open/water/ocean,
@@ -4020,23 +4062,29 @@
 /area/rogue/outdoors/beach/forest)
 "Hi" = (
 /obj/structure/bars/pipe{
-	dir = 4;
-	icon_state = "pipe"
+	dir = 8
 	},
-/turf/open/floor/rogue/rooftop{
-	dir = 2;
-	icon_state = "roofg"
-	},
-/area/rogue/outdoors/mountains)
-"Hm" = (
 /turf/open/floor/rogue/metal,
 /area/rogue/outdoors/woods)
-"Hp" = (
+"Hm" = (
 /obj/structure/bars/pipe{
-	dir = 1
+	pixel_y = 16
 	},
-/turf/closed/mineral/rogue/bedrock,
-/area/rogue/outdoors/woods)
+/obj/structure/bars/pipe,
+/obj/structure/bars/pipe{
+	dir = 9;
+	pixel_x = 19
+	},
+/obj/structure/bars/pipe{
+	dir = 10
+	},
+/turf/open/floor/rogue/metal/barograte/open,
+/area/rogue/indoors)
+"Hp" = (
+/turf/closed/wall/mineral/rogue/pipe{
+	icon_state = "iron_joint"
+	},
+/area/rogue/indoors)
 "Hq" = (
 /obj/structure/flora/roguegrass/water/reeds,
 /turf/open/water/swamp/deep,
@@ -4095,10 +4143,8 @@
 /turf/closed/mineral/random/rogue,
 /area/rogue/under/town/basement)
 "HJ" = (
-/obj/machinery/light/roguestreet/midlamp{
-	pixel_y = 10
-	},
-/turf/open/floor/rogue/metal/barograte/open,
+/obj/structure/fence/corner,
+/turf/open/floor/rogue/metal/barograte,
 /area/rogue/outdoors/woods)
 "HK" = (
 /obj/structure/flora/roguegrass/water/reeds,
@@ -4116,14 +4162,8 @@
 /turf/open/floor/rogue/dirt,
 /area/rogue/under/town/basement)
 "HR" = (
-/obj/structure/bars/pipe{
-	dir = 8
-	},
-/obj/structure/bars/pipe{
-	dir = 4
-	},
 /turf/closed/wall/mineral/rogue/pipe,
-/area/rogue/under/town/basement)
+/area/rogue/outdoors/woods)
 "HS" = (
 /obj/item/grown/log/tree/small{
 	pixel_y = 7
@@ -4162,10 +4202,8 @@
 	dir = 1;
 	pixel_y = -8
 	},
-/turf/open/lava/acid{
-	name = "dirty coolant"
-	},
-/area/rogue/outdoors/woods)
+/turf/open/transparent/openspace,
+/area/rogue/outdoors/mountains)
 "Iq" = (
 /obj/structure/handcart,
 /obj/item/natural/stone,
@@ -4220,14 +4258,9 @@
 /turf/open/floor/rogue/dirt,
 /area/rogue/under/cave)
 "IL" = (
-/obj/structure/bars/pipe{
-	dir = 4
-	},
-/obj/structure/bars/pipe{
-	dir = 8
-	},
+/obj/structure/fence/corner,
 /turf/open/floor/rogue/metal/barograte,
-/area/rogue/under/town/basement)
+/area/rogue/indoors)
 "IO" = (
 /obj/structure/bars/steel{
 	max_integrity = 500
@@ -4269,6 +4302,10 @@
 /obj/structure/bars/pipe,
 /turf/open/floor/rogue/dirt,
 /area/rogue/under/cave/dungeon1/gethsmane)
+"Jc" = (
+/obj/machinery/light/rogue/smelter/great,
+/turf/open/floor/rogue/metal/barograte/open,
+/area/rogue/under/town/basement)
 "Jd" = (
 /obj/structure/closet/dirthole,
 /turf/open/floor/rogue/dirt/road,
@@ -4298,14 +4335,11 @@
 /area/rogue/outdoors/woods)
 "Jn" = (
 /obj/structure/bars/pipe{
-	dir = 8
+	dir = 4;
+	icon_state = "pipe"
 	},
-/obj/structure/bars/pipe{
-	dir = 4
-	},
-/obj/machinery/light/rogue/smelter/great,
-/turf/open/floor/rogue/metal/barograte/open,
-/area/rogue/under/town/basement)
+/turf/open/transparent/openspace,
+/area/rogue/outdoors/mountains)
 "Jo" = (
 /obj/structure/fluff/railing/border{
 	dir = 8
@@ -4368,11 +4402,12 @@
 /area/rogue/outdoors/beach/forest)
 "JO" = (
 /obj/structure/bars/pipe{
-	dir = 1;
-	pixel_y = -8
+	pixel_x = -11
 	},
-/turf/open/transparent/openspace,
-/area/rogue/outdoors/mountains)
+/turf/open/lava/acid{
+	name = "dirty coolant"
+	},
+/area/rogue/under/town/basement)
 "JQ" = (
 /turf/closed/wall/mineral/rogue/pipe{
 	icon_state = "iron_corner";
@@ -4467,7 +4502,8 @@
 /area/rogue/under/cavewet/bogcaves)
 "KG" = (
 /turf/closed/wall/mineral/rogue/pipe{
-	icon_state = "iron_line"
+	icon_state = "iron_line";
+	dir = 4
 	},
 /area/rogue/indoors)
 "KI" = (
@@ -4499,6 +4535,12 @@
 /obj/structure/fluff/alch,
 /turf/open/floor/rogue/ruinedwood,
 /area/rogue/indoors/shelter/woods)
+"KS" = (
+/turf/closed/wall/mineral/rogue/pipe{
+	icon_state = "iron_joint";
+	dir = 8
+	},
+/area/rogue/outdoors/woods)
 "KW" = (
 /obj/machinery/conveyor/auto{
 	dir = 1;
@@ -4836,15 +4878,14 @@
 /turf/closed/wall/mineral/rogue/wooddark/vertical,
 /area/rogue/indoors)
 "NG" = (
-/obj/structure/fence{
-	dir = 4
-	},
 /obj/structure/bars/pipe{
-	dir = 4;
-	icon_state = "pipe"
+	dir = 8;
+	pixel_x = 8
 	},
-/turf/open/floor/rogue/metal/barograte,
-/area/rogue/indoors)
+/turf/open/lava/acid{
+	name = "dirty coolant"
+	},
+/area/rogue/outdoors/woods)
 "NK" = (
 /obj/structure/glowshroom,
 /turf/open/floor/rogue/dirt,
@@ -4918,7 +4959,8 @@
 /area/rogue/outdoors/beach/forest)
 "OK" = (
 /obj/structure/bars/pipe{
-	dir = 8
+	dir = 4;
+	icon_state = "pipe"
 	},
 /turf/open/floor/rogue/metal,
 /area/rogue/outdoors/woods)
@@ -4955,11 +4997,14 @@
 /area/rogue/under/cave/dungeon1/gethsmane/inner)
 "Pf" = (
 /obj/structure/bars/pipe{
-	pixel_y = 16
+	dir = 4;
+	icon_state = "pipe"
 	},
-/obj/structure/bars/pipe,
-/turf/open/floor/rogue/metal/barograte/open,
-/area/rogue/indoors)
+/turf/open/floor/rogue/rooftop{
+	dir = 2;
+	icon_state = "roofg"
+	},
+/area/rogue/outdoors/mountains)
 "Ph" = (
 /obj/machinery/conveyor/auto{
 	color = "#755f48"
@@ -5046,13 +5091,19 @@
 /turf/open/floor/rogue/greenstone,
 /area/rogue/under/cave/dungeon1/gethsmane/inner)
 "PS" = (
-/obj/machinery/light/rogue/smelter/great,
-/turf/open/floor/rogue/metal/barograte,
+/obj/structure/bars/pipe{
+	dir = 8
+	},
+/turf/open/lava{
+	name = "molten slag"
+	},
 /area/rogue/under/town/basement)
 "PW" = (
-/turf/closed/wall/mineral/rogue/pipe{
-	icon_state = "iron_corner"
+/obj/structure/bars/pipe{
+	dir = 1;
+	pixel_y = -8
 	},
+/turf/closed/wall/mineral/rogue/pipe,
 /area/rogue/outdoors/woods)
 "PX" = (
 /turf/open/floor/rogue/concrete,
@@ -5076,7 +5127,7 @@
 "Qn" = (
 /turf/closed/wall/mineral/rogue/pipe{
 	icon_state = "iron_joint";
-	dir = 1
+	dir = 8
 	},
 /area/rogue/indoors)
 "Qo" = (
@@ -5124,9 +5175,6 @@
 /turf/open/floor/rogue/greenstone,
 /area/rogue/under/cave/dungeon1/gethsmane/inner)
 "Qy" = (
-/obj/structure/bars/pipe{
-	dir = 4
-	},
 /obj/structure/bars/pipe{
 	pixel_x = -11
 	},
@@ -5200,10 +5248,14 @@
 /turf/open/floor/rogue/cobble,
 /area/rogue/under/town/basement)
 "Rp" = (
-/turf/closed/wall/mineral/rogue/pipe{
-	icon_state = "iron_line";
+/obj/structure/fence{
 	dir = 4
 	},
+/obj/structure/bars/pipe{
+	dir = 4;
+	icon_state = "pipe"
+	},
+/turf/open/floor/rogue/metal/barograte,
 /area/rogue/indoors)
 "Rt" = (
 /turf/open/floor/rogue/greenstone,
@@ -5256,8 +5308,11 @@
 /turf/open/floor/rogue/dirt,
 /area/rogue/under/cavewet/bogcaves)
 "RM" = (
-/turf/closed/wall/mineral/rogue/pipe,
-/area/rogue/outdoors/mountains)
+/turf/closed/wall/mineral/rogue/pipe{
+	icon_state = "iron_joint";
+	dir = 1
+	},
+/area/rogue/indoors)
 "RO" = (
 /obj/machinery/light/rogue/campfire/densefire,
 /turf/open/floor/rogue/dirt/road,
@@ -5281,19 +5336,11 @@
 /area/rogue/indoors/shelter/woods)
 "RS" = (
 /obj/structure/bars/pipe{
-	dir = 8
+	dir = 4;
+	icon_state = "pipe"
 	},
-/obj/structure/bars/pipe{
-	dir = 4
-	},
-/obj/structure/bars/pipe{
-	pixel_x = -11
-	},
-/obj/structure/bars/pipe{
-	dir = 9
-	},
-/turf/open/floor/rogue/metal/barograte/open,
-/area/rogue/under/town/basement)
+/turf/closed/wall/mineral/rogue/pipe,
+/area/rogue/outdoors/woods)
 "RW" = (
 /obj/machinery/conveyor/auto{
 	dir = 9;
@@ -5335,18 +5382,10 @@
 /area/rogue/under/cave/dungeon1/gethsmane/inner)
 "Sh" = (
 /obj/structure/bars/pipe{
-	dir = 9
+	dir = 4;
+	icon_state = "pipe"
 	},
-/obj/structure/bars/pipe{
-	dir = 1;
-	pixel_x = 25
-	},
-/obj/structure/bars/pipe{
-	dir = 8
-	},
-/turf/open/lava/acid{
-	name = "dirty coolant"
-	},
+/turf/open/floor/rogue/metal/barograte,
 /area/rogue/outdoors/woods)
 "Si" = (
 /mob/living/simple_animal/hostile/retaliate/rogue/mudcrab,
@@ -5398,11 +5437,8 @@
 /turf/open/floor/rogue/greenstone,
 /area/rogue/under/cave/dungeon1/gethsmane/inner)
 "SK" = (
-/turf/closed/wall/mineral/rogue/pipe{
-	icon_state = "iron_corner";
-	dir = 8
-	},
-/area/rogue/indoors)
+/turf/closed/wall/mineral/rogue/pipe,
+/area/rogue/under/town/basement)
 "SO" = (
 /obj/structure/flora/roguegrass/water,
 /turf/open/water/swamp,
@@ -5449,17 +5485,21 @@
 /area/rogue/outdoors/woods)
 "Tm" = (
 /obj/structure/bars/pipe{
-	dir = 5
+	dir = 4;
+	icon_state = "pipe"
+	},
+/obj/structure/bars/pipe{
+	dir = 6;
+	pixel_y = 16
 	},
 /turf/open/lava/acid{
 	name = "dirty coolant"
 	},
 /area/rogue/outdoors/woods)
 "To" = (
-/obj/structure/fence{
-	dir = 4
+/turf/open/floor/rogue/metal{
+	dir = 1
 	},
-/turf/open/floor/rogue/metal/barograte,
 /area/rogue/outdoors/woods)
 "Tp" = (
 /turf/open/water/ocean/deep,
@@ -5655,14 +5695,11 @@
 /turf/open/water/pond,
 /area/rogue/outdoors/woods)
 "UM" = (
-/obj/structure/fence{
-	dir = 4
-	},
 /obj/structure/bars/pipe{
-	dir = 8
+	dir = 1
 	},
-/turf/open/floor/rogue/metal/barograte,
-/area/rogue/indoors)
+/turf/closed/mineral/rogue/bedrock,
+/area/rogue/outdoors/woods)
 "UR" = (
 /obj/structure/spacevine,
 /turf/open/water/swamp,
@@ -5700,18 +5737,10 @@
 /area/rogue/under/town/basement)
 "Vj" = (
 /obj/structure/bars/pipe{
-	dir = 8
-	},
-/obj/structure/bars/pipe{
-	dir = 9
-	},
-/obj/structure/bars/pipe{
 	dir = 1;
-	pixel_x = 25
+	pixel_y = -8
 	},
-/turf/open/lava/acid{
-	name = "dirty coolant"
-	},
+/turf/open/floor/rogue/metal/barograte/open,
 /area/rogue/outdoors/woods)
 "Vl" = (
 /obj/structure/gravemarker,
@@ -5720,11 +5749,18 @@
 /area/rogue/under/town/basement)
 "Vm" = (
 /obj/structure/bars/pipe{
-	dir = 1;
-	pixel_y = -8
+	dir = 4
 	},
-/turf/open/floor/rogue/metal/barograte,
-/area/rogue/outdoors/woods)
+/obj/structure/bars/pipe{
+	dir = 8
+	},
+/obj/structure/bars/pipe{
+	pixel_x = -11
+	},
+/turf/open/lava{
+	name = "molten slag"
+	},
+/area/rogue/under/town/basement)
 "Vn" = (
 /turf/open/water/cleanshallow,
 /area/rogue/outdoors/woods)
@@ -5770,12 +5806,10 @@
 /turf/open/floor/rogue/greenstone,
 /area/rogue/under/cave/dungeon1/gethsmane/inner)
 "VA" = (
-/obj/structure/fence,
-/obj/structure/bars/pipe{
-	dir = 1;
-	pixel_y = -8
+/obj/structure/fence/corner{
+	dir = 9
 	},
-/turf/open/floor/rogue/metal,
+/turf/open/floor/rogue/metal/barograte,
 /area/rogue/outdoors/woods)
 "VE" = (
 /obj/machinery/conveyor/auto{
@@ -5814,10 +5848,10 @@
 /area/rogue/outdoors/woods)
 "VV" = (
 /obj/structure/bars/pipe{
-	pixel_x = -11
+	dir = 1
 	},
-/turf/open/floor/rogue/dirt,
-/area/rogue/outdoors/woods)
+/turf/closed/wall/mineral/rogue/pipe,
+/area/rogue/under/town/basement)
 "VX" = (
 /obj/machinery/conveyor/auto{
 	dir = 8;
@@ -5911,11 +5945,14 @@
 /area/rogue/under/cave/dungeon1/gethsmane/inner)
 "WT" = (
 /obj/structure/bars/pipe{
-	dir = 4;
-	icon_state = "pipe"
+	pixel_y = 16
 	},
-/turf/closed/wall/mineral/rogue/pipe,
-/area/rogue/outdoors/mountains)
+/obj/structure/bars/pipe,
+/obj/structure/bars/pipe{
+	dir = 10
+	},
+/turf/open/floor/rogue/metal/barograte/open,
+/area/rogue/indoors)
 "WU" = (
 /turf/open/floor/rogue/dirt/road,
 /area/rogue/under/cave/dungeon1/gethsmane)
@@ -5946,10 +5983,11 @@
 /turf/open/floor/rogue/dirt/road,
 /area/rogue/outdoors/beach/forest)
 "Xh" = (
-/turf/closed/wall/mineral/rogue/pipe{
-	icon_state = "iron_joint"
+/obj/structure/bars/pipe{
+	dir = 8
 	},
-/area/rogue/indoors)
+/turf/closed/wall/mineral/rogue/pipe,
+/area/rogue/outdoors/woods)
 "Xk" = (
 /obj/machinery/conveyor/auto{
 	color = "#755f48"
@@ -5961,13 +5999,13 @@
 /area/rogue/indoors/shelter/woods)
 "Xr" = (
 /obj/structure/bars/pipe{
-	dir = 1;
-	pixel_x = 25
+	pixel_x = -11
 	},
-/turf/open/lava/acid{
-	name = "dirty coolant"
+/obj/structure/bars/pipe{
+	pixel_x = -11
 	},
-/area/rogue/outdoors/woods)
+/turf/closed/wall/mineral/rogue/pipe,
+/area/rogue/under/town/basement)
 "Xt" = (
 /obj/structure/stairs,
 /turf/open/floor/rogue/metal/barograte/open,
@@ -6014,10 +6052,9 @@
 /area/rogue/indoors/shelter/woods)
 "XW" = (
 /turf/closed/wall/mineral/rogue/pipe{
-	dir = 4;
 	icon_state = "iron_corner"
 	},
-/area/rogue/indoors)
+/area/rogue/outdoors/woods)
 "XY" = (
 /obj/effect/decal/cobbleedge{
 	dir = 4
@@ -6066,8 +6103,11 @@
 /obj/structure/bars/pipe{
 	dir = 8
 	},
-/turf/open/lava{
-	name = "molten slag"
+/obj/structure/bars/pipe{
+	dir = 4
+	},
+/turf/open/floor/rogue/metal{
+	dir = 1
 	},
 /area/rogue/under/town/basement)
 "Yp" = (
@@ -6090,16 +6130,14 @@
 /turf/open/floor/rogue/grass,
 /area/rogue/outdoors/woods)
 "Yx" = (
-/obj/structure/bars/pipe{
-	dir = 1
+/obj/structure/fence{
+	dir = 4
 	},
 /obj/structure/bars/pipe{
 	dir = 8
 	},
-/turf/open/lava/acid{
-	name = "dirty coolant"
-	},
-/area/rogue/outdoors/woods)
+/turf/open/floor/rogue/metal/barograte,
+/area/rogue/indoors)
 "YC" = (
 /obj/structure/bars/steel{
 	name = "blacksteel bars";
@@ -6143,22 +6181,22 @@
 /turf/open/floor/rogue/ruinedwood/spiral,
 /area/rogue/indoors)
 "YW" = (
-/turf/closed/wall/mineral/rogue/pipe{
-	icon_state = "iron_corner";
+/obj/structure/bars/pipe{
 	dir = 8
 	},
-/area/rogue/outdoors/woods)
+/obj/structure/bars/pipe{
+	dir = 4
+	},
+/obj/machinery/light/rogue/smelter/great,
+/turf/open/floor/rogue/metal/barograte/open,
+/area/rogue/under/town/basement)
 "YX" = (
 /obj/structure/bars/pipe{
-	dir = 8
+	dir = 1;
+	pixel_x = 25
 	},
-/obj/structure/bars/pipe{
-	pixel_x = -11
-	},
-/turf/open/lava{
-	name = "molten slag"
-	},
-/area/rogue/under/town/basement)
+/turf/open/transparent/openspace,
+/area/rogue/outdoors/mountains)
 "Zg" = (
 /obj/structure/fence{
 	dir = 4
@@ -6166,23 +6204,19 @@
 /turf/open/floor/rogue/metal/barograte,
 /area/rogue/indoors)
 "Zk" = (
-/obj/structure/bars/pipe{
-	pixel_y = 16
-	},
-/obj/structure/bars/pipe,
-/obj/structure/bars/pipe{
-	dir = 10
-	},
-/turf/open/floor/rogue/metal/barograte/open,
-/area/rogue/indoors)
+/turf/open/floor/rogue/metal,
+/area/rogue/outdoors/woods)
 "Zp" = (
 /obj/structure/roguerock,
 /turf/open/floor/rogue/naturalstone,
 /area/rogue/under/cavewet/bogcaves)
 "Zt" = (
-/obj/structure/fence/corner,
-/turf/open/floor/rogue/metal,
-/area/rogue/outdoors/woods)
+/obj/structure/bars/pipe{
+	pixel_y = 16
+	},
+/obj/structure/bars/pipe,
+/turf/open/floor/rogue/metal/barograte/open,
+/area/rogue/indoors)
 "Zu" = (
 /obj/structure/fluff/railing/border{
 	dir = 9
@@ -6223,10 +6257,13 @@
 /area/rogue/indoors/shelter/woods)
 "ZD" = (
 /obj/structure/bars/pipe{
-	dir = 4
+	dir = 8
 	},
-/turf/open/floor/rogue/metal/barograte,
-/area/rogue/under/town/basement)
+/turf/closed/wall/mineral/rogue/pipe{
+	dir = 4;
+	icon_state = "iron_line"
+	},
+/area/rogue/indoors)
 "ZH" = (
 /obj/item/flint,
 /obj/structure/bed/rogue/shit,
@@ -6270,10 +6307,11 @@
 	},
 /area/rogue/under/cave/dungeon1/gethsmane)
 "ZY" = (
-/turf/open/lava{
-	name = "molten slag"
+/obj/structure/bars/pipe{
+	dir = 1
 	},
-/area/rogue/under/town/basement)
+/turf/closed/mineral/random/rogue,
+/area/rogue/outdoors/woods)
 
 (1,1,1) = {"
 VO
@@ -37403,10 +37441,10 @@ nt
 jW
 jW
 jW
-VV
+cR
 kV
 kV
-kV
+fZ
 kV
 kV
 pC
@@ -37560,14 +37598,14 @@ nt
 Ek
 jW
 jW
-lF
+mu
 pC
 pC
-lF
+mu
 pC
 pC
 pC
-Ge
+HR
 SX
 sY
 sY
@@ -37717,15 +37755,15 @@ nt
 nt
 jW
 kV
-lF
-se
-se
-hZ
-se
-se
-Ge
-Ge
-DL
+mu
+SK
+SK
+vt
+SK
+SK
+SK
+SK
+cg
 sY
 sY
 sY
@@ -37874,17 +37912,17 @@ nt
 nt
 kV
 kV
-lF
-se
-Fg
+mu
+SK
+CL
 UJ
-Fg
-Fg
-Fg
-Ge
+CL
+bw
+bw
+SK
 pC
 pC
-lF
+mu
 pC
 kV
 sY
@@ -38031,18 +38069,18 @@ nt
 jW
 kV
 kV
-hZ
-se
-Fg
+vt
+SK
+CL
 UJ
-Fg
-Fg
-Fg
-se
-se
-se
-hZ
-se
+CL
+bw
+bw
+SK
+SK
+SK
+vt
+SK
 kV
 kV
 AG
@@ -38185,21 +38223,21 @@ nt
 jW
 Ek
 nt
-se
-se
-se
-hZ
-Fg
-Fg
-UJ
-Fg
-Fg
-Fg
-Fg
-Fg
-Fg
-UJ
-se
+SK
+SK
+SK
+vt
+xi
+xi
+Qy
+xi
+bw
+bw
+SK
+SK
+SK
+vt
+SK
 pC
 pC
 kV
@@ -38342,22 +38380,22 @@ nt
 jW
 jW
 jW
-se
-PS
+SK
+DI
 Cz
 gv
 Cz
 jr
 ij
 jr
-ZD
-ZD
+jw
+jw
 ot
 ot
 ot
-Qy
-hw
-se
+Ci
+Jc
+SK
 pC
 kV
 Yi
@@ -38499,22 +38537,22 @@ nt
 jW
 By
 jW
-se
-se
+SK
+SK
 xi
 UJ
-Fg
-ZY
-fo
-ZY
-Fg
-Fg
-ZY
-ZY
-ZY
+CL
+qe
+lF
+qe
+bw
+bw
+qe
+qe
+qe
 UJ
-se
-se
+SK
+SK
 pC
 kV
 Yi
@@ -38656,22 +38694,22 @@ nt
 nt
 nt
 jW
-se
+SK
+DI
+Cz
+gv
+Cz
+jr
+mj
+jr
+Yo
+Yo
+ot
 PS
-Cz
+PS
 gv
-Cz
-Yo
-YX
-Yo
-FJ
-FJ
-ZY
-Yo
-Yo
-gv
-Jn
-se
+YW
+SK
 pC
 kV
 MK
@@ -38813,22 +38851,22 @@ nt
 nt
 va
 jW
-se
-se
+SK
+SK
 xi
 UJ
-Fg
-ZY
-fo
-ZY
-Fg
-Fg
-ZY
-ZY
-ZY
+CL
+qe
+lF
+qe
+bw
+bw
+qe
+qe
+qe
 UJ
-se
-se
+SK
+SK
 pC
 kV
 jW
@@ -38970,22 +39008,22 @@ nt
 nt
 nt
 jW
-se
-PS
+SK
+DI
 Cz
 gv
 Fj
-Yo
+PS
+pv
+qe
 fo
-ZY
-wk
-wk
-Yo
-Yo
-Yo
+fo
+PS
+PS
+PS
 DC
-Jn
-se
+YW
+SK
 pC
 kV
 jW
@@ -39127,22 +39165,22 @@ nt
 nt
 nt
 jW
-se
-se
+SK
+SK
 xi
 UJ
-Fg
-ZY
-fo
-ZY
-Fg
-Fg
-ZY
-ZY
-ZY
+CL
+qe
+lF
+qe
+bw
+bw
+qe
+qe
+qe
 UJ
-se
-se
+SK
+SK
 pC
 kV
 nt
@@ -39284,27 +39322,27 @@ nt
 Ek
 nt
 jW
-se
-PS
+SK
+DI
 Cz
-RS
+Ad
 Pi
 BF
-Ad
+Vm
 BF
-IL
-IL
-Yo
-Yo
-Yo
+Bb
+Bb
+jr
+PS
+jr
 fj
 Uj
-se
+SK
 pC
 kV
 nt
 pF
-fZ
+jW
 Yi
 Yi
 Yi
@@ -39441,22 +39479,22 @@ nt
 Ek
 nt
 jW
-se
-se
-se
-vn
-Fg
-ZY
-fo
-ZY
-Fg
-Fg
-ZY
-ZY
-ZY
-UJ
-se
-se
+SK
+SK
+SK
+VV
+CL
+qe
+lF
+qe
+bw
+bw
+xi
+xi
+xi
+Qy
+SK
+SK
 pC
 kV
 nt
@@ -39601,19 +39639,19 @@ jW
 kV
 kV
 pC
-vn
-Fg
-Fg
+VV
+xi
+xi
+Qy
+xi
+bw
+bw
+CL
+CL
+CL
 UJ
-Fg
-Fg
-Fg
-Fg
-Fg
-Fg
-UJ
-se
-se
+SK
+SK
 pC
 jW
 nt
@@ -39758,19 +39796,19 @@ jW
 kV
 kV
 pC
-vn
-Fg
-Fg
+VV
+CL
+CL
 UJ
-Fg
+CL
 AV
-Fg
-Fg
-Fg
-Fg
+bw
+CL
 hZ
-Ge
-Ge
+hZ
+JO
+HR
+HR
 pC
 jW
 nt
@@ -39915,18 +39953,18 @@ jW
 kV
 kV
 pC
-vn
-se
-se
-Ak
-se
-se
-Fg
-Fg
-Fg
-Fg
-hZ
-pC
+VV
+SK
+SK
+Xr
+SK
+SK
+bw
+CL
+CL
+CL
+vt
+HR
 kV
 kV
 jW
@@ -40072,17 +40110,17 @@ Hz
 Hz
 kV
 pC
-Hp
+UM
 pC
 pC
-lF
-pC
+mu
 pC
 HR
+Yo
 me
 me
-me
-cE
+Bb
+wk
 pC
 kV
 kV
@@ -40225,21 +40263,21 @@ nt
 nt
 nt
 Hz
-Gw
-bw
+VA
+gA
 kV
 kV
-ry
+ZY
 kV
 kV
-mu
+fZ
 kV
 kV
-Ge
-se
-se
-se
-Ak
+HR
+SK
+SK
+SK
+Xr
 pC
 kV
 jW
@@ -40382,21 +40420,21 @@ nt
 nt
 nt
 Hz
-To
-gA
-gA
-gA
-ry
+dJ
+jq
+jq
+jq
+ZY
 kV
 kV
+fZ
+kV
+kV
+pC
+pC
+pC
+pC
 mu
-kV
-kV
-pC
-pC
-pC
-pC
-lF
 pC
 jW
 jW
@@ -40539,21 +40577,21 @@ nt
 nt
 nt
 Hz
-To
-gA
-gA
-gA
-aD
-To
+dJ
+jq
+jq
+jq
+BY
+dJ
 Hz
-mu
+fZ
 kV
 kV
 kV
 kV
 kV
 kV
-mu
+fZ
 jW
 jW
 jW
@@ -40696,21 +40734,21 @@ Ek
 nt
 nt
 Hz
-To
-gA
-gA
-gA
-gA
-To
+dJ
+jq
+jq
+jq
+jq
+dJ
 Hz
-VV
+cR
 jW
 jW
 jW
 jW
 jW
 jW
-VV
+cR
 jW
 jW
 jW
@@ -40853,12 +40891,12 @@ Ek
 nt
 nt
 Hz
-To
+dJ
+jq
+jq
+VA
 gA
-gA
-Gw
-bw
-by
+HJ
 Hz
 nt
 nt
@@ -41010,10 +41048,10 @@ nt
 nt
 nt
 Hz
-by
-bw
-bw
-by
+HJ
+gA
+gA
+HJ
 Hz
 Hz
 Hz
@@ -61426,17 +61464,17 @@ rj
 rj
 rj
 rj
-JO
+Io
 rj
 rj
 rj
 rj
 rj
 rj
-Ge
-Ge
-Ge
-Ge
+HR
+HR
+HR
+HR
 rj
 rj
 rj
@@ -61582,18 +61620,18 @@ rj
 rj
 rj
 rj
-Ge
-wz
-Ge
-Ge
-Ge
-Ge
-Ge
-Ge
-gG
-cR
-cR
+HR
 PW
+HR
+HR
+HR
+HR
+HR
+HR
+KS
+NG
+NG
+XW
 ew
 rj
 rj
@@ -61736,21 +61774,21 @@ rj
 rj
 rj
 rj
-cg
+YX
 rj
-Ge
-Ge
-Io
+HR
+HR
+by
 aK
 aK
 Hz
 Hz
-HJ
+Bt
 Hz
-Zt
-VA
-VA
-Ge
+Ei
+GR
+GR
+HR
 ew
 rj
 rj
@@ -61893,21 +61931,21 @@ rj
 rj
 rj
 rj
+YX
+HR
+HR
+jq
+by
+aK
+aK
+aK
+Hz
+Hz
 cg
-Ge
-Ge
-gA
-Io
-aK
-aK
-aK
-Hz
-Hz
-DL
 ew
-Bv
+Vj
 bb
-Ge
+HR
 ew
 rj
 rj
@@ -62050,21 +62088,21 @@ rj
 rj
 rj
 rj
-dJ
-Ge
-gA
-gA
-Vm
+yB
+HR
+jq
+jq
+Gw
 aK
 aK
 aK
 Hz
 Hz
-DL
+cg
 ew
-Bv
+Vj
 bb
-Ge
+HR
 ew
 ew
 rj
@@ -62206,23 +62244,23 @@ rj
 rj
 rj
 rj
-RM
-BY
-gA
-gA
+hw
+vn
+jq
+jq
 aK
-Vm
+Gw
 aK
 aK
 Hz
 Hz
-HJ
-Hm
-Hm
+Bt
+Zk
+Zk
 bb
 bb
-Ge
-Ge
+HR
+HR
 ew
 ew
 rj
@@ -62363,12 +62401,12 @@ rj
 rj
 rj
 rj
-Ge
-Xr
-gA
+HR
+wz
+jq
 aK
 aK
-Vm
+Gw
 aK
 aK
 aK
@@ -62376,12 +62414,12 @@ Hz
 Hz
 aK
 aK
-Vm
+Gw
 bb
-Hm
-Ge
-Ge
-Ge
+Zk
+HR
+HR
+HR
 ew
 rj
 rj
@@ -62520,12 +62558,12 @@ rj
 rj
 rj
 rj
-Ge
-Xr
-Hm
+HR
+wz
+Zk
 aK
 aK
-Vm
+Gw
 aK
 aK
 aK
@@ -62533,13 +62571,13 @@ aK
 Mn
 aK
 aK
-Vm
-Vm
-Hm
-Hm
-Ge
-Ge
-Ge
+Gw
+Gw
+Zk
+Zk
+HR
+HR
+HR
 rj
 rj
 rj
@@ -62677,26 +62715,26 @@ rj
 rj
 rj
 rj
-Ge
-Xr
-Hm
+HR
+wz
+Zk
 aK
 aK
-yB
-KG
-KG
-KG
+Qn
+bS
+bS
+bS
 Kq
-KG
-KG
-KG
-KG
-jq
+bS
+bS
+bS
+bS
+xI
 aK
-Hm
-aD
-Ge
-Ge
+Zk
+BY
+HR
+HR
 rj
 rj
 rj
@@ -62834,26 +62872,26 @@ rj
 rj
 rj
 rj
-Ge
-Xr
-Hm
+HR
+wz
+Zk
 aK
 aK
-bS
+ry
 ZN
 ZN
 Zg
-Pf
+Zt
 Zg
 ZN
 ZN
 ZN
-Rp
+KG
 aK
-Hm
-aD
-Ge
-Ge
+Zk
+BY
+HR
+HR
 rj
 rj
 rj
@@ -62991,26 +63029,26 @@ rj
 rj
 rj
 rj
-Ge
-Xr
-Hm
+HR
+wz
+Zk
 Hz
 aK
-bS
+ry
 ZN
 ZN
 Zg
-Pf
+Zt
 Zg
 ZN
 ZN
 ZN
-Rp
+KG
 aK
-Hm
-aD
-Ge
-Ge
+Zk
+BY
+HR
+HR
 rj
 rj
 rj
@@ -63144,30 +63182,30 @@ rj
 rj
 rj
 rj
-Bb
+is
 rj
 rj
 rj
-Ge
-jw
-Hm
-HJ
+HR
+ym
+Zk
+Bt
 Hz
-bS
+ry
 ZN
 ZN
 Zg
-Pf
+Zt
 Zg
 ZN
 ZN
 ZN
-Rp
+KG
 aK
-Hm
-aD
-Ge
-Ge
+Zk
+BY
+HR
+HR
 rj
 rj
 rj
@@ -63305,26 +63343,26 @@ rj
 rj
 rj
 rj
-Ge
-Xr
-Hm
+HR
+wz
+Zk
 Hz
 aK
-bS
+ry
 ZN
 ZN
 Zg
-Pf
+Zt
 Zg
 ZN
 ZN
 ZN
-Rp
+KG
 aK
-Hm
-aD
-Ge
-Ge
+To
+BY
+HR
+HR
 rj
 rj
 rj
@@ -63461,27 +63499,27 @@ rj
 rj
 rj
 rj
-CL
-xI
-Sh
-OK
-em
-em
-DI
+Ak
+Xh
+yN
+Hi
+Bv
+Bv
+ZD
 fQ
 fQ
-UM
-Zk
+Yx
+WT
 Zg
 ZN
 ZN
 ZN
-Rp
+KG
 aK
-Hm
-aD
-Ge
-Ge
+Zk
+BY
+HR
+HR
 rj
 rj
 rj
@@ -63618,28 +63656,28 @@ rj
 rj
 rj
 rj
-CL
-xI
-Vj
-OK
+Ak
+Xh
 AM
-em
-DI
+Hi
+aD
+Bv
+ZD
 fQ
 fQ
-UM
-vt
-NG
-kY
-kY
-kY
+Yx
+Hm
 Rp
-GR
-uu
-ym
-pv
-pv
-qe
+kY
+kY
+kY
+KG
+Sh
+OK
+Tm
+RS
+RS
+Jn
 rj
 rj
 rj
@@ -63776,28 +63814,28 @@ rj
 rj
 rj
 rj
-Ge
-Xr
-Hm
-HJ
+HR
+wz
+Zk
+Bt
 Hz
-bS
+ry
 ZN
 ZN
 Zg
-Pf
+Zt
 Zg
 ZN
 ZN
 ZN
-Rp
-em
-OK
-Yx
-xI
-xI
-CL
-CL
+KG
+Bv
+Hi
+FJ
+Xh
+Xh
+Ak
+Ak
 rj
 rj
 rj
@@ -63933,26 +63971,26 @@ rj
 rj
 rj
 rj
-Ge
-Xr
-Hm
+HR
+wz
+Zk
 Hz
 aK
-bS
+ry
 kM
 kM
-Ci
-Pf
-Ci
+IL
+Zt
+IL
 kM
 kM
 kM
-Rp
+KG
 aK
-Hm
-aD
-Ge
-Ge
+Zk
+BY
+HR
+HR
 rj
 rj
 rj
@@ -64090,12 +64128,12 @@ rj
 rj
 rj
 rj
-Ge
-Xr
-Hm
+HR
+wz
+Zk
 aK
 aK
-bS
+ry
 LW
 LW
 LW
@@ -64104,11 +64142,11 @@ LW
 Xt
 eU
 eU
-Rp
+KG
 aK
-Hm
-aD
-Ge
+Zk
+BY
+HR
 rj
 rj
 rj
@@ -64247,25 +64285,25 @@ rj
 rj
 rj
 rj
-Ge
-Xr
-Hm
+HR
+wz
+Zk
 aK
 aK
-SK
-KG
-KG
-KG
-Qn
-KG
-KG
-Xh
-KG
-XW
+uu
+bS
+bS
+bS
+RM
+bS
+bS
+Hp
+bS
+em
 aK
-Hm
-aD
-Ge
+Zk
+BY
+HR
 rj
 rj
 rj
@@ -64404,9 +64442,9 @@ rj
 rj
 rj
 rj
-Ge
-Xr
-Hm
+HR
+wz
+Zk
 aK
 aK
 aK
@@ -64416,13 +64454,13 @@ aK
 aK
 aK
 aK
-Vm
+Gw
 aK
 aK
 aK
-Hm
-aD
-Ge
+Zk
+BY
+HR
 rj
 rj
 rj
@@ -64561,25 +64599,25 @@ rj
 rj
 rj
 rj
-RM
-Xr
-Hm
-Hm
-Hm
-Hm
+hw
+wz
+Zk
+Zk
+Zk
+Zk
 aK
 aK
 aK
 aK
 aK
 aK
-Vm
+Gw
 aK
-Hm
-Hm
-Hm
-aD
-Ge
+Zk
+Zk
+Zk
+BY
+HR
 rj
 rj
 rj
@@ -64718,27 +64756,27 @@ rj
 rj
 rj
 rj
-RM
-Xr
-gA
-gA
-gA
-Hm
-Hm
-Hm
-Hm
-Hm
-Hm
-Hm
+hw
+wz
+jq
+jq
+jq
+Zk
+Zk
+Zk
+Zk
+Zk
+Zk
+Zk
 bb
-Hm
-Hm
-gA
-gA
-Tm
-WT
-qe
-Hi
+Zk
+Zk
+jq
+jq
+Ge
+Fg
+Jn
+Pf
 QQ
 QQ
 QQ
@@ -64876,24 +64914,24 @@ rj
 rj
 rj
 rj
-cg
+YX
 rj
-Ge
-gA
-gA
-gA
-gA
-gA
-gA
-gA
-gA
-Io
-gA
-gA
-gA
-Ge
-RM
-RM
+HR
+jq
+jq
+jq
+jq
+jq
+jq
+jq
+jq
+by
+jq
+jq
+jq
+HR
+hw
+hw
 rj
 QQ
 QQ
@@ -65035,20 +65073,20 @@ rj
 rj
 rj
 rj
-RM
-Ge
-Ge
-Ge
-Ge
-Ge
-Ge
-Ge
-Ge
-wz
-Ge
-Ge
-Ge
-RM
+hw
+HR
+HR
+HR
+HR
+HR
+HR
+HR
+HR
+PW
+HR
+HR
+HR
+hw
 rj
 rj
 rj
@@ -65201,7 +65239,7 @@ rj
 rj
 rj
 rj
-JO
+Io
 rj
 rj
 rj
@@ -87018,7 +87056,7 @@ ew
 ew
 ew
 ew
-Bt
+DL
 Qv
 Qv
 Qv
@@ -87027,7 +87065,7 @@ Qv
 Qv
 Qv
 Qv
-PW
+XW
 ew
 ew
 ew
@@ -87176,14 +87214,14 @@ ew
 ew
 ew
 BS
-Hm
-Hm
-Hm
-Hm
-Hm
-Hm
-Hm
-Hm
+Zk
+Zk
+Zk
+Zk
+Zk
+Zk
+Zk
+Zk
 BS
 ew
 ew
@@ -87333,14 +87371,14 @@ ew
 ew
 ew
 BS
-Hm
-Hm
-Hm
-Hm
-Hm
-Hm
-Hm
-Hm
+Zk
+Zk
+Zk
+Zk
+Zk
+Zk
+Zk
+Zk
 BS
 ew
 ew
@@ -87490,14 +87528,14 @@ ew
 ew
 ew
 BS
-Hm
-Hm
-Hm
-Hm
-Hm
-Hm
-Hm
-Hm
+Zk
+Zk
+Zk
+Zk
+Zk
+Zk
+Zk
+Zk
 BS
 ew
 ew
@@ -87647,14 +87685,14 @@ ew
 ew
 ew
 BS
-Hm
-Hm
-Hm
-Hm
-Hm
-Hm
-Hm
-Hm
+Zk
+Zk
+Zk
+Zk
+Zk
+Zk
+Zk
+Zk
 BS
 ew
 ew
@@ -87804,14 +87842,14 @@ ew
 ew
 ew
 BS
-Hm
-Hm
-Hm
-Hm
-Hm
-Hm
-Hm
-Hm
+Zk
+Zk
+Zk
+Zk
+Zk
+Zk
+Zk
+Zk
 BS
 ew
 ew
@@ -87961,14 +87999,14 @@ ew
 ew
 ew
 BS
-Hm
-Hm
-Hm
-Hm
-Hm
-Hm
-Hm
-Hm
+Zk
+Zk
+Zk
+Zk
+Zk
+Zk
+Zk
+Zk
 BS
 ew
 ew
@@ -88118,14 +88156,14 @@ ew
 ew
 ew
 BS
-Hm
-Hm
-Hm
-Hm
-Hm
-Hm
-Hm
-Hm
+Zk
+Zk
+Zk
+Zk
+Zk
+Zk
+Zk
+Zk
 BS
 ew
 ew
@@ -88275,14 +88313,14 @@ ew
 ew
 ew
 BS
-Hm
-Hm
-Hm
-Hm
-Hm
-Hm
-Hm
-Hm
+Zk
+Zk
+Zk
+Zk
+Zk
+Zk
+Zk
+Zk
 BS
 ew
 ew
@@ -88432,14 +88470,14 @@ ew
 ew
 ew
 BS
-Hm
-Hm
-Hm
-Hm
+Zk
+Zk
+Zk
+Zk
 ew
 ew
 mc
-Hm
+Zk
 BS
 ew
 ew
@@ -88588,7 +88626,7 @@ ew
 ew
 ew
 ew
-YW
+gG
 Qv
 Qv
 Qv
@@ -88597,7 +88635,7 @@ Qv
 Qv
 Qv
 Qv
-mj
+se
 ew
 ew
 ew
