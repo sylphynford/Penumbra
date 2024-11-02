@@ -758,3 +758,22 @@ GLOBAL_LIST_INIT(roguetown_areas_typecache, typecacheof(/area/rogue/indoors/town
 	droning_sound_dusk = null
 	droning_sound_night = null
 	first_time_text = "The Forest of Repentence"
+
+
+//////
+/////
+////     OLD PSYDONIA AREAS
+////
+///
+//
+
+// the air exchange
+/area/rogue/outdoors/psydon/airexchangeoutside
+	name = "psydonair"
+	icon_state = "town" // placeholder
+	soundenv = 16
+	droning_sound = 'sound/music/area/townstreets.ogg' // placeholder
+	converted_type = /area/rogue/indoors/shelter/town
+	first_time_text = "THE AIR EXCHANGE TOWER"
+/area/rogue/indoors/psydon/airexchangeinside
+	icon_state = "town" // placeholder
