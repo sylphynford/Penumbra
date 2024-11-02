@@ -1,7 +1,5 @@
 /datum/faith/inhumen
-	name = "Ascendents"
-	desc = "The Holy Ecclesial is a series of sects formed by a violent schism with the Holy See that split the church in twain. \n\
-		The Holy Ecclesial accepts the Four Ascendents as True Divinity, proof that Mortals can ascend past the coil of Psydon's corpse.  \
-		So close to the seat of the Holy See, worship of the Four Usurpers is considered heretical, and they are denounced as the INHUMEN. But we laugh, and spit in their face."
-	worshippers = "cultists, those who live outside of the Peak, those spurned by the Ten, zealotry-filled fools."
+	name = "Inhumane"
+	desc = "The Shattered See is nothing but a group of misguided fools who remain in total ignorance about reality. They deny themselves true power! They say I am inhumane, but I am the one with the most humanity of them all. I shatter myself to become something lesser in order to realize a dream. I cannot let this plan fail at the climax."
+	worshippers = "Cultists, men and women who live beyond civilization."
 	godhead = /datum/patron/inhumen/zizo
