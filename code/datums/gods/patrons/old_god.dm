@@ -7,6 +7,6 @@
 	t0 = /obj/effect/proc_holder/spell/invoked/lesser_heal
 	confess_lines = list(
 		"THERE IS ONLY ONE TRUE GOD!",
-		"PSYDONS CREATION WILL BE REMADE",
-		"REBUKE THE HERETICAL- PSYDON ENDURES!",
+		"PSYDON'S CREATION WILL BE REMADE!",
+		"REBUKE THE HERETICAL - PSYDON ENDURES!",
 	)
