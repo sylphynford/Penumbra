@@ -73,12 +73,17 @@
 "aA" = (
 /turf/open/floor/rogue/dirt/road,
 /area/rogue/under/cave)
+"aC" = (
+/turf/closed/wall/mineral/rogue/pipe{
+	icon_state = "iron_corner"
+	},
+/area/rogue/outdoors/psydon/airexchangeoutside)
 "aD" = (
 /obj/structure/bars/pipe{
 	dir = 8
 	},
 /turf/open/floor/rogue/metal/barograte/open,
-/area/rogue/outdoors/woods)
+/area/rogue/outdoors/psydon/airexchangeoutside)
 "aE" = (
 /obj/structure/fermenting_barrel/random/beer,
 /turf/open/floor/rogue/dirt,
@@ -106,7 +111,7 @@
 /area/rogue/under/town/basement)
 "aK" = (
 /turf/open/floor/rogue/metal/barograte,
-/area/rogue/outdoors/woods)
+/area/rogue/outdoors/psydon/airexchangeoutside)
 "aM" = (
 /obj/structure/spacevine,
 /turf/open/water/swamp/deep,
@@ -137,7 +142,7 @@
 	pixel_y = -8
 	},
 /turf/open/floor/rogue/metal,
-/area/rogue/outdoors/woods)
+/area/rogue/outdoors/psydon/airexchangeoutside)
 "bd" = (
 /obj/machinery/light/rogue/torchholder/r,
 /turf/open/floor/rogue/dirt/road,
@@ -205,7 +210,7 @@
 /turf/open/lava/acid{
 	name = "dirty coolant"
 	},
-/area/rogue/outdoors/woods)
+/area/rogue/outdoors/psydon/airexchangeoutside)
 "bA" = (
 /obj/structure/closet/crate/chest/wicker,
 /obj/item/reagent_containers/food/snacks/grown/wheat,
@@ -466,6 +471,13 @@
 	},
 /turf/open/transparent/openspace,
 /area/rogue/outdoors/woods)
+"du" = (
+/obj/structure/bars/pipe{
+	dir = 4;
+	icon_state = "pipe"
+	},
+/turf/open/transparent/openspace,
+/area/rogue/outdoors/psydon/airexchangeoutside)
 "dA" = (
 /obj/structure/flora/roguetree/stump/log,
 /turf/open/floor/rogue/dirt,
@@ -928,8 +940,7 @@
 /area/rogue/under/cave/dungeon1/gethsmane/inner)
 "hl" = (
 /obj/machinery/light/rogue/smelter/great{
-	name = "fix1"
-	color = "#485775";
+	name = "fix1"color="#485775";
 	desc = ""
 	},
 /turf/open/floor/rogue/metal/barograte/open,
@@ -959,7 +970,7 @@
 /area/rogue/under/cave/dungeon1/gethsmane)
 "hw" = (
 /turf/closed/wall/mineral/rogue/pipe,
-/area/rogue/outdoors/mountains)
+/area/rogue/outdoors/psydon/airexchangeoutside)
 "hx" = (
 /obj/structure/fluff/signage{
 	name = "AZURE PEAK - EAST"
@@ -1340,6 +1351,9 @@
 /obj/item/fishingrod,
 /turf/open/floor/rogue/twig,
 /area/rogue/outdoors/beach/forest)
+"kK" = (
+/turf/open/floor/rogue/metal/barograte/open,
+/area/rogue/outdoors/psydon/airexchangeoutside)
 "kL" = (
 /obj/structure/chair/stool/rogue,
 /turf/open/floor/rogue/grass,
@@ -1948,6 +1962,11 @@
 /obj/machinery/light/rogue/firebowl/stump,
 /turf/open/floor/rogue/dirt/road,
 /area/rogue/outdoors/mountains)
+"pO" = (
+/turf/open/lava/acid{
+	name = "dirty coolant"
+	},
+/area/rogue/outdoors/psydon/airexchangeoutside)
 "pS" = (
 /obj/structure/closet/crate/chest/crate,
 /obj/effect/spawner/lootdrop/roguetown/sewers,
@@ -2664,7 +2683,7 @@
 	pixel_x = 25
 	},
 /turf/closed/wall/mineral/rogue/pipe,
-/area/rogue/outdoors/woods)
+/area/rogue/outdoors/psydon/airexchangeoutside)
 "vo" = (
 /turf/open/floor/rogue/dirt,
 /area/rogue/indoors/shelter/woods)
@@ -2792,7 +2811,7 @@
 /turf/open/lava/acid{
 	name = "dirty coolant"
 	},
-/area/rogue/outdoors/woods)
+/area/rogue/outdoors/psydon/airexchangeoutside)
 "wA" = (
 /obj/structure/fluff/railing/wood{
 	dir = 1
@@ -2968,7 +2987,7 @@
 /turf/open/lava/acid{
 	name = "dirty coolant"
 	},
-/area/rogue/outdoors/woods)
+/area/rogue/outdoors/psydon/airexchangeoutside)
 "yo" = (
 /turf/open/water/swamp,
 /area/rogue/outdoors/woods)
@@ -2984,7 +3003,7 @@
 	pixel_x = 25
 	},
 /turf/closed/wall/mineral/rogue/pipe,
-/area/rogue/outdoors/woods)
+/area/rogue/outdoors/psydon/airexchangeoutside)
 "yC" = (
 /obj/structure/stairs/stone{
 	dir = 8
@@ -3026,7 +3045,7 @@
 /turf/open/lava/acid{
 	name = "dirty coolant"
 	},
-/area/rogue/outdoors/woods)
+/area/rogue/outdoors/psydon/airexchangeoutside)
 "yO" = (
 /obj/structure/flora/newtree,
 /turf/open/floor/rogue/dirt,
@@ -3064,6 +3083,9 @@
 /mob/living/carbon/human/species/goblin/npc/ambush/cave,
 /turf/open/floor/rogue/cobble/mossy,
 /area/rogue/under/town/basement)
+"zn" = (
+/turf/open/floor/rogue/metal,
+/area/rogue/outdoors/psydon/airexchangeoutside)
 "zo" = (
 /obj/structure/fluff/railing/fence{
 	dir = 1
@@ -3301,7 +3323,7 @@
 /turf/open/lava/acid{
 	name = "dirty coolant"
 	},
-/area/rogue/outdoors/woods)
+/area/rogue/outdoors/psydon/airexchangeoutside)
 "AN" = (
 /obj/structure/table/wood{
 	dir = 6;
@@ -3378,13 +3400,13 @@
 	pixel_y = 10
 	},
 /turf/open/floor/rogue/metal/barograte/open,
-/area/rogue/outdoors/woods)
+/area/rogue/outdoors/psydon/airexchangeoutside)
 "Bv" = (
 /obj/structure/bars/pipe{
 	dir = 8
 	},
 /turf/open/floor/rogue/metal/barograte,
-/area/rogue/outdoors/woods)
+/area/rogue/outdoors/psydon/airexchangeoutside)
 "Bx" = (
 /obj/machinery/light/rogue/torchholder/l,
 /turf/open/water/ocean,
@@ -3715,7 +3737,7 @@
 "Ei" = (
 /obj/structure/fence/corner,
 /turf/open/floor/rogue/metal,
-/area/rogue/outdoors/woods)
+/area/rogue/outdoors/psydon/airexchangeoutside)
 "Ek" = (
 /obj/structure/flora/newtree,
 /turf/open/floor/rogue/grass,
@@ -3812,11 +3834,11 @@
 /area/rogue/outdoors/woods)
 "Fg" = (
 /obj/structure/bars/pipe{
-	dir = 4;
-	icon_state = "pipe"
+	dir = 1;
+	pixel_y = -8
 	},
-/turf/closed/wall/mineral/rogue/pipe,
-/area/rogue/outdoors/mountains)
+/turf/open/transparent/openspace,
+/area/rogue/outdoors/psydon/airexchangeoutside)
 "Fh" = (
 /obj/machinery/conveyor/auto{
 	dir = 4;
@@ -3913,7 +3935,7 @@
 /turf/open/lava/acid{
 	name = "dirty coolant"
 	},
-/area/rogue/outdoors/woods)
+/area/rogue/outdoors/psydon/airexchangeoutside)
 "FL" = (
 /obj/item/chair/stool/bar/rogue/crafted,
 /turf/open/floor/rogue/dirt/road,
@@ -3948,7 +3970,7 @@
 /turf/open/lava/acid{
 	name = "dirty coolant"
 	},
-/area/rogue/outdoors/woods)
+/area/rogue/outdoors/psydon/airexchangeoutside)
 "Gi" = (
 /turf/open/transparent/openspace,
 /area/rogue/under/town/basement)
@@ -3976,7 +3998,7 @@
 	pixel_y = -8
 	},
 /turf/open/floor/rogue/metal/barograte,
-/area/rogue/outdoors/woods)
+/area/rogue/outdoors/psydon/airexchangeoutside)
 "Gx" = (
 /obj/structure/bars/pipe{
 	dir = 4
@@ -4018,7 +4040,7 @@
 	pixel_y = -8
 	},
 /turf/open/floor/rogue/metal,
-/area/rogue/outdoors/woods)
+/area/rogue/outdoors/psydon/airexchangeoutside)
 "GT" = (
 /turf/open/water/ocean,
 /area/rogue/under/cavewet/bogcaves)
@@ -4065,7 +4087,7 @@
 	dir = 8
 	},
 /turf/open/floor/rogue/metal,
-/area/rogue/outdoors/woods)
+/area/rogue/outdoors/psydon/airexchangeoutside)
 "Hm" = (
 /obj/structure/bars/pipe{
 	pixel_y = 16
@@ -4283,6 +4305,14 @@
 /obj/structure/fluff/walldeco/church/line,
 /turf/open/floor/rogue/cobble,
 /area/rogue/under/town/basement)
+"IU" = (
+/obj/structure/bars/pipe{
+	dir = 1
+	},
+/turf/open/lava/acid{
+	name = "dirty coolant"
+	},
+/area/rogue/outdoors/psydon/airexchangeoutside)
 "IW" = (
 /turf/open/water/swamp/deep,
 /area/rogue/under/cave/dungeon1/gethsmane)
@@ -4298,6 +4328,9 @@
 /obj/item/reagent_containers/glass/cup/wooden,
 /turf/open/floor/rogue/twig,
 /area/rogue/under/town/basement)
+"IZ" = (
+/turf/open/transparent/openspace,
+/area/rogue/outdoors/psydon/airexchangeoutside)
 "Ja" = (
 /obj/structure/bars/pipe,
 /turf/open/floor/rogue/dirt,
@@ -4540,7 +4573,7 @@
 	icon_state = "iron_joint";
 	dir = 8
 	},
-/area/rogue/outdoors/woods)
+/area/rogue/outdoors/psydon/airexchangeoutside)
 "KW" = (
 /obj/machinery/conveyor/auto{
 	dir = 1;
@@ -4725,7 +4758,7 @@
 	name = "weird piece of metal..?"
 	},
 /turf/open/floor/rogue/metal/barograte,
-/area/rogue/outdoors/woods)
+/area/rogue/outdoors/psydon/airexchangeoutside)
 "Mp" = (
 /obj/effect/spawner/lootdrop/roguetown/dungeon,
 /obj/structure/rack/rogue,
@@ -4781,6 +4814,13 @@
 "MK" = (
 /turf/open/floor/rogue/dirt/road,
 /area/rogue/outdoors/woods)
+"MM" = (
+/obj/structure/stairs/stone{
+	dir = 1;
+	icon_state = "stonestairs"
+	},
+/turf/open/floor/rogue/cobble,
+/area/rogue/outdoors/psydon/airexchangeoutside)
 "MS" = (
 /obj/machinery/conveyor/auto{
 	dir = 6;
@@ -4885,7 +4925,7 @@
 /turf/open/lava/acid{
 	name = "dirty coolant"
 	},
-/area/rogue/outdoors/woods)
+/area/rogue/outdoors/psydon/airexchangeoutside)
 "NK" = (
 /obj/structure/glowshroom,
 /turf/open/floor/rogue/dirt,
@@ -4963,7 +5003,7 @@
 	icon_state = "pipe"
 	},
 /turf/open/floor/rogue/metal,
-/area/rogue/outdoors/woods)
+/area/rogue/outdoors/psydon/airexchangeoutside)
 "OU" = (
 /obj/effect/decal/remains/bigrat,
 /turf/open/floor/rogue/naturalstone,
@@ -5024,6 +5064,13 @@
 	},
 /turf/open/floor/rogue/metal/barograte/open,
 /area/rogue/under/town/basement)
+"Pk" = (
+/obj/structure/bars/pipe{
+	dir = 1;
+	pixel_x = 25
+	},
+/turf/open/transparent/openspace,
+/area/rogue/outdoors/psydon/airexchangeoutside)
 "Pm" = (
 /obj/structure/chair/wood/rogue/chair3{
 	dir = 4
@@ -5104,7 +5151,7 @@
 	pixel_y = -8
 	},
 /turf/closed/wall/mineral/rogue/pipe,
-/area/rogue/outdoors/woods)
+/area/rogue/outdoors/psydon/airexchangeoutside)
 "PX" = (
 /turf/open/floor/rogue/concrete,
 /area/rogue/under/cave/dungeon1/gethsmane/inner)
@@ -5340,7 +5387,7 @@
 	icon_state = "pipe"
 	},
 /turf/closed/wall/mineral/rogue/pipe,
-/area/rogue/outdoors/woods)
+/area/rogue/outdoors/psydon/airexchangeoutside)
 "RW" = (
 /obj/machinery/conveyor/auto{
 	dir = 9;
@@ -5386,7 +5433,7 @@
 	icon_state = "pipe"
 	},
 /turf/open/floor/rogue/metal/barograte,
-/area/rogue/outdoors/woods)
+/area/rogue/outdoors/psydon/airexchangeoutside)
 "Si" = (
 /mob/living/simple_animal/hostile/retaliate/rogue/mudcrab,
 /turf/open/floor/rogue/naturalstone,
@@ -5495,12 +5542,12 @@
 /turf/open/lava/acid{
 	name = "dirty coolant"
 	},
-/area/rogue/outdoors/woods)
+/area/rogue/outdoors/psydon/airexchangeoutside)
 "To" = (
 /turf/open/floor/rogue/metal{
 	dir = 1
 	},
-/area/rogue/outdoors/woods)
+/area/rogue/outdoors/psydon/airexchangeoutside)
 "Tp" = (
 /turf/open/water/ocean/deep,
 /area/rogue/outdoors/beach/forest)
@@ -5741,7 +5788,7 @@
 	pixel_y = -8
 	},
 /turf/open/floor/rogue/metal/barograte/open,
-/area/rogue/outdoors/woods)
+/area/rogue/outdoors/psydon/airexchangeoutside)
 "Vl" = (
 /obj/structure/gravemarker,
 /obj/structure/closet/dirthole/closed/loot,
@@ -5987,7 +6034,7 @@
 	dir = 8
 	},
 /turf/closed/wall/mineral/rogue/pipe,
-/area/rogue/outdoors/woods)
+/area/rogue/outdoors/psydon/airexchangeoutside)
 "Xk" = (
 /obj/machinery/conveyor/auto{
 	color = "#755f48"
@@ -61461,22 +61508,22 @@ rj
 rj
 rj
 rj
-rj
-rj
-rj
-Io
-rj
-rj
-rj
-rj
-rj
-rj
-HR
-HR
-HR
-HR
-rj
-rj
+IZ
+IZ
+IZ
+Fg
+IZ
+IZ
+IZ
+IZ
+IZ
+IZ
+hw
+hw
+hw
+hw
+IZ
+IZ
 rj
 rj
 rj
@@ -61614,26 +61661,26 @@ rj
 rj
 rj
 rj
-rj
-rj
-rj
-rj
-rj
-rj
-HR
+IZ
+IZ
+IZ
+IZ
+IZ
+IZ
+hw
 PW
-HR
-HR
-HR
-HR
-HR
-HR
+hw
+hw
+hw
+hw
+hw
+hw
 KS
 NG
 NG
-XW
-ew
-rj
+aC
+IZ
+IZ
 rj
 rj
 rj
@@ -61771,26 +61818,26 @@ rj
 rj
 rj
 rj
-rj
-rj
-rj
-YX
-rj
-HR
-HR
+IZ
+IZ
+IZ
+Pk
+IZ
+hw
+hw
 by
 aK
 aK
-Hz
-Hz
+kK
+kK
 Bt
-Hz
+kK
 Ei
 GR
 GR
-HR
-ew
-rj
+hw
+IZ
+IZ
 rj
 rj
 rj
@@ -61928,26 +61975,26 @@ rj
 rj
 rj
 rj
-rj
-rj
-rj
-YX
-HR
-HR
-jq
+IZ
+IZ
+IZ
+Pk
+hw
+hw
+pO
 by
 aK
 aK
 aK
-Hz
-Hz
-cg
-ew
+kK
+kK
+MM
+IZ
 Vj
 bb
-HR
-ew
-rj
+hw
+IZ
+IZ
 rj
 rj
 rj
@@ -62085,26 +62132,26 @@ rj
 rj
 rj
 rj
-rj
-rj
-rj
+IZ
+IZ
+IZ
 yB
-HR
-jq
-jq
+hw
+pO
+pO
 Gw
 aK
 aK
 aK
-Hz
-Hz
-cg
-ew
+kK
+kK
+MM
+IZ
 Vj
 bb
-HR
-ew
-ew
+hw
+IZ
+IZ
 rj
 rj
 rj
@@ -62242,28 +62289,28 @@ rj
 rj
 rj
 rj
-rj
-rj
+IZ
+IZ
 hw
 vn
-jq
-jq
+pO
+pO
 aK
 Gw
 aK
 aK
-Hz
-Hz
+kK
+kK
 Bt
-Zk
-Zk
+zn
+zn
 bb
 bb
-HR
-HR
-ew
-ew
-rj
+hw
+hw
+IZ
+IZ
+IZ
 rj
 rj
 rj
@@ -62399,28 +62446,28 @@ rj
 rj
 rj
 rj
-rj
-rj
-HR
+IZ
+IZ
+hw
 wz
-jq
+pO
 aK
 aK
 Gw
 aK
 aK
 aK
-Hz
-Hz
+kK
+kK
 aK
 aK
 Gw
 bb
-Zk
-HR
-HR
-HR
-ew
+zn
+hw
+hw
+hw
+IZ
 rj
 rj
 rj
@@ -62556,11 +62603,11 @@ rj
 rj
 rj
 rj
-rj
-rj
-HR
+IZ
+IZ
+hw
 wz
-Zk
+zn
 aK
 aK
 Gw
@@ -62573,11 +62620,11 @@ aK
 aK
 Gw
 Gw
-Zk
-Zk
-HR
-HR
-HR
+zn
+zn
+hw
+hw
+hw
 rj
 rj
 rj
@@ -62713,11 +62760,11 @@ rj
 rj
 rj
 rj
-rj
-rj
-HR
+IZ
+IZ
+hw
 wz
-Zk
+zn
 aK
 aK
 Qn
@@ -62731,10 +62778,10 @@ bS
 bS
 xI
 aK
-Zk
-BY
-HR
-HR
+zn
+IU
+hw
+hw
 rj
 rj
 rj
@@ -62872,9 +62919,9 @@ rj
 rj
 rj
 rj
-HR
+hw
 wz
-Zk
+zn
 aK
 aK
 ry
@@ -62888,10 +62935,10 @@ ZN
 ZN
 KG
 aK
-Zk
-BY
-HR
-HR
+zn
+IU
+hw
+hw
 rj
 rj
 rj
@@ -63029,10 +63076,10 @@ rj
 rj
 rj
 rj
-HR
+hw
 wz
-Zk
-Hz
+zn
+kK
 aK
 ry
 ZN
@@ -63045,10 +63092,10 @@ ZN
 ZN
 KG
 aK
-Zk
-BY
-HR
-HR
+zn
+IU
+hw
+hw
 rj
 rj
 rj
@@ -63186,11 +63233,11 @@ is
 rj
 rj
 rj
-HR
+hw
 ym
-Zk
+zn
 Bt
-Hz
+kK
 ry
 ZN
 ZN
@@ -63202,10 +63249,10 @@ ZN
 ZN
 KG
 aK
-Zk
-BY
-HR
-HR
+zn
+IU
+hw
+hw
 rj
 rj
 rj
@@ -63343,10 +63390,10 @@ rj
 rj
 rj
 rj
-HR
+hw
 wz
-Zk
-Hz
+zn
+kK
 aK
 ry
 ZN
@@ -63360,9 +63407,9 @@ ZN
 KG
 aK
 To
-BY
-HR
-HR
+IU
+hw
+hw
 rj
 rj
 rj
@@ -63516,10 +63563,10 @@ ZN
 ZN
 KG
 aK
-Zk
-BY
-HR
-HR
+zn
+IU
+hw
+hw
 rj
 rj
 rj
@@ -63814,11 +63861,11 @@ rj
 rj
 rj
 rj
-HR
+hw
 wz
-Zk
+zn
 Bt
-Hz
+kK
 ry
 ZN
 ZN
@@ -63971,10 +64018,10 @@ rj
 rj
 rj
 rj
-HR
+hw
 wz
-Zk
-Hz
+zn
+kK
 aK
 ry
 kM
@@ -63987,10 +64034,10 @@ kM
 kM
 KG
 aK
-Zk
-BY
-HR
-HR
+zn
+IU
+hw
+hw
 rj
 rj
 rj
@@ -64128,9 +64175,9 @@ rj
 rj
 rj
 rj
-HR
+hw
 wz
-Zk
+zn
 aK
 aK
 ry
@@ -64144,10 +64191,10 @@ eU
 eU
 KG
 aK
-Zk
-BY
-HR
-rj
+zn
+IU
+hw
+IZ
 rj
 rj
 rj
@@ -64285,9 +64332,9 @@ rj
 rj
 rj
 rj
-HR
+hw
 wz
-Zk
+zn
 aK
 aK
 uu
@@ -64301,10 +64348,10 @@ Hp
 bS
 em
 aK
-Zk
-BY
-HR
-rj
+zn
+IU
+hw
+IZ
 rj
 rj
 rj
@@ -64442,9 +64489,9 @@ rj
 rj
 rj
 rj
-HR
+hw
 wz
-Zk
+zn
 aK
 aK
 aK
@@ -64458,10 +64505,10 @@ Gw
 aK
 aK
 aK
-Zk
-BY
-HR
-rj
+zn
+IU
+hw
+IZ
 rj
 rj
 rj
@@ -64601,10 +64648,10 @@ rj
 rj
 hw
 wz
-Zk
-Zk
-Zk
-Zk
+zn
+zn
+zn
+zn
 aK
 aK
 aK
@@ -64613,12 +64660,12 @@ aK
 aK
 Gw
 aK
-Zk
-Zk
-Zk
-BY
-HR
-rj
+zn
+zn
+zn
+IU
+hw
+IZ
 rj
 rj
 rj
@@ -64758,24 +64805,24 @@ rj
 rj
 hw
 wz
-jq
-jq
-jq
-Zk
-Zk
-Zk
-Zk
-Zk
-Zk
-Zk
+pO
+pO
+pO
+zn
+zn
+zn
+zn
+zn
+zn
+zn
 bb
-Zk
-Zk
-jq
-jq
+zn
+zn
+pO
+pO
 Ge
-Fg
-Jn
+RS
+du
 Pf
 QQ
 QQ
@@ -64915,24 +64962,24 @@ rj
 rj
 rj
 YX
-rj
-HR
-jq
-jq
-jq
-jq
-jq
-jq
-jq
-jq
+IZ
+hw
+pO
+pO
+pO
+pO
+pO
+pO
+pO
+pO
 by
-jq
-jq
-jq
-HR
+pO
+pO
+pO
 hw
 hw
-rj
+hw
+IZ
 QQ
 QQ
 rj
@@ -65072,24 +65119,24 @@ rj
 rj
 rj
 rj
-rj
+IZ
 hw
-HR
-HR
-HR
-HR
-HR
-HR
-HR
-HR
+hw
+hw
+hw
+hw
+hw
+hw
+hw
+hw
 PW
-HR
-HR
-HR
 hw
-rj
-rj
-rj
+hw
+hw
+hw
+IZ
+IZ
+IZ
 QQ
 rj
 rj
@@ -65243,10 +65290,10 @@ Io
 rj
 rj
 rj
-rj
-rj
-rj
-rj
+IZ
+IZ
+IZ
+IZ
 QQ
 rj
 rj
@@ -65400,10 +65447,10 @@ rj
 rj
 rj
 rj
-rj
-rj
-rj
-rj
+IZ
+IZ
+IZ
+IZ
 QQ
 rj
 rj
