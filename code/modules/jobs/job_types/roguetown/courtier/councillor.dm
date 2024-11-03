@@ -15,7 +15,7 @@
 
 	give_bank_account = 40
 	noble_income = 20
-	min_pq = 1 //Probably a bad idea to have a complete newbie advising the monarch
+	min_pq = 0 //Probably a bad idea to have a complete newbie advising the monarch
 	max_pq = null
 	round_contrib_points = 2
 
