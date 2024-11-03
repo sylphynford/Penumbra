@@ -13,7 +13,7 @@
 	whitelist_req = TRUE
 	outfit = /datum/outfit/job/roguetown/woodsman
 	display_order = JDO_CHIEF
-	min_pq = 2 //mentor role, not a high PQ requirement but not zero
+	min_pq = 0 //mentor role, not a high PQ requirement but not zero
 	max_pq = null
 	give_bank_account = 16
 	round_contrib_points = 3
