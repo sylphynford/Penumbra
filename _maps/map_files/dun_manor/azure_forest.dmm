@@ -928,7 +928,7 @@
 /area/rogue/under/cave/dungeon1/gethsmane/inner)
 "hl" = (
 /obj/machinery/light/rogue/smelter/great{
-	name = ";
+	name = "fix1"
 	color = "#485775";
 	desc = ""
 	},
