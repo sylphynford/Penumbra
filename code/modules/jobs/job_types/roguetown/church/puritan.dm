@@ -17,7 +17,7 @@
 	outfit = /datum/outfit/job/roguetown/puritan
 	display_order = JDO_PURITAN
 	give_bank_account = 36
-	min_pq = 6 //Only for those bold of spirit, sure of mind, hard of pintle...and should probably know Psydon from Zizo. Not a crucial role, and rather prone to people instigating excessive conflict
+	min_pq = 0 //Only for those bold of spirit, sure of mind, hard of pintle...and should probably know Psydon from Zizo. Not a crucial role, and rather prone to people instigating excessive conflict
 	max_pq = null
 	round_contrib_points = 2
 
