@@ -16,7 +16,7 @@
 
 	display_order = JDO_BANDIT
 	announce_latejoin = FALSE
-	min_pq = 0
+	min_pq = 5
 	max_pq = null
 
 	advclass_cat_rolls = list(CTAG_BANDIT = 20)
