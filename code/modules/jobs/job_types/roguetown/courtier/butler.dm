@@ -15,7 +15,7 @@
 	outfit = /datum/outfit/job/roguetown/butler
 	display_order = JDO_BUTLER
 	give_bank_account = 30
-	min_pq = 1 //Head Butler needs to actually give head at least once before getting the position
+	min_pq = 0 //Head Butler needs to actually give head at least once before getting the position
 	max_pq = null
 	round_contrib_points = 2
 

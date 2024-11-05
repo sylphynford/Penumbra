@@ -9,7 +9,7 @@
 	allowed_races = RACES_ALL_KINDS
 	allowed_patrons = ALL_PALADIN_PATRONS
 	outfit = /datum/outfit/job/roguetown/templar
-	min_pq = 3 //Deus vult, but only according to the proper escalation rules
+	min_pq = 0 //Deus vult, but only according to the proper escalation rules
 	max_pq = null
 	round_contrib_points = 2
 	total_positions = 3
