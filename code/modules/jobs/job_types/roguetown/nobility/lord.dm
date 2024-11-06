@@ -33,8 +33,8 @@ GLOBAL_LIST_EMPTY(lord_titles)
 	cmode_music = 'sound/music/combat_fancy.ogg'
 
 /datum/job/roguetown/exlord //just used to change the lords title
-	title = "Duke Emeritus"
-	f_title = "Duchess Emeritus"
+	title = "Baron Emeritus"
+	f_title = "Baroness Emeritus"
 	flag = LORD
 	department_flag = NOBLEMEN
 	faction = "Station"
