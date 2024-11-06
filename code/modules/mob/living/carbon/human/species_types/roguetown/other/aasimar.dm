@@ -11,7 +11,7 @@
 	Most commonly, Aasimar are similar to Humans, albeit taller, and possess uncanny beauty. \
 	They have strangely colored skin and are more physically frail than the average Human. \
 	Because of their upbringing, they make for natural conduits for godly powers. \
-	Azure Peak's populace holds them with a mixture of uneasy fear or, and respect. \
+	Fablefields's populace holds them with a mixture of uneasy fear or, and respect. \
 	It is also widely believed that an Aasimars death is a bad omen... \
 	+1 Fortune, -1 Perception."
 
