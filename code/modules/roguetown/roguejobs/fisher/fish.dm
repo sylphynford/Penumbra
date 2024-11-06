@@ -81,7 +81,7 @@
 
 /obj/item/reagent_containers/food/snacks/fish/clownfish
 	name = "clownfish"
-	desc = "This fish brings vibrant hues to the dark world of Azure Peak."
+	desc = "This fish brings vibrant hues to the dark world of Fablefield."
 	icon_state = "clownfish"
 	sellprice = 40
 	fried_type = /obj/item/reagent_containers/food/snacks/rogue/fryfish/clownfish
