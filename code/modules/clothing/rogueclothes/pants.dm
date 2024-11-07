@@ -114,6 +114,19 @@
 	icon_state = "leathertrou"
 	resistance_flags = FIRE_PROOF
 
+/obj/item/clothing/under/roguetown/trou/otavan
+	name = "heavy leather trousers"
+	desc = "padded leather armor."
+	icon_state = "fencerpants"
+	resistance_flags = FIRE_PROOF
+	armor = list("blunt" = 60, "slash" = 100, "stab" = 80, "bullet" = 20, "laser" = 0,"energy" = 0, "bomb" = 0, "bio" = 0, "rad" = 0, "fire" = 0, "acid" = 0)
+	prevent_crits = list(BCLASS_CUT, BCLASS_STAB, BCLASS_CHOP, BCLASS_BLUNT)
+	blocksound = SOFTHIT
+	max_integrity = 300
+	blade_dulling = DULLING_BASHCHOP
+	sewrepair = TRUE
+	allowed_race = NON_DWARVEN_RACE_TYPES
+
 /obj/item/clothing/under/roguetown/trou/leather/mourning
 	name = "mourning trousers"
 	icon_state = "leathertrou"
