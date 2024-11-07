@@ -40,7 +40,7 @@
 			H.change_stat("constitution", 4)
 			H.change_stat("perception", 1)
 			H.change_stat("speed", -1)
-			r_hand = /obj/item/rogueweapon/sword/long
+			r_hand = /obj/item/rogueweapon/sword/falchion
 		if("Macebearer")
 			H.set_blindness(0)
 			to_chat(H, span_warning("You are a Macebearer from Otava, a skilled user of maces and clubs."))
