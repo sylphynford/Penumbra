@@ -1,3 +1,5 @@
+//The sprites for this class are commissioned works, please do not claim them!
+
 /datum/advclass/mercenary/routier
 	name = "Otavan Routiers"
 	tutorial = "The Routiers are a formidable Otavan mercenary band, a brotherhood of knights from noble families serving lords who seek to profit in peacetime. Known for their fierce combat skills and loyalty to coin, they offer their swords to the highest bidder, filling the quiet between wars with skirmishes and intrigue across the land."
