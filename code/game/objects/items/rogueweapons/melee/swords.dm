@@ -92,6 +92,17 @@
 	minstr = 4
 	wdefense = 4
 
+/obj/item/rogueweapon/sword/falchion
+	name = "falchion"
+	desc = "A blade with a quilloned crossguard."
+	parrysound = "bladedmedium"
+	force = 20
+	possible_item_intents = list(/datum/intent/sword/cut/short, /datum/intent/sword/thrust/short)
+	icon_state = "falchion"
+	gripped_intents = null
+	minstr = 4
+	wdefense = 6
+
 /obj/item/rogueweapon/sword/long
 	force = 25
 	force_wielded = 30
