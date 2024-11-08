@@ -1,20 +1,19 @@
 /datum/advclass/knighterrant
-	name = "Knight-errant"
-	tutorial = "You fashion yourself a knight from a distant land, a scion of a noble house. Whether or not that's true is irrelevant; manner maketh man, bandit. Carry yourself with dignity and remind the land that chivalry still exists, or give everyone a cruel reality check as they decry you as a blackguard under the weight of a steel boot. After selection you receive a choice between a shining knight or a black knight, which is entirely aesthetic."
+	name = "Dishonored Knight"
+	tutorial = "A dishonored knight from a foreign kingdom. Stripped of your honor and decried as a blackguard, your armor has been darkened as a symbol of such. As few may trust you in this land, you may either regain your honor through heroics, or prove that your heart has been darkened as well. "
 	allowed_races = RACES_ALL_KINDS
 	allowed_sexes = list(MALE, FEMALE)
 	outfit = /datum/outfit/job/roguetown/adventurer/knighterrant
 	traits_applied = list(TRAIT_HEAVYARMOR, TRAIT_NOBLE)
 	category_tags = list(CTAG_ADVENTURER)
 
-	noble_income = 5
 	cmode_music = 'sound/music/combat_knight.ogg'
 
 
 /datum/outfit/job/roguetown/adventurer/knighterrant/pre_equip(mob/living/carbon/human/H)
 	..()
 	H.adjust_blindness(-3)
-	var/classes = list("Normal Knight","Black Knight")
+	var/classes = list("Black Knight")
 	var/classchoice = input("Choose your archetypes", "Available archetypes") as anything in classes
 
 	switch(classchoice)
@@ -70,17 +69,17 @@
 			pants = /obj/item/clothing/under/roguetown/chainlegs/blk
 			cloak = /obj/item/clothing/cloak/half/rider/red
 			neck = /obj/item/clothing/neck/roguetown/gorget
-			shirt = /obj/item/clothing/suit/roguetown/armor/chainmail
-			armor = /obj/item/clothing/suit/roguetown/armor/plate/blk
+			shirt = /obj/item/clothing/suit/roguetown/armor/gambeson/blk
+			armor = /obj/item/clothing/suit/roguetown/armor/plate/half/blk
 			wrists = /obj/item/clothing/wrists/roguetown/bracers
-			shoes = /obj/item/clothing/shoes/roguetown/boots/armor/blk
+			shoes = /obj/item/clothing/shoes/roguetown/boots
 			belt = /obj/item/storage/belt/rogue/leather
 			backr = /obj/item/storage/backpack/rogue/satchel/black
 			backl = /obj/item/rogueweapon/shield/tower/metal
 			backpack_contents = list(/obj/item/rogueweapon/huntingknife/idagger = 1, /obj/item/storage/belt/rogue/pouch/coins/poor)
 			H.mind.adjust_skillrank(/datum/skill/combat/polearms, 3, TRUE)
 			H.mind.adjust_skillrank(/datum/skill/combat/swords, 3, TRUE)
-			H.mind.adjust_skillrank(/datum/skill/combat/shields, 3, TRUE)
+			H.mind.adjust_skillrank(/datum/skill/combat/shields, 2, TRUE)
 			H.mind.adjust_skillrank(/datum/skill/combat/maces, 3, TRUE)
 			H.mind.adjust_skillrank(/datum/skill/combat/whipsflails, 3, TRUE)
 			H.mind.adjust_skillrank(/datum/skill/combat/wrestling, 3, TRUE)
@@ -96,7 +95,6 @@
 			H.change_stat("endurance", 1)
 			H.change_stat("constitution", 2)
 			H.change_stat("intelligence", 1)
-			H.change_stat("speed", 1)
 			H.dna.species.soundpack_m = new /datum/voicepack/male/knight()
 			var/weapons = list("Bastard Sword","Flail","Spear")
 			var/weapon_choice = input("Choose your weapon.", "TAKE UP ARMS") as anything in weapons
@@ -119,4 +117,10 @@
 		color = CLOTHING_GREY
 
 /obj/item/clothing/shoes/roguetown/boots/armor/blk
+		color = CLOTHING_GREY
+
+/obj/item/clothing/suit/roguetown/armor/gambeson/blk
+		color = CLOTHING_GREY
+
+/obj/item/clothing/suit/roguetown/armor/plate/half/blk
 		color = CLOTHING_GREY
