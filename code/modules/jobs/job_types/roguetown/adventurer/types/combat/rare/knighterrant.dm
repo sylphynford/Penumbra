@@ -69,8 +69,7 @@
 			pants = /obj/item/clothing/under/roguetown/chainlegs/blk
 			cloak = /obj/item/clothing/cloak/half/rider/red
 			neck = /obj/item/clothing/neck/roguetown/gorget
-			shirt = /obj/item/clothing/suit/roguetown/armor/gambeson/blk
-			armor = /obj/item/clothing/suit/roguetown/armor/plate/half/blk
+			shirt = /obj/item/clothing/suit/roguetown/armor/chainmail
 			wrists = /obj/item/clothing/wrists/roguetown/bracers
 			shoes = /obj/item/clothing/shoes/roguetown/boots
 			belt = /obj/item/storage/belt/rogue/leather
@@ -119,7 +118,7 @@
 /obj/item/clothing/shoes/roguetown/boots/armor/blk
 		color = CLOTHING_GREY
 
-/obj/item/clothing/suit/roguetown/armor/gambeson/blk
+/obj/item/clothing/suit/roguetown/armor/chainmail
 		color = CLOTHING_GREY
 
 /obj/item/clothing/suit/roguetown/armor/plate/half/blk
