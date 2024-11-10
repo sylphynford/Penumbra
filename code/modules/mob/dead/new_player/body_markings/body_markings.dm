@@ -56,6 +56,13 @@
 	default_color = "FF0000"
 	affected_bodyparts = HEAD
 
+/datum/body_marking/blush
+	icon = 'icons/mob/body_markings/other_markings.dmi'
+	name = "Blush"
+	icon_state = "blush"
+	default_color = "FF0000"
+	affected_bodyparts = HEAD
+
 /datum/body_marking/plain
 	icon = 'icons/mob/body_markings/plain_markings.dmi'
 	name = "Plain"

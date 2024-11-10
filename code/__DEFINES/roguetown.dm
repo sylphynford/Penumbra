@@ -134,6 +134,15 @@
 	/datum/species/anthromorph,\
 	/datum/species/demihuman,\
 )
+// Main races of Otava
+#define OTAVAN_RACE_TYPES list(\
+	/datum/species/human/northern,\
+	/datum/species/elf/dark,\
+	/datum/species/elf/wood,\
+	/datum/species/human/halfelf,\
+	/datum/species/demihuman,\
+)
+
 #define ALL_CLERIC_PATRONS list(/datum/patron/divine/astrata, /datum/patron/divine/noc, /datum/patron/divine/dendor, /datum/patron/divine/necra, /datum/patron/divine/pestra, /datum/patron/divine/ravox, /datum/patron/divine/malum, /datum/patron/divine/eora)
 
 #define ALL_PALADIN_PATRONS list(/datum/patron/divine/astrata, /datum/patron/divine/noc, /datum/patron/divine/dendor, /datum/patron/divine/necra, /datum/patron/divine/pestra, /datum/patron/divine/ravox, /datum/patron/divine/malum, /datum/patron/divine/eora, /datum/patron/old_god)
