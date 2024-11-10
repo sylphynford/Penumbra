@@ -64,18 +64,7 @@
 	/datum/species/dwarf/mountain,\
 	/datum/species/tieberian,\
 	/datum/species/aasimar,\
-	/datum/species/lizardfolk,\
-	/datum/species/lupian,\
-	/datum/species/tabaxi,\
-	/datum/species/vulpkanin,\
-	/datum/species/akula,\
-	/datum/species/moth,\
-	/datum/species/dracon,\
-	/datum/species/anthromorph,\
-	/datum/species/anthromorphsmall,\
 	/datum/species/demihuman,\
-	/datum/species/kobold,\
-	/datum/species/goblinp,\
 )
 
 #define CLOTHED_RACES_TYPES list(\
