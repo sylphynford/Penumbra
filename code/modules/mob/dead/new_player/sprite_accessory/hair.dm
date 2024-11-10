@@ -454,6 +454,10 @@
 	name = "One Shoulder"
 	icon_state = "oneshoulder"
 
+/datum/sprite_accessory/hair/head/otavanbraid
+	name = "Otavan Braid"
+	icon_state = "witch_f"
+
 /datum/sprite_accessory/hair/head/over_eye
 	name = "Over Eye"
 	icon_state = "shortovereye"

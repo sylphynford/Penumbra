@@ -224,6 +224,7 @@
 		/datum/sprite_accessory/hair/head/odango,
 		/datum/sprite_accessory/hair/head/ombre,
 		/datum/sprite_accessory/hair/head/oneshoulder,
+		/datum/sprite_accessory/hair/head/otavanbraid,
 		/datum/sprite_accessory/hair/head/over_eye,
 		/datum/sprite_accessory/hair/head/oxton,
 		/datum/sprite_accessory/hair/head/parted,
