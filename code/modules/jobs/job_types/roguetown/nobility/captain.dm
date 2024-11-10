@@ -1,5 +1,5 @@
 /datum/job/roguetown/captain
-	title = "Guard Captain"
+	title = "Knight Banneret"
 	flag = GUARD_CAPTAIN
 	department_flag = NOBLEMEN
 	faction = "Station"

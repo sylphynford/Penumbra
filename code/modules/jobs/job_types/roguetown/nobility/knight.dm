@@ -1,5 +1,5 @@
 /datum/job/roguetown/knight
-	title = "Royal Guard"		//Knights, but their role is far more clear this way.
+	title = "Knight Lieutenant"		
 	flag = KNIGHT
 	department_flag = NOBLEMEN
 	faction = "Station"
@@ -8,7 +8,7 @@
 	allowed_races = NOBLE_RACES_TYPES
 	allowed_sexes = list(MALE, FEMALE)
 	allowed_ages = list(AGE_ADULT, AGE_MIDDLEAGED)
-	tutorial = "Having proven yourself both loyal and capable, you have been knighted to serve the realm as the monarch's personal guard. You listen to your Liege and the Captain of the Guard, defending your Lord and realm."
+	tutorial = "Having proven yourself both loyal and capable, you have been knighted to serve the realm as the baron's personal guard. You listen to your Liege and the Knight Banneret, defending your Lord and realm. You also act as a Sergeant to the Men-At-Arms."
 	display_order = JDO_KNIGHT
 	whitelist_req = TRUE
 	outfit = /datum/outfit/job/roguetown/knight
