@@ -4,7 +4,7 @@
 	name = "Otavan Routiers"
 	tutorial = "The Routiers are a formidable Otavan mercenary band, a brotherhood of knights from noble families serving lords who seek to profit in peacetime. Known for their fierce combat skills and loyalty to coin, they offer their swords to the highest bidder, filling the quiet between wars with skirmishes and intrigue across the land."
 	allowed_sexes = list(MALE, FEMALE)
-	allowed_races = NON_DWARVEN_RACE_TYPES
+	allowed_races = OTAVAN_RACE_TYPES
 	outfit = /datum/outfit/job/roguetown/mercenary/routier
 	category_tags = list(CTAG_MERCENARY)
 	cmode_music = 'sound/music/combat_routier.ogg'
