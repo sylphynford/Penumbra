@@ -139,6 +139,7 @@
 	/datum/species/human/northern,\
 	/datum/species/elf/dark,\
 	/datum/species/elf/wood,\
+	/datum/species/human/halfelf,\
 	/datum/species/demihuman,\
 )
 
