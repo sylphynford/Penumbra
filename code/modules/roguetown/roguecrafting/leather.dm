@@ -226,3 +226,11 @@
 				/obj/item/natural/hide = 4)
 	craftdiff = 3
 	sellprice = 80
+
+/datum/crafting_recipe/roguetown/leather/gwstrap
+	name = "Greatweapon Strap"
+	result = /obj/item/gwstrap
+	reqs = list(/obj/item/natural/hide = 2,
+				/obj/item/rope = 1)
+	sellprice = 30
+
