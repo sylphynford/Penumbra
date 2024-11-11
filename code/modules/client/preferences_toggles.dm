@@ -53,7 +53,7 @@
 //	set category = "Options"
 //	set name = "Toggle ERP Panel"
 //	if(prefs)
-//		prefs.sexable = !prefs.sexable
+///		prefs.sexable = !prefs.sexable
 //		prefs.save_preferences()
 //		if(prefs.sexable)
 //			to_chat(src, "Others can play with you.")
