@@ -215,7 +215,7 @@ GLOBAL_LIST_EMPTY(round_join_times)
 
 #define CTAG_WATCH			"CAT_WATCH"			// Watch class - Handles Town Watch class selector
 #define CTAG_MENATARMS		"CAT_MENATARMS"		// Men-at-Arms class - Handles Men-at-Arms class selector
-#define CTAG_ROYALGUARD		"CAT_ROYALGUARD"	// Royal Guard class - Handles Royal Guard class selector
+#define CTAG_ROYALGUARD		"CAT_ROYALGUARD"	// Knight Lieutenant class - Handles Knight Lieutenant class selector
 #define CTAG_MERCENARY		"CAT_MERCENARY"		// Mercenary class - Handles Mercenary class selector
 #define CTAG_HAND			"CAT_HAND"			// Hand class - Handles Hand class selector
 #define CTAG_TEMPLAR		"CAT_TEMPLAR"		// Templar class - Handles Templar class selector

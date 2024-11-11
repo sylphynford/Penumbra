@@ -35,7 +35,7 @@
 	name = "the master key."
 	targetitem = /obj/item/roguekey/lord
 	difficulty = 3
-	excludefromjob = list("Lord", "Royal Guard")
+	excludefromjob = list("Lord", "Knight Lieutenant")
 
 /datum/objective_item/steal/rogue/spices
 	name = "a pepper mill."
@@ -47,7 +47,7 @@
 	name = "the Barons crown."
 	targetitem = /obj/item/clothing/head/roguetown/crown/serpcrown
 	difficulty = 3
-	excludefromjob = list("Baron", "Consort", "Royal Guard")
+	excludefromjob = list("Baron", "Consort", "Knight Lieutenant")
 
 
 ////////////////////////////////////////////////////////////

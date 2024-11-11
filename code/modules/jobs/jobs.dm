@@ -64,11 +64,11 @@ GLOBAL_LIST_INIT(noble_positions, list(
 	"Consort",
 	"Prince",
 	"Hand",
-	"Guard Captain",
-	"Marshal",
+	"Knight Banneret",
+	"Magistrate",
 	"Councillor",
 	"Steward",
-	"Royal Guard",
+	"Knight Lieutenant",
 ))
 
 GLOBAL_LIST_INIT(courtier_positions, list(

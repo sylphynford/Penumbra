@@ -143,7 +143,7 @@ INITIALIZE_IMMEDIATE(/obj/effect/landmark)
 	icon_state = "arrow"
 
 /obj/effect/landmark/start/knight
-	name = "Royal Guard"
+	name = "Knight Lieutenant"
 	icon_state = "arrow"
 
 /obj/effect/landmark/start/sheriff
@@ -151,7 +151,7 @@ INITIALIZE_IMMEDIATE(/obj/effect/landmark)
 	icon_state = "arrow"
 
 /obj/effect/landmark/start/guard_captain
-	name = "Guard Captain"
+	name = "Knight Banneret"
 	icon_state = "arrow"
 
 /obj/effect/landmark/start/barkeep
@@ -194,8 +194,8 @@ INITIALIZE_IMMEDIATE(/obj/effect/landmark)
 	name = "Bog Guard"
 	icon_state = "arrow"
 
-/obj/effect/landmark/start/marshal
-	name = "Marshal"
+/obj/effect/landmark/start/Magistrate
+	name = "Magistrate"
 	icon_state = "arrow"
 
 /obj/effect/landmark/start/councillor

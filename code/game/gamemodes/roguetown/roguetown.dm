@@ -199,7 +199,7 @@ var/global/list/roguegamemodes = list("Rebellion", "Vampires and Werewolves", "E
 	"Consort",
 	"Merchant",
 	"Priest",
-	"Royal Guard")
+	"Knight Lieutenant")
 	var/num_bandits = 0
 	if(num_players() >= 10)
 		num_bandits = CLAMP(round(num_players() / 5), 4, 6)
@@ -259,8 +259,8 @@ var/global/list/roguegamemodes = list("Rebellion", "Vampires and Werewolves", "E
 
 
 /datum/game_mode/chaosmode/proc/pick_aspirants()
-	var/list/possible_jobs_aspirants = list("Prince", "Princess", "Guard Captain", "Steward", "Hand", "Royal Guard")
-	var/list/possible_jobs_helpers = list("Guard Captain", "Prince", "Princess", "Hand",  "Steward", "Royal Guard")
+	var/list/possible_jobs_aspirants = list("Prince", "Princess", "Knight Banneret", "Steward", "Hand", "Knight Lieutenant")
+	var/list/possible_jobs_helpers = list("Knight Banneret", "Prince", "Princess", "Hand",  "Steward", "Knight Lieutenant")
 	var/list/rolesneeded = list("Aspirant","Loyalist","Supporter")
 
 	antag_candidates = get_players_for_role(ROLE_ASPIRANT)
@@ -353,7 +353,7 @@ var/global/list/roguegamemodes = list("Rebellion", "Vampires and Werewolves", "E
 	restricted_jobs = list()
 
 /datum/game_mode/chaosmode/proc/pick_lich()
-	restricted_jobs = list("Baron", "Consort", "Royal Guard", "Guard Captain")
+	restricted_jobs = list("Baron", "Consort", "Knight Lieutenant", "Knight Banneret")
 	antag_candidates = get_players_for_role(ROLE_LICH)
 	var/datum/mind/lichman = pick_n_take(antag_candidates)
 	if(lichman)
@@ -385,12 +385,12 @@ var/global/list/roguegamemodes = list("Rebellion", "Vampires and Werewolves", "E
 	"Priest",
 	"Acolyte",
 	"Cleric",
-	"Guard Captain",
+	"Knight Banneret",
 	"Court Magician",
 	"Templar",
 	"Bog Guard",
 	"Bog Master",
-	"Royal Guard"
+	"Knight Lieutenant"
 	)
 	antag_candidates = get_players_for_role(ROLE_NBEAST)
 	antag_candidates = shuffle(antag_candidates)
@@ -432,12 +432,12 @@ var/global/list/roguegamemodes = list("Rebellion", "Vampires and Werewolves", "E
 	"Priest",
 	"Acolyte",
 	"Cleric",
-	"Guard Captain",
+	"Knight Banneret",
 	"Court Magician",
 	"Templar",
 	"Bog Guard",
 	"Bog Master",
-	"Royal Guard",
+	"Knight Lieutenant",
 	"Mortician",
 	"Desert Rider",
 	"Desert Rider Mercenary",

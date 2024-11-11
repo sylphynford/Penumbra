@@ -1,4 +1,4 @@
-/datum/job/roguetown/marshal // A somewhat ham-fisted merge between bailiff and the old town sheriff role. The latter was built like a modern day officer, but we medieval in this bitch!
+/datum/job/roguetown/Magistrate // A somewhat ham-fisted merge between bailiff and the old town sheriff role. The latter was built like a modern day officer, but we medieval in this bitch!
 	title = "Magistrate"
 	flag = MARSHAL
 	department_flag = NOBLEMEN
