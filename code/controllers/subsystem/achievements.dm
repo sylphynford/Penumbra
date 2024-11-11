@@ -13,7 +13,7 @@ SUBSYSTEM_DEF(achievements)
 
 /datum/controller/subsystem/achievements/Initialize(timeofday)
 	if(CONFIG_GET(string/medal_hub_address) && CONFIG_GET(string/medal_hub_password))
-		hub_enabled = TRUE
+		hub_enabled = FALSE
 	
 	for(var/T in subtypesof(/datum/award/achievement))
 		var/instance = new T

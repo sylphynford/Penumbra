@@ -92,7 +92,7 @@ GLOBAL_LIST_EMPTY(chosen_names)
 	var/list/friendlyGenders = list("male" = "masculine", "female" = "feminine")
 	var/phobia = "spiders"
 	var/shake = TRUE
-	var/sexable = FALSE
+	var/sexable = TRUE
 
 	var/list/custom_names = list()
 	var/preferred_ai_core_display = "Blue"
@@ -418,7 +418,7 @@ GLOBAL_LIST_EMPTY(chosen_names)
 
 			dat += "<br><b>Flavortext:</b> <a href='?_src_=prefs;preference=flavortext;task=input'>Change</a>"
 
-			dat += "<br><b>OOC Notes:</b> <a href='?_src_=prefs;preference=ooc_notes;task=input'>Change</a>"
+			//dat += "<br><b>OOC Notes:</b> <a href='?_src_=prefs;preference=ooc_notes;task=input'>Change</a>"
 
 			dat += "<br><b>Loadout Item:</b> <a href='?_src_=prefs;preference=loadout_item;task=input'>[loadout ? loadout.name : "None"]</a>"
 			dat += "</td>"

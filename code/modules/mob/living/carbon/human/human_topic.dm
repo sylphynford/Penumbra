@@ -13,10 +13,10 @@
 		dat += "<div align='center'>[src]</div>"
 		if(flavortext)
 			dat += "<div align='left'>[replacetext(flavortext, "\n", "<BR>")]</div>"
-		if(ooc_notes)
-			dat += "<br>"
-			dat += "<div align='center'><b>OOC notes</b></div>"
-			dat += "<div align='left'>[replacetext(ooc_notes, "\n", "<BR>")]"
+//		if(ooc_notes)
+//			dat += "<br>"
+//			dat += "<div align='center'><b>OOC notes</b></div>"
+//			dat += "<div align='left'>[replacetext(ooc_notes, "\n", "<BR>")]"
 		var/datum/browser/popup = new(user, "[src]", 600, 900)
 		popup.set_content(dat.Join())
 		popup.open(FALSE)
