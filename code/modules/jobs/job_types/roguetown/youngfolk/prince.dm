@@ -1,12 +1,12 @@
 /datum/job/roguetown/prince
-	title = "Prince"
-	f_title = "Princess"
+	title = "Heir"
+	f_title = "Successor"
 	flag = PRINCE
 	department_flag = YOUNGFOLK
 	faction = "Station"
 	total_positions = 2
 	spawn_positions = 2
-	f_title = "Princess"
+	f_title = "Successor"
 	allowed_races = NOBLE_RACES_TYPES //Maybe a system to force-pick lineage based on king and queen should be implemented.
 	allowed_sexes = list(MALE, FEMALE)
 	allowed_ages = list(AGE_ADULT)
