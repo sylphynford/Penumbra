@@ -102,9 +102,10 @@
 		return FALSE
 	if(!recruit.mind)
 		return FALSE
-	//only advcs and mercs
-	if(!(recruit.job in GLOB.party_positions))
-		return FALSE
+	//only advs and mercs
+	for(var/mob/living/carbon/human/H)
+		if(H.job != "Mercenary" || H.job != "Adventurer")
+			return FALSE
 	if(!recruit.get_face_name(null))
 		return FALSE
 	return TRUE
