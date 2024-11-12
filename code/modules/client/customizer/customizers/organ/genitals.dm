@@ -6,6 +6,9 @@
 	gender_enabled = MALE
 
 /datum/customizer/organ/penis/is_allowed(datum/preferences/prefs)
+	for(var/datum/customizer_entry/entry as anything in prefs.customizer_entries)
+		if(istype(entry,/datum/customizer_entry/organ/vagina))
+			return entry.disabled
 	return TRUE
 
 /datum/customizer_choice/organ/penis
@@ -174,7 +177,9 @@
 	gender_enabled = MALE
 
 /datum/customizer/organ/testicles/is_allowed(datum/preferences/prefs)
-	return TRUE
+	for(var/datum/customizer_entry/entry as anything in prefs.customizer_entries)
+		if(istype(entry,/datum/customizer_entry/organ/penis))
+			return !entry.disabled
 
 /datum/customizer_choice/organ/testicles
 	abstract_type = /datum/customizer_choice/organ/testicles
@@ -260,7 +265,7 @@
 	gender_enabled = FEMALE
 
 /datum/customizer/organ/breasts/is_allowed(datum/preferences/prefs)
-	return TRUE
+	return (prefs.gender == FEMALE)
 
 /datum/customizer_choice/organ/breasts
 	abstract_type = /datum/customizer_choice/organ/breasts
@@ -330,6 +335,9 @@
 	gender_enabled = FEMALE
 
 /datum/customizer/organ/vagina/is_allowed(datum/preferences/prefs)
+	for(var/datum/customizer_entry/entry as anything in prefs.customizer_entries)
+		if(istype(entry,/datum/customizer_entry/organ/penis))
+			return entry.disabled
 	return TRUE
 
 /datum/customizer_choice/organ/vagina
@@ -360,7 +368,7 @@
 	switch(href_list["customizer_task"])
 		if("fertile")
 			vagina_entry.fertility = !vagina_entry.fertility
-			
+
 
 /datum/customizer/organ/vagina/human
 	customizer_choices = list(/datum/customizer_choice/organ/vagina/human)
