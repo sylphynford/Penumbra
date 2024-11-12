@@ -152,6 +152,11 @@ GLOBAL_LIST_INIT(youngfolk_positions, list(
 	"Vagabond",
 ))
 
+GLOBAL_LIST_INIT(party_positions, list(
+	"Adventurer",
+	"Mercenary",
+))
+
 GLOBAL_LIST_INIT(allmig_positions, list(
 	"Adventurer",
 	"Pilgrim",
