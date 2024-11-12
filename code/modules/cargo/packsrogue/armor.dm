@@ -56,8 +56,8 @@
 	name = "Steel Boots"
 	cost = 50
 	contains = list(
-					/obj/item/clothing/shoes/roguetown/boots,
-					/obj/item/clothing/shoes/roguetown/boots,
+					/obj/item/clothing/shoes/roguetown/boots/armor,
+					/obj/item/clothing/shoes/roguetown/boots/armor,
 				)
 
 /datum/supply_pack/rogue/armor/gambeson
