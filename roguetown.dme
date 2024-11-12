@@ -3596,7 +3596,6 @@
 #include "modular_azurepeak\code\modules\spells\orison.dm"
 #include "modular_azurepeak\code\modules\spells\pantheon\divine\necra.dm"
 #include "modular_azurepeak\code\modules\spells\pantheon\inhumen\zizo.dm"
-#include "modular_azurepeak\icons\obj\items\gwstrap.dm"
 #include "modular_azurepeak\statpacks\agile.dm"
 #include "modular_azurepeak\statpacks\mental.dm"
 #include "modular_azurepeak\statpacks\physical.dm"
