@@ -458,6 +458,12 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 
 	S["pronouns"] >> pronouns
 	S["voice_type"] >> voice_type
+
+	S["family"] >> family
+	S["family_species"] >> family_species
+	S["family_sexes"] >> family_sexes
+	S["family_gender"] >> family_gender
+
 	//try to fix any outdated data if necessary
 	if(needs_update >= 0)
 		update_character(needs_update, S)		//needs_update == savefile_version if we need an update (positive integer)
@@ -485,6 +491,14 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	if(!features["ethcolor"] || features["ethcolor"] == "#000")
 		features["ethcolor"] = GLOB.color_list_ethereal[pick(GLOB.color_list_ethereal)]
 
+
+	if(!islist(family_species))
+		family_species = list()
+	if(!islist(family_sexes))
+		family_sexes = list()
+	if(!islist(family_gender))
+		family_gender = list()
+
 	randomise = SANITIZE_LIST(randomise)
 
 	age				= sanitize_inlist(age, pref_species.possible_ages)
@@ -505,6 +519,8 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	S["body_markings"] >> body_markings
 	body_markings = SANITIZE_LIST(body_markings)
 	validate_body_markings()
+	if(!family_species)
+		family_species = list()
 
 	S["descriptor_entries"] >> descriptor_entries
 	descriptor_entries = SANITIZE_LIST(descriptor_entries)
@@ -567,7 +583,10 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	WRITE_FILE(S["feature_mcolor2"]					, features["mcolor2"])
 	WRITE_FILE(S["feature_mcolor3"]					, features["mcolor3"])
 	WRITE_FILE(S["feature_ethcolor"]					, features["ethcolor"])
-
+	WRITE_FILE(S["family"]							, family)
+	WRITE_FILE(S["family_species"]					, family_species)
+	WRITE_FILE(S["family_sexes"]					, family_sexes)
+	WRITE_FILE(S["family_gender"]					, family_gender)
 	//Custom names
 	for(var/custom_name_id in GLOB.preferences_custom_names)
 		var/savefile_slot_name = custom_name_id + "_name" //TODO remove this

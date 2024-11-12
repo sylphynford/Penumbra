@@ -63,6 +63,11 @@
 		/datum/body_marking/tonage,
 		/datum/body_marking/blush
 	)
+	halfchild_types = list(
+		"elfw" =  /datum/species/human/halfelf,
+		"halforc" = /datum/species/halforc,
+		"helf" = /datum/species/human/halfelf,
+	)
 
 /datum/species/human/northern/check_roundstart_eligible()
 	return TRUE
