@@ -194,7 +194,7 @@ INITIALIZE_IMMEDIATE(/obj/effect/landmark)
 	name = "Bog Guard"
 	icon_state = "arrow"
 
-/obj/effect/landmark/start/Magistrate
+/obj/effect/landmark/start/magistrate
 	name = "Magistrate"
 	icon_state = "arrow"
 
@@ -385,6 +385,10 @@ INITIALIZE_IMMEDIATE(/obj/effect/landmark)
 
 /obj/effect/landmark/start/adventurer
 	name = "Adventurer"
+	icon_state = "arrow"
+
+/obj/effect/landmark/start/partyleader
+	name = "Party Leader"
 	icon_state = "arrow"
 
 //yrf
