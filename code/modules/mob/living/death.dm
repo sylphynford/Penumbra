@@ -62,6 +62,7 @@
 	var/was_dead_before = stat == DEAD
 	stat = DEAD
 	unset_machine()
+//	GLOB.respawntimes[key] = world.time
 	timeofdeath = world.time
 	tod = station_time_timestamp()
 //	var/turf/T = get_turf(src)
