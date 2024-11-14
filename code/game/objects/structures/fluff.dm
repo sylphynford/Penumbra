@@ -863,13 +863,13 @@
 
 /obj/structure/fluff/statue/astrata
 	name = "astrata statue"
-	desc = "A stone statue of the sun Goddess Astrata. Bless."
+	desc = "A stone statue of the sun Saint Astrata. Bless."
 	icon_state = "astrata"
 	icon = 'icons/roguetown/misc/tallandwide.dmi'
 
 /obj/structure/fluff/statue/astrata/gold
 	name = "ornamental astrata statue"
-	desc = "An ornamental stone statue of the sun Goddess Astrata, decorated with golden jewelry. Bless."
+	desc = "An ornamental stone statue of the sun Saint Astrata, decorated with golden jewelry. Bless."
 	icon_state = "astrata_bling"
 
 /obj/structure/fluff/statue/knight/r
