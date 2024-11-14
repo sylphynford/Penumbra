@@ -237,20 +237,20 @@ SUBSYSTEM_DEF(family)
 			return "Wife"
 	return "Spouse"
 
-/mob/living/carbon/human/proc/getFamily(var/true = FALSE)//Returns the family src belongs to. By default. We use our names + DNA to support people pretending to be family members. Use true if you wish to get their ACTUAL family.
-	if(true)
+/mob/living/carbon/human/proc/getFamily(var/true_family = FALSE)//Returns the family src belongs to. By default. We use our names + DNA to support people pretending to be family members. Use true_family if you wish to get their ACTUAL family.
+	if(true_family)
 		return family
 	for(var/f in SSfamily.families)
 		var/datum/family/F = f
-		if(F.members.Find(name) && dna.uni_identity == family.member_identity[target.name])
+		if(F.members.Find(name) && dna.uni_identity == family.member_identity[name])
 			return F
 
 
-/mob/living/carbon/human/proc/isFamily(var/mob/living/carbon/human/target,var/true = FALSE) //Checks if target is in our family. By default. We use our names + DNA to support people pretending to be family members. Use true if you wish to check if they ACTUALLY belong to the family.
+/mob/living/carbon/human/proc/isFamily(var/mob/living/carbon/human/target,var/true_family = FALSE) //Checks if target is in our family. By default. We use our names + DNA to support people pretending to be family members. Use true_family if you wish to check if they ACTUALLY belong to the family.
 	if(!family)
 		return FALSE
 
-	if(true)
+	if(true_family)
 		return target.family == family
 
 	if(family.members[target.name] != null) //Name has the advantage of supporting masked humans + future cases like stealing identities.
