@@ -20,6 +20,8 @@
 	max_pq = null
 	round_contrib_points = 3
 
+	family_blacklisted = TRUE
+
 /datum/job/roguetown/exlady //just used to change the ladys title
 	title = "Consort Dowager"
 	flag = LADY
