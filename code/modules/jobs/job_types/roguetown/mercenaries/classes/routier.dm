@@ -66,7 +66,7 @@
 			r_hand = /obj/item/rogueweapon/mace/steel/morningstar
 		if("Flailman")
 			H.set_blindness(0)
-			to_chat(H, span_warning("You are a Flailman from Otava, your enemies fear the unpredicability of your weapon."))
+			to_chat(H, span_warning("You are a Flailman from Otava, your enemies fear the unpredictability of your weapon."))
 			H.mind.adjust_skillrank(/datum/skill/misc/swimming, 2, TRUE)
 			H.mind.adjust_skillrank(/datum/skill/misc/climbing, 2, TRUE)
 			H.mind.adjust_skillrank(/datum/skill/misc/sneaking, 2, TRUE)
