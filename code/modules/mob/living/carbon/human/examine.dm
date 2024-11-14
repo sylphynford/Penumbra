@@ -92,7 +92,7 @@
 					. += "Ah, they belong to the [F.name] family!"
 
 		if(name in GLOB.excommunicated_players)
-			. += span_userdanger("HERETIC! SHAME!")
+			. += span_userdanger("HERETIC! BURN THEM!")
 
 		if(name in GLOB.outlawed_players)
 			. += span_userdanger("OUTLAW!")
