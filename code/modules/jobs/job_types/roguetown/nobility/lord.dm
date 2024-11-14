@@ -32,6 +32,8 @@ GLOBAL_LIST_EMPTY(lord_titles)
 	required = TRUE
 	cmode_music = 'sound/music/combat_fancy.ogg'
 
+	family_blacklisted = TRUE
+
 /datum/job/roguetown/exlord //just used to change the lords title
 	title = "Baron Emeritus"
 	f_title = "Baroness Emeritus"
