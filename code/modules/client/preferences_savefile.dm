@@ -461,7 +461,6 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 
 	S["family"] >> family
 	S["family_species"] >> family_species
-	S["family_sexes"] >> family_sexes
 	S["family_gender"] >> family_gender
 
 	//try to fix any outdated data if necessary
@@ -494,8 +493,6 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 
 	if(!islist(family_species))
 		family_species = list()
-	if(!islist(family_sexes))
-		family_sexes = list()
 	if(!islist(family_gender))
 		family_gender = list()
 
@@ -585,7 +582,6 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	WRITE_FILE(S["feature_ethcolor"]					, features["ethcolor"])
 	WRITE_FILE(S["family"]							, family)
 	WRITE_FILE(S["family_species"]					, family_species)
-	WRITE_FILE(S["family_sexes"]					, family_sexes)
 	WRITE_FILE(S["family_gender"]					, family_gender)
 	//Custom names
 	for(var/custom_name_id in GLOB.preferences_custom_names)
