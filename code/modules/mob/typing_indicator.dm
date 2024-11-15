@@ -1,3 +1,5 @@
+#define TYPING_INDICATOR_LIFETIME 3 * 5
+
 /mob
 	var/hud_typing = FALSE //set when typing in an input window instead of chatline
 	var/typing
@@ -36,8 +38,6 @@
 				set_typing_indicator(TRUE, TRUE)
 			if("Me" in binds)
 				set_typing_indicator(TRUE, TRUE)*/
-		if(_key == "T")
-			set_typing_indicator(TRUE, TRUE)
 		if(_key == "M")
 			set_typing_indicator(TRUE, TRUE)
 		if(_key == ",")
@@ -48,3 +48,24 @@
 	if(!client || stat)
 		set_typing_indicator(FALSE)
 		return
+
+
+
+
+	var/temp = winget(client, "input", "text")
+
+	var/command = winget(client,"input","command")
+	world << command
+	if(command == "" || command + temp == "say \"")
+		set_typing_indicator(0)
+		return
+
+	last_typed_time = world.time
+
+	if (world.time > last_typed_time + TYPING_INDICATOR_LIFETIME)
+		set_typing_indicator(0)
+		return
+	else if(length(temp) > 0)
+		set_typing_indicator(TRUE,"hTy")
+
+
