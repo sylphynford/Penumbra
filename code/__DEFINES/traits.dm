@@ -93,6 +93,7 @@
 #define TRAIT_PUNISHMENT_CURSE "PunishmentCurse"
 #define TRAIT_LEPROSY "Leprosy"
 #define TRAIT_NUDE_SLEEPER "Nude Sleeper"
+#define TRAIT_PARTY_MEMBER "Party Member"
 
 GLOBAL_LIST_INIT(roguetraits, list(
 	TRAIT_LEPROSY = span_necrosis("I'm a disgusting leper..."),

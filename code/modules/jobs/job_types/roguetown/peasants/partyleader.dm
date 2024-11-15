@@ -56,6 +56,7 @@
 		H.change_stat("endurance", 2)
 		H.change_stat("fortune", 1)
 	ADD_TRAIT(H, TRAIT_HEAVYARMOR, TRAIT_GENERIC)
+	ADD_TRAIT(H, TRAIT_PARTY_MEMBER, TRAIT_GENERIC)
 
 /obj/effect/proc_holder/spell/self/joinparty
 	name = "Recruit Beggar"
@@ -124,6 +125,7 @@
 		recruit.say(accept_message, forced = "[name]")
 	if(new_role)
 		recruit.job = new_role
+	ADD_TRAIT(recruit, TRAIT_PARTY_MEMBER, TRAIT_GENERIC)
 	return TRUE
 
 /obj/effect/proc_holder/spell/self/joinparty/partymember
