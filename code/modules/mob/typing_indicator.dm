@@ -38,8 +38,6 @@
 				set_typing_indicator(TRUE, TRUE)
 			if("Me" in binds)
 				set_typing_indicator(TRUE, TRUE)*/
-		if(_key == "T")
-			set_typing_indicator(TRUE, TRUE)
 		if(_key == "M")
 			set_typing_indicator(TRUE, TRUE)
 		if(_key == ",")
@@ -59,18 +57,15 @@
 	var/command = winget(client,"input","command")
 	world << command
 	if(command == "" || command + temp == "say \"")
-		world << "1 FAIL!"
 		set_typing_indicator(0)
 		return
 
 	last_typed_time = world.time
 
 	if (world.time > last_typed_time + TYPING_INDICATOR_LIFETIME)
-		world << "2 FAIL!"
 		set_typing_indicator(0)
 		return
 	else if(length(temp) > 0)
-		world << "3 FAIL!"
 		set_typing_indicator(TRUE,"hTy")
 
 
