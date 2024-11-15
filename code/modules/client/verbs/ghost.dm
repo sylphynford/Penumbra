@@ -28,6 +28,10 @@ GLOBAL_LIST_INIT(ghost_verbs, list(
 	set category = "Options"
 	set hidden = 1
 
+	if(key && (world.time < GLOB.respawntimes[key] + RESPAWNTIME))
+		to_chat(usr, span_warning("I can return in [DisplayTimeText(GLOB.respawntimes[key] + RESPAWNTIME - world.time)]."))
+		return
+
 	if(key)
 		GLOB.respawntimes[key] = world.time
 
