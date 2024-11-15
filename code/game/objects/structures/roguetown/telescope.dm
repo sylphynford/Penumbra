@@ -11,16 +11,8 @@
 		return
 
 	var/mob/living/carbon/human/H = user
-	var/random_message = pick("You can see noc rotating.", "Looking at Astrata blinds you!", "The stars smile at you.", "Nepolx is red today.", "Blessed yellow strife.", "You see a star!")
+	var/random_message = pick("The stars smile at you.", "Nepolx is red today.", "Blessed yellow strife.", "You see a star!")
 	to_chat(H, span_notice("[random_message]"))
-
-	if(random_message == "Looking at Astrata blinds you!")
-		if(do_after(H, 25, target = src))
-			var/obj/item/bodypart/affecting = H.get_bodypart("head")
-			to_chat(H, span_warning("The blinding light causes you intense pain!"))
-			if(affecting && affecting.receive_damage(0, 5))
-				H.update_damage_overlays()
-
 
 /obj/structure/globe
 	name = "globe"
