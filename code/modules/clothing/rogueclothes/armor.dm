@@ -679,3 +679,20 @@
 	smeltresult = /obj/item/ingot/blacksteel
 	armor_class = ARMOR_CLASS_MEDIUM
 	smelt_bar_num = 2
+
+/obj/item/clothing/suit/roguetown/armor/plate/halfplateroyalguard
+	slot_flags = ITEM_SLOT_ARMOR
+	name = "knight's halfplate"
+	desc = "A halfplate of steel, decorated with gold."
+	body_parts_covered = CHEST|VITALS
+	icon_state = "royal"
+	item_state = "royal"
+	armor = list("blunt" = 80, "slash" = 100, "stab" = 80, "bullet" = 100, "laser" = 0,"energy" = 0, "bomb" = 0, "bio" = 0, "rad" = 0, "fire" = 0, "acid" = 0)
+	allowed_race = CLOTHED_RACES_TYPES
+	nodismemsleeves = TRUE
+	do_sound_plate = TRUE
+	blocking_behavior = null
+	max_integrity = 300
+	anvilrepair = /datum/skill/craft/armorsmithing
+	smeltresult = /obj/item/ingot/steel
+	armor_class = ARMOR_CLASS_HEAVY
