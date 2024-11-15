@@ -1,15 +1,5 @@
 //Speech verbs.
 
-/client/var/say_focus = FALSE
-
-/client/verb/ntalk3()
-	set hidden = TRUE
-	say_focus = FALSE
-
-/client/verb/ntalk4()
-	set hidden = TRUE
-	say_focus = !say_focus
-
 
 /mob/verb/say_verb(message as text)
 	set name = "Say"
@@ -17,18 +7,14 @@
 	set hidden = 1
 
 	// If they don't type anything just drop the message.
+	set_typing_indicator(FALSE)
 	if(!length(message))
-		if(!client || !client.say_focus)
-			set_typing_indicator(FALSE)
-			winset(client, "mapwindow.map", "focus=true")
 		return
 	if(GLOB.say_disabled)	//This is here to try to identify lag problems
 		to_chat(usr, span_danger("Speech is currently admin-disabled."))
 		return
 	if(message)
-		if(!client || !client.say_focus)
-			set_typing_indicator(FALSE)
-			winset(client, "mapwindow.map", "focus=true")
+		set_typing_indicator(FALSE)
 		say(message)
 
 ///Whisper verb
