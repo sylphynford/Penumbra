@@ -46,7 +46,7 @@
 /datum/outfit/job/roguetown/templar/monk/pre_equip(mob/living/carbon/human/H)
 	..()
 	neck = /obj/item/clothing/neck/roguetown/psicross/
-	cloak = /obj/item/clothing/cloak/tabard/crusader/tief
+	cloak = /obj/item/clothing/cloak/templar/psydon
 	switch(H.patron?.type)
 		if(/datum/patron/divine/astrata)
 			neck = /obj/item/clothing/neck/roguetown/psicross/
