@@ -22,11 +22,11 @@ SUBSYSTEM_DEF(input)
 	macro_set = list(
 	"Any" = "\"KeyDown \[\[*\]\]\"",
 	"Any+UP" = "\"KeyUp \[\[*\]\]\"",
-	"T" = "say",
+	"T" = {".winset "input.text="";input.focus=true;input.command="say""\nntalk3"},
 	"M" = "me",
 	"," = "me(big)",
 	"Back" = "\".winset \\\"input.text=\\\"\\\"\\\"\"",
-	"Tab" = "\".winset \\\"input.focus=true?map.focus=true command=disableInput input.text-color = #ad9eb4 input.background-color=[COLOR_INPUT_DISABLED] : input.focus=true command=activeInput input.text-color=#EEEEEE input.background-color=[COLOR_INPUT_ENABLED]\\\"\"",
+	"Tab" = {".winset "input.focus=true?mapwindow.map.focus=true:input.focus=true;input.command="say""\nntalk4"},
 	"Escape" = "\".winset \\\"input.text=\\\"\\\"\\\"\"")
 
 // Badmins just wanna have fun ♪
