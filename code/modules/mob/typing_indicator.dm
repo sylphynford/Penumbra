@@ -51,16 +51,26 @@
 		set_typing_indicator(FALSE)
 		return
 
+
+
+
 	var/temp = winget(client, "input", "text")
+
 	var/command = winget(client,"input","command")
-	if(command == "" || command == "say \"")
+	world << command
+	if(command == "" || command + temp == "say \"")
+		world << "1 FAIL!"
 		set_typing_indicator(0)
 		return
 
+	last_typed_time = world.time
+
 	if (world.time > last_typed_time + TYPING_INDICATOR_LIFETIME)
+		world << "2 FAIL!"
 		set_typing_indicator(0)
 		return
 	else if(length(temp) > 0)
+		world << "3 FAIL!"
 		set_typing_indicator(TRUE,"hTy")
 
 

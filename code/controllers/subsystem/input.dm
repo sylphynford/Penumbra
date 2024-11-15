@@ -22,11 +22,9 @@ SUBSYSTEM_DEF(input)
 	macro_set = list(
 	"Any" = "\"KeyDown \[\[*\]\]\"",
 	"Any+UP" = "\"KeyUp \[\[*\]\]\"",
-	"T" = {".winset "input.text="";input.focus=true;input.command="say""\nntalk3"},
 	"M" = "me",
 	"," = "me(big)",
 	"Back" = "\".winset \\\"input.text=\\\"\\\"\\\"\"",
-	"Tab" = {".winset "input.focus=true?mapwindow.map.focus=true:input.focus=true;input.command="say""\nntalk4"},
 	"Escape" = "\".winset \\\"input.text=\\\"\\\"\\\"\"")
 
 // Badmins just wanna have fun ♪

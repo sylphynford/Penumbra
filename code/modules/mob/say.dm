@@ -3,9 +3,11 @@
 /client/var/say_focus = FALSE
 
 /client/verb/ntalk3()
+	set hidden = TRUE
 	say_focus = FALSE
 
 /client/verb/ntalk4()
+	set hidden = TRUE
 	say_focus = !say_focus
 
 
