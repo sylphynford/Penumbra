@@ -143,9 +143,10 @@
 
 /datum/status_effect/incapacitating/stasis/proc/update_time_of_death()
         if(last_dead_time)
-                var/delta = world.time - last_dead_time
+                GLOB.respawntimes[owner.key] = world.time
+				var/delta = world.time - last_dead_time
                 var/new_timeofdeath = owner.timeofdeath + delta
-                owner.timeofdeath = new_timeofdeath
+				owner.timeofdeath = new_timeofdeath
                 owner.tod = station_time_timestamp(wtime=new_timeofdeath)
                 last_dead_time = null
         if(owner.stat == DEAD)
