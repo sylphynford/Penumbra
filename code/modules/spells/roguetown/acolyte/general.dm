@@ -141,7 +141,7 @@
 
 		var/healing = 2.5
 		if (conditional_buff)
-			to_chat(user, "Channeling my patron's power is easier in these conditions!")
+			to_chat(user, "Channeling PSYDON's power is easier in these conditions!")
 			healing += situational_bonus
 
 		if(iscarbon(target))

@@ -126,7 +126,7 @@
 #define THEY_THEM_F		"they/them (Femme)"
 #define IT_ITS			"it/its"
 
-GLOBAL_LIST_INIT(pronouns_list, list(HE_HIM, SHE_HER, THEY_THEM, THEY_THEM_F, IT_ITS))
+GLOBAL_LIST_INIT(pronouns_list, list(HE_HIM, SHE_HER))
 
 // Voice types (LETHALSTONE)
 

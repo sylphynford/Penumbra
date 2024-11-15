@@ -863,13 +863,13 @@
 
 /obj/structure/fluff/statue/astrata
 	name = "astrata statue"
-	desc = "A stone statue of the sun Goddess Astrata. Bless."
+	desc = "A stone statue of the sun Saint Astrata. Bless."
 	icon_state = "astrata"
 	icon = 'icons/roguetown/misc/tallandwide.dmi'
 
 /obj/structure/fluff/statue/astrata/gold
 	name = "ornamental astrata statue"
-	desc = "An ornamental stone statue of the sun Goddess Astrata, decorated with golden jewelry. Bless."
+	desc = "An ornamental stone statue of the sun Saint Astrata, decorated with golden jewelry. Bless."
 	icon_state = "astrata_bling"
 
 /obj/structure/fluff/statue/knight/r
@@ -1053,7 +1053,7 @@
 	..()
 
 /obj/structure/fluff/psycross
-	name = "pantheon cross"
+	name = "psicross"
 	icon_state = "psycross"
 	icon = 'icons/roguetown/misc/tallstructure.dmi'
 	break_sound = 'sound/combat/hits/onwood/destroyfurniture.ogg'
@@ -1094,14 +1094,14 @@
 	return !density
 
 /obj/structure/fluff/psycross/copper
-	name = "pantheon cross"
+	name = "psicross"
 	icon_state = "psycrosschurch"
 	break_sound = null
 	attacked_sound = list("sound/combat/hits/onmetal/metalimpact (1).ogg", "sound/combat/hits/onmetal/metalimpact (2).ogg")
 	chance2hear = 66
 
 /obj/structure/fluff/psycross/crafted
-	name = "wooden pantheon cross"
+	name = "wooden psicross"
 	icon_state = "psycrosscrafted"
 	max_integrity = 80
 	chance2hear = 10

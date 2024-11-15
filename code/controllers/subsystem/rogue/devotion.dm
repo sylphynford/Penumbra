@@ -42,12 +42,12 @@
 	src.holder = holder
 	holder?.devotion = src
 	src.patron = patron
-	if (patron.type == /datum/patron/inhumen/zizo || patron.type == /datum/patron/divine/necra)
+	if (patron.type == /datum/patron/inhumen/zizo)
 		ADD_TRAIT(holder, TRAIT_DEATHSIGHT, "devotion")
 
 /datum/devotion/Destroy(force)
 	. = ..()
-	if (patron.type == /datum/patron/inhumen/zizo || patron.type == /datum/patron/divine/necra)
+	if (patron.type == /datum/patron/inhumen/zizo)
 		REMOVE_TRAIT(holder, TRAIT_DEATHSIGHT, "devotion")
 	holder?.devotion = null
 	holder = null
@@ -138,7 +138,7 @@
 	if(!H || !H.mind || !patron)
 		return
 
-	var/list/spelllist = list(/obj/effect/proc_holder/spell/targeted/touch/orison, /obj/effect/proc_holder/spell/invoked/lesser_heal, /obj/effect/proc_holder/spell/invoked/diagnose) //This would have caused jank.
+	var/list/spelllist = list(/obj/effect/proc_holder/spell/targeted/touch/orison, /obj/effect/proc_holder/spell/invoked/diagnose) //This would have caused jank.
 	for(var/spell_type in spelllist)
 		if(!spell_type || H.mind.has_spell(spell_type))
 			continue
@@ -154,7 +154,7 @@
 		return
 
 	granted_spells = list()
-	var/list/spelllist = list(/obj/effect/proc_holder/spell/targeted/touch/orison, patron.t0, patron.t1, patron.t2, patron.t3, patron.t4)
+	var/list/spelllist = list(/obj/effect/proc_holder/spell/targeted/touch/orison, /obj/effect/proc_holder/spell/invoked/lesser_heal, patron.t0, patron.t1, patron.t2, patron.t3, patron.t4)
 	for(var/spell_type in spelllist)
 		if(!spell_type || H.mind.has_spell(spell_type))
 			continue
@@ -215,7 +215,7 @@
 		return FALSE
 
 	var/prayersesh = 0
-	visible_message("[src] kneels their head in prayer to the Gods.", "I kneel my head in prayer to [devotion.patron.name].")
+	visible_message("[src] kneels their head in prayer to PSYDON.", "I kneel my head in prayer to PSYDON.")
 	for(var/i in 1 to 50)
 		if(devotion.devotion >= devotion.max_devotion)
 			to_chat(src, span_warning("I have reached the limit of my devotion..."))

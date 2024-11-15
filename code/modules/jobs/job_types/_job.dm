@@ -139,6 +139,9 @@
 */
 	var/PQ_boost_divider = 0
 
+	//Prevents Job from being in families.
+	var/family_blacklisted = FALSE
+
 
 /datum/job/proc/special_job_check(mob/dead/new_player/player)
 	return TRUE

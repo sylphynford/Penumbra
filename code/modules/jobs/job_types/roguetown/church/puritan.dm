@@ -7,11 +7,8 @@
 	spawn_positions = 1
 	allowed_sexes = list(MALE, FEMALE)
 	allowed_races = RACES_ALL_KINDS
-	allowed_patrons = list(
-		/datum/patron/old_god,
-		ALL_DIVINE_PATRONS,
-	) //gets set to old god.
-	tutorial = "You worship and pay credence to the old god, Psydon--in heretical contrast to the church of the Ten. However, both the crown and church have emboldened your radical sect. Your fervor allows you to root out cultists, the cursed night beasts, and other agents of the darkness using your practice of extracting involuntary 'sin confessions.' Remember, though; they tolerate you only so long as you have a common enemy..."
+	allowed_patrons = ALL_DIVINE_PATRONS
+	tutorial = "You worship and pay credence PSYDON. Both the crown and church have emboldened your radical ideals. Your fervor allows you to root out cultists, the cursed night beasts, and other agents of the darkness using your practice of extracting involuntary 'sin confessions.' Remember, though; they tolerate you only so long as you have a common enemy..."
 	whitelist_req = TRUE
 
 	outfit = /datum/outfit/job/roguetown/puritan
@@ -121,7 +118,7 @@
 	if(H.add_stress(/datum/stressevent/tortured))
 		if(!H.stat)
 			var/static/list/faith_lines = list(
-				"DO YOU DENY THE TEN?",
+				"DO YOU DENY PSYDON?",
 				"WHO IS YOUR GOD?",
 				"ARE YOU FAITHFUL?",
 				"WHO IS YOUR SHEPHERD?",

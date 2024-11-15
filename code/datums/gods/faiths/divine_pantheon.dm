@@ -1,5 +1,5 @@
 /datum/faith/divine
-	name = "Divine Pantheon"
-	desc = "The TEN, all aspects of the mighty PSYDON. The most accepted religion on the Isle of Enigma. The TEN caused the Dwarven Federation to win against New Psydonia. They could not let the fracture become whole lest they invite their demise."
-	worshippers = "Citizens of Fablefield and onwards. The independent."
+	name = "PSYDON"
+	desc = "The only accepted religion on the Isle of Enigma. PSYDON is the one true god. It is common practice to adopt one of His Saints as your patron."
+	worshippers = "Citizens of Fablefield and onwards."
 	godhead = /datum/patron/divine/astrata // to do, fix spelling errors

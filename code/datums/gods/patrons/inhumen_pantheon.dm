@@ -4,9 +4,9 @@
 	undead_hater = FALSE
 	t0 = /obj/effect/proc_holder/spell/invoked/lesser_heal
 	confess_lines = list(
-		"PSYDON FAILED!",
-		"THE TEN ARE WORTHLESS COWARDS!",
-		"THE TEN ARE DECEIVERS!"
+		"PSYDON WILL FAIL!",
+		"PSYDON IS A WORTHLESS COWARD!",
+		"PSYDON IS A DECEIVERS!"
 	)
 
 /datum/patron/inhumen/zizo
@@ -21,7 +21,7 @@
 	confess_lines = list(
 		"PRAISE ZIZO!",
 		"LONG LIVE ZIZO!",
-		"ZIZO IS QUEEN!"
+		"ZIZO IS GOD!"
 	)
 
 /datum/patron/inhumen/graggar
@@ -56,6 +56,6 @@
 	mob_traits = list(TRAIT_DEPRAVED, TRAIT_CRACKHEAD)
 	confess_lines = list(
 		"BAOTHA DEMANDS PLEASURE!",
-		"THINGS ARE GOING TO GET LOUD NOW!", // noise marine reference
+		"I SUCCUMB TO PLEASURE!", // noise marine reference (not anymore that's cringe)
 		"BAOTHA IS MY JOY!"
 	)

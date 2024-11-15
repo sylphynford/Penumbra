@@ -128,6 +128,7 @@ GLOBAL_LIST_INIT(peasant_positions, list(
 	"Docker",
 	"Prisoner",
 	"Beggar",
+	"Party Leader",
 	"Adventurer",
 	"Pilgrim",
 	"Bandit",
@@ -150,6 +151,11 @@ GLOBAL_LIST_INIT(youngfolk_positions, list(
 	"Servant",
 	"Shophand",
 	"Vagabond",
+))
+
+GLOBAL_LIST_INIT(party_positions, list(
+	"Adventurer",
+	"Mercenary",
 ))
 
 GLOBAL_LIST_INIT(allmig_positions, list(

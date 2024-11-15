@@ -4,10 +4,10 @@
 	title = "Templar"
 	department_flag = CHURCHMEN
 	faction = "Station"
-	tutorial = "Templars are warriors who have forsaken wealth and title in lieu of service to the church, due to either zealotry or a past shame. They guard the church and its priest while keeping a watchful eye against heresy and nite-creechers. Within troubled dreams, they wonder if the blood they shed makes them holy or stained."
+	tutorial = "Templars are warriors who have forsaken wealth and title in lieu of service to the church, due to either zealotry or a past shame. They serve the inquisitor while keeping a watchful eye against heresy and nite-creechers. Within troubled dreams, they wonder if the blood they shed makes them holy or stained."
 	allowed_sexes = list(MALE, FEMALE)
 	allowed_races = RACES_ALL_KINDS
-	allowed_patrons = ALL_PALADIN_PATRONS
+	allowed_patrons = ALL_DIVINE_PATRONS
 	outfit = /datum/outfit/job/roguetown/templar
 	min_pq = 0 //Deus vult, but only according to the proper escalation rules
 	max_pq = null
@@ -21,9 +21,9 @@
 
 /datum/outfit/job/roguetown/templar
 	has_loadout = TRUE
-	allowed_patrons = ALL_PALADIN_PATRONS
+	allowed_patrons = ALL_DIVINE_PATRONS
 	belt = /obj/item/storage/belt/rogue/leather/black
-	beltl = /obj/item/storage/belt/rogue/pouch/coins/mid
+	beltl = /obj/item/storage/belt/rogue/pouch/coins/poor
 	beltr = /obj/item/roguekey/church
 	id = /obj/item/clothing/ring/silver
 	backl = /obj/item/storage/backpack/rogue/satchel
@@ -38,37 +38,37 @@
 
 /datum/advclass/templar/monk
 	name = "Monk"
-	tutorial = "You are a monk of the Church, trained in pugilism and acrobatics. You bear no armor but your faith, and your hands are lethal weapons in service to your God."
+	tutorial = "You are a monk of the Church, trained in pugilism and acrobatics. You bear no armor but your faith, and your hands are lethal weapons in service to PSYDON."
 	outfit = /datum/outfit/job/roguetown/templar/monk
 	
 	category_tags = list(CTAG_TEMPLAR)
 
 /datum/outfit/job/roguetown/templar/monk/pre_equip(mob/living/carbon/human/H)
 	..()
-	neck = /obj/item/clothing/neck/roguetown/psicross/astrata
-	cloak = /obj/item/clothing/cloak/tabard/crusader/tief
+	neck = /obj/item/clothing/neck/roguetown/psicross/
+	cloak = /obj/item/clothing/cloak/templar/psydon
 	switch(H.patron?.type)
 		if(/datum/patron/divine/astrata)
-			neck = /obj/item/clothing/neck/roguetown/psicross/astrata
-			cloak = /obj/item/clothing/cloak/tabard/crusader/astrata
+			neck = /obj/item/clothing/neck/roguetown/psicross/
+			cloak = /obj/item/clothing/cloak/templar/psydon
 		if(/datum/patron/divine/dendor)
-			neck = /obj/item/clothing/neck/roguetown/psicross/dendor
-			cloak = /obj/item/clothing/cloak/tabard/crusader/dendor
+			neck = /obj/item/clothing/neck/roguetown/psicross/
+			cloak = /obj/item/clothing/cloak/templar/psydon
 		if(/datum/patron/divine/necra)
-			neck = /obj/item/clothing/neck/roguetown/psicross/necra
-			cloak = /obj/item/clothing/cloak/tabard/crusader/necra
+			neck = /obj/item/clothing/neck/roguetown/psicross/
+			cloak = /obj/item/clothing/cloak/templar/psydon
 		if(/datum/patron/divine/pestra)
-			neck = /obj/item/clothing/neck/roguetown/psicross/pestra
-			cloak = /obj/item/clothing/cloak/tabard/crusader/pestra
+			neck = /obj/item/clothing/neck/roguetown/psicross/
+			cloak = /obj/item/clothing/cloak/templar/psydon
 		if(/datum/patron/divine/noc)
-			neck = /obj/item/clothing/neck/roguetown/psicross/noc
-			cloak = /obj/item/clothing/cloak/tabard/crusader/noc
+			neck = /obj/item/clothing/neck/roguetown/psicross/
+			cloak = /obj/item/clothing/cloak/templar/psydon
 		if(/datum/patron/divine/ravox)
-			neck = /obj/item/clothing/neck/roguetown/psicross/ravox
-			cloak = /obj/item/clothing/cloak/tabard/crusader/ravox
+			neck = /obj/item/clothing/neck/roguetown/psicross/
+			cloak = /obj/item/clothing/cloak/templar/psydon
 		if(/datum/patron/divine/malum)
-			neck = /obj/item/clothing/neck/roguetown/psicross/malum
-			cloak = /obj/item/clothing/cloak/tabard/crusader/malum
+			neck = /obj/item/clothing/neck/roguetown/psicross/
+			cloak = /obj/item/clothing/cloak/templar/psydon
 		if(/datum/patron/old_god)
 			neck = /obj/item/clothing/neck/roguetown/psicross
 			cloak = /obj/item/clothing/cloak/tabard/crusader/psydon
@@ -101,7 +101,7 @@
 
 /datum/advclass/templar/crusader
 	name = "Templar"
-	tutorial = "You are a templar of the Church, trained in heavy weaponry and zealous warfare. You are the instrument of your God's wrath, clad in steel and faith."
+	tutorial = "You are a templar of the Church, trained in heavy weaponry and zealous warfare. You are the instrument of PSYDON's wrath, clad in steel and faith."
 	outfit = /datum/outfit/job/roguetown/templar/crusader
 	
 	category_tags = list(CTAG_TEMPLAR)
@@ -109,40 +109,34 @@
 /datum/outfit/job/roguetown/templar/crusader/pre_equip(mob/living/carbon/human/H)
 	..()
 	H.virginity = TRUE
-	head = /obj/item/clothing/head/roguetown/helmet/heavy/bucket
-	neck = /obj/item/clothing/neck/roguetown/psicross/astrata
-	cloak = /obj/item/clothing/cloak/tabard/crusader/tief
+	head = /obj/item/clothing/head/roguetown/helmet/sallet/visored
+	neck = /obj/item/clothing/neck/roguetown/psicross/
+	cloak = /obj/item/clothing/cloak/tabard/crusader/psydon
 	switch(H.patron?.type)
 		if(/datum/patron/divine/astrata)
-			wrists = /obj/item/clothing/neck/roguetown/psicross/astrata
-			head = /obj/item/clothing/head/roguetown/helmet/heavy/astratan
-			cloak = /obj/item/clothing/cloak/templar/astratan
+			wrists = /obj/item/clothing/neck/roguetown/psicross/
+			cloak = /obj/item/clothing/cloak/templar/psydon
 		if(/datum/patron/divine/dendor)
-			wrists = /obj/item/clothing/neck/roguetown/psicross/dendor
-			head = /obj/item/clothing/head/roguetown/helmet/heavy/dendorhelm
-			cloak = /obj/item/clothing/cloak/tabard/crusader/dendor
+			wrists = /obj/item/clothing/neck/roguetown/psicross/
+			cloak = /obj/item/clothing/cloak/templar/psydon
 		if(/datum/patron/divine/necra)
-			wrists = /obj/item/clothing/neck/roguetown/psicross/necra
-			head = /obj/item/clothing/head/roguetown/helmet/heavy/necran
-			cloak = /obj/item/clothing/cloak/templar/necran
+			wrists = /obj/item/clothing/neck/roguetown/psicross/
+			cloak = /obj/item/clothing/cloak/templar/psydon
 		if(/datum/patron/divine/pestra)
-			wrists = /obj/item/clothing/neck/roguetown/psicross/pestra
-			cloak = /obj/item/clothing/cloak/tabard/crusader/pestra
+			wrists = /obj/item/clothing/neck/roguetown/psicross/
+			cloak = /obj/item/clothing/cloak/templar/psydon
 		if(/datum/patron/divine/noc)
-			wrists = /obj/item/clothing/neck/roguetown/psicross/noc
-			head = /obj/item/clothing/head/roguetown/helmet/heavy/nochelm
-			cloak = /obj/item/clothing/cloak/tabard/crusader/noc
+			wrists = /obj/item/clothing/neck/roguetown/psicross/
+			cloak = /obj/item/clothing/cloak/templar/psydon
 		if(/datum/patron/divine/ravox)
-			wrists = /obj/item/clothing/neck/roguetown/psicross/ravox
-			cloak = /obj/item/clothing/cloak/tabard/crusader/ravox
+			wrists = /obj/item/clothing/neck/roguetown/psicross/
+			cloak = /obj/item/clothing/cloak/templar/psydon
 		if(/datum/patron/divine/malum)
-			wrists = /obj/item/clothing/neck/roguetown/psicross/malum
-			cloak = /obj/item/clothing/cloak/templar/malumite
-			head = /obj/item/clothing/head/roguetown/helmet/heavy/malum
+			wrists = /obj/item/clothing/neck/roguetown/psicross/
+			cloak = /obj/item/clothing/cloak/templar/psydon
 		if(/datum/patron/old_god)
 			wrists = /obj/item/clothing/neck/roguetown/psicross
-			cloak = /obj/item/clothing/cloak/tabard/crusader/psydon
-	backr = /obj/item/rogueweapon/shield/tower/metal
+			cloak = /obj/item/clothing/cloak/templar/psydon
 	gloves = /obj/item/clothing/gloves/roguetown/chain
 	neck = /obj/item/clothing/neck/roguetown/chaincoif
 	pants = /obj/item/clothing/under/roguetown/chainlegs
