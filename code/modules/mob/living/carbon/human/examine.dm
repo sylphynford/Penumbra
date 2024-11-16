@@ -123,6 +123,8 @@
 			. += span_notice("Anointed!")
 		else if(HAS_TRAIT(src, TRAIT_DEPRAVED) && HAS_TRAIT(user, TRAIT_DEPRAVED))
 			. += span_notice("Debased!")
+		else if(HAS_TRAIT(src, TRAIT_PARTY_MEMBER) && HAS_TRAIT(user, TRAIT_PARTY_MEMBER))
+			. += span_notice("Fellow Party Member!")
 
 	if(leprosy == 1)
 		. += span_necrosis("A LEPER...")

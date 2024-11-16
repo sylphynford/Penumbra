@@ -122,7 +122,8 @@
 	"El Odio" = 'sound/music/instruments/guitar (7).ogg',
 	"Danza De Las Lanzas" = 'sound/music/instruments/guitar (8).ogg',
 	"The Feline, Forever Returning" = 'sound/music/instruments/guitar (9).ogg',
-	"El Beso Carmesí" = 'sound/music/instruments/guitar (10).ogg')
+	"El Beso Carmesí" = 'sound/music/instruments/guitar (10).ogg',
+	"If I Could Be a Constellation" = 'sound/music/instruments/guitar (11).ogg')
 
 /obj/item/rogue/instrument/harp
 	name = "harp"
