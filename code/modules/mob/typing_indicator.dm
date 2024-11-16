@@ -55,7 +55,6 @@
 	var/temp = winget(client, "input", "text")
 
 	var/command = winget(client,"input","command")
-	world << command
 	if(command == "" || command + temp == "say \"")
 		set_typing_indicator(0)
 		return
