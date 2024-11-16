@@ -62,7 +62,7 @@
 	var/was_dead_before = stat == DEAD
 	stat = DEAD
 	unset_machine()
-//	GLOB.respawntimes[key] = world.time
+	GLOB.respawntimes[key] = world.time
 	timeofdeath = world.time
 	tod = station_time_timestamp()
 //	var/turf/T = get_turf(src)
@@ -103,7 +103,7 @@
 	if(client)
 		client.move_delay = initial(client.move_delay)
 		var/atom/movable/screen/gameover/hog/H = new()
-		H.layer = SPLASHSCREEN_LAYER+0.1
+		H.layer = SPLASHSCREEN_LAYER+0.1	
 		client.screen += H
 //		flick("gameover",H)
 //		addtimer(CALLBACK(H, TYPE_PROC_REF(/atom/movable/screen/gameover, Fade)), 29)
