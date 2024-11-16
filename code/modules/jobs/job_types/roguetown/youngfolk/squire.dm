@@ -40,7 +40,7 @@
 	tutorial = "A hopeful for the next generation of knightly mounted lancers and infantry pike specialists, \
 	your training with polearms sets you apart from other squires."
 	outfit = /datum/outfit/job/roguetown/squire/lancer
-		
+
 	category_tags = list(CTAG_SQUIRE)
 
 /datum/outfit/job/roguetown/squire/lancer/pre_equip(mob/living/carbon/human/H)
@@ -78,7 +78,7 @@
 	tutorial = "Your training has been singularly focused on the intricacies of sword, a weapon whose versatility \
 	belies the difficulty of its use."
 	outfit = /datum/outfit/job/roguetown/squire/footman
-		
+
 	category_tags = list(CTAG_SQUIRE)
 
 /datum/outfit/job/roguetown/squire/footman/pre_equip(mob/living/carbon/human/H)
@@ -116,7 +116,7 @@
 	switch(weapon_choice)
 		if("Iron Sword")
 			beltr = /obj/item/rogueweapon/sword/iron
-		if("Cudgel")	
+		if("Cudgel")
 			beltr = /obj/item/rogueweapon/mace/cudgel
 
 /datum/advclass/squire/skirmisher
@@ -125,7 +125,7 @@
 	has become more apparent, and hopefuls such as yourself have been trained into the future of elite skirmisher \
 	troops."
 	outfit = /datum/outfit/job/roguetown/squire/skirmisher
-		
+
 	category_tags = list(CTAG_SQUIRE)
 
 /datum/outfit/job/roguetown/squire/skirmisher/pre_equip(mob/living/carbon/human/H)
@@ -148,7 +148,7 @@
 		H.mind.adjust_skillrank(/datum/skill/combat/swords, 2, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/combat/knives, 2, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/misc/swimming, 2, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/misc/climbing, 3, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/misc/climbing, 2, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/misc/athletics, 2, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/misc/reading, 1, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/misc/riding, 1, TRUE)

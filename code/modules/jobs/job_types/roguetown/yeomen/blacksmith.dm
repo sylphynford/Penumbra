@@ -57,7 +57,7 @@
 		beltr = /obj/item/roguekey/blacksmith
 		cloak = /obj/item/clothing/cloak/apron/blacksmith
 
-	H.change_stat("strength", 2)
+	H.change_stat("strength", 1)
 	H.change_stat("intelligence", 1)
 	H.change_stat("endurance", 2)
 	H.change_stat("constitution", 2)
@@ -120,7 +120,7 @@
 		beltl = /obj/item/storage/belt/rogue/pouch/coins/poor
 		beltr = /obj/item/roguekey/blacksmith
 		cloak = /obj/item/clothing/cloak/apron/blacksmith
-	H.change_stat("strength", 2)
+	H.change_stat("strength", 1)
 	H.change_stat("intelligence", 1)
 	H.change_stat("endurance", 2)
 	H.change_stat("constitution", 2)
@@ -188,7 +188,7 @@
 		beltr = /obj/item/roguekey/blacksmith
 		cloak = /obj/item/clothing/cloak/apron/blacksmith
 
-	H.change_stat("strength", 2)
+	H.change_stat("strength", 1)
 	H.change_stat("intelligence", 1)
 	H.change_stat("endurance", 2)
 	H.change_stat("constitution", 2)

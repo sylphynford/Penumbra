@@ -16,12 +16,11 @@
 	var/classchoice = input("Choose your archetypes", "Available archetypes") as anything in classes
 
 	switch(classchoice)
-		if("Doppelsoldner")
+		if("Doppelsoldner") // (M EDIT: why did they have to narrate all their changes in comments... like damn bro it dont matter)
 			H.set_blindness(0)
 			to_chat(H, span_warning("You are a Doppelsoldner of Grenzelhoft, a swordsman experienced with long-length blades."))
 			H.mind.adjust_skillrank(/datum/skill/misc/swimming, 2, TRUE)
 			H.mind.adjust_skillrank(/datum/skill/misc/climbing, 2, TRUE)
-			H.mind.adjust_skillrank(/datum/skill/misc/sneaking, 2, TRUE)
 			H.mind.adjust_skillrank(/datum/skill/combat/maces, 2, TRUE)
 			H.mind.adjust_skillrank(/datum/skill/combat/crossbows, 2, TRUE)
 			H.mind.adjust_skillrank(/datum/skill/combat/wrestling, 3, TRUE)
@@ -32,10 +31,10 @@
 			H.mind.adjust_skillrank(/datum/skill/combat/whipsflails, 2, TRUE)
 			H.mind.adjust_skillrank(/datum/skill/combat/knives, 2, TRUE)
 			H.mind.adjust_skillrank(/datum/skill/misc/reading, 1, TRUE)
-			H.mind.adjust_skillrank(/datum/skill/misc/athletics, 4, TRUE)		//Trust me, they'll need it due to stamina drain on their base-sword.
+			H.mind.adjust_skillrank(/datum/skill/misc/athletics, 3, TRUE)		//Trust me, they'll need it due to stamina drain on their base-sword.
 			H.change_stat("strength", 2)	//Should give minimum required stats to use Zweihander
 			H.change_stat("endurance", 2)
-			H.change_stat("constitution", 2)
+			H.change_stat("constitution", 1)
 			H.change_stat("perception", 1)
 			H.change_stat("speed", -1)		//They get heavy armor now + sword option; so lower speed.
 			r_hand = /obj/item/rogueweapon/greatsword/grenz
@@ -57,7 +56,7 @@
 			H.mind.adjust_skillrank(/datum/skill/misc/athletics, 3, TRUE)
 			H.change_stat("strength", 2) //same str, worse end, more speed - actually a good tradeoff, now.
 			H.change_stat("endurance", 1)
-			H.change_stat("constitution", 2)
+			H.change_stat("constitution", 1)
 			H.change_stat("perception", 1)
 			r_hand = /obj/item/rogueweapon/halberd
 
