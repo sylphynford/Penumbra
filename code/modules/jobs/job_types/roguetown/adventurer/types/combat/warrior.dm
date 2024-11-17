@@ -7,6 +7,7 @@
 	allowed_races = RACES_ALL_KINDS
 	outfit = /datum/outfit/job/roguetown/adventurer/sfighter
 	traits_applied = list(TRAIT_HEAVYARMOR)
+	pickprob = 1
 
 	category_tags = list(CTAG_ADVENTURER)
 

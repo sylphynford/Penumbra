@@ -8,6 +8,7 @@
 	outfit = /datum/outfit/job/roguetown/adventurer/paladin
 	traits_applied = list(TRAIT_HEAVYARMOR)
 	category_tags = list(CTAG_ADVENTURER)
+	pickprob = 1
 
 /datum/outfit/job/roguetown/adventurer/paladin
 	allowed_patrons = ALL_PALADIN_PATRONS

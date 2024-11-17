@@ -5,6 +5,7 @@
 	allowed_sexes = list(MALE, FEMALE)
 	outfit = /datum/outfit/job/roguetown/adventurer/squireerrant
 	category_tags = list(CTAG_ADVENTURER)
+	pickprob = 1
 
 /datum/outfit/job/roguetown/adventurer/squireerrant/pre_equip(mob/living/carbon/human/H)
 	..()

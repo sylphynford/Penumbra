@@ -8,6 +8,7 @@
 	traits_applied = list(TRAIT_CRITICAL_RESISTANCE, TRAIT_NOPAINSTUN, TRAIT_STEELHEARTED)
 	cmode_music = 'sound/music/combat_gronn.ogg'
 	category_tags = list(CTAG_ADVENTURER)
+	pickprob = 1
 
 /datum/outfit/job/roguetown/adventurer/barbarian/pre_equip(mob/living/carbon/human/H)
 	..() // Compared to the Warrior the barbarian is more suited to the wilds. But they are able to make use of almost any weapon by talent and killer instinct.

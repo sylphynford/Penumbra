@@ -6,6 +6,8 @@
 	outfit = /datum/outfit/job/roguetown/adventurer/ranger
 	traits_applied = list(TRAIT_MEDIUMARMOR, TRAIT_DODGEEXPERT)
 	category_tags = list(CTAG_ADVENTURER)
+	pickprob = 1
+
 
 /datum/outfit/job/roguetown/adventurer/ranger/pre_equip(mob/living/carbon/human/H)
 	..()

@@ -5,7 +5,8 @@
 	allowed_races = RACES_ALL_KINDS
 	outfit = /datum/outfit/job/roguetown/adventurer/amazon
 	category_tags = list(CTAG_ADVENTURER)
-
+	pickprob = 1
+	
 	traits_applied = list(TRAIT_CRITICAL_RESISTANCE, TRAIT_NOPAINSTUN, TRAIT_STEELHEARTED)
 	cmode_music = 'sound/music/combat_gronn.ogg'
 

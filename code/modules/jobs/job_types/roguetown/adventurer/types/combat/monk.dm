@@ -6,6 +6,7 @@
 	allowed_races = RACES_ALL_KINDS
 	outfit = /datum/outfit/job/roguetown/adventurer/monk
 	traits_applied = list(TRAIT_DODGEEXPERT)
+	pickprob = 1
 
 	vampcompat = FALSE
 

@@ -7,6 +7,7 @@
 	horse = /mob/living/simple_animal/hostile/retaliate/rogue/saigabuck/tame/saddled
 	cmode_music = 'sound/music/combat_vaquero.ogg'
 	category_tags = list(CTAG_ADVENTURER)
+	pickprob = 1
 
 /datum/advclass/vaquero/equipme(mob/living/carbon/human/H)
 	if(H.pronouns == SHE_HER || H.pronouns == THEY_THEM_F)
