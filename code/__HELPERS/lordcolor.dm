@@ -36,23 +36,29 @@ GLOBAL_VAR(lordsecondary)
 "CUSTOM")
 	var/prim
 	var/sec
+	FIRST
 	var/choice = input(src, "Choose a Primary Color", "ROGUETOWN") as anything in lordcolors
 	if(choice)
 		if(choice == "CUSTOM")
 			var/custom_lord_color = color_pick_sanitized_lumi(src, "Custom banner primary color:", "Banner Color")
 			if(custom_lord_color)
 				prim = "#" + custom_lord_color
+			else
+				goto FIRST
 		else
 			prim = lordcolors[choice]
 		lordcolors -= choice
 	GLOB.lordprimary = prim
-	lordcolors += "CUSTOM"
+	lordcolors |= "CUSTOM"
+	SECOND
 	choice = input(src, "Choose a Secondary Color", "ROGUETOWN") as anything in lordcolors
 	if(choice)
 		if(choice == "CUSTOM")
 			var/custom_lord_color = color_pick_sanitized_lumi(src, "Custom banner secondary color:", "Banner Color")
 			if(custom_lord_color)
 				sec = "#" + custom_lord_color
+			else
+				goto SECOND
 		else
 			sec = lordcolors[choice]
 	if(!prim || !sec)
