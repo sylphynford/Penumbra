@@ -59,7 +59,7 @@
 		if(H.mind)
 			H.mind.adjust_skillrank(/datum/skill/misc/sneaking, 2, TRUE)
 			H.mind.adjust_skillrank(/datum/skill/misc/stealing, 2, TRUE)
-			H.mind.adjust_skillrank(/datum/skill/misc/climbing, 1 TRUE)
+			H.mind.adjust_skillrank(/datum/skill/misc/climbing, 1, TRUE)
 			H.mind.adjust_skillrank(/datum/skill/misc/reading, 1, TRUE) //very good reading he is wise
 			H.mind.adjust_skillrank(/datum/skill/combat/polearms, 1, TRUE) // dog beating staff
 		//	H.STASTR = rand(1, 20)

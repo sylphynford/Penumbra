@@ -142,7 +142,7 @@ Archer is basically a 'bounty-catcher' in function, less specialized at close-qu
 	backpack_contents = list(/obj/item/rogueweapon/huntingknife/idagger/steel = 1, /obj/item/rope/chain = 1)
 	H.verbs |= /mob/proc/haltyell
 
-	/mob/proc/haltyell()
-	set name = "HALT!"
-	set category = "Noises"
-	emote("haltyell")
+//	mob/proc/haltyell()
+//	set name = "HALT!"
+//	set category = "Noises"
+//	emote("haltyell")

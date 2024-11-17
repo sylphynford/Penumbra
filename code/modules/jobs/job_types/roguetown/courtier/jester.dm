@@ -47,7 +47,7 @@
 //		H.STALUC = rand(1, 20) (M EDIT: hello darkness my old friend)
 		H.change_stat("speed", 2)
 		H.change_stat("intelligence", 1)
-		H.change_stat("fortune", rand(-5,-4,-3,-2,-1,0,0,1,2,3,4,5) // (M EDIT: lol)
+		H.change_stat("fortune", rand(-5,5)) // (M EDIT: lol)
 		H.cmode_music = 'sound/music/combat_jester.ogg'
 	H.verbs |= /mob/living/carbon/human/proc/ventriloquate
 	H.verbs |= /mob/living/carbon/human/proc/ear_trick
