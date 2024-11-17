@@ -35,6 +35,8 @@
 	backr = /obj/item/storage/backpack/rogue/satchel/black
 	backpack_contents = list(/obj/item/rogueweapon/huntingknife/idagger/steel/special = 1)
 	if(H.mind)
+		var/datum/antagonist/new_antag = new /datum/antagonist/partyleader()
+		H.mind.add_antag_datum(new_antag)
 		H.mind.adjust_skillrank(/datum/skill/combat/swords, 3, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/combat/polearms, 3, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/combat/wrestling, 3, TRUE)
@@ -136,3 +138,46 @@
 	recruitment_message = "Join my party, %RECRUIT!"
 	accept_message = "I'm in!"
 	refuse_message = "I refuse."
+
+/datum/antagonist/partyleader
+	name = "Party Leader"
+	roundend_category = "Party Members"
+	antagpanel_category = "Party Leader"
+	antag_hud_type = ANTAG_HUD_TRAITOR
+	rogue_enabled = TRUE
+
+/datum/antagonist/partyleader/on_gain()
+	owner.special_role = "Party Leader"
+	add_objective()
+	. = ..()
+
+
+/* /datum/antagonist/bandit/greet()
+	to_chat(owner.current, span_alertsyndie("I am a BANDIT!"))
+	to_chat(owner.current, span_info("Long ago I did a crime worthy of my bounty being hung on the wall outside of the local inn. I must feed the idol money and valuable metals to satisfy my greed!"))
+	owner.announce_objectives()
+	..() */ //commenting out until they get a proper objective implementation or whatever.
+
+/*
+	if(!(locate(/datum/objective/bandit) in objectives))
+		var/datum/objective/bandit/bandit_objective = new
+		bandit_objective.owner = owner
+		objectives += bandit_objective
+	if(!(locate(/datum/objective/escape) in objectives))
+		var/datum/objective/escape/boat/escape_objective = new
+		escape_objective.owner = owner
+		objectives += escape_objective*/
+
+
+
+/datum/antagonist/partyleader/roundend_report()
+	if(owner?.current)
+		var/the_name = owner.name
+		if(ishuman(owner.current))
+			var/mob/living/carbon/human/H = owner.current
+			the_name = H.real_name
+			to_chat(world, "[the_name] was the party leader.")
+
+/datum/antagonist/partyleader/proc/add_objective(datum/objective/O)
+	var/datum/objective/steal/steal_objective = new O
+	objectives += steal_objective
