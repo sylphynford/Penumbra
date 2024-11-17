@@ -71,7 +71,8 @@
 		"Peasant Brown" = "#685542",
 		"Dirt" = "#7c6d5c",
 		"Chestnut" = "#613613",
-		"Russet" = "#7f461b"
+		"Russet" = "#7f461b",
+		"CUSTOM"
 		)
 /obj/machinery/gear_painter/Destroy()
 	inserted.forceMove(drop_location())
@@ -138,7 +139,13 @@
 		var/choice = input(usr,"Choose your dye:","Dyes",null) as null|anything in selectable_colors
 		if(!choice)
 			return
-		activecolor = selectable_colors[choice]
+		else
+			if(choice == "CUSTOM")
+				var/custom_dye_color = color_pick_sanitized_lumi(usr, "Choose your color:", "Custom Dyes")
+				if(custom_dye_color)
+					activecolor = "#" + custom_dye_color
+			else
+				activecolor = selectable_colors[choice]
 		updateUsrDialog()
 
 	if(href_list["paint"])
