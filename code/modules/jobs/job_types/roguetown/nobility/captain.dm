@@ -168,11 +168,11 @@
 
 /obj/effect/proc_holder/spell/self/convertrole/guard
 	name = "Recruit Guardsmen"
-	new_role = "Watchman"
+	new_role = "Town Guard"
 	overlay_state = "recruit_guard"
 	recruitment_faction = "Watchman"
 	recruitment_message = "Serve the town guard, %RECRUIT!"
-	accept_message = "FOR THE CROWN!"
+	accept_message = "FOR THE BARON!"
 	refuse_message = "I refuse."
 
 /obj/effect/proc_holder/spell/self/convertrole/guard/convert(mob/living/carbon/human/recruit, mob/living/carbon/human/recruiter)

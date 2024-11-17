@@ -1,5 +1,5 @@
 /datum/job/roguetown/guardsman
-	title = "Watchman"
+	title = "Town Guard"
 	flag = GUARDSMAN
 	department_flag = GARRISON
 	faction = "Station"
@@ -9,7 +9,7 @@
 	allowed_sexes = list(MALE, FEMALE)
 	allowed_races = RACES_ALL_KINDS
 	allowed_ages = list(AGE_ADULT, AGE_MIDDLEAGED)
-	tutorial = "Responsible for the safety of the town and the enforcement of the Baron's law, you are the vanguard of the city faced with punishing those who defy his Royal Majesty."
+	tutorial = "Responsible for the safety of the town and the enforcement of the Baron's law, you are the vanguard of the city faced with punishing those who defy His Lordship."
 	display_order = JDO_TOWNGUARD
 	whitelist_req = TRUE
 
@@ -37,7 +37,7 @@
 				index = copytext(H.real_name, 1,index)
 			if(!index)
 				index = H.real_name
-			S.name = "watchman tabard ([index])"
+			S.name = "guard tabard ([index])"
 
 /datum/outfit/job/roguetown/guardsman
 	pants = /obj/item/clothing/under/roguetown/chainlegs

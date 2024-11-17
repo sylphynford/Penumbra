@@ -17,9 +17,9 @@
 	switch(user.job)
 		if("Warden")
 			playsound(src, 'modular_hearthstone/sound/items/bogguardhorn.ogg', 100, TRUE)
-		if("Town Sheriff", "Watchman")
+		if("Town Sheriff", "Town Guard")
 			playsound(src, 'modular_hearthstone/sound/items/watchhorn.ogg', 100, TRUE)
-		if("Man at Arms", "Knight Lieutenant")
+		if("Sergeant at Arms", "Knight Lieutenant")
 			playsound(src, 'modular_hearthstone/sound/items/rghorn.ogg', 100, TRUE)
 		else
 			playsound(src, 'modular_hearthstone/sound/items/signalhorn.ogg', 100, TRUE)
@@ -106,7 +106,7 @@
 			if("Marshall", "Watchman")
 				player.playsound_local(get_turf(player), 'modular_hearthstone/sound/items/watchhorn.ogg', 35, FALSE, pressure_affected = FALSE)
 				to_chat(player, span_warning("I hear the horn of the Watch somewhere[disttext],[dirtext],[placetext]"))
-			if("Man at Arms", "Knight Lieutenant")
+			if("Sergeant at Arms", "Knight Lieutenant")
 				player.playsound_local(get_turf(player), 'modular_hearthstone/sound/items/rghorn.ogg', 35, FALSE, pressure_affected = FALSE)
 				to_chat(player, span_warning("I hear the horn of the Knight Lieutenant somewhere[disttext],[dirtext],[placetext]"))
 			else

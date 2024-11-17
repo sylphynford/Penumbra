@@ -1,5 +1,5 @@
 /datum/job/roguetown/manorguard
-	title = "Man at Arms"
+	title = "Sergeant at Arms"
 	flag = MANATARMS
 	department_flag = GARRISON
 	faction = "Station"
@@ -9,7 +9,7 @@
 	allowed_sexes = list(MALE, FEMALE)
 	allowed_races = RACES_ALL_KINDS
 	allowed_ages = list(AGE_ADULT, AGE_MIDDLEAGED)
-	tutorial = "Having proven yourself loyal and capable, you are entrusted to defend the Royal Family and their Court. Trained regularly in combat and siege warfare, you stand a small chance of surviving the Baron's reign."
+	tutorial = "Having proven yourself loyal and capable, you are entrusted as a Sergeant in the Town Guard. Trained regularly in combat and siege warfare, you stand a small chance of surviving the Baron's reign."
 	display_order = JDO_CASTLEGUARD
 	whitelist_req = TRUE
 
@@ -53,7 +53,7 @@
 
 // Maces + Axes + Shield	-	Better armor, typical Man-at-Arms loadout
 /datum/advclass/manorguard/footsman
-	name = "Men-at-Arms Footsman"
+	name = "Sergeant-at-Arms Footsman"
 	tutorial = "You are a professional soldier of the realm, specializing in melee warfare. Stalwart and hardy, your body can both withstand and dish out powerful strikes.."
 	outfit = /datum/outfit/job/roguetown/manorguard/footsman
 
@@ -108,7 +108,7 @@
 
 // Shield + Swords + Crossbow/Bow	-	Lighter armor, but ranged + sword skill in exchange for it.
 /datum/advclass/manorguard/boltman
-	name = "Men-at-Arms Boltman"
+	name = "Sergeant-at-Arms Boltman"
 	tutorial = "You are a professional soldier of the realm, specializing in ranged implements. You sport a keen eye, looking for your enemies weaknesses."
 	outfit = /datum/outfit/job/roguetown/manorguard/boltman
 
