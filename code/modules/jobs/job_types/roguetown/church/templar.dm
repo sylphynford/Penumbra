@@ -1,4 +1,4 @@
-//shield flail or longsword, tief can be this with red cross	
+//shield flail or longsword, tief can be this with red cross
 
 /datum/job/roguetown/templar
 	title = "Templar"
@@ -16,7 +16,7 @@
 	spawn_positions = 3
 	advclass_cat_rolls = list(CTAG_TEMPLAR = 20)
 	display_order = JDO_TEMPLAR
-	
+
 	give_bank_account = TRUE
 
 /datum/outfit/job/roguetown/templar
@@ -27,7 +27,7 @@
 	beltr = /obj/item/roguekey/church
 	id = /obj/item/clothing/ring/silver
 	backl = /obj/item/storage/backpack/rogue/satchel
-	
+
 /datum/job/roguetown/templar/after_spawn(mob/living/L, mob/M, latejoin = TRUE)
 	. = ..()
 	if(ishuman(L))
@@ -40,7 +40,7 @@
 	name = "Monk"
 	tutorial = "You are a monk of the Church, trained in pugilism and acrobatics. You bear no armor but your faith, and your hands are lethal weapons in service to PSYDON."
 	outfit = /datum/outfit/job/roguetown/templar/monk
-	
+
 	category_tags = list(CTAG_TEMPLAR)
 
 /datum/outfit/job/roguetown/templar/monk/pre_equip(mob/living/carbon/human/H)
@@ -76,19 +76,16 @@
 	wrists = /obj/item/clothing/wrists/roguetown/wrappings
 	shoes = /obj/item/clothing/shoes/roguetown/sandals
 	if(H.mind)
-		H.mind.adjust_skillrank(/datum/skill/misc/athletics, 4, TRUE) 
-		H.mind.adjust_skillrank(/datum/skill/combat/wrestling, 4, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/combat/unarmed, 5, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/misc/swimming, 3, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/misc/climbing, 4, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/misc/athletics, 4, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/combat/wrestling, 3, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/combat/unarmed, 2, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/misc/swimming, 2, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/misc/reading, 2, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/misc/sneaking, 2, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/craft/cooking, 1, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/misc/medicine, 2, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/magic/holy, 2, TRUE)
-		H.change_stat("strength", 3)
+		H.change_stat("strength", 2)
 		H.change_stat("endurance", 2)
-		H.change_stat("speed", 2)
 		H.change_stat("perception", -1)
 
 		ADD_TRAIT(H, TRAIT_DODGEEXPERT, TRAIT_GENERIC)
@@ -103,7 +100,7 @@
 	name = "Templar"
 	tutorial = "You are a templar of the Church, trained in heavy weaponry and zealous warfare. You are the instrument of PSYDON's wrath, clad in steel and faith."
 	outfit = /datum/outfit/job/roguetown/templar/crusader
-	
+
 	category_tags = list(CTAG_TEMPLAR)
 
 /datum/outfit/job/roguetown/templar/crusader/pre_equip(mob/living/carbon/human/H)
@@ -157,14 +154,14 @@
 		H.mind.adjust_skillrank(/datum/skill/magic/holy, 2, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/misc/medicine, 1, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/combat/shields, 3, TRUE)	//May tone down to 2; seems OK.
-		H.change_stat("strength", 3)
+		H.change_stat("strength", 2)
 		H.change_stat("constitution", 2)
-		H.change_stat("endurance", 3)
+		H.change_stat("endurance", 2)
 		H.change_stat("speed", -2)
-		
+
 	ADD_TRAIT(H, TRAIT_HEAVYARMOR, TRAIT_GENERIC)
 	ADD_TRAIT(H, TRAIT_STEELHEARTED, TRAIT_GENERIC)
-	
+
 	H.dna.species.soundpack_m = new /datum/voicepack/male/knight()
 	var/datum/devotion/C = new /datum/devotion(H, H.patron)
 	C.grant_spells_templar(H)

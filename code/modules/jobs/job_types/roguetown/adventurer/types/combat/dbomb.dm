@@ -23,10 +23,10 @@
 		beltr = /obj/item/rogueweapon/pick
 	else
 		beltr = /obj/item/rogueweapon/hammer
-	H.mind.adjust_skillrank(/datum/skill/combat/maces, 3, TRUE)
+	H.mind.adjust_skillrank(/datum/skill/combat/maces, 2, TRUE)
 	H.mind.adjust_skillrank(/datum/skill/combat/unarmed, 2, TRUE)
 	H.mind.adjust_skillrank(/datum/skill/combat/wrestling, 2, TRUE)
-	H.mind.adjust_skillrank(/datum/skill/craft/crafting, 4, TRUE)
+	H.mind.adjust_skillrank(/datum/skill/craft/crafting, 3, TRUE)
 	H.mind.adjust_skillrank(/datum/skill/misc/alchemy, 2, TRUE)
 	H.mind.adjust_skillrank(/datum/skill/misc/swimming, 1, TRUE)
 	H.mind.adjust_skillrank(/datum/skill/misc/climbing, 1, TRUE)

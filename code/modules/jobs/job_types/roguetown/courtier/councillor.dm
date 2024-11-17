@@ -3,8 +3,8 @@
 	flag = COUNCILLOR
 	department_flag = NOBLEMEN
 	faction = "Station"
-	total_positions = 3
-	spawn_positions = 3
+	total_positions = 0
+	spawn_positions = 0
 	allowed_ages = ALL_AGES_LIST
 	allowed_races = NOBLE_RACES_TYPES
 	allowed_sexes = list(MALE, FEMALE)
@@ -15,7 +15,7 @@
 
 	give_bank_account = 40
 	noble_income = 20
-	min_pq = 0 //Probably a bad idea to have a complete newbie advising the monarch
+	min_pq = 0
 	max_pq = null
 	round_contrib_points = 2
 

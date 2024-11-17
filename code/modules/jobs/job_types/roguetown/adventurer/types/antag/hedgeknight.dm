@@ -43,7 +43,6 @@
 	H.change_stat("constitution", 3) //dark souls 3 dual greatshield moment
 	H.change_stat("intelligence", 1)
 	H.change_stat("speed", 1)
-	H.change_stat("fortune", 2)
 	ADD_TRAIT(H, TRAIT_MEDIUMARMOR, TRAIT_GENERIC)
 	ADD_TRAIT(H, TRAIT_HEAVYARMOR, TRAIT_GENERIC)
 	ADD_TRAIT(H, TRAIT_NOBLE, TRAIT_GENERIC) //hey buddy you hear about roleplaying

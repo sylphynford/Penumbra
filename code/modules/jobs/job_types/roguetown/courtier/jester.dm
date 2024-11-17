@@ -34,17 +34,20 @@
 	neck = /obj/item/clothing/neck/roguetown/coif
 
 	if(H.mind)
-		H.mind.adjust_skillrank(/datum/skill/combat/knives, 3, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/combat/knives, 2, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/misc/reading, 4, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/misc/sneaking, 4, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/misc/stealing, 5, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/misc/climbing, 4, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/misc/music, rand(1,6), TRUE)
+		H.mind.adjust_skillrank(/datum/skill/misc/stealing, 4, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/misc/climbing, 3, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/misc/music, 4, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/misc/lockpicking, 2, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/craft/cooking, rand(1,3), TRUE)
-		H.STASTR = rand(1, 20)
-		H.STAINT = rand(1, 20)
-		H.STALUC = rand(1, 20)
+		H.mind.adjust_skillrank(/datum/skill/craft/cooking, 1, TRUE)
+//		H.STASTR = rand(1, 20)
+//		H.STAINT = rand(1, 20)
+//		H.STALUC = rand(1, 20) (M EDIT: hello darkness my old friend)
+		H.change_stat("speed", 2)
+		H.change_stat("intelligence", 1)
+		H.change_stat("fortune", rand(-5,5)) // (M EDIT: lol)
 		H.cmode_music = 'sound/music/combat_jester.ogg'
 	H.verbs |= /mob/living/carbon/human/proc/ventriloquate
 	H.verbs |= /mob/living/carbon/human/proc/ear_trick

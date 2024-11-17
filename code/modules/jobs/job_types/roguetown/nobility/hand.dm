@@ -51,7 +51,7 @@
 
 	category_tags = list(CTAG_HAND)
 
-//Classical hand start - same as before, nothing changed. 
+//Classical hand start - same as before, nothing changed.
 /datum/outfit/job/roguetown/hand/handclassic/pre_equip(mob/living/carbon/human/H)
 	shirt = /obj/item/clothing/suit/roguetown/shirt/undershirt/guard
 	backr = /obj/item/storage/backpack/rogue/satchel/black
@@ -72,7 +72,7 @@
 		H.mind.adjust_skillrank(/datum/skill/misc/reading, 4, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/misc/riding, 2, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/misc/tracking, 1, TRUE)
-		H.change_stat("strength", 2)
+		H.change_stat("strength", 1)
 		H.change_stat("perception", 3)
 		H.change_stat("intelligence", 3)
 	ADD_TRAIT(H, TRAIT_NOBLE, TRAIT_GENERIC)
@@ -85,7 +85,7 @@
 
 	category_tags = list(CTAG_HAND)
 
-//Spymaster start. More similar to the rogue adventurer - loses heavy armor and sword skills for more sneaky stuff. 
+//Spymaster start. More similar to the rogue adventurer - loses heavy armor and sword skills for more sneaky stuff.
 /datum/outfit/job/roguetown/hand/spymaster/pre_equip(mob/living/carbon/human/H)
 	backr = /obj/item/storage/backpack/rogue/satchel/black
 	backpack_contents = list(/obj/item/rogueweapon/huntingknife/idagger/dtace = 1, /obj/item/storage/keyring/hand = 1, /obj/item/lockpickring/mundane)
@@ -110,17 +110,17 @@
 		H.mind.adjust_skillrank(/datum/skill/combat/swords, 2, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/combat/knives, 4, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/misc/swimming, 3, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/misc/climbing, 6, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/misc/climbing, 5, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/misc/athletics, 3, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/misc/reading, 3, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/misc/riding, 2, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/misc/tracking, 2, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/misc/sneaking, 5, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/misc/stealing, 5, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/misc/lockpicking, 5, TRUE) // not like they're gonna break into the vault.
+		H.mind.adjust_skillrank(/datum/skill/misc/sneaking, 4, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/misc/stealing, 4, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/misc/lockpicking, 2, TRUE) // not like they're gonna break into the vault. (M EDIT: xd)
 	H.change_stat("strength", -1)
 	H.change_stat("perception", 2)
-	H.change_stat("speed", 4)
+	H.change_stat("speed", 2)
 	H.change_stat("intelligence", 2)
 	ADD_TRAIT(H, TRAIT_NOBLE, TRAIT_GENERIC)
 	ADD_TRAIT(H, TRAIT_MEDIUMARMOR, TRAIT_GENERIC)
@@ -133,7 +133,7 @@
 
 	category_tags = list(CTAG_HAND)
 
-//Advisor start. Trades combat skills for more knowledge and skills - for older hands, hands that don't do combat - people who wanna play wizened old advisors. 
+//Advisor start. Trades combat skills for more knowledge and skills - for older hands, hands that don't do combat - people who wanna play wizened old advisors.
 /datum/outfit/job/roguetown/hand/advisor/pre_equip(mob/living/carbon/human/H)
 	shirt = /obj/item/clothing/suit/roguetown/shirt/undershirt/guard
 	backr = /obj/item/storage/backpack/rogue/satchel/black
@@ -153,8 +153,8 @@
 		H.mind.adjust_skillrank(/datum/skill/misc/alchemy, 4, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/misc/medicine, 4, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/misc/lockpicking, 4, TRUE)
-		H.change_stat("intelligence", rand(4,5))
-		H.change_stat("perception", 3)
+		H.change_stat("intelligence", 3)
+		H.change_stat("perception", 2)
 	if(H.age == AGE_OLD)
 		H.change_stat("speed", -1)
 		H.change_stat("strength", -1)

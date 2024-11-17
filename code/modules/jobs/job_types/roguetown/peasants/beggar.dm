@@ -18,9 +18,9 @@
 	display_order = JDO_VAGRANT
 	show_in_credits = FALSE
 	can_random = FALSE
-	
+
 	cmode_music = 'sound/music/combat_bum.ogg'
-	
+
 	/// Chance to become a wise beggar, if we still have space for more wise beggars
 	var/wise_chance = 10
 	/// Amount of wise beggars spawned as of now
@@ -57,14 +57,14 @@
 		r_hand = /obj/item/rogueweapon/woodstaff/wise // dog beating staff
 		l_hand = /obj/item/rogueweapon/huntingknife/idagger/steel/special // dog butchering knife
 		if(H.mind)
-			H.mind.adjust_skillrank(/datum/skill/misc/sneaking, rand(2,5), TRUE)
-			H.mind.adjust_skillrank(/datum/skill/misc/stealing, 5, TRUE)
-			H.mind.adjust_skillrank(/datum/skill/misc/climbing, rand(2,5), TRUE)
-			H.mind.adjust_skillrank(/datum/skill/misc/reading, 4, TRUE) //very good reading he is wise
-			H.mind.adjust_skillrank(/datum/skill/combat/polearms, rand(2,5), TRUE) // dog beating staff
-			H.STASTR = rand(1, 20)
-			H.STAINT = rand(5, 20)
-			H.STALUC = rand(1, 20)
+			H.mind.adjust_skillrank(/datum/skill/misc/sneaking, 2, TRUE)
+			H.mind.adjust_skillrank(/datum/skill/misc/stealing, 2, TRUE)
+			H.mind.adjust_skillrank(/datum/skill/misc/climbing, 1, TRUE)
+			H.mind.adjust_skillrank(/datum/skill/misc/reading, 1, TRUE) //very good reading he is wise
+			H.mind.adjust_skillrank(/datum/skill/combat/polearms, 1, TRUE) // dog beating staff
+		//	H.STASTR = rand(1, 20)
+		//	H.STAINT = rand(5, 20)
+		//	H.STALUC = rand(1, 20) (M EDIT: hopefully this role is never re-enabled but fuck this if it is)
 		H.change_stat("constitution", -rand(0, 2))
 		H.change_stat("endurance", -rand(0, 2))
 		H.real_name = "[H.real_name] the Wise"

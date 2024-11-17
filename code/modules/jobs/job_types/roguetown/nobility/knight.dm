@@ -1,10 +1,10 @@
 /datum/job/roguetown/knight
-	title = "Knight Lieutenant"		
+	title = "Knight Lieutenant"
 	flag = KNIGHT
 	department_flag = NOBLEMEN
 	faction = "Station"
-	total_positions = 3
-	spawn_positions = 3
+	total_positions = 1
+	spawn_positions = 1
 	allowed_races = NOBLE_RACES_TYPES
 	allowed_sexes = list(MALE, FEMALE)
 	allowed_ages = list(AGE_ADULT, AGE_MIDDLEAGED)

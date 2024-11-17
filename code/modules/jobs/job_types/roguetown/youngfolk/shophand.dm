@@ -41,10 +41,9 @@
 		beltl = /obj/item/storage/keyring/merchant
 		backr = /obj/item/storage/backpack/rogue/satchel
 	if(H.mind)
-		//worse skills than a normal peasant, generally, with random bad combat skill
-		H.mind.adjust_skillrank(/datum/skill/misc/stealing, 4, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/misc/stealing, 2, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/misc/sneaking, 2, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/misc/climbing, 3, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/misc/climbing, 1, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/misc/reading, 2, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/misc/medicine, 1, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/combat/knives, 2, TRUE)
@@ -54,7 +53,7 @@
 		H.mind.adjust_skillrank(/datum/skill/misc/lockpicking, 2, TRUE)
 		H.change_stat("intelligence", 1)
 		H.change_stat("fortune", 2)
-		if(prob(33))
+		if(prob(33)) // (M EDIT: ugh... im not changing this yet w/e)
 			H.mind.adjust_skillrank(/datum/skill/combat/crossbows, 1, TRUE)
 		else if(prob(33))
 			H.mind.adjust_skillrank(/datum/skill/combat/bows, 1, TRUE)
