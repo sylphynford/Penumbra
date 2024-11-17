@@ -9,7 +9,7 @@
 	allowed_sexes = list(MALE, FEMALE)
 	allowed_races = RACES_ALL_KINDS
 	allowed_ages = list(AGE_ADULT, AGE_MIDDLEAGED)
-	tutorial = "Having proven yourself loyal and capable, you are entrusted as a Sergeant in the Town Guard. Trained regularly in combat and siege warfare, you stand a small chance of surviving the Baron's reign."
+	tutorial = "Having proven yourself loyal and capable, you are entrusted as a Sergeant in the Town Guard. Trained regularly in combat and siege warfare, you stand a small chance of surviving the Baron's reign. You take orders from the Knights and your liege, enforcing their will on the guards below you."
 	display_order = JDO_CASTLEGUARD
 	whitelist_req = TRUE
 

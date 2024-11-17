@@ -8,7 +8,7 @@
 	allowed_races = NOBLE_RACES_TYPES
 	allowed_sexes = list(MALE, FEMALE)
 	allowed_ages = list(AGE_ADULT, AGE_MIDDLEAGED)
-	tutorial = "Having proven yourself both loyal and capable, you have been knighted to serve the realm as the baron's personal guard. You listen to your Liege and the Knight Banneret, defending your Lord and realm. You also act as a Sergeant to the Men-At-Arms."
+	tutorial = "Having proven yourself both loyal and capable, you have been knighted to serve the realm as one the Baron's elite soldiers. You listen to your Liege and the Knight Banneret, defending your Lord and realm. You may also give orders to the Town Guards."
 	display_order = JDO_KNIGHT
 	whitelist_req = TRUE
 	outfit = /datum/outfit/job/roguetown/knight
