@@ -33,20 +33,31 @@ GLOBAL_VAR(lordsecondary)
 "WHITE"="#ffffff",	//	  I DIE
 "ORANGE"="#b86f0c",	//I'M PROUD TO BE
 "MAJENTA"="#962e5c", // AN ALBANIAN
-"RAHET"="#fed68c")
+"CUSTOM")
 	var/prim
 	var/sec
 	var/choice = input(src, "Choose a Primary Color", "ROGUETOWN") as anything in lordcolors
 	if(choice)
-		prim = lordcolors[choice]
+		if(choice == "CUSTOM")
+			var/custom_lord_color = color_pick_sanitized_lumi(src, "Custom banner primary color:", "Banner Color")
+			if(custom_lord_color)
+				prim = "#" + custom_lord_color
+		else
+			prim = lordcolors[choice]
 		lordcolors -= choice
+	GLOB.lordprimary = prim
+	lordcolors += "CUSTOM"
 	choice = input(src, "Choose a Secondary Color", "ROGUETOWN") as anything in lordcolors
 	if(choice)
-		sec = lordcolors[choice]
+		if(choice == "CUSTOM")
+			var/custom_lord_color = color_pick_sanitized_lumi(src, "Custom banner secondary color:", "Banner Color")
+			if(custom_lord_color)
+				sec = "#" + custom_lord_color
+		else
+			sec = lordcolors[choice]
 	if(!prim || !sec)
 		GLOB.lordcolor = list()
 		return
-	GLOB.lordprimary = prim
 	GLOB.lordsecondary = sec
 	for(var/obj/O in GLOB.lordcolor)
 		O.lordcolor(prim,sec)
