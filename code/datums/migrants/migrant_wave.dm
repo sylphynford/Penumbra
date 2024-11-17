@@ -69,7 +69,7 @@
 	)
 	greet_text = "Fleeing from misfortune and hardship, you and a handful of survivors get closer to Fablefield, looking for refuge and work, finally almost being there, almost..."
 
-/datum/migrant_wave/adventurer
+/*/datum/migrant_wave/adventurer
 	name = "Adventure Party"
 	downgrade_wave = /datum/migrant_wave/adventurer_down_one
 	roles = list(
