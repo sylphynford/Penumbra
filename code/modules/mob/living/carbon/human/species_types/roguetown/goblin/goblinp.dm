@@ -88,7 +88,7 @@
 	)
 
 /datum/species/goblinp/check_roundstart_eligible()
-	return TRUE
+	return FALSE
 
 /datum/species/goblinp/qualifies_for_rank(rank, list/features)
 	return TRUE
