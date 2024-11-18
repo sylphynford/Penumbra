@@ -122,7 +122,7 @@
 	UnregisterSignal(C, COMSIG_MOB_SAY)
 
 /datum/species/anthromorphsmall/check_roundstart_eligible()
-	return TRUE
+	return FALSE
 
 /datum/species/anthromorphsmall/qualifies_for_rank(rank, list/features)
 	return TRUE
