@@ -390,7 +390,8 @@ var/global/list/roguegamemodes = list("Rebellion", "Vampires and Werewolves", "E
 	"Templar",
 	"Bog Guard",
 	"Bog Master",
-	"Knight Lieutenant"
+	"Knight Lieutenant",
+	"Huskar"
 	)
 	antag_candidates = get_players_for_role(ROLE_NBEAST)
 	antag_candidates = shuffle(antag_candidates)
@@ -441,7 +442,8 @@ var/global/list/roguegamemodes = list("Rebellion", "Vampires and Werewolves", "E
 	"Mortician",
 	"Desert Rider",
 	"Desert Rider Mercenary",
-	"Grenzelhoft Mercenary"
+	"Grenzelhoft Mercenary",
+	"Huskar"
 	)
 
 	var/num_werewolves = rand(1,2)

@@ -857,7 +857,7 @@
 		add_overlay(pic)
 
 /obj/item/clothing/head/roguetown/helmet/otavan
-	name = "otavan helmet"
+	name = "knight's helmet"
 	desc = ""
 	icon_state = "otavahelm"
 	item_state = "otavahelm"

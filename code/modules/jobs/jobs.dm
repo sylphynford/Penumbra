@@ -69,6 +69,7 @@ GLOBAL_LIST_INIT(noble_positions, list(
 	"Councillor",
 	"Steward",
 	"Knight Lieutenant",
+	"Huskar",
 ))
 
 GLOBAL_LIST_INIT(courtier_positions, list(
