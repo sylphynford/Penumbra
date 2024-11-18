@@ -18,9 +18,11 @@
 	/datum/species/anthromorphsmall,\
 	/datum/species/demihuman,\
 	/datum/species/halforc,\
-	/datum/species/kobold,\
 	/datum/species/goblinp,\
 )
+
+#define RACES_DIRT \
+	/datum/species/kobold,\
 
 #define RACES_RESPECTED \
 	/datum/species/human/northern,\
@@ -45,7 +47,6 @@
 #define RACES_SHUNNED \
 	/datum/species/halforc,\
 	/datum/species/anthromorphsmall,\
-	/datum/species/kobold
 
 #define RACES_DESPISED \
 	/datum/species/goblinp,\

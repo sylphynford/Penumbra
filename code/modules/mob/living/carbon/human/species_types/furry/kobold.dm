@@ -96,7 +96,7 @@
 	)
 
 /datum/species/kobold/check_roundstart_eligible()
-	return FALSE
+	return TRUE
 
 /datum/species/kobold/qualifies_for_rank(rank, list/features)
 	return TRUE
