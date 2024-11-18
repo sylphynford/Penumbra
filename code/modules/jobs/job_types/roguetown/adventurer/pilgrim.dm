@@ -5,7 +5,7 @@
 	faction = "Station"
 	total_positions = -1
 	spawn_positions = -1
-	allowed_races = list(RACES_ALL_KINDS, RACES_DIRT)
+	allowed_races = RACES_ALLPLUSKOBOLD
 	tutorial = "Fleeing misfortune you head your way towards Fablefield, you're not a soldier or an explorer, but a humble migrant trying to look for a better life, if you get to survive the trip that is."
 
 	outfit = null

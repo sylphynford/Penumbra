@@ -4,7 +4,7 @@
 	As very skilled cook you come with some ingredients to make food and feed the masses. \
 	cook up some cuisine with food gathered from the local flora and fauna"
 	allowed_sexes = list(MALE, FEMALE)
-	allowed_races = list(RACES_ALL_KINDS, RACES_DIRT)
+	allowed_races = RACES_ALLPLUSKOBOLD
 	outfit = /datum/outfit/job/roguetown/adventurer/cheesemaker
 
 	category_tags = list(CTAG_PILGRIM, CTAG_TOWNER)

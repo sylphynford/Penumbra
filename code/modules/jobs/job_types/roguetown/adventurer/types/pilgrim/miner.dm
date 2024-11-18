@@ -3,7 +3,7 @@
 	tutorial = "You are a Miner, you mine for the local blacksmith, gathering rare ores. \
 	there are tales of ambitious dwarf miners building great forts in the lavalands, to harvest all of its hardly touched ores"
 	allowed_sexes = list(MALE, FEMALE)
-	allowed_races = list(RACES_ALL_KINDS, RACES_DIRT)
+	allowed_races = RACES_ALLPLUSKOBOLD
 	outfit = /datum/outfit/job/roguetown/adventurer/miner
 
 	category_tags = list(CTAG_PILGRIM, CTAG_TOWNER)
