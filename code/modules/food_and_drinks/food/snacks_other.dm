@@ -136,7 +136,7 @@
 	name = "burned mess"
 	desc = ""
 	icon_state = "badrecipe"
-	list_reagents = list(/datum/reagent/toxin/bad_food = 30)
+	list_reagents = list(/datum/reagent/toxin/bad_food = 5)
 	filling_color = "#8B4513"
 	foodtype = GROSS
 	burntime = 0

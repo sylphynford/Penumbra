@@ -504,7 +504,7 @@
 	description = "The result of some abomination of cookery, food so bad it's toxic."
 	reagent_state = LIQUID
 	color = "#d6d6d8"
-	metabolization_rate = 0.25 * REAGENTS_METABOLISM
+	metabolization_rate = 0.25
 	toxpwr = 0.5
 	taste_description = "bad cooking"
 
