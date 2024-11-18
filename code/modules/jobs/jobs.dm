@@ -129,7 +129,6 @@ GLOBAL_LIST_INIT(peasant_positions, list(
 	"Prisoner",
 	"Beggar",
 	"Party Leader",
-	"Adventurer",
 	"Pilgrim",
 	"Bandit",
 ))
