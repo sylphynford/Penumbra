@@ -11,8 +11,8 @@
 			dat += ("<div align='center'><img src='[headshot_link]' width='325px' height='325px'></div>")
 		dat += "<br>"
 		dat += "<div align='center'>[src]</div>"
-		if(flavortext)
-			dat += "<div align='left'>[replacetext(flavortext, "\n", "<BR>")]</div>"
+//		if(flavortext)
+//			dat += "<div align='left'>[replacetext(flavortext, "\n", "<BR>")]</div>"
 //		if(ooc_notes)
 //			dat += "<br>"
 //			dat += "<div align='center'><b>OOC notes</b></div>"

@@ -423,7 +423,7 @@ GLOBAL_LIST_EMPTY(chosen_names)
 			if(headshot_link != null)
 				dat += "<br><img src='[headshot_link]' width='100px' height='100px'>"
 
-			dat += "<br><b>Flavortext:</b> <a href='?_src_=prefs;preference=flavortext;task=input'>Change</a>"
+			//dat += "<br><b>Flavortext:</b> <a href='?_src_=prefs;preference=flavortext;task=input'>Change</a>"
 
 			//dat += "<br><b>OOC Notes:</b> <a href='?_src_=prefs;preference=ooc_notes;task=input'>Change</a>"
 

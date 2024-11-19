@@ -1,4 +1,4 @@
-#define MINIMUM_FLAVOR_TEXT		200
+#define MINIMUM_FLAVOR_TEXT		0
 
 
 //Preference toggles
