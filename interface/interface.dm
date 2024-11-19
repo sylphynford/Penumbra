@@ -60,6 +60,7 @@
 	set name = "Mentorhelp"
 	set desc = ""
 	set category = "Admin"
+	set hidden = 1
 	if(mob)
 		var/msg = input("Say your meditation:", "Voices in your head") as text|null
 		if(msg)

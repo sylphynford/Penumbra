@@ -97,6 +97,7 @@
 
 /client/proc/adminwho()
 	set category = "Admin"
+	set hidden = 1
 	set name = "Adminwho"
 	set desc = "Lists all admins currently online."
 
