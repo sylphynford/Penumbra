@@ -4,7 +4,7 @@
 	title = "Templar"
 	department_flag = CHURCHMEN
 	faction = "Station"
-	tutorial = "Templars are warriors who have forsaken wealth and title in lieu of service to the church, due to either zealotry or a past shame. They serve the inquisitor while keeping a watchful eye against heresy and nite-creechers. Within troubled dreams, they wonder if the blood they shed makes them holy or stained."
+	tutorial = "The Templar is a fanatical enforcer tasked with eradicating heresy within the realm, answering only to those who are recognized as true representatives of Psydon: the Inquisitor first, and the priesthood second. Their role is not to interpret the will of Psydon but to enforce the edicts of those granted divine mandate. Any claim of a Templar understanding or interpreting the Psydon will is seen as a violation of their sacred purpose as such presumptions are considered heretical in themselves. Their service is ingrained in them so deeply that their lives are regarded as insignificant in comparison to the sacred duty they bear."
 	allowed_sexes = list(MALE, FEMALE)
 	allowed_races = RACES_ALL_KINDS
 	allowed_patrons = ALL_DIVINE_PATRONS

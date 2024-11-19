@@ -8,7 +8,7 @@
 	allowed_races = OTAVAN_RACE_TYPES
 	allowed_sexes = list(MALE, FEMALE)
 	allowed_ages = list(AGE_ADULT, AGE_MIDDLEAGED)
-	tutorial = "The Huskar is a seasoned guard assigned to the unenviable task of ensuring the consort's safety during their diplomatic mission, failure carries dire consequences for both them personally and those they know back home. Behind closed doors, their counsel is sharp and invaluable. In public, they remain subservient to the consort's authority."
+	tutorial = "The Huskar is a seasoned knight assigned to the unenviable task of ensuring the consort's safety during their diplomatic mission, failure carries dire consequences for both them personally and those they know back home. Behind closed doors, their counsel is sharp and invaluable. In public, they remain subservient to the consort's authority."
 	display_order = JDO_HUSKAR
 	whitelist_req = TRUE
 	outfit = /datum/outfit/job/roguetown/huskar

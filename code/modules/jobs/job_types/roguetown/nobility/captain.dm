@@ -9,7 +9,7 @@
 	allowed_races = NOBLE_RACES_TYPES
 	allowed_sexes = list(MALE, FEMALE)
 	allowed_ages = list(AGE_ADULT, AGE_MIDDLEAGED, AGE_OLD)
-	tutorial = "Your lineage is noble, and generations of strong, loyal knights have come before you. You served your time gracefully as knight of his Lordship, and now you've grown into a role which many men can only dream of becoming. Lead your men to victory--and keep them in line--and you will see this realm prosper under a thousand suns."
+	tutorial = "The Knight Banneret is the Baron's most devoted servant, a position of trust earned through a lifetime of unwavering loyalty and proven skill. Answering only to the nobility, they oversee the defense of the realm and the enforcement of the court's decrees with ruthless efficiency. Among the commoners, they are both feared and respected as an incorruptible force, but it is also well known that their dedication has led them to commit terrible acts in the name of the Barony, deeds they view not as atrocities, but as necessary measures to uphold the order they believe in."
 	display_order = JDO_GUARD_CAPTAIN
 	whitelist_req = FALSE
 
@@ -34,11 +34,14 @@
 				index = copytext(H.real_name, 1,index)
 			if(!index)
 				index = H.real_name
-			S.name = "captain cape ([index])"
+			S.name = "banneret cape ([index])"
 		var/prev_real_name = H.real_name
 		var/prev_name = H.name
-		H.real_name = "Captain [prev_real_name]"
-		H.name = "Captain [prev_name]"
+		var/honorary = "Ser"
+		if(H.pronouns == SHE_HER || H.pronouns == THEY_THEM_F)
+			honorary = "Dame"
+		H.real_name = "[honorary] [prev_real_name]"
+		H.name = "[honorary] [prev_name]"
 
 		for(var/X in peopleknowme)
 			for(var/datum/mind/MF in get_minds(X))

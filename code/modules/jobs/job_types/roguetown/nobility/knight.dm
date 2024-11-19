@@ -8,7 +8,7 @@
 	allowed_races = NOBLE_RACES_TYPES
 	allowed_sexes = list(MALE, FEMALE)
 	allowed_ages = list(AGE_ADULT, AGE_MIDDLEAGED)
-	tutorial = "Having proven yourself both loyal and capable, you have been knighted to serve the realm as one the Baron's elite soldiers. You listen to your Liege and the Knight Banneret, defending your Lord and realm. You may also give orders to the Town Guards."
+	tutorial = "The Knight Lieutenant is a seasoned knight who earned their position through merit, chosen from the ranks of squires. Tasked with overseeing the day-to-day operations of the garrison, they ensure the readiness, discipline, and coordination of those under their command. While they hold significant authority in maintaining the defence and order of the realm they ultimately answer to the Knight Banneret and the court."
 	display_order = JDO_KNIGHT
 	whitelist_req = TRUE
 	outfit = /datum/outfit/job/roguetown/knight
