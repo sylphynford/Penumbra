@@ -507,7 +507,6 @@ GLOBAL_DATUM_INIT(ahelp_tickets, /datum/admin_help_tickets, new)
 /client/verb/adminhelp(msg as text)
 	set category = "Admin"
 	set name = "Report Immersion Break"
-	to_chat(usr, span_danger("In-game reports are for major incidents of immersion breaking only."))
 
 	if(GLOB.say_disabled)	//This is here to try to identify lag problems
 		to_chat(usr, span_danger("Speech is currently admin-disabled."))
