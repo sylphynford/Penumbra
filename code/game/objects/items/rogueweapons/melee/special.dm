@@ -95,10 +95,9 @@
 	dropped(var/mob/dropping_mob)
 		if(on)
 			on = FALSE
-			world << span_warning("[src] turns off as it is dropped.") // Optional: Notify the environment
+			visible_message(span_warning("[src] turns off as it is dropped."))
 			update_icon()
 		..() // Call parent behavior
-
 
 	force = 15
 	force_wielded = 15
