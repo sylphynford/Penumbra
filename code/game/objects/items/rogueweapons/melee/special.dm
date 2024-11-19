@@ -54,7 +54,7 @@
 	. = ..()
 	if(get_dist(user, target) > 7)
 		return
-	
+
 	user.changeNext_move(CLICK_CD_MELEE)
 
 	if(ishuman(user))
@@ -72,7 +72,7 @@
 
 			if(H.anti_magic_check())
 				return
-		
+
 			if(!(H in SStreasury.bank_accounts))
 				return
 
@@ -90,9 +90,19 @@
 				return
 
 /obj/item/rogueweapon/mace/stunmace
+	var/last_toggle_time = 0 // Stores the last toggle time in deciseconds
+	// Turn off when dropped
+	dropped(var/mob/dropping_mob)
+		if(on)
+			on = FALSE
+			world << span_warning("[src] turns off as it is dropped.") // Optional: Notify the environment
+			update_icon()
+		..() // Call parent behavior
+
+
 	force = 15
 	force_wielded = 15
-	name = "stunmace"
+	name = "holy stunmace"
 	icon_state = "stunmace0"
 	desc = "Pain is our currency here."
 	gripped_intents = null
@@ -151,22 +161,41 @@
 		icon_state = "stunmace0"
 
 /obj/item/rogueweapon/mace/stunmace/attack_self(mob/user)
-	if(on)
-		on = FALSE
+	if(!user || !istype(user, /mob))
+		return
+
+	var/current_time = world.time
+	if(current_time < last_toggle_time + (1 SECONDS))
+		to_chat(user, span_warning("You need to wait a moment before toggling it again."))
+		return
+
+	if(user.job == "Inquisitor")
+		if(on)
+			on = FALSE
+			to_chat(user, span_warning("You turn off the [src]."))
+		else
+			if(charge <= 33)
+				to_chat(user, span_warning("It's out of juice."))
+				return
+			to_chat(user, span_warning("You turn on the [src]."))
+			user.visible_message(span_warning("[user] flicks [src] on."))
+			on = TRUE
+			charge--
+			playsound(user, pick('sound/items/stunmace_toggle (1).ogg',
+								 'sound/items/stunmace_toggle (2).ogg',
+								 'sound/items/stunmace_toggle (3).ogg'), 100, TRUE)
+		if(user.a_intent)
+			var/datum/intent/I = user.a_intent
+			if(istype(I))
+				I.afterchange()
+		update_icon()
+		add_fingerprint(user)
 	else
-		if(charge <= 33)
-			to_chat(user, span_warning("It's out of juice."))
-			return
-		user.visible_message(span_warning("[user] flicks [src] on."))
-		on = TRUE
-		charge--
-	playsound(user, pick('sound/items/stunmace_toggle (1).ogg','sound/items/stunmace_toggle (2).ogg','sound/items/stunmace_toggle (3).ogg'), 100, TRUE)
-	if(user.a_intent)
-		var/datum/intent/I = user.a_intent
-		if(istype(I))
-			I.afterchange()
-	update_icon()
-	add_fingerprint(user)
+		to_chat(user, span_warning("It doesn't respond to me."))
+
+
+	last_toggle_time = world.time
+
 
 /obj/item/rogueweapon/mace/stunmace/process()
 	if(on)
