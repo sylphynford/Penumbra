@@ -66,7 +66,7 @@
 
 /datum/advclass/knight/heavy
 	name = "Heavy Knight"
-	tutorial = "You are the indesputed master of man-on-man combat. Shockingly adept with massive swords, axes, and maces. People may fear the mounted knights, but they should truly fear those who come off their mount.."
+	tutorial = "You are the indisputed master of man-on-man combat. Shockingly adept with massive swords, axes, and maces. People may fear the mounted knights, but they should truly fear those who come off their mount.."
 	outfit = /datum/outfit/job/roguetown/knight/heavy
 
 	category_tags = list(CTAG_ROYALGUARD)

@@ -84,7 +84,7 @@
 	if(tag)
 		switch(tag)
 			if("gen")
-				return list("shrink" = 0.4,	
+				return list("shrink" = 0.4,
 "sx" = -6,
 "sy" = -3,
 "nx" = 13,
@@ -268,6 +268,9 @@
 
 /obj/item/storage/keyring/churchie
 	keys = list(/obj/item/roguekey/confession, /obj/item/roguekey/church, /obj/item/roguekey/graveyard)
+
+/obj/item/storage/keyring/templar
+	keys = list(/obj/item/roguekey/puritan, /obj/item/roguekey/church, /obj/item/roguekey/graveyard, /obj/item/roguekey/confession)
 
 /obj/item/storage/keyring/puritan
 	keys = list(/obj/item/roguekey/puritan, /obj/item/roguekey/manor, /obj/item/roguekey/dungeon, /obj/item/roguekey/confession, /obj/item/roguekey/church, /obj/item/roguekey/sheriff)
