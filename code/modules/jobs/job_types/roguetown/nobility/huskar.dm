@@ -8,7 +8,7 @@
 	allowed_races = OTAVAN_RACE_TYPES
 	allowed_sexes = list(MALE, FEMALE)
 	allowed_ages = list(AGE_ADULT, AGE_MIDDLEAGED)
-	tutorial = "You have been knighted to serve as an elite bodyguard of the Consort. Placeholder description"
+	tutorial = "The Huskar is a seasoned guard assigned to the unenviable task of ensuring the consort's safety during their diplomatic mission, failure carries dire consequences for both them personally and those they know back home. Behind closed doors, their counsel is sharp and invaluable. In public, they remain subservient to the consort's authority."
 	display_order = JDO_HUSKAR
 	whitelist_req = TRUE
 	outfit = /datum/outfit/job/roguetown/huskar
@@ -26,6 +26,15 @@
 	ADD_TRAIT(H, TRAIT_HEAVYARMOR, TRAIT_GENERIC)
 	ADD_TRAIT(H, TRAIT_NOBLE, TRAIT_GENERIC)
 	if(H.mind)
+
+		var/prev_real_name = H.real_name
+		var/prev_name = H.name
+		var/honorary = "Ser"
+		if(H.pronouns == SHE_HER || H.pronouns == THEY_THEM_F)
+			honorary = "Dame"
+		H.real_name = "[honorary] [prev_real_name]"
+		H.name = "[honorary] [prev_name]"
+
 		H.mind.adjust_skillrank(/datum/skill/misc/swimming, 2, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/misc/climbing, 2, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/combat/maces, 2, TRUE)
@@ -44,7 +53,7 @@
 /datum/outfit/job/roguetown/huskar
 	wrists = /obj/item/clothing/wrists/roguetown/bracers
 	belt = /obj/item/storage/belt/rogue/leather
-	beltl = /obj/item/storage/belt/rogue/pouch/coins/poor
+	beltl = /obj/item/storage/belt/rogue/pouch/coins/rich
 	beltr = /obj/item/rogueweapon/sword/falchion
 	neck = /obj/item/clothing/neck/roguetown/fencerguard
 	shirt = /obj/item/clothing/suit/roguetown/armor/gambeson/otavan
