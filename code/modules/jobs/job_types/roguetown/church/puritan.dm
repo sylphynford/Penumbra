@@ -56,6 +56,7 @@
 
 /datum/outfit/job/roguetown/inquisitor/confessor/pre_equip(mob/living/carbon/human/H)
 	..()
+	H.verbs += /datum/job/roguetown/confessor/verb/ConvertToDivine
 	H.mind.adjust_skillrank(/datum/skill/combat/swords, 2, TRUE)
 	H.mind.adjust_skillrank(/datum/skill/combat/whipsflails, 4, TRUE)
 	H.mind.adjust_skillrank(/datum/skill/combat/crossbows, 3, TRUE)
@@ -75,7 +76,7 @@
 	H.change_stat("perception", 1)
 	H.change_stat("speed", 1)
 	H.change_stat("intelligence", 2)
-	
+
 	shirt = /obj/item/clothing/suit/roguetown/shirt/undershirt/puritan
 	belt = /obj/item/storage/belt/rogue/leather
 	neck = /obj/item/clothing/neck/roguetown/psicross/silver
@@ -118,7 +119,7 @@
 	H.change_stat("perception", 1)
 	H.change_stat("speed", 1)
 	H.change_stat("intelligence", 2)
-	
+
 	shirt = /obj/item/clothing/suit/roguetown/shirt/undershirt/puritan
 	belt = /obj/item/storage/belt/rogue/leather
 	neck = /obj/item/clothing/neck/roguetown/psicross/silver
@@ -161,7 +162,7 @@
 	H.change_stat("perception", 1)
 	H.change_stat("speed", 1)
 	H.change_stat("intelligence", 2)
-	
+
 	armor = /obj/item/clothing/suit/roguetown/armor/plate
 	shirt = /obj/item/clothing/suit/roguetown/shirt/undershirt/puritan
 	belt = /obj/item/storage/belt/rogue/leather
@@ -275,3 +276,4 @@
 			say(pick(confessions), spans = list("torture"))
 			return
 	say(pick(innocent_lines), spans = list("torture"))
+
