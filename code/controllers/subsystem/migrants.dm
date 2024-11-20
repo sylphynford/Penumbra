@@ -421,7 +421,7 @@ SUBSYSTEM_DEF(migrants)
 		///FOR SOME silly FUCKING REASON THIS REFUSED TO WORK WITHOUT A FUCKING TIMER IT JUST FUCKED SHIT UP
 		addtimer(CALLBACK(character, TYPE_PROC_REF(/mob/living/carbon/human, adv_hugboxing_start)), 1)
 
-/proc/grant_lit_torch(mob/living/carbon/human/character)
+proc/grant_lit_torch(mob/living/carbon/human/character)
 	var/obj/item/flashlight/flare/torch/torch = new()
 	torch.spark_act()
 	character.put_in_hands(torch, forced = TRUE)

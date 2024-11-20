@@ -37,7 +37,7 @@
 				index = copytext(H.real_name, 1,index)
 			if(!index)
 				index = H.real_name
-			S.name = "man-at-arms jupon ([index])"
+			S.name = "sergeant-at-arms jupon ([index])"
 
 /datum/outfit/job/roguetown/manorguard
 	pants = /obj/item/clothing/under/roguetown/chainlegs
