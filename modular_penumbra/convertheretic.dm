@@ -45,7 +45,6 @@
     if(istype(target.patron, /datum/patron/divine))
         to_chat(user, "This target is already under divine patronage, the conversion will fail.")
         user.apply_damage(30, BURN)
-        target.apply_damage(30, BURN)
         qdel(required_item)
         return
     
