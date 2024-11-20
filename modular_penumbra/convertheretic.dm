@@ -41,10 +41,11 @@
     if(target.health <= 0)
         to_chat(user, "The target is dead and cannot be converted.")
         return
-    var/datum/patron/target_patron = target.patron
-    if(target_patron && target_patron == /datum/patron/divine)
+    
+    if(istype(target.patron, /datum/patron/divine))
         to_chat(user, "This target is already under divine patronage, the conversion will fail.")
         user.apply_damage(30, BURN)
+        target.apply_damage(30, BURN)
         qdel(required_item)
         return
     
