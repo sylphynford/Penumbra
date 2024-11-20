@@ -3,8 +3,8 @@
 	flag = PURITAN
 	department_flag = CHURCHMEN
 	faction = "Station"
-	total_positions = 10
-	spawn_positions = 10
+	total_positions = 1
+	spawn_positions = 1
 	allowed_sexes = list(MALE, FEMALE)
 	allowed_races = RACES_ALL_KINDS
 	allowed_patrons = ALL_DIVINE_PATRONS
