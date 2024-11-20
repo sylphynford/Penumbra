@@ -8,15 +8,14 @@
 	allowed_sexes = list(MALE, FEMALE)
 	allowed_races = RACES_ALL_KINDS
 	allowed_patrons = ALL_DIVINE_PATRONS
-	tutorial = "You worship and pay credence PSYDON. Both the crown and church have emboldened your radical ideals. Your fervor allows you to root out cultists, the cursed night beasts, and other agents of the darkness using your practice of extracting involuntary 'sin confessions.' Remember, though; they tolerate you only so long as you have a common enemy..."
+	tutorial = "You worship and pay credence to the Gods. Both the crown and church have emboldened your radical ideals. Your fervor allows you to root out cultists, the cursed night beasts, and other agents of the abyss, as you are entrusted with the ability of extracting involuntary 'sin confessions.'"
 	whitelist_req = TRUE
 	advclass_cat_rolls = list(CTAG_INQUISITOR = 20)
 
 	outfit = /datum/outfit/job/roguetown/puritan
 	display_order = JDO_PURITAN
 	give_bank_account = 36
-	min_pq = 0 //Only for those bold of spirit, sure of mind, hard of pintle...and should probably know Psydon from Zizo. Not a crucial role, and rather prone to people instigating excessive conflict
-	max_pq = null
+	min_pq = 0
 	round_contrib_points = 2
 
 
@@ -49,7 +48,7 @@
 
 /datum/advclass/inquisitor/confessor
 	name = "Confessor"
-	tutorial = "Placeholder (stunmace guy)"
+	tutorial = "Bathed in rays of gold, you sing the melody of a self-proclaimed savior, the Confessor. Armed with the lightening-infused stun mace and the ability to flush the corruption from the unclean, you may just be able to back up these claims. Unfortunately, however, your over-reliance on the power of the stun mace has left you rusty in genuine skill. And yet, it does not seem to matter."
 	outfit = /datum/outfit/job/roguetown/inquisitor/confessor
 
 	category_tags = list(CTAG_INQUISITOR)
@@ -58,34 +57,33 @@
 	..()
 	H.verbs += /datum/job/roguetown/confessor/verb/ConvertToDivine
 	H.mind.adjust_skillrank(/datum/skill/combat/swords, 2, TRUE)
-	H.mind.adjust_skillrank(/datum/skill/combat/whipsflails, 4, TRUE)
-	H.mind.adjust_skillrank(/datum/skill/combat/crossbows, 3, TRUE)
+	H.mind.adjust_skillrank(/datum/skill/combat/whipsflails, 3, TRUE)
+	H.mind.adjust_skillrank(/datum/skill/combat/crossbows, 2, TRUE)
 	H.mind.adjust_skillrank(/datum/skill/combat/wrestling, 3, TRUE)
-	H.mind.adjust_skillrank(/datum/skill/combat/unarmed, 3, TRUE)
+	H.mind.adjust_skillrank(/datum/skill/combat/unarmed, 2, TRUE)
 	H.mind.adjust_skillrank(/datum/skill/combat/bows, 2, TRUE)
-	H.mind.adjust_skillrank(/datum/skill/combat/maces, 4, TRUE)
-	H.mind.adjust_skillrank(/datum/skill/combat/knives, 2, TRUE)
+	H.mind.adjust_skillrank(/datum/skill/combat/maces, 2, TRUE)
+	H.mind.adjust_skillrank(/datum/skill/combat/knives, 3, TRUE)
 	H.mind.adjust_skillrank(/datum/skill/misc/athletics, 3, TRUE)
 	H.mind.adjust_skillrank(/datum/skill/misc/reading, 3, TRUE)
-	H.mind.adjust_skillrank(/datum/skill/misc/sewing, 2, TRUE)
+	H.mind.adjust_skillrank(/datum/skill/misc/sewing, 1, TRUE)
 	H.mind.adjust_skillrank(/datum/skill/misc/medicine, 2, TRUE)
 	H.mind.adjust_skillrank(/datum/skill/misc/tracking, 1, TRUE)
 	H.change_stat("strength", 1)
 	H.change_stat("endurance", 1)
 	H.change_stat("constitution", 1)
-	H.change_stat("perception", 1)
 	H.change_stat("speed", 1)
 	H.change_stat("intelligence", 2)
 
-	shirt = /obj/item/clothing/suit/roguetown/shirt/undershirt/puritan
-	belt = /obj/item/storage/belt/rogue/leather
-	neck = /obj/item/clothing/neck/roguetown/psicross/silver
+	shirt = /obj/item/clothing/suit/roguetown/shirt/tunic/white
+	belt = /obj/item/storage/belt/rogue/leather/plaquegold
+	neck = /obj/item/clothing/neck/roguetown/psicross/g
 	shoes = /obj/item/clothing/shoes/roguetown/boots
 	pants = /obj/item/clothing/under/roguetown/tights/black
 	cloak = /obj/item/clothing/cloak/cape/puritan
 	backr = /obj/item/storage/backpack/rogue/satchel/black
-	beltr = /obj/item/storage/belt/rogue/pouch/coins/rich
-	head = /obj/item/clothing/head/roguetown/puritan
+	beltr = /obj/item/storage/belt/rogue/pouch/coins/mid
+	mask = /obj/item/clothing/mask/rogue/facemask/goldmask
 	gloves = /obj/item/clothing/gloves/roguetown/leather
 	backpack_contents = list(/obj/item/storage/keyring/puritan = 1, /obj/item/rogueweapon/huntingknife/idagger/silver)
 	beltl = /obj/item/rogueweapon/mace/stunmace
@@ -93,88 +91,91 @@
 
 /datum/advclass/inquisitor/zealot
 	name = "Zealot"
-	tutorial = "Placeholder (offensive guy)"
+	tutorial = "Once master warrior-monk turned Zealot. Your journey of self-perfection has ended in great success, leaving you with the skill and strength of legend. Yet, you feel as though your journey has just begun. It seems to you that the power to eradicate the abyssal corruption with such finesse must surely be put to use in tribute to the Gods whom led you down this path so long ago."
 	outfit = /datum/outfit/job/roguetown/inquisitor/zealot
 
 	category_tags = list(CTAG_INQUISITOR)
 
 /datum/outfit/job/roguetown/inquisitor/zealot/pre_equip(mob/living/carbon/human/H)
 	..()
-	H.mind.adjust_skillrank(/datum/skill/combat/swords, 4, TRUE)
-	H.mind.adjust_skillrank(/datum/skill/combat/whipsflails, 4, TRUE)
-	H.mind.adjust_skillrank(/datum/skill/combat/crossbows, 3, TRUE)
+	H.mind.adjust_skillrank(/datum/skill/combat/swords, 5, TRUE)
+	H.mind.adjust_skillrank(/datum/skill/combat/whipsflails, 5, TRUE)
+	H.mind.adjust_skillrank(/datum/skill/combat/crossbows, 2, TRUE)
 	H.mind.adjust_skillrank(/datum/skill/combat/wrestling, 4, TRUE)
-	H.mind.adjust_skillrank(/datum/skill/combat/unarmed, 3, TRUE)
+	H.mind.adjust_skillrank(/datum/skill/combat/unarmed, 5, TRUE)
 	H.mind.adjust_skillrank(/datum/skill/combat/bows, 2, TRUE)
-	H.mind.adjust_skillrank(/datum/skill/combat/maces, 3, TRUE)
+	H.mind.adjust_skillrank(/datum/skill/combat/maces, 5, TRUE)
 	H.mind.adjust_skillrank(/datum/skill/combat/knives, 3, TRUE)
-	H.mind.adjust_skillrank(/datum/skill/misc/athletics, 3, TRUE)
+	H.mind.adjust_skillrank(/datum/skill/misc/athletics, 1, TRUE)
 	H.mind.adjust_skillrank(/datum/skill/misc/reading, 3, TRUE)
 	H.mind.adjust_skillrank(/datum/skill/misc/sewing, 2, TRUE)
-	H.mind.adjust_skillrank(/datum/skill/misc/medicine, 2, TRUE)
-	H.mind.adjust_skillrank(/datum/skill/misc/tracking, 1, TRUE)
+	H.mind.adjust_skillrank(/datum/skill/misc/medicine, 3, TRUE)
+	H.mind.adjust_skillrank(/datum/skill/misc/tracking, 2, TRUE)
 	H.change_stat("strength", 2)
 	H.change_stat("endurance", 1)
 	H.change_stat("constitution", 2)
-	H.change_stat("perception", 1)
 	H.change_stat("speed", 1)
-	H.change_stat("intelligence", 2)
 
-	shirt = /obj/item/clothing/suit/roguetown/shirt/undershirt/puritan
+	shirt = /obj/item/clothing/suit/roguetown/shirt/undershirt
 	belt = /obj/item/storage/belt/rogue/leather
 	neck = /obj/item/clothing/neck/roguetown/psicross/silver
-	shoes = /obj/item/clothing/shoes/roguetown/boots
-	pants = /obj/item/clothing/under/roguetown/tights/black
+	shoes = /obj/item/clothing/shoes/roguetown/sandals
 	cloak = /obj/item/clothing/cloak/cape/puritan
 	backr = /obj/item/storage/backpack/rogue/satchel/black
 	beltr = /obj/item/storage/belt/rogue/pouch/coins/rich
-	head = /obj/item/clothing/head/roguetown/puritan
+	armor = /obj/item/clothing/suit/roguetown/shirt/robe
+	head = /obj/item/clothing/head/roguetown/headband
 	gloves = /obj/item/clothing/gloves/roguetown/leather
 	backpack_contents = list(/obj/item/storage/keyring/puritan = 1, /obj/item/rogueweapon/huntingknife/idagger/silver)
 	beltl = /obj/item/rogueweapon/sword/rapier
 	ADD_TRAIT(H, TRAIT_MEDIUMARMOR, TRAIT_GENERIC)
+	ADD_TRAIT(H, TRAIT_DODGEEXPERT, TRAIT_GENERIC)
 
 /datum/advclass/inquisitor/puritanclass
 	name = "Puritan"
-	tutorial = "Placeholder (defensive guy)"
+	tutorial = "Future monster hunters will look upon the work of the Puritan with adoration. A heavy heart and steady hand guide your crusade against the creatures of the night. It may be your experience or superstition that keeps you alive, however you believe the true answer lies in the cold metal that separates the teeth of your enemies from your flesh."
 	outfit = /datum/outfit/job/roguetown/inquisitor/puritanclass
 
 	category_tags = list(CTAG_INQUISITOR)
 
 /datum/outfit/job/roguetown/inquisitor/puritanclass/pre_equip(mob/living/carbon/human/H)
 	..()
-	H.mind.adjust_skillrank(/datum/skill/combat/swords, 2, TRUE)
-	H.mind.adjust_skillrank(/datum/skill/combat/whipsflails, 4, TRUE)
-	H.mind.adjust_skillrank(/datum/skill/combat/crossbows, 2, TRUE)
+	H.mind.adjust_skillrank(/datum/skill/combat/swords, 4, TRUE)
+	H.mind.adjust_skillrank(/datum/skill/combat/whipsflails, 3, TRUE)
+	H.mind.adjust_skillrank(/datum/skill/combat/crossbows, 5, TRUE)
 	H.mind.adjust_skillrank(/datum/skill/combat/wrestling, 3, TRUE)
 	H.mind.adjust_skillrank(/datum/skill/combat/unarmed, 3, TRUE)
-	H.mind.adjust_skillrank(/datum/skill/combat/bows, 2, TRUE)
+	H.mind.adjust_skillrank(/datum/skill/combat/bows, 3, TRUE)
 	H.mind.adjust_skillrank(/datum/skill/combat/maces, 3, TRUE)
 	H.mind.adjust_skillrank(/datum/skill/combat/knives, 3, TRUE)
-	H.mind.adjust_skillrank(/datum/skill/misc/athletics, 3, TRUE)
+	H.mind.adjust_skillrank(/datum/skill/misc/athletics, 4, TRUE)
 	H.mind.adjust_skillrank(/datum/skill/misc/reading, 3, TRUE)
 	H.mind.adjust_skillrank(/datum/skill/misc/sewing, 2, TRUE)
 	H.mind.adjust_skillrank(/datum/skill/misc/medicine, 2, TRUE)
-	H.mind.adjust_skillrank(/datum/skill/misc/tracking, 1, TRUE)
+	H.mind.adjust_skillrank(/datum/skill/misc/tracking, 4, TRUE)
 	H.change_stat("strength", 1)
 	H.change_stat("endurance", 1)
 	H.change_stat("constitution", 3)
-	H.change_stat("perception", 1)
+	H.change_stat("perception", 2)
 	H.change_stat("speed", 1)
-	H.change_stat("intelligence", 2)
+	H.change_stat("intelligence", 1)
 
 	armor = /obj/item/clothing/suit/roguetown/armor/plate
 	shirt = /obj/item/clothing/suit/roguetown/shirt/undershirt/puritan
 	belt = /obj/item/storage/belt/rogue/leather
-	neck = /obj/item/clothing/neck/roguetown/psicross/silver
+	neck = /obj/item/clothing/neck/roguetown/chaincoif/full
+	wrists = /obj/item/clothing/neck/roguetown/psicross/silver
 	shoes = /obj/item/clothing/shoes/roguetown/boots/armor
-	pants = /obj/item/clothing/under/roguetown/tights/black
+	pants = /obj/item/clothing/under/roguetown/trou/leather
 	cloak = /obj/item/clothing/cloak/cape/puritan
 	backr = /obj/item/storage/backpack/rogue/satchel/black
-	beltr = /obj/item/storage/belt/rogue/pouch/coins/rich
+	backl = /obj/item/gun/ballistic/revolver/grenadelauncher/crossbow
+	beltr = /obj/item/quiver/bolts
 	head = /obj/item/clothing/head/roguetown/puritan
 	gloves = /obj/item/clothing/gloves/roguetown/leather
-	backpack_contents = list(/obj/item/storage/keyring/puritan = 1, /obj/item/rogueweapon/huntingknife/idagger/silver)
+	mask = /obj/item/clothing/mask/rogue/eyepatch
+	backpack_contents = list(/obj/item/storage/keyring/puritan = 1, /obj/item/rogueweapon/huntingknife/idagger/silver, /obj/item/storage/belt/rogue/pouch/coins/mid = 1)
+	beltl = /obj/item/rogueweapon/sword/falchion
 	ADD_TRAIT(H, TRAIT_HEAVYARMOR, TRAIT_GENERIC)
 
 
@@ -276,4 +277,3 @@
 			say(pick(confessions), spans = list("torture"))
 			return
 	say(pick(innocent_lines), spans = list("torture"))
-

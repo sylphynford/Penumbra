@@ -98,7 +98,7 @@
 
 /datum/advclass/templar/crusader
 	name = "Templar"
-	tutorial = "You are a templar of the Church, trained in heavy weaponry and zealous warfare. You are the instrument of PSYDON's wrath, clad in steel and faith."
+	tutorial = "You are a templar of the Church, trained in heavy weaponry and zealous warfare. The Inquisitor knows best, or so you believe."
 	outfit = /datum/outfit/job/roguetown/templar/crusader
 
 	category_tags = list(CTAG_TEMPLAR)
