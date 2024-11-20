@@ -45,12 +45,32 @@
     if(target_patron && target_patron == /datum/patron/divine)
         to_chat(user, "This target is already under divine patronage, the conversion will fail.")
         user.apply_damage(30, BURN)
-        target.apply_damage(30, BURN)
         qdel(required_item)
         return
+    
+    var/initial_user_loc = user.loc
+    var/initial_target_loc = target.loc
+    
+    user.visible_message("<span class='notice'>[user] begins the conversion ritual on [target]...</span>")
+    
+    if(!do_after(user, 300, target = target, extra_checks = CALLBACK(src, .proc/conversion_checks, user, target, initial_user_loc, initial_target_loc)))
+        to_chat(user, "<span class='warning'>The conversion ritual has been interrupted!</span>")
+        return
+        
     target.patron = new /datum/patron/divine/astrata()
-    to_chat(target, "You have been converted to the true faith!")
-    to_chat(user, "[target.name] has been converted to the true faith!")
+    to_chat(target, "<span class='notice'>You have been converted to the true faith!</span>")
+    to_chat(user, "<span class='notice'>[target.name] has been converted to the true faith!</span>")
     target.apply_damage(30, BURN)
-    to_chat(user, "The conversion to the true faith was successful, the target has been converted.")
+    to_chat(user, "<span class='notice'>The conversion to the true faith was successful, the target has been converted.</span>")
     qdel(required_item)
+
+/datum/job/roguetown/confessor/proc/conversion_checks(mob/living/carbon/human/user, mob/living/carbon/human/target, initial_user_loc, initial_target_loc)
+    if(user.loc != initial_user_loc)
+        return FALSE
+    if(target.loc != initial_target_loc)
+        return FALSE
+    if(!user || user.stat || user.health <= 0)
+        return FALSE
+    if(!target || target.stat || target.health <= 0)
+        return FALSE
+    return TRUE
