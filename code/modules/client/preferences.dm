@@ -89,7 +89,7 @@ GLOBAL_LIST_EMPTY(chosen_names)
 	var/static/datum/patron/default_patron = /datum/patron/divine/astrata
 	var/list/features = MANDATORY_FEATURE_LIST
 	var/list/randomise = list(RANDOM_UNDERWEAR = TRUE, RANDOM_UNDERWEAR_COLOR = TRUE, RANDOM_UNDERSHIRT = TRUE, RANDOM_SOCKS = TRUE, RANDOM_BACKPACK = TRUE, RANDOM_JUMPSUIT_STYLE = FALSE, RANDOM_SKIN_TONE = TRUE, RANDOM_EYE_COLOR = TRUE)
-	var/list/friendlyGenders = list("male" = "masculine", "female" = "feminine")
+	var/list/friendlyGenders = list("male" = "male", "female" = "female")
 	var/phobia = "spiders"
 	var/shake = TRUE
 	var/sexable = TRUE
@@ -318,7 +318,7 @@ GLOBAL_LIST_EMPTY(chosen_names)
 
 			// LETHALSTONE EDIT BEGIN: add pronoun prefs
 			dat += "<BR>"
-			dat += "<b>Pronouns:</b> <a href='?_src_=prefs;preference=pronouns;task=input'>[pronouns]</a><BR>"
+//			dat += "<b>Pronouns:</b> <a href='?_src_=prefs;preference=pronouns;task=input'>[pronouns]</a><BR>"
 			// LETHALSTONE EDIT END
 
 			dat += "<BR>"
@@ -332,18 +332,18 @@ GLOBAL_LIST_EMPTY(chosen_names)
 			if(!(AGENDER in pref_species.species_traits))
 				var/dispGender
 				if(gender == MALE)
-					dispGender = "Masculine" // LETHALSTONE EDIT: repurpose gender as bodytype, display accordingly
+					dispGender = "Male" // LETHALSTONE EDIT: repurpose gender as bodytype, display accordingly
 				else if(gender == FEMALE)
-					dispGender = "Feminine" // LETHALSTONE EDIT: repurpose gender as bodytype, display accordingly
+					dispGender = "Female" // LETHALSTONE EDIT: repurpose gender as bodytype, display accordingly
 				else
 					dispGender = "Other"
-				dat += "<b>Body Type:</b> <a href='?_src_=prefs;preference=gender'>[dispGender]</a><BR>"
+				dat += "<b>Gender:</b> <a href='?_src_=prefs;preference=gender'>[dispGender]</a><BR>"
 				if(randomise[RANDOM_BODY] || randomise[RANDOM_BODY_ANTAG]) //doesn't work unless random body
 					dat += "<a href='?_src_=prefs;preference=toggle_random;random_type=[RANDOM_GENDER]'>Always Random Bodytype: [(randomise[RANDOM_GENDER]) ? "Yes" : "No"]</A>"
 					dat += "<a href='?_src_=prefs;preference=toggle_random;random_type=[RANDOM_GENDER_ANTAG]'>When Antagonist: [(randomise[RANDOM_GENDER_ANTAG]) ? "Yes" : "No"]</A>"
 
 			// LETHALSTONE EDIT BEGIN: add voice type prefs
-			dat += "<b>Voice Type</b>: <a href='?_src_=prefs;preference=voicetype;task=input'>[voice_type]</a><BR>"
+//			dat += "<b>Voice Type</b>: <a href='?_src_=prefs;preference=voicetype;task=input'>[voice_type]</a><BR>"
 			// LETHALSTONE EDIT END
 
 			dat += "<b>Age:</b> <a href='?_src_=prefs;preference=age;task=input'>[age]</a><BR>"
@@ -1857,9 +1857,15 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 						pickedGender = "female"
 					if(pickedGender && pickedGender != gender)
 						gender = pickedGender
-						to_chat(user, "<font color='red'>Your character will now use a [friendlyGenders[pickedGender]] sprite.</font>")
-						//random_character(gender)
-					genderize_customizer_entries()
+						// Automatically update pronouns based on body type
+						switch(gender)
+							if("male")
+								pronouns = HE_HIM  // Assuming these are defined constants
+								voice_type = VOICE_TYPE_MASC
+							if("female") 
+								pronouns = SHE_HER
+								voice_type = VOICE_TYPE_FEM
+						genderize_customizer_entries()
 				if("domhand")
 					if(domhand == 1)
 						domhand = 2
