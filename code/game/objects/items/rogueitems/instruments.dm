@@ -1,4 +1,3 @@
-
 /obj/item/rogue/instrument
 	name = ""
 	desc = ""
@@ -31,7 +30,6 @@
 
 /obj/item/rogue/instrument/Initialize()
 	soundloop = new(list(src), FALSE)
-//	soundloop.start()
 	. = ..()
 
 /obj/item/rogue/instrument/dropped(mob/living/user, silent)
@@ -41,16 +39,37 @@
 		user.remove_status_effect(/datum/status_effect/buff/playing_music)
 
 /obj/item/rogue/instrument/attack_self(mob/living/user)
+	if(!user.mind)
+		to_chat(user, "<span class='warning'>You have no mind to learn musical skills with!</span>")
+		return TRUE
+
+	if(user.mind.get_skill_level(/datum/skill/misc/music) < 1)
+		to_chat(user, "<span class='warning'>You lack the musical expertise to play any instrument!</span>")
+		return TRUE
+
 	var/stressevent = /datum/stressevent/music
 	. = ..()
 	if(.)
 		return
+
 	user.changeNext_move(CLICK_CD_MELEE)
 	if(!playing)
-		var/note_color = "#7f7f7f" // uses MMO item rarity color grading
-		var/curfile = input(user, "Which song?", "Roguetown", name) as null|anything in song_list
+		var/note_color = "#7f7f7f"
+		var/list/available_songs = list()
+		var/music_skill = user.mind.get_skill_level(/datum/skill/misc/music)
+		// Only show songs they have the skill to play
+		for(var/song_name in song_list)
+			if(music_skill >= song_list[song_name]["skill"])
+				available_songs[song_name] = song_list[song_name]
+
+		if(!length(available_songs))
+			to_chat(user, "<span class='warning'>You don't know any songs for this instrument!</span>")
+			return TRUE
+
+		var/curfile = input(user, "Which song?", "Roguetown", name) as null|anything in available_songs
 		if(!user)
 			return
+
 		if(user.mind)
 			soundloop.stress2give = null
 			switch(user.mind.get_skill_level(/datum/skill/misc/music))
@@ -71,117 +90,131 @@
 				if(6)
 					note_color = "#ff8000"
 					stressevent = /datum/stressevent/music/six
+
 		if(playing)
 			playing = FALSE
 			soundloop.stop()
 			user.remove_status_effect(/datum/status_effect/buff/playing_music)
 			return
+
 		if(!(src in user.held_items))
 			return
+
 		if(user.get_inactive_held_item())
 			playing = FALSE
 			soundloop.stop()
 			user.remove_status_effect(/datum/status_effect/buff/playing_music)
 			return
+
 		if(curfile)
-			curfile = song_list[curfile]
+			var/required_skill = available_songs[curfile]["skill"]
+			if(user.mind.get_skill_level(/datum/skill/misc/music) < required_skill)
+				to_chat(user, "<span class='warning'>This song is too difficult for your current musical expertise!</span>")
+				return TRUE
+
+			var/sound_file = available_songs[curfile]["file"]
 			playing = TRUE
-			soundloop.mid_sounds = list(curfile)
+			soundloop.mid_sounds = list(sound_file)
 			soundloop.cursound = null
 			soundloop.start()
 			user.apply_status_effect(/datum/status_effect/buff/playing_music, stressevent, note_color)
-		/* for(var/mob/living/carbon/human/L in viewers(7)) // this is very simple, shouldn't we pulse this on a regular tick?
-			L.add_stress(stressevent)
-			add_sleep_experience(user, /datum/skill/misc/music, user.STAINT)*/
-		// we handle the above on the status effect now
 	else
 		playing = FALSE
 		soundloop.stop()
 		user.remove_status_effect(/datum/status_effect/buff/playing_music)
 
+
 /obj/item/rogue/instrument/lute
 	name = "lute"
 	desc = "Its graceful curves were designed to weave joyful melodies."
 	icon_state = "lute"
-	song_list = list("A Knight's Return" = 'sound/music/instruments/lute (1).ogg',
-	"Amongst Fare Friends" = 'sound/music/instruments/lute (2).ogg',
-	"The Road Traveled by Few" = 'sound/music/instruments/lute (3).ogg',
-	"Tip Thine Tankard" = 'sound/music/instruments/lute (4).ogg',
-	"A Reed On the Wind" = 'sound/music/instruments/lute (5).ogg',
-	"Jests On Steel Ears" = 'sound/music/instruments/lute (6).ogg',
-	"Merchant in the Mire" = 'sound/music/instruments/lute (7).ogg')
+	song_list = list(
+		"A Knight's Return" = list("file" = 'sound/music/instruments/lute (1).ogg', "skill" = 1),
+		"Amongst Fare Friends" = list("file" = 'sound/music/instruments/lute (2).ogg', "skill" = 2),
+		"The Road Traveled by Few" = list("file" = 'sound/music/instruments/lute (3).ogg', "skill" = 3),
+		"Tip Thine Tankard" = list("file" = 'sound/music/instruments/lute (4).ogg', "skill" = 4),
+		"A Reed On the Wind" = list("file" = 'sound/music/instruments/lute (5).ogg', "skill" = 5),
+		"Jests On Steel Ears" = list("file" = 'sound/music/instruments/lute (6).ogg', "skill" = 5),
+		"Merchant in the Mire" = list("file" = 'sound/music/instruments/lute (7).ogg', "skill" = 6))
 
 /obj/item/rogue/instrument/accord
 	name = "accordion"
 	desc = "A harmonious vessel of nostalgia and celebration."
 	icon_state = "accordion"
-	song_list = list("Her Healing Tears" = 'sound/music/instruments/accord (1).ogg',
-	"Peddler's Tale" = 'sound/music/instruments/accord (2).ogg',
-	"We Toil Together" = 'sound/music/instruments/accord (3).ogg',
-	"Just One More, Tavern Wench" = 'sound/music/instruments/accord (4).ogg',
-	"Moonlight Carnival" = 'sound/music/instruments/accord (5).ogg',
-	"'Ye Best Be Goin'" = 'sound/music/instruments/accord (6).ogg')
+	song_list = list(
+		"Her Healing Tears" = list("file" = 'sound/music/instruments/accord (1).ogg', "skill" = 1),
+		"Peddler's Tale" = list("file" = 'sound/music/instruments/accord (2).ogg', "skill" = 2),
+		"We Toil Together" = list("file" = 'sound/music/instruments/accord (3).ogg', "skill" = 3),
+		"Just One More, Tavern Wench" = list("file" = 'sound/music/instruments/accord (4).ogg', "skill" = 4),
+		"Moonlight Carnival" = list("file" = 'sound/music/instruments/accord (5).ogg', "skill" = 5),
+		"'Ye Best Be Goin'" = list("file" = 'sound/music/instruments/accord (6).ogg', "skill" = 6))
 
 /obj/item/rogue/instrument/guitar
 	name = "guitar"
 	desc = "This is a guitar, chosen instrument of wanderers and the heartbroken." // YIPPEE I LOVE GUITAR
 	icon_state = "guitar"
-	song_list = list("Fire-Cast Shadows" = 'sound/music/instruments/guitar (1).ogg',
-	"The Forced Hand" = 'sound/music/instruments/guitar (2).ogg',
-	"Regrets Unpaid" = 'sound/music/instruments/guitar (3).ogg',
-	"'Took the Mammon and Ran'" = 'sound/music/instruments/guitar (4).ogg',
-	"Poor Man's Tithe" = 'sound/music/instruments/guitar (5).ogg',
-	"In His Arms Ye'll Find Me" = 'sound/music/instruments/guitar (6).ogg',
-	"El Odio" = 'sound/music/instruments/guitar (7).ogg',
-	"Danza De Las Lanzas" = 'sound/music/instruments/guitar (8).ogg',
-	"The Feline, Forever Returning" = 'sound/music/instruments/guitar (9).ogg',
-	"El Beso Carmesí" = 'sound/music/instruments/guitar (10).ogg',
-	"If I Could Be a Constellation" = 'sound/music/instruments/guitar (11).ogg')
+	song_list = list(
+		"Fire-Cast Shadows" = list("file" = 'sound/music/instruments/guitar (1).ogg', "skill" = 1),
+		"The Forced Hand" = list("file" = 'sound/music/instruments/guitar (2).ogg', "skill" = 1),
+		"Regrets Unpaid" = list("file" = 'sound/music/instruments/guitar (3).ogg', "skill" = 2),
+		"'Took the Mammon and Ran'" = list("file" = 'sound/music/instruments/guitar (4).ogg', "skill" = 2),
+		"Poor Man's Tithe" = list("file" = 'sound/music/instruments/guitar (5).ogg', "skill" = 3),
+		"In His Arms Ye'll Find Me" = list("file" = 'sound/music/instruments/guitar (6).ogg', "skill" = 3),
+		"El Odio" = list("file" = 'sound/music/instruments/guitar (7).ogg', "skill" = 4),
+		"Danza De Las Lanzas" = list("file" = 'sound/music/instruments/guitar (8).ogg', "skill" = 4),
+		"The Feline, Forever Returning" = list("file" = 'sound/music/instruments/guitar (9).ogg', "skill" = 5),
+		"El Beso Carmesí" = list("file" = 'sound/music/instruments/guitar (10).ogg', "skill" = 5),
+		"If I Could Be a Constellation" = list("file" = 'sound/music/instruments/guitar (11).ogg', "skill" = 6))
 
 /obj/item/rogue/instrument/harp
 	name = "harp"
 	desc = "A harp of elven craftsmanship."
 	icon_state = "harp"
-	song_list = list("Through Thine Window, He Glanced" = 'sound/music/instruments/harb (1).ogg',
-	"The Lady of Red Silks" = 'sound/music/instruments/harb (2).ogg',
-	"Eora Doth Watches" = 'sound/music/instruments/harb (3).ogg')
+	song_list = list(
+		"Through Thine Window, He Glanced" = list("file" = 'sound/music/instruments/harb (1).ogg', "skill" = 2),
+		"The Lady of Red Silks" = list("file" = 'sound/music/instruments/harb (2).ogg', "skill" = 4),
+		"Eora Doth Watches" = list("file" = 'sound/music/instruments/harb (3).ogg', "skill" = 6))
 
 /obj/item/rogue/instrument/flute
 	name = "flute"
 	desc = "A slender flute carefully carved from a smooth wood piece."
 	icon_state = "flute"
-	song_list = list("Half-Dragon's Ten Mammon" = 'sound/music/instruments/flute (1).ogg',
-	"'The Local Favorite'" = 'sound/music/instruments/flute (2).ogg',
-	"Rous in the Cellar" = 'sound/music/instruments/flute (3).ogg',
-	"Her Boots, So Incandescent" = 'sound/music/instruments/flute (4).ogg',
-	"Moondust Minx" = 'sound/music/instruments/flute (5).ogg',
-	"Quest to the Ends" = 'sound/music/instruments/flute (6).ogg',
-	"Spit Shine" = 'sound/music/instruments/flute (7).ogg')
+	song_list = list(
+		"Half-Dragon's Ten Mammon" = list("file" = 'sound/music/instruments/flute (1).ogg', "skill" = 1),
+		"'The Local Favorite'" = list("file" = 'sound/music/instruments/flute (2).ogg', "skill" = 2),
+		"Rous in the Cellar" = list("file" = 'sound/music/instruments/flute (3).ogg', "skill" = 3),
+		"Her Boots, So Incandescent" = list("file" = 'sound/music/instruments/flute (4).ogg', "skill" = 4),
+		"Moondust Minx" = list("file" = 'sound/music/instruments/flute (5).ogg', "skill" = 5),
+		"Quest to the Ends" = list("file" = 'sound/music/instruments/flute (6).ogg', "skill" = 5),
+		"Spit Shine" = list("file" = 'sound/music/instruments/flute (7).ogg', "skill" = 6))
 
 /obj/item/rogue/instrument/drum
 	name = "drum"
 	desc = "Fashioned from taut skins across a sturdy frame, pulses like a giant heartbeat."
 	icon_state = "drum"
-	song_list = list("Barbarian's Moot" = 'sound/music/instruments/drum (1).ogg',
-	"Muster the Wardens" = 'sound/music/instruments/drum (2).ogg',
-	"The Earth That Quakes" = 'sound/music/instruments/drum (3).ogg')
+	song_list = list(
+		"Barbarian's Moot" = list("file" = 'sound/music/instruments/drum (1).ogg', "skill" = 2),
+		"Muster the Wardens" = list("file" = 'sound/music/instruments/drum (2).ogg', "skill" = 4),
+		"The Earth That Quakes" = list("file" = 'sound/music/instruments/drum (3).ogg', "skill" = 6))
 
 /obj/item/rogue/instrument/hurdygurdy
 	name = "hurdy-gurdy"
 	desc = "A knob-driven, wooden string instrument that reminds you of the oceans far."
 	icon_state = "hurdygurdy"
-	song_list = list("Ruler's One Ring" = 'sound/music/instruments/hurdy (1).ogg',
-	"Tangled Trod" = 'sound/music/instruments/hurdy (2).ogg',
-	"Motus" = 'sound/music/instruments/hurdy (3).ogg',
-	"Becalmed" = 'sound/music/instruments/hurdy (4).ogg',
-	"The Bloody Throne" = 'sound/music/instruments/hurdy (5).ogg')
+	song_list = list(
+		"Ruler's One Ring" = list("file" = 'sound/music/instruments/hurdy (1).ogg', "skill" = 2),
+		"Tangled Trod" = list("file" = 'sound/music/instruments/hurdy (2).ogg', "skill" = 3),
+		"Motus" = list("file" = 'sound/music/instruments/hurdy (3).ogg', "skill" = 4),
+		"Becalmed" = list("file" = 'sound/music/instruments/hurdy (4).ogg', "skill" = 5),
+		"The Bloody Throne" = list("file" = 'sound/music/instruments/hurdy (5).ogg', "skill" = 6))
 
 /obj/item/rogue/instrument/viola
 	name = "viola"
 	desc = "The prim and proper Viola, every prince's first instrument taught."
 	icon_state = "viola"
-	song_list = list("Far Flung Tale" = 'sound/music/instruments/viola (1).ogg',
-	"G Major Cello Suite No. 1" = 'sound/music/instruments/viola (2).ogg',
-	"Ursine's Home" = 'sound/music/instruments/viola (3).ogg',
-	"Mead, Gold and Blood" = 'sound/music/instruments/viola (4).ogg',
-	"Gasgow's Reel" = 'sound/music/instruments/viola (5).ogg')
+	song_list = list(
+		"Far Flung Tale" = list("file" = 'sound/music/instruments/viola (1).ogg', "skill" = 2),
+		"G Major Cello Suite No. 1" = list("file" = 'sound/music/instruments/viola (2).ogg', "skill" = 3),
+		"Ursine's Home" = list("file" = 'sound/music/instruments/viola (3).ogg', "skill" = 4),
+		"Mead, Gold and Blood" = list("file" = 'sound/music/instruments/viola (4).ogg', "skill" = 5),
+		"Gasgow's Reel" = list("file" = 'sound/music/instruments/viola (5).ogg', "skill" = 6))
