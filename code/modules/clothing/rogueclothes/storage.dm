@@ -157,6 +157,22 @@
 			if(!SEND_SIGNAL(src, COMSIG_TRY_STORAGE_INSERT, H, null, TRUE, TRUE))
 				qdel(H)
 
+/obj/item/storage/belt/rogue/pouch/coins/reallyrich/Initialize()
+	. = ..()
+	var/obj/item/roguecoin/gold/pile/H = new(loc)
+	if(istype(H))
+		if(!SEND_SIGNAL(src, COMSIG_TRY_STORAGE_INSERT, H, null, TRUE, TRUE))
+			qdel(H)
+	H = new(loc)
+	if(istype(H))
+		if(!SEND_SIGNAL(src, COMSIG_TRY_STORAGE_INSERT, H, null, TRUE, TRUE))
+			qdel(H)
+	if(prob(50))
+		H = new(loc)
+		if(istype(H))
+			if(!SEND_SIGNAL(src, COMSIG_TRY_STORAGE_INSERT, H, null, TRUE, TRUE))
+				qdel(H)
+
 /obj/item/storage/belt/rogue/pouch/food/PopulateContents()
 	new /obj/item/reagent_containers/food/snacks/rogue/crackerscooked(src)
 
