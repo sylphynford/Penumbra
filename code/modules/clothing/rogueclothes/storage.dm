@@ -210,7 +210,7 @@
 				new /obj/item/reagent_containers/powder/spice(src)
 
 /obj/item/storage/backpack/rogue/satchel/black
-	color = CLOTHING_BLACK
+	color = "#775759"
 
 /obj/item/storage/backpack/rogue/satchel/ComponentInitialize()
 	. = ..()
