@@ -1,43 +1,90 @@
-// Base roundstart event control
+// Base types
 /datum/round_event_control/roundstart
 	var/runnable = TRUE
 	var/event_announcement = ""
+
+/datum/round_event/roundstart
+	var/static/is_active = FALSE
+	
+	proc/apply_effect()
+		SHOULD_CALL_PARENT(TRUE)
+		return
 
 /datum/round_event_control/roundstart/proc/can_spawn_event()
 	if(SSticker.current_state != GAME_STATE_PLAYING)
 		return FALSE
 	return runnable
 
-// Female Transformation event with late join support and complete organ modification
+// Eternal Night event
+/datum/round_event/roundstart/eternal_night
+	/datum/round_event/roundstart/eternal_night/apply_effect()
+		. = ..()
+		is_active = TRUE
+		
+		// Nullify existing sunlights
+		for(var/obj/effect/sunlight/S in GLOB.sunlights)
+			S.light_power = 0
+			S.set_light(S.brightness, 0, S.light_color)
+		
+		priority_announce("An otherworldly darkness descends upon the Barony...", "Praise PSYDON!")
+		START_PROCESSING(SSprocessing, src)
 
-/mob/living/carbon/human/proc/update_shaved_facial_hair()
-	// Remove any existing facial hair overlays
-	for(var/image/overlay in overlays_standing)
-		if(overlay.icon_state == "facial_hair" || overlay.icon_state == "facial_mask")
-			overlays_standing -= overlay
+	/datum/round_event/roundstart/eternal_night/process()
+		if(!is_active)
+			STOP_PROCESSING(SSprocessing, src)
+			return
+		
+		for(var/obj/effect/sunlight/S in GLOB.sunlights)
+			if(S.light_power != 0)
+				S.light_power = 0
+				S.set_light(S.brightness, 0, S.light_color)
 
-	// If facial hairstyle is "Shaved", we don't need to add any new overlays
-	if(facial_hairstyle == "Shaved")
-		return
+/datum/round_event_control/roundstart/eternal_night
+	name = "Eternal Night"
+	typepath = /datum/round_event/roundstart/eternal_night
+	weight = 5
+	event_announcement = "A supernatural darkness approaches..."
+	runnable = TRUE
 
-	// If facial hairstyle is not "Shaved", add the appropriate facial hair overlays
-	var/icon/facial_hair_icon = new/icon("icon" = 'icons/mob/human_face.dmi', "icon_state" = "[facial_hairstyle]_s")
+// Wealthy Benefactor event
+/datum/round_event/roundstart/wealthy_benefactor
+	var/static/list/rewarded_ckeys = list()
 
-	if(facial_hair_icon)
-		facial_hair_icon.Blend(facial_hair_color, ICON_ADD)
+	/datum/round_event/roundstart/wealthy_benefactor/apply_effect()
+		. = ..()
+		is_active = TRUE
+		START_PROCESSING(SSprocessing, src)
 
-		var/icon/mask_icon = new/icon("icon" = 'icons/mob/human_face.dmi', "icon_state" = "facial_mask")
-		if(mask_icon)
-			facial_hair_icon.Blend(mask_icon, ICON_MULTIPLY)
+	/datum/round_event/roundstart/wealthy_benefactor/process()
+		if(!is_active)
+			STOP_PROCESSING(SSprocessing, src)
+			return
+			
+		for(var/mob/living/carbon/human/H in GLOB.alive_mob_list)
+			if(!H.mind || !H.mind.key)
+				continue
+			if(H.mind.key in rewarded_ckeys)
+				continue
+			if(H.mind.special_role in list("Vampire Lord", "Lich", "Bandit"))
+				continue
+				
+			var/obj/item/storage/belt/rogue/pouch/coins/reallyrich/reward = new(get_turf(H))
+			H.put_in_hands(reward)
+			rewarded_ckeys += H.mind.key
+			priority_announce("They say [H.real_name] recently had a large inheritence..", "Arcyne Phenomena")
+			STOP_PROCESSING(SSprocessing, src)
+			is_active = FALSE
+			return
 
-		var/image/facial_overlay = image(facial_hair_icon)
-		facial_overlay.icon_state = "facial_hair"
-		overlays_standing += facial_overlay
+/datum/round_event_control/roundstart/wealthy_benefactor
+	name = "Wealthy Benefactor"
+	typepath = /datum/round_event/roundstart/wealthy_benefactor
+	weight = 10
+	event_announcement = ""
+	runnable = TRUE
 
-	update_icons()
-
+// Female Transformation event
 /datum/round_event/roundstart/female_transformation
-	var/static/is_active = FALSE
 	var/static/list/transformed_ckeys = list()
 	
 	proc/handle_organs(mob/living/carbon/human/H)
@@ -78,7 +125,6 @@
 		
 		// Force a full icon update
 		H.regenerate_icons()
-		H.update_shaved_facial_hair()
 		H.update_hair()
 		H.update_body()
 		H.update_body_parts()
@@ -92,20 +138,12 @@
 			transformed_ckeys += H.mind.key
 		return TRUE
 
-	proc/apply_effect()
+	/datum/round_event/roundstart/female_transformation/apply_effect()
+		. = ..()
 		is_active = TRUE
-		
 		START_PROCESSING(SSprocessing, src)
-		
-		var/transformations = 0
-		for(var/mob/living/carbon/human/H in GLOB.alive_mob_list)
-			if(transform_human(H))
-				transformations++
-				
-		if(transformations > 0)
-			priority_announce("The Barony was always known as a matriarchy.. [transformations] individuals have been transformed!", "Praise PSYDON!")
 
-	process()
+	/datum/round_event/roundstart/female_transformation/process()
 		if(!is_active)
 			STOP_PROCESSING(SSprocessing, src)
 			return
@@ -116,7 +154,7 @@
 			if(H.mind.key in transformed_ckeys)
 				continue
 			if(transform_human(H))
-				priority_announce("[H.real_name] has been transformed by the lingering energies!", "Praise PSYDON!")
+				priority_announce("[H.real_name] has been transformed by the lingering energies!", "Arcyne Phenomena")
 
 /datum/round_event_control/roundstart/female_transformation
 	name = "Sisterhood"
@@ -127,15 +165,15 @@
 
 // Great Lover event
 /datum/round_event/roundstart/great_lover
-	proc/apply_effect()
+	/datum/round_event/roundstart/great_lover/apply_effect()
+		. = ..()
 		var/list/valid_lovers = list()
-		// Get all minded humans
 		for(var/mob/living/carbon/human/H in GLOB.alive_mob_list)
 			if(H.mind)
 				valid_lovers += H
 				
 		if(!length(valid_lovers))
-			return // No valid candidates
+			return
 			
 		var/mob/living/carbon/human/chosen_lover = pick(valid_lovers)
 		ADD_TRAIT(chosen_lover, TRAIT_GOODLOVER, "great_lover_event")
@@ -149,16 +187,16 @@
 		)
 		
 		var/chosen_title = pick(lover_titles)
-		priority_announce("The stars have aligned... [chosen_lover.real_name] has been blessed as a [chosen_title]!", "Praise PSYDON!")
+		priority_announce("The stars have aligned... [chosen_lover.real_name] has been blessed as a [chosen_title]!", "Arcyne Phenomena")
 
 /datum/round_event_control/roundstart/great_lover
 	name = "Great Lover"
 	typepath = /datum/round_event/roundstart/great_lover
 	weight = 0
-	event_announcement = ""  // Removed since we're doing the announcement in apply_effect
+	event_announcement = ""
 	runnable = TRUE
 
-// Throne execution event
+	// Throne execution event
 /datum/round_event/roundstart/throne_execution
 	proc/announce_execution(message, failed = FALSE)
 		priority_announce(message, "Official Execution[failed ? " Failed" : ""]")
@@ -166,18 +204,6 @@
 		for(var/mob/living/L in GLOB.mob_list)
 			SEND_SOUND(L, sound('sound/misc/royal_decree.ogg', volume = 100))
 
-	proc/apply_effect()
-		// Add throne speech handling to all humans
-		for(var/mob/living/carbon/human/H in GLOB.alive_mob_list)
-			if(H.job in list("Baron", "Baronness"))
-				RegisterSignal(H, COMSIG_MOB_SAY, PROC_REF(handle_throne_execution))
-		
-		// Make all titans announce the execution instructions with sound
-		for(var/obj/structure/roguemachine/titan/T in world)
-			T.say("Say EXECUTE followed by the criminal's name to destroy them.")
-			playsound(T.loc, 'sound/misc/machinetalk.ogg', 50, FALSE)
-
-	// Helper proc to check if someone is immune to execution
 	proc/is_execution_immune(mob/living/carbon/human/H)
 		if(!H)
 			return FALSE
@@ -239,6 +265,18 @@
 				H.gib(TRUE, TRUE, TRUE)  // Full gibbing with animation
 				break
 
+	/datum/round_event/roundstart/throne_execution/apply_effect()
+		. = ..()
+		// Add throne speech handling to all humans
+		for(var/mob/living/carbon/human/H in GLOB.alive_mob_list)
+			if(H.job in list("Baron", "Baronness"))
+				RegisterSignal(H, COMSIG_MOB_SAY, PROC_REF(handle_throne_execution))
+		
+		// Make all titans announce the execution instructions with sound
+		for(var/obj/structure/roguemachine/titan/T in world)
+			T.say("Say EXECUTE followed by the criminal's name to destroy them.")
+			playsound(T.loc, 'sound/misc/machinetalk.ogg', 50, FALSE)
+
 /datum/round_event_control/roundstart/throne_execution
 	name = "Throne Execution Power"
 	typepath = /datum/round_event/roundstart/throne_execution
@@ -257,39 +295,29 @@
 
 	var/list/event_choices = list()
 	for(var/event_path in subtypesof(/datum/round_event_control/roundstart))
-		var/datum/round_event_control/roundstart/event = event_path
-		var/event_name = initial(event.name)
-		event_choices[event_name] = event_path
+		var/datum/round_event_control/roundstart/event = new event_path()
+		if(event.runnable)  // Only show events that are marked as runnable
+			event_choices[event.name] = event  // Store the actual event object
 
 	var/choice = input(usr, "Choose an event to trigger", "Force Roundstart Event") as null|anything in event_choices
-	
 	if(!choice)
 		return
 	
-	var/event_path = event_choices[choice]
-	var/datum/round_event_control/roundstart/chosen_event = new event_path()
-	
-	// Create and trigger the event
-	if(chosen_event)
-		var/confirm = alert(usr, "Trigger [chosen_event.name]? \nAnnouncement: [chosen_event.event_announcement]", "Confirm Event", "Yes", "No")
-		if(confirm != "Yes")
-			return
+	var/datum/round_event_control/roundstart/chosen_event = event_choices[choice]
+	var/confirm = alert(usr, "Trigger [chosen_event.name]? \nAnnouncement: [chosen_event.event_announcement]", "Confirm Event", "Yes", "No")
+	if(confirm != "Yes")
+		return
+		
+	var/datum/round_event/roundstart/E = new chosen_event.typepath()
+	if(E && istype(E))
+		if(chosen_event.event_announcement)
+			priority_announce(chosen_event.event_announcement, "Arcyne Phenomena")
+		if(chosen_event.runnable)
+			E.apply_effect()
 			
-		var/datum/round_event/roundstart/E = new chosen_event.typepath()
-		if(E && istype(E))
-			if(chosen_event.event_announcement)
-				priority_announce(chosen_event.event_announcement, "Praise PSYDON!")
-			if(istype(E, /datum/round_event/roundstart/female_transformation))
-				var/datum/round_event/roundstart/female_transformation/FT = E
-				FT.apply_effect()
-			else if(istype(E, /datum/round_event/roundstart/throne_execution))
-				var/datum/round_event/roundstart/throne_execution/TE = E
-				TE.apply_effect()
-			else if(istype(E, /datum/round_event/roundstart/great_lover))
-				var/datum/round_event/roundstart/great_lover/GL = E
-				GL.apply_effect()
-			message_admins("[key_name_admin(usr)] forced the roundstart event: [chosen_event.name]")
-			log_admin("[key_name(usr)] forced the roundstart event: [chosen_event.name]")
+		message_admins("[key_name_admin(usr)] forced the roundstart event: [chosen_event.name]")
+		log_admin("[key_name(usr)] forced the roundstart event: [chosen_event.name]")
+
 
 // Roundstart events subsystem
 /datum/controller/subsystem/roundstart_events
@@ -318,44 +346,30 @@
 
 	proc/pick_roundstart_event()
 		var/list/possible_events = list()
-		for(var/datum/round_event_control/roundstart/RE in roundstart_events)
-			if(RE.can_spawn_event())
-				possible_events[RE] = RE.weight
-		if(length(possible_events))
-			selected_event = pickweight(possible_events)
-			return TRUE
-		return FALSE
+		
+		// Get all runnable events and their weights
+		for(var/event_path in subtypesof(/datum/round_event_control/roundstart))
+			var/datum/round_event_control/roundstart/event = new event_path()
+			if(event.runnable && event.can_spawn_event())
+				possible_events[event] = event.weight
+		
+		// If no events available, return FALSE
+		if(!length(possible_events))
+			return FALSE
+
+		// Pick event based on weight
+		selected_event = pickweight(possible_events)
+		return TRUE
 
 	proc/fire_event()
 		if(!selected_event || !selected_event.typepath)
 			return
 
 		if(selected_event.event_announcement)
-			priority_announce(selected_event.event_announcement, "Praise PSYDON!")
+			priority_announce(selected_event.event_announcement, "Arcyne Phenomena")
 			
 		var/datum/round_event/roundstart/E = new selected_event.typepath()
 		if(E && istype(E))
 			active_events += E
-			if(istype(E, /datum/round_event/roundstart/female_transformation))
-				var/datum/round_event/roundstart/female_transformation/FT = E
-				FT.apply_effect()
-			else if(istype(E, /datum/round_event/roundstart/throne_execution))
-				var/datum/round_event/roundstart/throne_execution/TE = E
-				TE.apply_effect()
-			else if(istype(E, /datum/round_event/roundstart/great_lover))
-				var/datum/round_event/roundstart/great_lover/GL = E
-				GL.apply_effect()
-
-// Define GLOB var
-GLOBAL_DATUM(SSroundstart_events, /datum/controller/subsystem/roundstart_events)
-
-// Add roundstart event subsystem initialization
-SUBSYSTEM_DEF(roundstart_events)
-	name = "Roundstart Events"
-	init_order = INIT_ORDER_EVENTS
-	flags = SS_NO_FIRE
-
-	Initialize(timeofday)
-		if(!GLOB.SSroundstart_events)
-			GLOB.SSroundstart_events = src
-		return ..()
+			if(selected_event.runnable)
+				E.apply_effect()
