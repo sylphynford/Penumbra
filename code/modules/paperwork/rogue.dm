@@ -128,14 +128,14 @@
 	textper = 150
 
 /obj/item/paper/scroll/cargo/Destroy()
-	for(var/datum/supply_order/SO in orders)
+	for(var/datum/supply_pack/SO in orders)
 		orders -= SO
 	return ..()
 
 /obj/item/paper/scroll/cargo/examine(mob/user)
 	. = ..()
-//	if(signedname)
-//		. += "It was signed by [signedname] the [signedjob]."
+	if(signedname)
+		. += "It was signed by [signedname] the [signedjob]."
 
 	//for each order, add up total price and display orders
 
@@ -179,8 +179,8 @@
 	if(orders.len)
 		info += "Orders: <br/>"
 		info += "<ul>"
-		for(var/datum/supply_order/A in orders)
-			info += "<li>[A.pack.name]</li><br/>"
+		for(var/datum/supply_pack/A in orders)
+			info += "<li>[A.name] - [A.cost]</li><br/>"
 		info += "</ul>"
 
 	info += "<br/></font>"
