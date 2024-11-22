@@ -173,14 +173,14 @@
 
 /obj/item/paper/scroll/cargo/proc/rebuild_info()
 	info = null
-	info += "<h2>Shipping Order</h2>"
+	info += "<div style='vertical-align:top'>"
+	info += "<h2 style='color:#06080F;font-family:\"Segoe Script\"'>Shipping Order</h2>"
 	info += "<hr/>"
 
 	if(orders.len)
-		info += "Orders: <br/>"
 		info += "<ul>"
 		for(var/datum/supply_pack/A in orders)
-			info += "<li>[A.name] - [A.cost]</li><br/>"
+			info += "<li style='color:#06080F;font-size:11px;font-family:\"Segoe Script\"'>[A.name] - [A.cost] mammons</li><br/>"
 		info += "</ul>"
 
 	info += "<br/></font>"

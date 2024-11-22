@@ -17,6 +17,6 @@
 
 	if(SSmerchant.cargo_docked && SSmerchant.cargo_boat.check_living())
 		SSmerchant.send_cargo_ship_back()
-	else if(!SSmerchant.cargo_docked)
+	else if(SSmerchant.cargo_docked)
 		SSmerchant.prepare_cargo_shipment()
 	COOLDOWN_START(src, ring_bell, 3 MINUTES)
