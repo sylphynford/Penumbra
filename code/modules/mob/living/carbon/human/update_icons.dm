@@ -1902,3 +1902,27 @@ generate/load female uniform sprites matching all previously decided variables
 	if(boobs.breast_size == 0)
 		return FALSE
 	return TRUE
+
+/mob/living/carbon/human/proc/update_facial_hair()
+	remove_overlay(HAIR_LAYER)  // Since facial hair is part of the head appearance
+
+	if(facial_hairstyle == "Shaved")
+		return
+
+	var/mutable_appearance/facial_overlay = mutable_appearance('icons/mob/human_face.dmi', "facial_[facial_hairstyle]", -HAIR_LAYER)
+	
+	if(facial_hair_color)
+		facial_overlay.color = facial_hair_color
+
+	// Handle gender-based offsets
+	if(gender == MALE)
+		if(OFFSET_FACE in dna.species.offset_features)
+			facial_overlay.pixel_x += dna.species.offset_features[OFFSET_FACE][1]
+			facial_overlay.pixel_y += dna.species.offset_features[OFFSET_FACE][2]
+	else
+		if(OFFSET_FACE_F in dna.species.offset_features)
+			facial_overlay.pixel_x += dna.species.offset_features[OFFSET_FACE_F][1]
+			facial_overlay.pixel_y += dna.species.offset_features[OFFSET_FACE_F][2]
+
+	overlays_standing[HAIR_LAYER] = facial_overlay
+	apply_overlay(HAIR_LAYER)

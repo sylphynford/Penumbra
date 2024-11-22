@@ -1,7 +1,11 @@
+GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_events, new)
+#define SSroundstart_events GLOB.SSroundstart_events
+
 // Base types
 /datum/round_event_control/roundstart
 	var/runnable = TRUE
 	var/event_announcement = ""
+	var/selected_event_name = null 
 
 /datum/round_event/roundstart
 	var/static/is_active = FALSE
@@ -26,7 +30,6 @@
 			S.light_power = 0
 			S.set_light(S.brightness, 0, S.light_color)
 		
-		priority_announce("An otherworldly darkness descends upon the Barony...", "Praise PSYDON!")
 		START_PROCESSING(SSprocessing, src)
 
 	/datum/round_event/roundstart/eternal_night/process()
@@ -40,10 +43,10 @@
 				S.set_light(S.brightness, 0, S.light_color)
 
 /datum/round_event_control/roundstart/eternal_night
-	name = "Eternal Night"
+	name = "Magician's Curse"
 	typepath = /datum/round_event/roundstart/eternal_night
 	weight = 5
-	event_announcement = "A supernatural darkness approaches..."
+	event_announcement = "The sky has been darkened by inhumen magicks..."
 	runnable = TRUE
 
 // Wealthy Benefactor event
@@ -86,8 +89,30 @@
 // Female Transformation event
 /datum/round_event/roundstart/female_transformation
 	var/static/list/transformed_ckeys = list()
-	
-	proc/handle_organs(mob/living/carbon/human/H)
+
+	/datum/round_event/roundstart/female_transformation/apply_effect()
+		. = ..()
+		is_active = TRUE
+		// Initial transformation of existing players
+		for(var/mob/living/carbon/human/H in GLOB.alive_mob_list)
+			transform_human(H)
+		START_PROCESSING(SSprocessing, src)
+
+	/datum/round_event/roundstart/female_transformation/process()
+		if(!is_active)
+			STOP_PROCESSING(SSprocessing, src)
+			return
+		
+		// Check for new players to transform
+		for(var/mob/living/carbon/human/H in GLOB.alive_mob_list)
+			if(!H.mind || !H.mind.key)
+				continue
+			if(H.mind.key in transformed_ckeys)
+				continue
+			if(transform_human(H))
+				priority_announce("[H.real_name] has been transformed by the lingering energies!", "Arcyne Phenomena")
+
+	/datum/round_event/roundstart/female_transformation/proc/handle_organs(mob/living/carbon/human/H)
 		if(!H.mind || H.gender == FEMALE)
 			return
 			
@@ -111,7 +136,7 @@
 			var/obj/item/organ/breasts/B = new
 			B.Insert(H, special = TRUE, drop_if_replaced = FALSE)
 
-	proc/transform_human(mob/living/carbon/human/H)
+	/datum/round_event/roundstart/female_transformation/proc/transform_human(mob/living/carbon/human/H)
 		if(!H?.mind || H.gender == FEMALE)
 			return FALSE
 			
@@ -121,14 +146,20 @@
 		H.gender = FEMALE
 		H.voice_type = "Feminine"
 		H.pronouns = "she/her"
+			
+		// Force facial hair removal
 		H.facial_hairstyle = "Shaved"
-		
-		// Force a full icon update
-		H.regenerate_icons()
-		H.update_hair()
+		H.update_facial_hair()
+		H.overlays_standing[HAIR_LAYER] = null
+			
+		// Force full updates in correct order
 		H.update_body()
-		H.update_body_parts()
-		H.update_mutations_overlay()
+		H.update_body_parts(TRUE)
+		H.update_hair()
+		H.update_facial_hair()
+		H.dna?.species.handle_body(H)
+		H.regenerate_icons()
+		H.regenerate_clothes()
 
 		// Force client-side update
 		if(H.client)
@@ -136,31 +167,14 @@
 			
 		if(H.mind.key)
 			transformed_ckeys += H.mind.key
-		return TRUE
-
-	/datum/round_event/roundstart/female_transformation/apply_effect()
-		. = ..()
-		is_active = TRUE
-		START_PROCESSING(SSprocessing, src)
-
-	/datum/round_event/roundstart/female_transformation/process()
-		if(!is_active)
-			STOP_PROCESSING(SSprocessing, src)
-			return
 			
-		for(var/mob/living/carbon/human/H in GLOB.alive_mob_list)
-			if(!H.mind || !H.mind.key)
-				continue
-			if(H.mind.key in transformed_ckeys)
-				continue
-			if(transform_human(H))
-				priority_announce("[H.real_name] has been transformed by the lingering energies!", "Arcyne Phenomena")
+		return TRUE
 
 /datum/round_event_control/roundstart/female_transformation
 	name = "Sisterhood"
 	typepath = /datum/round_event/roundstart/female_transformation
 	weight = 10
-	event_announcement = "The Barony was always known as a matriarchy.."
+	event_announcement = "Some sort of curse has turned all the men into women.."
 	runnable = TRUE
 
 // Great Lover event
@@ -274,7 +288,7 @@
 		
 		// Make all titans announce the execution instructions with sound
 		for(var/obj/structure/roguemachine/titan/T in world)
-			T.say("Say EXECUTE followed by the criminal's name to destroy them.")
+			T.say("Say EXECUTE followed by the criminal's name while sitting on the throne to destroy them.")
 			playsound(T.loc, 'sound/misc/machinetalk.ogg', 50, FALSE)
 
 /datum/round_event_control/roundstart/throne_execution
@@ -318,7 +332,6 @@
 		message_admins("[key_name_admin(usr)] forced the roundstart event: [chosen_event.name]")
 		log_admin("[key_name(usr)] forced the roundstart event: [chosen_event.name]")
 
-
 // Roundstart events subsystem
 /datum/controller/subsystem/roundstart_events
 	name = "Roundstart Events"
@@ -347,17 +360,13 @@
 	proc/pick_roundstart_event()
 		var/list/possible_events = list()
 		
-		// Get all runnable events and their weights
-		for(var/event_path in subtypesof(/datum/round_event_control/roundstart))
-			var/datum/round_event_control/roundstart/event = new event_path()
-			if(event.runnable && event.can_spawn_event())
-				possible_events[event] = event.weight
-		
-		// If no events available, return FALSE
+		for(var/datum/round_event_control/roundstart/RE as anything in roundstart_events)
+			if(RE.runnable && RE.can_spawn_event())
+				possible_events[RE] = RE.weight
+				
 		if(!length(possible_events))
 			return FALSE
 
-		// Pick event based on weight
 		selected_event = pickweight(possible_events)
 		return TRUE
 
@@ -373,3 +382,4 @@
 			active_events += E
 			if(selected_event.runnable)
 				E.apply_effect()
+
