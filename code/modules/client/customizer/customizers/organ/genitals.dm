@@ -61,7 +61,7 @@
 	customizer_choices = list(
 		/datum/customizer_choice/organ/penis/human,
 		/datum/customizer_choice/organ/penis/knotted
-		)
+	)
 
 /datum/customizer_choice/organ/penis/human
 	name = "Plain Penis"
@@ -82,7 +82,6 @@
 
 /datum/customizer_choice/organ/penis/knotted/is_allowed(datum/preferences/prefs)
     return istype(prefs.pref_species, /datum/species/demihuman)
-
 
 /datum/customizer/organ/testicles
 	abstract_type = /datum/customizer/organ/testicles
@@ -250,8 +249,10 @@
 	gender_enabled = FEMALE
 
 /datum/customizer/organ/vagina/is_allowed(datum/preferences/prefs)
+	if(prefs.gender != FEMALE)
+		return FALSE
 	for(var/datum/customizer_entry/entry as anything in prefs.customizer_entries)
-		if(istype(entry,/datum/customizer_entry/organ/penis))
+		if(istype(entry, /datum/customizer_entry/organ/penis))
 			return entry.disabled
 	return TRUE
 

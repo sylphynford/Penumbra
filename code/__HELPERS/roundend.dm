@@ -1,6 +1,7 @@
 #define POPCOUNT_SURVIVORS "survivors"					//Not dead at roundend
 #define POPCOUNT_ESCAPEES "escapees"					//Not dead and on centcom/shuttles marked as escaped
 #define POPCOUNT_SHUTTLE_ESCAPEES "shuttle_escapees" 	//Emergency shuttle only.
+GLOBAL_VAR(roundstart_event_name)
 
 /datum/controller/subsystem/ticker/proc/gather_roundend_feedback()
 	gather_antag_data()
@@ -243,6 +244,8 @@
 	players_report()
 
 	stats_report()
+
+	SSticker.announce_roundstart_event()
 
 //	for(var/client/C in GLOB.clients)
 //		if(!C.credits)
@@ -780,3 +783,7 @@
 				return
 			qdel(query_update_everything_ranks)
 		qdel(query_check_everything_ranks)
+
+/datum/controller/subsystem/ticker/proc/announce_roundstart_event()
+	if(GLOB.roundstart_event_name)
+		to_chat(world, "<span class='header'>This week's Phenomena: [GLOB.roundstart_event_name]</span>")

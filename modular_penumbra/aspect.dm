@@ -1,46 +1,74 @@
 GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_events, new)
-#define SSroundstart_events GLOB.SSroundstart_events
 
 // Base types
 /datum/round_event_control/roundstart
 	var/runnable = TRUE
 	var/event_announcement = ""
-	var/selected_event_name = null 
+	var/selected_event_name = null
 
 /datum/round_event/roundstart
-	var/static/is_active = FALSE
-	
+	var/is_active = FALSE
+
 	proc/apply_effect()
 		SHOULD_CALL_PARENT(TRUE)
 		return
 
 /datum/round_event_control/roundstart/proc/can_spawn_event()
-	if(SSticker.current_state != GAME_STATE_PLAYING)
+	if(!(SSticker.current_state in list(GAME_STATE_PREGAME, GAME_STATE_SETTING_UP, GAME_STATE_PLAYING)))
 		return FALSE
 	return runnable
 
+
+// Funky Water event
+/datum/round_event/roundstart/funky_water/apply_effect()
+	. = ..()
+	is_active = TRUE
+	START_PROCESSING(SSprocessing, src)
+
+/datum/round_event/roundstart/funky_water/process()
+	if(!is_active)
+		STOP_PROCESSING(SSprocessing, src)
+		return
+
+	for(var/mob/living/carbon/human/H in GLOB.alive_mob_list)
+		if(H.client && H.sexcon)
+			H.sexcon.arousal += 0.1  // Small constant increase over time
+
+/datum/round_event_control/roundstart/funky_water
+	name = "Funky Water"
+	typepath = /datum/round_event/roundstart/funky_water
+	weight = 5
+	event_announcement = "Something is wrong with the water supply..."
+	runnable = TRUE
+
 // Eternal Night event
 /datum/round_event/roundstart/eternal_night
-	/datum/round_event/roundstart/eternal_night/apply_effect()
-		. = ..()
-		is_active = TRUE
-		
-		// Nullify existing sunlights
-		for(var/obj/effect/sunlight/S in GLOB.sunlights)
-			S.light_power = 0
-			S.set_light(S.brightness, 0, S.light_color)
-		
-		START_PROCESSING(SSprocessing, src)
 
-	/datum/round_event/roundstart/eternal_night/process()
-		if(!is_active)
-			STOP_PROCESSING(SSprocessing, src)
-			return
-		
-		for(var/obj/effect/sunlight/S in GLOB.sunlights)
-			if(S.light_power != 0)
-				S.light_power = 0
-				S.set_light(S.brightness, 0, S.light_color)
+/datum/round_event/roundstart/eternal_night/apply_effect()
+	. = ..()
+	is_active = TRUE
+
+	// Disable sunlight system
+	for(var/obj/effect/sunlight/S in GLOB.sunlights)
+		S.light_power = 0
+		S.set_light(0)  // Just use set_light with brightness 0
+		STOP_PROCESSING(SStodchange, S)
+
+	// Prevent nightshift system from re-enabling lights
+	GLOB.SSroundstart_events.eternal_night_active = TRUE
+	START_PROCESSING(SSprocessing, src)
+
+/datum/round_event/roundstart/eternal_night/process()
+	if(!is_active)
+		STOP_PROCESSING(SSprocessing, src)
+		return
+
+	// Continuously ensure lights stay disabled
+	for(var/obj/effect/sunlight/S in GLOB.sunlights)
+		if(S.light_power != 0)
+			S.light_power = 0
+			S.set_light(0)
+			STOP_PROCESSING(SStodchange, S)
 
 /datum/round_event_control/roundstart/eternal_night
 	name = "Magician's Curse"
@@ -62,7 +90,7 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 		if(!is_active)
 			STOP_PROCESSING(SSprocessing, src)
 			return
-			
+
 		for(var/mob/living/carbon/human/H in GLOB.alive_mob_list)
 			if(!H.mind || !H.mind.key)
 				continue
@@ -70,7 +98,7 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 				continue
 			if(H.mind.special_role in list("Vampire Lord", "Lich", "Bandit"))
 				continue
-				
+
 			var/obj/item/storage/belt/rogue/pouch/coins/reallyrich/reward = new(get_turf(H))
 			H.put_in_hands(reward)
 			rewarded_ckeys += H.mind.key
@@ -90,90 +118,90 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 /datum/round_event/roundstart/female_transformation
 	var/static/list/transformed_ckeys = list()
 
-	/datum/round_event/roundstart/female_transformation/apply_effect()
-		. = ..()
-		is_active = TRUE
-		// Initial transformation of existing players
-		for(var/mob/living/carbon/human/H in GLOB.alive_mob_list)
-			transform_human(H)
-		START_PROCESSING(SSprocessing, src)
+/datum/round_event/roundstart/female_transformation/apply_effect()
+	. = ..()
+	is_active = TRUE
+	transform_existing_players()
+	START_PROCESSING(SSprocessing, src)
 
-	/datum/round_event/roundstart/female_transformation/process()
-		if(!is_active)
-			STOP_PROCESSING(SSprocessing, src)
-			return
-		
-		// Check for new players to transform
-		for(var/mob/living/carbon/human/H in GLOB.alive_mob_list)
-			if(!H.mind || !H.mind.key)
-				continue
-			if(H.mind.key in transformed_ckeys)
-				continue
-			if(transform_human(H))
-				priority_announce("[H.real_name] has been transformed by the lingering energies!", "Arcyne Phenomena")
+/datum/round_event/roundstart/female_transformation/process()
+	if(!is_active)
+		STOP_PROCESSING(SSprocessing, src)
+		return
+	transform_new_players()
 
-	/datum/round_event/roundstart/female_transformation/proc/handle_organs(mob/living/carbon/human/H)
-		if(!H.mind || H.gender == FEMALE)
-			return
-			
-		// Remove male organs
-		var/obj/item/organ/penis/P = H.internal_organs_slot["penis"]
-		if(P)
-			P.Remove(H, special = TRUE)
-			qdel(P)
-		
-		var/obj/item/organ/testicles/T = H.internal_organs_slot["testicles"]
-		if(T)
-			T.Remove(H, special = TRUE)
-			qdel(T)
-			
-		// Add female organs
-		if(!H.internal_organs_slot["vagina"])
-			var/obj/item/organ/vagina/V = new
-			V.Insert(H, special = TRUE, drop_if_replaced = FALSE)
-			
-		if(!H.internal_organs_slot["breasts"])
-			var/obj/item/organ/breasts/B = new
-			B.Insert(H, special = TRUE, drop_if_replaced = FALSE)
+/datum/round_event/roundstart/female_transformation/proc/transform_existing_players()
+	for(var/mob/living/carbon/human/H in GLOB.alive_mob_list)
+		transform_human(H)
 
-	/datum/round_event/roundstart/female_transformation/proc/transform_human(mob/living/carbon/human/H)
-		if(!H?.mind || H.gender == FEMALE)
-			return FALSE
-			
-		handle_organs(H)
-		
-		// Gender, voice, and pronoun changes
-		H.gender = FEMALE
-		H.voice_type = "Feminine"
-		H.pronouns = "she/her"
-			
-		// Force facial hair removal
-		H.facial_hairstyle = "Shaved"
-		H.update_facial_hair()
-		H.overlays_standing[HAIR_LAYER] = null
-			
-		// Force full updates in correct order
-		H.update_body()
-		H.update_body_parts(TRUE)
-		H.update_hair()
-		H.update_facial_hair()
-		H.dna?.species.handle_body(H)
-		H.regenerate_icons()
-		H.regenerate_clothes()
+/datum/round_event/roundstart/female_transformation/proc/transform_new_players()
+	for(var/mob/living/carbon/human/H in GLOB.alive_mob_list)
+		if(!H.mind?.key || (H.mind.key in transformed_ckeys))
+			continue
+		transform_human(H)
 
-		// Force client-side update
-		if(H.client)
-			addtimer(CALLBACK(H, TYPE_PROC_REF(/atom, update_icon)), 1)
-			
-		if(H.mind.key)
-			transformed_ckeys += H.mind.key
-			
-		return TRUE
+/datum/round_event/roundstart/female_transformation/proc/transform_human(mob/living/carbon/human/H)
+	if(!H || !H.mind?.key || (H.mind.key in transformed_ckeys))
+		return FALSE
+
+	// Only transform males
+	if(H.gender != MALE)
+		return FALSE
+
+	H.gender = FEMALE
+	H.voice_type = "Feminine"
+	H.pronouns = "she/her"
+	// Update title/name
+	var/prev_real_name = H.real_name
+
+	// Convert male titles to female equivalents
+	var/new_name = prev_real_name
+	if(findtext(new_name, "Ser "))
+		new_name = replacetext(new_name, "Ser ", "Dame ")
+	else if(findtext(new_name, "Lord "))
+		new_name = replacetext(new_name, "Lord ", "Lady ")
+	else if(findtext(new_name, "King "))
+		new_name = replacetext(new_name, "King ", "Queen ")
+	else if(findtext(new_name, "Baron "))
+		new_name = replacetext(new_name, "Baron ", "Baroness ")
+
+	H.real_name = new_name
+	H.name = new_name
+
+	// Remove male organs and add female ones
+	var/obj/item/organ/penis = H.getorganslot(ORGAN_SLOT_PENIS)
+	if(penis)
+		penis.Remove(H)
+		qdel(penis)
+
+	var/obj/item/organ/testicles = H.getorganslot(ORGAN_SLOT_TESTICLES)
+	if(testicles)
+		testicles.Remove(H)
+		qdel(testicles)
+
+	if(!H.getorganslot(ORGAN_SLOT_VAGINA))
+		var/obj/item/organ/vagina/V = new
+		V.Insert(H, TRUE)
+
+	if(!H.getorganslot(ORGAN_SLOT_BREASTS))
+		var/obj/item/organ/breasts/B = new
+		B.Insert(H, TRUE)
+
+	// Update appearance
+	H.update_body()
+	H.update_body_parts()
+	H.regenerate_icons()
+	H.regenerate_clothes()
+
+	transformed_ckeys += H.mind.key
+
+
+	return TRUE
 
 /datum/round_event_control/roundstart/female_transformation
 	name = "Sisterhood"
 	typepath = /datum/round_event/roundstart/female_transformation
-	weight = 10
+	weight = 1
 	event_announcement = "Some sort of curse has turned all the men into women.."
 	runnable = TRUE
 
@@ -185,13 +213,13 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 		for(var/mob/living/carbon/human/H in GLOB.alive_mob_list)
 			if(H.mind)
 				valid_lovers += H
-				
+
 		if(!length(valid_lovers))
 			return
-			
+
 		var/mob/living/carbon/human/chosen_lover = pick(valid_lovers)
 		ADD_TRAIT(chosen_lover, TRAIT_GOODLOVER, "great_lover_event")
-		
+
 		var/list/lover_titles = list(
 			"legendary lover",
 			"fabled seducer",
@@ -199,14 +227,14 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 			"extraordinary paramour",
 			"illustrious heartbreaker"
 		)
-		
+
 		var/chosen_title = pick(lover_titles)
 		priority_announce("The stars have aligned... [chosen_lover.real_name] has been blessed as a [chosen_title]!", "Arcyne Phenomena")
 
 /datum/round_event_control/roundstart/great_lover
 	name = "Great Lover"
 	typepath = /datum/round_event/roundstart/great_lover
-	weight = 0
+	weight = 10
 	event_announcement = ""
 	runnable = TRUE
 
@@ -232,36 +260,36 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 	proc/handle_throne_execution(mob/living/carbon/human/speaker, list/speech_args)
 		if(!speaker || !(speaker.job in list("Baron", "Baroness")))
 			return
-		
+
 		// Check if they're buckled to the throne
 		if(!speaker.buckled || !istype(speaker.buckled, /obj/structure/roguethrone))
 			return
-			
+
 		var/spoken_text = speech_args[SPEECH_MESSAGE]
-		
+
 		// Convert to lowercase and remove punctuation for comparison
 		spoken_text = lowertext(spoken_text)
 		spoken_text = replacetext(spoken_text, "!", "")
 		spoken_text = replacetext(spoken_text, ".", "")
 		spoken_text = replacetext(spoken_text, "?", "")
 		spoken_text = replacetext(spoken_text, ",", "")
-		
+
 		// Check if the message starts with "execute" (case insensitive)
 		if(!findtext(spoken_text, "execute ", 1, 9))
 			return
-			
+
 		// Extract and clean the name after "execute "
 		var/target_name = trim(copytext(spoken_text, 9))
 		if(!length(target_name))
 			return
-			
+
 		// Look for a mob matching the spoken name (case insensitive)
 		for(var/mob/living/carbon/human/H in GLOB.alive_mob_list)
 			if(lowertext(H.real_name) == target_name)
 				// Check if target has a mind
 				if(!H.mind)
 					return
-					
+
 				// Check for execution immunity
 				if(is_execution_immune(H))
 					announce_execution("[H.real_name] resists the execution through supernatural power!", TRUE)
@@ -270,7 +298,7 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 					if(T)
 						new /obj/effect/temp_visual/dir_setting/bloodsplatter(T)
 					return
-				
+
 				// If not immune and has mind, proceed with execution
 				announce_execution("[H.real_name] has been violently executed by official decree!")
 				var/turf/T = get_turf(H)
@@ -285,7 +313,7 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 		for(var/mob/living/carbon/human/H in GLOB.alive_mob_list)
 			if(H.job in list("Baron", "Baronness"))
 				RegisterSignal(H, COMSIG_MOB_SAY, PROC_REF(handle_throne_execution))
-		
+
 		// Make all titans announce the execution instructions with sound
 		for(var/obj/structure/roguemachine/titan/T in world)
 			T.say("Say EXECUTE followed by the criminal's name while sitting on the throne to destroy them.")
@@ -294,7 +322,7 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 /datum/round_event_control/roundstart/throne_execution
 	name = "Throne Execution Power"
 	typepath = /datum/round_event/roundstart/throne_execution
-	weight = 0
+	weight = 5
 	event_announcement = "The throne crackles with newfound power..."
 	runnable = TRUE
 
@@ -316,54 +344,57 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 	var/choice = input(usr, "Choose an event to trigger", "Force Roundstart Event") as null|anything in event_choices
 	if(!choice)
 		return
-	
+
 	var/datum/round_event_control/roundstart/chosen_event = event_choices[choice]
 	var/confirm = alert(usr, "Trigger [chosen_event.name]? \nAnnouncement: [chosen_event.event_announcement]", "Confirm Event", "Yes", "No")
 	if(confirm != "Yes")
 		return
-		
+
 	var/datum/round_event/roundstart/E = new chosen_event.typepath()
 	if(E && istype(E))
 		if(chosen_event.event_announcement)
 			priority_announce(chosen_event.event_announcement, "Arcyne Phenomena")
 		if(chosen_event.runnable)
 			E.apply_effect()
-			
+
 		message_admins("[key_name_admin(usr)] forced the roundstart event: [chosen_event.name]")
 		log_admin("[key_name(usr)] forced the roundstart event: [chosen_event.name]")
 
-// Roundstart events subsystem
 /datum/controller/subsystem/roundstart_events
 	name = "Roundstart Events"
 	flags = SS_NO_FIRE
-	init_order = INIT_ORDER_EVENTS
-	
+	init_order = INIT_ORDER_EVENTS - 10
+
 	var/list/datum/round_event_control/roundstart/roundstart_events = list()
 	var/datum/round_event_control/roundstart/selected_event
 	var/has_fired = FALSE
 	var/list/active_events = list()
+	var/eternal_night_active = FALSE
 
-	Initialize(timeofday)
+	Initialize()
 		. = ..()
 		for(var/path in subtypesof(/datum/round_event_control/roundstart))
 			var/datum/round_event_control/roundstart/RE = new path()
 			roundstart_events += RE
-		START_PROCESSING(SSprocessing, src)
 
-	process()
-		if(!has_fired && SSticker.current_state == GAME_STATE_PLAYING)
-			has_fired = TRUE
-			pick_roundstart_event()
-			fire_event()
-			STOP_PROCESSING(SSprocessing, src)
+		// Create callback for ticker setup
+		var/datum/callback/cb = CALLBACK(src, .proc/early_round_start)
+		if(SSticker.round_start_events)
+			SSticker.round_start_events += cb
+		else
+			SSticker.round_start_events = list(cb)
+
+	proc/early_round_start()
+		pick_roundstart_event()
+		fire_event()
 
 	proc/pick_roundstart_event()
 		var/list/possible_events = list()
-		
+
 		for(var/datum/round_event_control/roundstart/RE as anything in roundstart_events)
 			if(RE.runnable && RE.can_spawn_event())
 				possible_events[RE] = RE.weight
-				
+
 		if(!length(possible_events))
 			return FALSE
 
@@ -374,12 +405,16 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 		if(!selected_event || !selected_event.typepath)
 			return
 
-		if(selected_event.event_announcement)
-			priority_announce(selected_event.event_announcement, "Arcyne Phenomena")
-			
 		var/datum/round_event/roundstart/E = new selected_event.typepath()
 		if(E && istype(E))
 			active_events += E
 			if(selected_event.runnable)
 				E.apply_effect()
+				if(selected_event.event_announcement && length(selected_event.event_announcement) > 0)
+					priority_announce(selected_event.event_announcement, "Arcyne Phenomena")
+
+				// Store the event name globally
+				GLOB.roundstart_event_name = selected_event.name
+
+
 
