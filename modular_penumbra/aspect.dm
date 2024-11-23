@@ -43,6 +43,11 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 	var/turf/baron_loc = get_turf(baron)
 	var/turf/consort_loc = get_turf(consort)
 	
+	// Close any open color choice menus for the baron
+	if(baron.client)
+		baron.client << browse(null, "window=color_choice")
+		baron.client << browse(null, "window=Banner Color")
+	
 	// Swap their positions
 	baron.forceMove(consort_loc)
 	consort.forceMove(baron_loc)
@@ -51,20 +56,30 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 	consort.job = "Consort-Regnant"
 	
 	// Swap their spells
-	var/list/baron_spells = baron.mob_spell_list.Copy()
-	var/list/consort_spells = consort.mob_spell_list.Copy()
+	var/list/baron_spells = list()
+	var/list/consort_spells = list()
 	
-	// Remove all spells from both
-	for(var/obj/effect/proc_holder/spell/S in baron.mob_spell_list)
-		baron.RemoveSpell(S)
-	for(var/obj/effect/proc_holder/spell/S in consort.mob_spell_list)
-		consort.RemoveSpell(S)
+	// Store baron's spells
+	if(baron.mind)
+		baron_spells = baron.mind.spell_list.Copy()
+		for(var/obj/effect/proc_holder/spell/S in baron_spells)
+			baron.mind.RemoveSpell(S)
 	
-	// Give baron's spells to consort and vice versa
+	// Store consort's spells
+	if(consort.mind)
+		consort_spells = consort.mind.spell_list.Copy()
+		for(var/obj/effect/proc_holder/spell/S in consort_spells)
+			consort.mind.RemoveSpell(S)
+	
+	// Give baron's spells to consort
 	for(var/obj/effect/proc_holder/spell/S in baron_spells)
-		consort.AddSpell(S)
+		if(consort.mind)
+			consort.mind.AddSpell(S)
+	
+	// Give consort's spells to baron
 	for(var/obj/effect/proc_holder/spell/S in consort_spells)
-		baron.AddSpell(S)
+		if(baron.mind)
+			baron.mind.AddSpell(S)
 	
 	// Transfer crown
 	var/obj/item/clothing/head/crown = baron.get_item_by_slot(SLOT_HEAD)
@@ -82,12 +97,16 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 			qdel(consort.cloak)
 		consort.equip_to_slot_or_del(cloak, SLOT_CLOAK)
 	
-	// Delete old scepter and give new one to consort
-	var/obj/item/scepter = baron.get_item_by_slot(SLOT_HANDS)
-	if(istype(scepter, /obj/item/rogueweapon/lordscepter))
-		qdel(scepter)
-		var/obj/item/rogueweapon/lordscepter/new_scepter = new(get_turf(consort))
-		consort.put_in_hands(new_scepter)
+	// Give new scepter directly to consort
+	var/obj/item/rogueweapon/lordscepter/new_scepter = new(get_turf(consort))
+	consort.put_in_hands(new_scepter)
+	
+	// Delete any existing scepter the baron might have
+	for(var/obj/item/rogueweapon/lordscepter/old_scepter in baron.GetAllContents())
+		qdel(old_scepter)
+	
+	// Give the color choice to the consort instead
+	addtimer(CALLBACK(consort, TYPE_PROC_REF(/mob, lord_color_choice)), 50)
 
 /datum/round_event_control/roundstart/matriarchy
 	name = "Regnant"
