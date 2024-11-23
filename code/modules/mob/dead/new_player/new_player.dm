@@ -155,12 +155,32 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/rp_prompt.txt"))
 
 	if(href_list["ready"])
 		var/tready = text2num(href_list["ready"])
-		//Avoid updating ready if we're after PREGAME (they should use latejoin instead)
-		//This is likely not an actual issue but I don't have time to prove that this
-		//no longer is required
 		if(tready == PLAYER_NOT_READY)
 			if(SSticker.job_change_locked)
 				return
+		if(SSticker.current_state <= GAME_STATE_PREGAME)
+			// Check for valid genitals before allowing ready
+			var/has_valid_genitals = FALSE
+			if(client?.prefs)
+				for(var/datum/customizer_entry/entry as anything in client.prefs.customizer_entries)
+					if((istype(entry, /datum/customizer_entry/organ/penis) || istype(entry, /datum/customizer_entry/organ/vagina)) && !entry.disabled)
+						has_valid_genitals = TRUE
+						break
+				
+				// Males must have penis
+				if(client.prefs.gender == MALE)
+					var/has_penis = FALSE
+					for(var/datum/customizer_entry/entry as anything in client.prefs.customizer_entries)
+						if(istype(entry, /datum/customizer_entry/organ/penis) && !entry.disabled)
+							has_penis = TRUE
+							break
+					if(!has_penis)
+						to_chat(src, "<span class='warning'>Body validation failed. Please make sure your genitals are set up correctly.</span>")
+						return
+
+				if(!has_valid_genitals)
+					to_chat(src, "<span class='warning'>Body validation failed. Please make sure your genitals are set up correctly.</span>")
+					return
 		if(SSticker.current_state <= GAME_STATE_PREGAME)
 			if(tready == PLAYER_READY_TO_PLAY && length(client.prefs.flavortext) < MINIMUM_FLAVOR_TEXT)
 				to_chat(src, span_boldwarning("You need a minimum of [MINIMUM_FLAVOR_TEXT] characters in your flavor text in order to play."))
@@ -245,7 +265,7 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/rp_prompt.txt"))
 
 	if(href_list["SelectedJob"])
 		if(!SSticker?.IsRoundInProgress())
-			to_chat(usr, span_danger("The round is either not ready, or has already finished..."))
+			to_chat(usr, "<span class='danger'>The round is either not ready, or has already finished...</span>")
 			return
 
 		if(!GLOB.enter_allowed)
@@ -261,8 +281,38 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/rp_prompt.txt"))
 			to_chat(usr, span_boldwarning("You are in the migrant queue."))
 			return
 
+		// Check for valid genitals before allowing late join
+		var/has_valid_genitals = FALSE
+		var/has_penis = FALSE
+		var/has_testicles = FALSE
+		if(client?.prefs)
+			for(var/datum/customizer_entry/entry as anything in client.prefs.customizer_entries)
+				if(istype(entry, /datum/customizer_entry/organ/penis) && !entry.disabled)
+					has_penis = TRUE
+					has_valid_genitals = TRUE
+				if(istype(entry, /datum/customizer_entry/organ/vagina) && !entry.disabled)
+					has_valid_genitals = TRUE
+				if(istype(entry, /datum/customizer_entry/organ/testicles) && !entry.disabled)
+					has_testicles = TRUE
+			
+			// Males must have penis
+			if(client.prefs.gender == MALE)
+				if(!has_penis)
+					to_chat(src, "<span class='warning'>Male characters must have a penis enabled to join the game!</span>")
+					return
+
+			// Characters with penis must have testicles
+			if(has_penis && !has_testicles)
+				to_chat(src, "<span class='warning'>Characters with a penis must have testicles enabled!</span>")
+				return
+
+			if(!has_valid_genitals)
+				to_chat(src, "<span class='warning'>You must have either a penis or vagina enabled to join the game!</span>")
+				return
+
+		// Check flavor text minimum
 		if(length(client.prefs.flavortext) < MINIMUM_FLAVOR_TEXT)
-			to_chat(usr, span_boldwarning("You need a minimum of [MINIMUM_FLAVOR_TEXT] characters in your flavor text in order to play."))
+			to_chat(src, span_boldwarning("You need a minimum of [MINIMUM_FLAVOR_TEXT] characters in your flavor text in order to play."))
 			return
 
 		AttemptLateSpawn(href_list["SelectedJob"])
