@@ -395,7 +395,7 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 		. = ..()
 		// Add throne speech handling to all humans
 		for(var/mob/living/carbon/human/H in GLOB.alive_mob_list)
-			if(H.job in list("Baron", "Baronness"))
+			if(H.job in list("Baron", "Baroness"))
 				RegisterSignal(H, COMSIG_MOB_SAY, PROC_REF(handle_throne_execution))
 
 		// Make all titans announce the execution instructions with sound
@@ -535,6 +535,67 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 
 				// Store the event name globally
 				GLOB.roundstart_event_name = selected_event.name
+
+
+// Matriarchy event
+/datum/round_event/roundstart/matriarchy
+
+/datum/round_event/roundstart/matriarchy/apply_effect()
+    . = ..()
+    is_active = TRUE
+    
+    var/mob/living/carbon/human/baron
+    var/mob/living/carbon/human/consort
+    
+    // Find the Baron and Consort
+    for(var/mob/living/carbon/human/H in GLOB.alive_mob_list)
+        if(H.mind?.assigned_role == "Baron" || H.mind?.assigned_role == "Baroness")
+            baron = H
+        else if(H.mind?.assigned_role == "Consort")
+            consort = H
+    
+    if(!baron || !consort)
+        return
+    
+    // Store their locations
+    var/turf/baron_loc = get_turf(baron)
+    var/turf/consort_loc = get_turf(consort)
+    
+    // Swap their positions
+    baron.forceMove(consort_loc)
+    consort.forceMove(baron_loc)
+    
+    // Update Consort's title
+    consort.job = "Consort-Regnant"
+    
+    // Transfer crown
+    var/obj/item/clothing/head/crown = baron.get_item_by_slot(SLOT_HEAD)
+    if(istype(crown, /obj/item/clothing/head/roguetown/crown/serpcrown))
+        baron.dropItemToGround(crown)
+        if(consort.head)
+            qdel(consort.head)
+        consort.equip_to_slot_or_del(crown, SLOT_HEAD)
+    
+    // Transfer cloak
+    var/obj/item/clothing/cloak = baron.get_item_by_slot(SLOT_CLOAK)
+    if(istype(cloak, /obj/item/clothing/cloak/lordcloak))
+        baron.dropItemToGround(cloak)
+        if(consort.cloak)
+            qdel(consort.cloak)
+        consort.equip_to_slot_or_del(cloak, SLOT_CLOAK)
+    
+    // Transfer scepter
+    var/obj/item/scepter = baron.get_item_by_slot(SLOT_HANDS)
+    if(istype(scepter, /obj/item/rogueweapon/lordscepter))
+        baron.dropItemToGround(scepter)
+        consort.put_in_hands(scepter)
+
+/datum/round_event_control/roundstart/matriarchy
+    name = "Regnant"
+    typepath = /datum/round_event/roundstart/matriarchy
+    weight = 5
+    event_announcement = "The crown passes to the Consort in a rare recognizance of ancient law..."
+    runnable = TRUE
 
 
 
