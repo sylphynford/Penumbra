@@ -1965,7 +1965,6 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 					hotkeys = (choice == "Do It")
 					key_bindings = (hotkeys) ? deepCopyList(GLOB.hotkey_keybinding_list_by_key) : deepCopyList(GLOB.classic_keybinding_list_by_key)
 					user.client.update_movement_keys()
-					SetKeybinds(user)
 				if("chat_on_map")
 					chat_on_map = !chat_on_map
 				if("see_chat_non_mob")
@@ -1979,177 +1978,177 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 				if("winflash")
 					windowflashing = !windowflashing
 
-					//here lies the badmins
-					if("hear_adminhelps")
-						user.client.toggleadminhelpsound()
-					if("hear_prayers")
-						user.client.toggle_prayer_sound()
-					if("announce_login")
-						user.client.toggleannouncelogin()
-					if("combohud_lighting")
-						toggles ^= COMBOHUD_LIGHTING
-					if("toggle_dead_chat")
-						user.client.deadchat()
-					if("toggle_radio_chatter")
-						user.client.toggle_hear_radio()
-					if("toggle_prayers")
-						user.client.toggleprayers()
-					if("toggle_deadmin_always")
-						toggles ^= DEADMIN_ALWAYS
-					if("toggle_deadmin_antag")
-						toggles ^= DEADMIN_ANTAGONIST
-					if("toggle_deadmin_head")
-						toggles ^= DEADMIN_POSITION_HEAD
-					if("toggle_deadmin_security")
-						toggles ^= DEADMIN_POSITION_SECURITY
-					if("toggle_deadmin_silicon")
-						toggles ^= DEADMIN_POSITION_SILICON
+				//here lies the badmins
+				if("hear_adminhelps")
+					user.client.toggleadminhelpsound()
+				if("hear_prayers")
+					user.client.toggle_prayer_sound()
+				if("announce_login")
+					user.client.toggleannouncelogin()
+				if("combohud_lighting")
+					toggles ^= COMBOHUD_LIGHTING
+				if("toggle_dead_chat")
+					user.client.deadchat()
+				if("toggle_radio_chatter")
+					user.client.toggle_hear_radio()
+				if("toggle_prayers")
+					user.client.toggleprayers()
+				if("toggle_deadmin_always")
+					toggles ^= DEADMIN_ALWAYS
+				if("toggle_deadmin_antag")
+					toggles ^= DEADMIN_ANTAGONIST
+				if("toggle_deadmin_head")
+					toggles ^= DEADMIN_POSITION_HEAD
+				if("toggle_deadmin_security")
+					toggles ^= DEADMIN_POSITION_SECURITY
+				if("toggle_deadmin_silicon")
+					toggles ^= DEADMIN_POSITION_SILICON
 
 
-					if("be_special")
-						var/be_special_type = href_list["be_special_type"]
-						if(be_special_type in be_special)
-							be_special -= be_special_type
-						else
-							be_special += be_special_type
+				if("be_special")
+					var/be_special_type = href_list["be_special_type"]
+					if(be_special_type in be_special)
+						be_special -= be_special_type
+					else
+						be_special += be_special_type
 
-					if("toggle_random")
-						var/random_type = href_list["random_type"]
-						if(randomise[random_type])
-							randomise -= random_type
-						else
-							randomise[random_type] = TRUE
+				if("toggle_random")
+					var/random_type = href_list["random_type"]
+					if(randomise[random_type])
+						randomise -= random_type
+					else
+						randomise[random_type] = TRUE
 
-					if("hear_midis")
-						toggles ^= SOUND_MIDI
+				if("hear_midis")
+					toggles ^= SOUND_MIDI
 
-					if("lobby_music")
-						toggles ^= SOUND_LOBBY
-						if((toggles & SOUND_LOBBY) && user.client && isnewplayer(user))
-							user.client.playtitlemusic()
-						else
-							user.stop_sound_channel(CHANNEL_LOBBYMUSIC)
+				if("lobby_music")
+					toggles ^= SOUND_LOBBY
+					if((toggles & SOUND_LOBBY) && user.client && isnewplayer(user))
+						user.client.playtitlemusic()
+					else
+						user.stop_sound_channel(CHANNEL_LOBBYMUSIC)
 
-					if("ghost_ears")
-						chat_toggles ^= CHAT_GHOSTEARS
+				if("ghost_ears")
+					chat_toggles ^= CHAT_GHOSTEARS
 
-					if("ghost_sight")
-						chat_toggles ^= CHAT_GHOSTSIGHT
+				if("ghost_sight")
+					chat_toggles ^= CHAT_GHOSTSIGHT
 
-					if("ghost_whispers")
-						chat_toggles ^= CHAT_GHOSTWHISPER
+				if("ghost_whispers")
+					chat_toggles ^= CHAT_GHOSTWHISPER
 
-					if("ghost_radio")
-						chat_toggles ^= CHAT_GHOSTRADIO
+				if("ghost_radio")
+					chat_toggles ^= CHAT_GHOSTRADIO
 
-					if("ghost_pda")
-						chat_toggles ^= CHAT_GHOSTPDA
+				if("ghost_pda")
+					chat_toggles ^= CHAT_GHOSTPDA
 
-					if("income_pings")
-						chat_toggles ^= CHAT_BANKCARD
+				if("income_pings")
+					chat_toggles ^= CHAT_BANKCARD
 
-					if("pull_requests")
-						chat_toggles ^= CHAT_PULLR
+				if("pull_requests")
+					chat_toggles ^= CHAT_PULLR
 
-					if("allow_midround_antag")
-						toggles ^= MIDROUND_ANTAG
+				if("allow_midround_antag")
+					toggles ^= MIDROUND_ANTAG
 
-					if("parallaxup")
-						parallax = WRAP(parallax + 1, PARALLAX_INSANE, PARALLAX_DISABLE + 1)
-						if (parent && parent.mob && parent.mob.hud_used)
-							parent.mob.hud_used.update_parallax_pref(parent.mob)
+				if("parallaxup")
+					parallax = WRAP(parallax + 1, PARALLAX_INSANE, PARALLAX_DISABLE + 1)
+					if (parent && parent.mob && parent.mob.hud_used)
+						parent.mob.hud_used.update_parallax_pref(parent.mob)
 
-					if("parallaxdown")
-						parallax = WRAP(parallax - 1, PARALLAX_INSANE, PARALLAX_DISABLE + 1)
-						if (parent && parent.mob && parent.mob.hud_used)
-							parent.mob.hud_used.update_parallax_pref(parent.mob)
+				if("parallaxdown")
+					parallax = WRAP(parallax - 1, PARALLAX_INSANE, PARALLAX_DISABLE + 1)
+					if (parent && parent.mob && parent.mob.hud_used)
+						parent.mob.hud_used.update_parallax_pref(parent.mob)
 
-					if("ambientocclusion")
-						ambientocclusion = !ambientocclusion
-						if(parent && parent.screen && parent.screen.len)
-							var/atom/movable/screen/plane_master/game_world/PM = locate(/atom/movable/screen/plane_master/game_world) in parent.screen
-							PM.backdrop(parent.mob)
-							PM = locate(/atom/movable/screen/plane_master/game_world_fov_hidden) in parent.screen
-							PM.backdrop(parent.mob)
-							PM = locate(/atom/movable/screen/plane_master/game_world_above) in parent.screen
-							PM.backdrop(parent.mob)
+				if("ambientocclusion")
+					ambientocclusion = !ambientocclusion
+					if(parent && parent.screen && parent.screen.len)
+						var/atom/movable/screen/plane_master/game_world/PM = locate(/atom/movable/screen/plane_master/game_world) in parent.screen
+						PM.backdrop(parent.mob)
+						PM = locate(/atom/movable/screen/plane_master/game_world_fov_hidden) in parent.screen
+						PM.backdrop(parent.mob)
+						PM = locate(/atom/movable/screen/plane_master/game_world_above) in parent.screen
+						PM.backdrop(parent.mob)
 
-					if("auto_fit_viewport")
-						auto_fit_viewport = !auto_fit_viewport
-						if(auto_fit_viewport && parent)
-							parent.fit_viewport()
+				if("auto_fit_viewport")
+					auto_fit_viewport = !auto_fit_viewport
+					if(auto_fit_viewport && parent)
+						parent.fit_viewport()
 
-					if("widescreenpref")
-						widescreenpref = !widescreenpref
-						user.client.change_view(CONFIG_GET(string/default_view))
+				if("widescreenpref")
+					widescreenpref = !widescreenpref
+					user.client.change_view(CONFIG_GET(string/default_view))
 
-					if("schizo_voice")
-						toggles ^= SCHIZO_VOICE
-						if(toggles & SCHIZO_VOICE)
-							to_chat(user, "<span class='warning'>You are now a voice.\n\
-											As a voice, you will receive meditations from players asking about game mechanics!\n\
-											Good voices will be rewarded with PQ for answering meditations, while bad ones are punished at the discretion of The Management.</span>")
-						else
-							to_chat(user, span_warning("You are no longer a voice."))
+				if("schizo_voice")
+					toggles ^= SCHIZO_VOICE
+					if(toggles & SCHIZO_VOICE)
+						to_chat(user, "<span class='warning'>You are now a voice.\n\
+										As a voice, you will receive meditations from players asking about game mechanics!\n\
+										Good voices will be rewarded with PQ for answering meditations, while bad ones are punished at the discretion of The Management.</span>")
+					else
+						to_chat(user, span_warning("You are no longer a voice."))
 
-					if("migrants")
-						migrant.show_ui()
-						return
+				if("migrants")
+					migrant.show_ui()
+					return
 
-					if("manifest")
-						parent.view_actors_manifest()
-						return
+				if("manifest")
+					parent.view_actors_manifest()
+					return
 
-					if("observe")
-						var/mob/dead/new_player/P = user
-						P.make_me_an_observer()
-						return
+				if("observe")
+					var/mob/dead/new_player/P = user
+					P.make_me_an_observer()
+					return
 
-					if("finished")
-						user << browse(null, "window=latechoices") //closes late choices window
-						user << browse(null, "window=playersetup") //closes the player setup window
-						user << browse(null, "window=preferences") //closes job selection
-						user << browse(null, "window=mob_occupation")
-						user << browse(null, "window=latechoices") //closes late job selection
-						user << browse(null, "window=migration") // Closes migrant menu
+				if("finished")
+					user << browse(null, "window=latechoices") //closes late choices window
+					user << browse(null, "window=playersetup") //closes the player setup window
+					user << browse(null, "window=preferences") //closes job selection
+					user << browse(null, "window=mob_occupation")
+					user << browse(null, "window=latechoices") //closes late job selection
+					user << browse(null, "window=migration") // Closes migrant menu
 
-						SStriumphs.remove_triumph_buy_menu(user.client)
+					SStriumphs.remove_triumph_buy_menu(user.client)
 
-						winshow(user, "preferencess_window", FALSE)
-						user << browse(null, "window=preferences_browser")
-						user << browse(null, "window=lobby_window")
-						return
+					winshow(user, "preferencess_window", FALSE)
+					user << browse(null, "window=preferences_browser")
+					user << browse(null, "window=lobby_window")
+					return
 
-					if("save")
-						save_preferences()
-						save_character()
+				if("save")
+					save_preferences()
+					save_character()
 
-					if("load")
-						load_preferences()
-						load_character()
+				if("load")
+					load_preferences()
+					load_character()
 
-					if("changeslot")
-						var/list/choices = list()
-						if(path)
-							var/savefile/S = new /savefile(path)
-							if(S)
-								for(var/i=1, i<=max_save_slots, i++)
-									var/name
-									S.cd = "/character[i]"
-									S["real_name"] >> name
-									if(!name)
-										name = "Slot[i]"
-									choices[name] = i
-						var/choice = input(user, "CHOOSE A HERO","ROGUETOWN") as null|anything in choices
-						if(choice)
-							choice = choices[choice]
-							if(!load_character(choice))
-								random_character()
-								save_character()
+				if("changeslot")
+					var/list/choices = list()
+					if(path)
+						var/savefile/S = new /savefile(path)
+						if(S)
+							for(var/i=1, i<=max_save_slots, i++)
+								var/name
+								S.cd = "/character[i]"
+								S["real_name"] >> name
+								if(!name)
+									name = "Slot[i]"
+								choices[name] = i
+					var/choice = input(user, "CHOOSE A HERO","ROGUETOWN") as null|anything in choices
+					if(choice)
+						choice = choices[choice]
+						if(!load_character(choice))
+							random_character()
+							save_character()
 
-					if("tab")
-						if (href_list["tab"])
-							current_tab = text2num(href_list["tab"])
+				if("tab")
+					if (href_list["tab"])
+						current_tab = text2num(href_list["tab"])
 
 	ShowChoices(user)
 	return 1
@@ -2345,28 +2344,3 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 	if(!migrant.active)
 		return FALSE
 	return TRUE
-
-/datum/preferences/proc/validate_character()
-	. = TRUE
-	
-	// Check if character has either penis or vagina enabled
-	var/has_valid_genitals = FALSE
-	var/has_penis = FALSE
-	
-	for(var/datum/customizer_entry/entry as anything in customizer_entries)
-		if(istype(entry, /datum/customizer_entry/organ/penis) && !entry.disabled)
-			has_penis = TRUE
-			has_valid_genitals = TRUE
-		if(istype(entry, /datum/customizer_entry/organ/vagina) && !entry.disabled)
-			has_valid_genitals = TRUE
-	
-	// Males (including demihumans) must have penis
-	if(gender == MALE)
-		if(!has_penis)
-			to_chat(parent, "<span class='warning'>Male characters must have a penis!</span>")
-			return FALSE
-	
-	// Everyone (including demihumans) must have at least one genital
-	if(!has_valid_genitals)
-		to_chat(parent, "<span class='warning'>You must have either a penis or vagina enabled to join the game!</span>")
-		return FALSE

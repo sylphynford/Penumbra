@@ -3,9 +3,11 @@
 	name = "Penis"
 	allows_disabling = TRUE
 	default_disabled = TRUE
-	gender_enabled = MALE
 
 /datum/customizer/organ/penis/is_allowed(datum/preferences/prefs)
+	for(var/datum/customizer_entry/entry as anything in prefs.customizer_entries)
+		if(istype(entry,/datum/customizer_entry/organ/vagina))
+			return entry.disabled
 	return TRUE
 
 /datum/customizer_choice/organ/penis
@@ -23,25 +25,6 @@
 	..()
 	var/datum/customizer_entry/organ/penis/penis_entry = entry
 	penis_entry.penis_size = sanitize_integer(penis_entry.penis_size, MIN_PENIS_SIZE, MAX_PENIS_SIZE, DEFAULT_PENIS_SIZE)
-	if(!entry.disabled)
-		// Always enable testicles when penis is enabled
-		var/found_testicles = FALSE
-		for(var/datum/customizer_entry/other_entry as anything in prefs.customizer_entries)
-			if(istype(other_entry, /datum/customizer_entry/organ/testicles))
-				other_entry.disabled = FALSE
-				found_testicles = TRUE
-			if(istype(other_entry, /datum/customizer_entry/organ/vagina))
-				other_entry.disabled = TRUE
-		// Create testicles if they don't exist
-		if(!found_testicles)
-			var/datum/customizer_entry/organ/testicles/new_testicles = new()
-			new_testicles.disabled = FALSE
-			prefs.customizer_entries += new_testicles
-	else
-		// Disable testicles when penis is disabled
-		for(var/datum/customizer_entry/other_entry as anything in prefs.customizer_entries)
-			if(istype(other_entry, /datum/customizer_entry/organ/testicles))
-				other_entry.disabled = TRUE
 
 /datum/customizer_choice/organ/penis/imprint_organ_dna(datum/organ_dna/organ_dna, datum/customizer_entry/entry, datum/preferences/prefs)
 	..()
@@ -105,12 +88,12 @@
 	name = "Testicles"
 	allows_disabling = TRUE
 	default_disabled = TRUE
+	gender_enabled = MALE
 
 /datum/customizer/organ/testicles/is_allowed(datum/preferences/prefs)
 	for(var/datum/customizer_entry/entry as anything in prefs.customizer_entries)
-		if(istype(entry, /datum/customizer_entry/organ/penis) && !entry.disabled)
-			return TRUE
-	return FALSE
+		if(istype(entry,/datum/customizer_entry/organ/penis))
+			return !entry.disabled
 
 /datum/customizer_choice/organ/testicles
 	abstract_type = /datum/customizer_choice/organ/testicles
@@ -160,10 +143,13 @@
 /datum/customizer/organ/testicles/human
 	customizer_choices = list(/datum/customizer_choice/organ/testicles/human)
 
+/datum/customizer/organ/testicles/internal
+	customizer_choices = list(/datum/customizer_choice/organ/testicles/internal)
 
 /datum/customizer/organ/testicles/anthro
 	customizer_choices = list(
 		/datum/customizer_choice/organ/testicles/external,
+		/datum/customizer_choice/organ/testicles/internal,
 	)
 
 /datum/customizer_choice/organ/testicles/external
@@ -175,6 +161,12 @@
 	sprite_accessories = list(/datum/sprite_accessory/testicles/pair)
 	allows_accessory_color_customization = FALSE
 
+/datum/customizer_choice/organ/testicles/internal
+	name = "Internal testicles"
+	organ_type = /obj/item/organ/testicles/internal
+	sprite_accessories = null
+	can_customize_size = FALSE
+
 /datum/customizer_entry/organ/testicles
 	var/ball_size = DEFAULT_TESTICLES_SIZE
 	var/virility = TRUE
@@ -183,7 +175,7 @@
 	abstract_type = /datum/customizer/organ/breasts
 	name = "Breasts"
 	allows_disabling = TRUE
-	default_disabled = FALSE
+	default_disabled = TRUE
 	gender_enabled = FEMALE
 
 /datum/customizer/organ/breasts/is_allowed(datum/preferences/prefs)
@@ -253,16 +245,15 @@
 	abstract_type = /datum/customizer/organ/vagina
 	name = "Vagina"
 	allows_disabling = TRUE
-	default_disabled = FALSE
+	default_disabled = TRUE
 	gender_enabled = FEMALE
 
 /datum/customizer/organ/vagina/is_allowed(datum/preferences/prefs)
-	if(prefs.gender == MALE)
+	if(prefs.gender != FEMALE)
 		return FALSE
-	// Check if penis is already enabled
 	for(var/datum/customizer_entry/entry as anything in prefs.customizer_entries)
-		if(istype(entry, /datum/customizer_entry/organ/penis) && !entry.disabled)
-			return FALSE
+		if(istype(entry, /datum/customizer_entry/organ/penis))
+			return entry.disabled
 	return TRUE
 
 /datum/customizer_choice/organ/vagina
@@ -293,6 +284,7 @@
 	switch(href_list["customizer_task"])
 		if("fertile")
 			vagina_entry.fertility = !vagina_entry.fertility
+
 
 /datum/customizer/organ/vagina/human
 	customizer_choices = list(/datum/customizer_choice/organ/vagina/human)
@@ -338,11 +330,5 @@
 		/datum/sprite_accessory/vagina/hairy,
 		/datum/sprite_accessory/vagina/spade,
 		/datum/sprite_accessory/vagina/furred,
+		/datum/sprite_accessory/vagina/cloaca,
 		)
-
-/datum/customizer/organ/vagina/validate_entry(datum/preferences/prefs, datum/customizer_entry/entry)
-	..()
-	if(!entry.disabled)
-		for(var/datum/customizer_entry/other_entry as anything in prefs.customizer_entries)
-			if(istype(other_entry, /datum/customizer_entry/organ/penis) || istype(other_entry, /datum/customizer_entry/organ/testicles))
-				other_entry.disabled = TRUE
