@@ -19,81 +19,160 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 	return runnable
 
 
+// Matriarchy event
+/datum/round_event/roundstart/matriarchy
+
+/datum/round_event/roundstart/matriarchy/apply_effect()
+	. = ..()
+	is_active = TRUE
+	
+	var/mob/living/carbon/human/baron
+	var/mob/living/carbon/human/consort
+	
+	// Find the Baron and Consort
+	for(var/mob/living/carbon/human/H in GLOB.alive_mob_list)
+		if(H.mind?.assigned_role == "Baron" || H.mind?.assigned_role == "Baroness")
+			baron = H
+		else if(H.mind?.assigned_role == "Consort")
+			consort = H
+	
+	if(!baron || !consort)
+		return
+	
+	// Store their locations
+	var/turf/baron_loc = get_turf(baron)
+	var/turf/consort_loc = get_turf(consort)
+	
+	// Swap their positions
+	baron.forceMove(consort_loc)
+	consort.forceMove(baron_loc)
+	
+	// Update Consort's title and name
+	consort.job = "Consort-Regnant"
+	
+	// Swap their spells
+	var/list/baron_spells = baron.mob_spell_list.Copy()
+	var/list/consort_spells = consort.mob_spell_list.Copy()
+	
+	// Remove all spells from both
+	for(var/obj/effect/proc_holder/spell/S in baron.mob_spell_list)
+		baron.RemoveSpell(S)
+	for(var/obj/effect/proc_holder/spell/S in consort.mob_spell_list)
+		consort.RemoveSpell(S)
+	
+	// Give baron's spells to consort and vice versa
+	for(var/obj/effect/proc_holder/spell/S in baron_spells)
+		consort.AddSpell(S)
+	for(var/obj/effect/proc_holder/spell/S in consort_spells)
+		baron.AddSpell(S)
+	
+	// Transfer crown
+	var/obj/item/clothing/head/crown = baron.get_item_by_slot(SLOT_HEAD)
+	if(istype(crown, /obj/item/clothing/head/roguetown/crown/serpcrown))
+		baron.dropItemToGround(crown)
+		if(consort.head)
+			qdel(consort.head)
+		consort.equip_to_slot_or_del(crown, SLOT_HEAD)
+	
+	// Transfer cloak
+	var/obj/item/clothing/cloak = baron.get_item_by_slot(SLOT_CLOAK)
+	if(istype(cloak, /obj/item/clothing/cloak/lordcloak))
+		baron.dropItemToGround(cloak)
+		if(consort.cloak)
+			qdel(consort.cloak)
+		consort.equip_to_slot_or_del(cloak, SLOT_CLOAK)
+	
+	// Delete old scepter and give new one to consort
+	var/obj/item/scepter = baron.get_item_by_slot(SLOT_HANDS)
+	if(istype(scepter, /obj/item/rogueweapon/lordscepter))
+		qdel(scepter)
+		var/obj/item/rogueweapon/lordscepter/new_scepter = new(get_turf(consort))
+		consort.put_in_hands(new_scepter)
+
+/datum/round_event_control/roundstart/matriarchy
+	name = "Regnant"
+	typepath = /datum/round_event/roundstart/matriarchy
+	weight = 5
+	event_announcement = "The crown passes to the Consort in a rare recognizance of ancient law..."
+	runnable = TRUE
+
+
+
 //Militia event
 
 /datum/component/militia_blessing
-    var/applied = TRUE
+	var/applied = TRUE
 
 /datum/component/militia_blessing/Initialize()
-    . = ..()
-    if(!ismob(parent))
-        return COMPONENT_INCOMPATIBLE
+	. = ..()
+	if(!ismob(parent))
+		return COMPONENT_INCOMPATIBLE
 
 // Then the rest of your existing event code
 /datum/round_event/roundstart/militia
-    var/static/list/weapon_skills = list(
-        /obj/item/rogueweapon/sword/short = /datum/skill/combat/swords,
-        /obj/item/rogueweapon/mace/cudgel = /datum/skill/combat/maces,
-        /obj/item/rogueweapon/spear = /datum/skill/combat/polearms,
-        /obj/item/rogueweapon/stoneaxe/woodcut/steel = /datum/skill/combat/axes
-    )
+	var/static/list/weapon_skills = list(
+		/obj/item/rogueweapon/sword/short = /datum/skill/combat/swords,
+		/obj/item/rogueweapon/mace/cudgel = /datum/skill/combat/maces,
+		/obj/item/rogueweapon/spear = /datum/skill/combat/polearms,
+		/obj/item/rogueweapon/stoneaxe/woodcut/steel = /datum/skill/combat/axes
+	)
 
-    var/static/list/basic_weapons = list(
-        /obj/item/rogueweapon/sword/short,
-        /obj/item/rogueweapon/mace/cudgel,
-        /obj/item/rogueweapon/spear,
-        /obj/item/rogueweapon/stoneaxe/woodcut/steel
-    )
+	var/static/list/basic_weapons = list(
+		/obj/item/rogueweapon/sword/short,
+		/obj/item/rogueweapon/mace/cudgel,
+		/obj/item/rogueweapon/spear,
+		/obj/item/rogueweapon/stoneaxe/woodcut/steel
+	)
 
 /datum/round_event/roundstart/militia/apply_effect()
-    . = ..()
-    is_active = TRUE
-    bless_existing_players()
-    START_PROCESSING(SSprocessing, src)
+	. = ..()
+	is_active = TRUE
+	bless_existing_players()
+	START_PROCESSING(SSprocessing, src)
 
 /datum/round_event/roundstart/militia/process()
-    if(!is_active)
-        STOP_PROCESSING(SSprocessing, src)
-        return
-    
-    for(var/mob/living/carbon/human/H in GLOB.alive_mob_list)
-        if(!H.mind?.key || H.GetComponent(/datum/component/militia_blessing))
-            continue
-        apply_blessing(H)
+	if(!is_active)
+		STOP_PROCESSING(SSprocessing, src)
+		return
+	
+	for(var/mob/living/carbon/human/H in GLOB.alive_mob_list)
+		if(!H.mind?.key || H.GetComponent(/datum/component/militia_blessing))
+			continue
+		apply_blessing(H)
 
 /datum/round_event/roundstart/militia/proc/bless_existing_players()
-    for(var/mob/living/carbon/human/H in GLOB.alive_mob_list)
-        apply_blessing(H)
+	for(var/mob/living/carbon/human/H in GLOB.alive_mob_list)
+		apply_blessing(H)
 
 /datum/round_event/roundstart/militia/proc/apply_blessing(mob/living/carbon/human/H)
-    if(!H || !H.mind || !H.job)
-        return FALSE
-    
-    var/datum/job/J = SSjob.GetJob(H.job)
-    if(!J || !(J.department_flag & PEASANTS))
-        return FALSE
+	if(!H || !H.mind || !H.job)
+		return FALSE
+	
+	var/datum/job/J = SSjob.GetJob(H.job)
+	if(!J || !(J.department_flag & PEASANTS))
+		return FALSE
 
-    // Give random basic weapon and increase its related skill
-    var/weapon_type = pick(basic_weapons)
-    var/obj/item/weapon = new weapon_type(get_turf(H))
-    H.put_in_hands(weapon)
-    
-    // Increase the specific weapon skill
-    var/skill_type = weapon_skills[weapon_type]
-    if(skill_type)
-        H.mind.adjust_skillrank(skill_type, 2, TRUE)
-    
-    // Always increase these basic combat skills
-    H.mind.adjust_skillrank(/datum/skill/combat/wrestling, 1, TRUE)
-    H.mind.adjust_skillrank(/datum/skill/combat/unarmed, 1, TRUE)
+	// Give random basic weapon and increase its related skill
+	var/weapon_type = pick(basic_weapons)
+	var/obj/item/weapon = new weapon_type(get_turf(H))
+	H.put_in_hands(weapon)
+	
+	// Increase the specific weapon skill
+	var/skill_type = weapon_skills[weapon_type]
+	if(skill_type)
+		H.mind.adjust_skillrank(skill_type, 2, TRUE)
+	
+	// Always increase these basic combat skills
+	H.mind.adjust_skillrank(/datum/skill/combat/wrestling, 1, TRUE)
+	H.mind.adjust_skillrank(/datum/skill/combat/unarmed, 1, TRUE)
 
-    // Increase stats
-    H.change_stat("strength", 1)
-    H.change_stat("endurance", 1)
-    H.change_stat("constitution", 1)
-    
-    // Add militia blessing component
-    H.AddComponent(/datum/component/militia_blessing)
+	// Increase stats
+	H.change_stat("strength", 1)
+	H.change_stat("endurance", 1)
+	H.change_stat("constitution", 1)
+	
+	// Add militia blessing component
+	H.AddComponent(/datum/component/militia_blessing)
 
 /datum/round_event_control/roundstart/militia
 	name = "Militia"
@@ -414,37 +493,37 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 /datum/round_event/roundstart/eternal_day
 
 /datum/round_event/roundstart/eternal_day/apply_effect()
-    . = ..()
-    is_active = TRUE
-    
-    // Keep sunlight bright
-    for(var/obj/effect/sunlight/S in GLOB.sunlights)
-        S.light_power = 1
-        S.light_color = pick("#dbbfbf", "#ddd7bd", "#add1b0", "#a4c0ca", "#ae9dc6", "#d09fbf")
-        S.set_light(S.brightness)
-        STOP_PROCESSING(SStodchange, S)
-    
-    START_PROCESSING(SSprocessing, src)
+	. = ..()
+	is_active = TRUE
+	
+	// Keep sunlight bright
+	for(var/obj/effect/sunlight/S in GLOB.sunlights)
+		S.light_power = 1
+		S.light_color = pick("#dbbfbf", "#ddd7bd", "#add1b0", "#a4c0ca", "#ae9dc6", "#d09fbf")
+		S.set_light(S.brightness)
+		STOP_PROCESSING(SStodchange, S)
+	
+	START_PROCESSING(SSprocessing, src)
 
 /datum/round_event/roundstart/eternal_day/process()
-    if(!is_active)
-        STOP_PROCESSING(SSprocessing, src)
-        return
+	if(!is_active)
+		STOP_PROCESSING(SSprocessing, src)
+		return
 
-    // Continuously ensure lights stay bright
-    for(var/obj/effect/sunlight/S in GLOB.sunlights)
-        if(S.light_power != 1 || S.light_color in list("#100a18", "#0c0412", "#0f0012", "#c26f56", "#c05271", "#b84933", "#394579", "#49385d", "#3a1537"))
-            S.light_power = 1
-            S.light_color = pick("#dbbfbf", "#ddd7bd", "#add1b0", "#a4c0ca", "#ae9dc6", "#d09fbf")
-            S.set_light(S.brightness)
-            STOP_PROCESSING(SStodchange, S)
+	// Continuously ensure lights stay bright
+	for(var/obj/effect/sunlight/S in GLOB.sunlights)
+		if(S.light_power != 1 || S.light_color in list("#100a18", "#0c0412", "#0f0012", "#c26f56", "#c05271", "#b84933", "#394579", "#49385d", "#3a1537"))
+			S.light_power = 1
+			S.light_color = pick("#dbbfbf", "#ddd7bd", "#add1b0", "#a4c0ca", "#ae9dc6", "#d09fbf")
+			S.set_light(S.brightness)
+			STOP_PROCESSING(SStodchange, S)
 
 /datum/round_event_control/roundstart/eternal_day
-    name = "Eternal Day"
-    typepath = /datum/round_event/roundstart/eternal_day
-    weight = 5
-    event_announcement = "The sun refuses to set..."
-    runnable = TRUE
+	name = "Eternal Day"
+	typepath = /datum/round_event/roundstart/eternal_day
+	weight = 5
+	event_announcement = "The sun refuses to set..."
+	runnable = TRUE
 
 // Admin verb for managing roundstart events
 /client/proc/force_roundstart_event()
@@ -537,65 +616,6 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 				GLOB.roundstart_event_name = selected_event.name
 
 
-// Matriarchy event
-/datum/round_event/roundstart/matriarchy
-
-/datum/round_event/roundstart/matriarchy/apply_effect()
-    . = ..()
-    is_active = TRUE
-    
-    var/mob/living/carbon/human/baron
-    var/mob/living/carbon/human/consort
-    
-    // Find the Baron and Consort
-    for(var/mob/living/carbon/human/H in GLOB.alive_mob_list)
-        if(H.mind?.assigned_role == "Baron" || H.mind?.assigned_role == "Baroness")
-            baron = H
-        else if(H.mind?.assigned_role == "Consort")
-            consort = H
-    
-    if(!baron || !consort)
-        return
-    
-    // Store their locations
-    var/turf/baron_loc = get_turf(baron)
-    var/turf/consort_loc = get_turf(consort)
-    
-    // Swap their positions
-    baron.forceMove(consort_loc)
-    consort.forceMove(baron_loc)
-    
-    // Update Consort's title
-    consort.job = "Consort-Regnant"
-    
-    // Transfer crown
-    var/obj/item/clothing/head/crown = baron.get_item_by_slot(SLOT_HEAD)
-    if(istype(crown, /obj/item/clothing/head/roguetown/crown/serpcrown))
-        baron.dropItemToGround(crown)
-        if(consort.head)
-            qdel(consort.head)
-        consort.equip_to_slot_or_del(crown, SLOT_HEAD)
-    
-    // Transfer cloak
-    var/obj/item/clothing/cloak = baron.get_item_by_slot(SLOT_CLOAK)
-    if(istype(cloak, /obj/item/clothing/cloak/lordcloak))
-        baron.dropItemToGround(cloak)
-        if(consort.cloak)
-            qdel(consort.cloak)
-        consort.equip_to_slot_or_del(cloak, SLOT_CLOAK)
-    
-    // Transfer scepter
-    var/obj/item/scepter = baron.get_item_by_slot(SLOT_HANDS)
-    if(istype(scepter, /obj/item/rogueweapon/lordscepter))
-        baron.dropItemToGround(scepter)
-        consort.put_in_hands(scepter)
-
-/datum/round_event_control/roundstart/matriarchy
-    name = "Regnant"
-    typepath = /datum/round_event/roundstart/matriarchy
-    weight = 5
-    event_announcement = "The crown passes to the Consort in a rare recognizance of ancient law..."
-    runnable = TRUE
 
 
 

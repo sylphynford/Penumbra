@@ -89,3 +89,12 @@
 	accept_message = "FOR THE CROWN!"
 	refuse_message = "I refuse."
 	charge_max = 100
+
+
+/datum/job/roguetown/consort_regnant
+	title = "Consort-Regnant"
+	flag = LADY
+	department_flag = NOBLEMEN
+	faction = "Station"
+	total_positions = 0
+	spawn_positions = 0

@@ -60,7 +60,7 @@
 	if(ishuman(user))
 		var/mob/living/carbon/human/HU = user
 
-		if((HU.job != "Baron") && (HU.job != "Consort"))
+		if((HU.job != "Baron") && (HU.job != "Consort") && (HU.job != "Consort-Regnant"))
 			to_chat(user, span_danger("The rod doesn't obey me."))
 			return
 

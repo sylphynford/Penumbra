@@ -109,8 +109,8 @@
 	lockid = "vault"
 
 /obj/item/roguekey/sheriff
-	name = "Knight Banneret's key"
-	desc = "This key belongs to the captain of the guard."
+	name = "knight banneret's key"
+	desc = "This key belongs to the knight banneret."
 	icon_state = "cheesekey"
 	lockid = "sheriff"
 
