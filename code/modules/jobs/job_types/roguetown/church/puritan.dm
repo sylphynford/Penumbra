@@ -15,6 +15,7 @@
 	outfit = /datum/outfit/job/roguetown/puritan
 	display_order = JDO_PURITAN
 	give_bank_account = 36
+	max_pq = null
 	min_pq = 0
 	round_contrib_points = 2
 
