@@ -19,6 +19,92 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 	return runnable
 
 
+//Militia event
+
+/datum/component/militia_blessing
+    var/applied = TRUE
+
+/datum/component/militia_blessing/Initialize()
+    . = ..()
+    if(!ismob(parent))
+        return COMPONENT_INCOMPATIBLE
+
+// Then the rest of your existing event code
+/datum/round_event/roundstart/militia
+    var/static/list/combat_skills = list(
+        /datum/skill/combat/knives,
+        /datum/skill/combat/swords,
+        /datum/skill/combat/polearms,
+        /datum/skill/combat/maces,
+        /datum/skill/combat/axes,
+        /datum/skill/combat/whipsflails,
+        /datum/skill/combat/bows,
+        /datum/skill/combat/crossbows,
+        /datum/skill/combat/wrestling,
+        /datum/skill/combat/unarmed,
+        /datum/skill/combat/shields
+    )
+
+    var/static/list/basic_weapons = list(
+        /obj/item/rogueweapon/sword/short,
+        /obj/item/rogueweapon/mace/cudgel,
+        /obj/item/rogueweapon/spear,
+        /obj/item/rogueweapon/stoneaxe/woodcut/steel
+    )
+
+/datum/round_event/roundstart/militia/apply_effect()
+    . = ..()
+    is_active = TRUE
+    bless_existing_players()
+    START_PROCESSING(SSprocessing, src)
+
+/datum/round_event/roundstart/militia/process()
+    if(!is_active)
+        STOP_PROCESSING(SSprocessing, src)
+        return
+    
+    for(var/mob/living/carbon/human/H in GLOB.alive_mob_list)
+        if(!H.mind?.key || H.GetComponent(/datum/component/militia_blessing))
+            continue
+        apply_blessing(H)
+
+/datum/round_event/roundstart/militia/proc/bless_existing_players()
+    for(var/mob/living/carbon/human/H in GLOB.alive_mob_list)
+        apply_blessing(H)
+
+/datum/round_event/roundstart/militia/proc/apply_blessing(mob/living/carbon/human/H)
+    if(!H || !H.mind || !H.job)
+        return FALSE
+    
+    var/datum/job/J = SSjob.GetJob(H.job)
+    if(!J || !(J.department_flag & PEASANTS))
+        return FALSE
+
+    // Increase combat skills
+    for(var/skill_type in combat_skills)
+        H.mind.adjust_skillrank(skill_type, 2, TRUE)
+
+    // Increase stats
+    H.change_stat("strength", 1)
+    H.change_stat("endurance", 1)
+    H.change_stat("constitution", 1)
+    
+    // Give random basic weapon
+    var/weapon_type = pick(basic_weapons)
+    var/obj/item/weapon = new weapon_type(get_turf(H))
+    H.put_in_hands(weapon)
+    
+    // Add militia blessing component
+    H.AddComponent(/datum/component/militia_blessing)
+
+/datum/round_event_control/roundstart/militia
+	name = "Militia"
+	typepath = /datum/round_event/roundstart/militia
+	weight = 5
+	event_announcement = "The common folk have been drilled ruthlessly by the Baron into an organized militia.."
+	runnable = TRUE
+
+
 // Funky Water event
 /datum/round_event/roundstart/funky_water/apply_effect()
 	. = ..()
@@ -201,7 +287,7 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 /datum/round_event_control/roundstart/female_transformation
 	name = "Sisterhood"
 	typepath = /datum/round_event/roundstart/female_transformation
-	weight = 1
+	weight = 0
 	event_announcement = "Some sort of curse has turned all the men into women.."
 	runnable = TRUE
 
