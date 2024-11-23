@@ -155,10 +155,6 @@
 			H.adjust_hydration(hydration)
 		if(M.blood_volume < BLOOD_VOLUME_NORMAL)
 			M.blood_volume = min(M.blood_volume+10, BLOOD_VOLUME_NORMAL)
-		
-		// Funky Water Event: Increase arousal by 1 per unit of water ingested
-		if(H.sexcon)
-			H.sexcon.adjust_arousal(hydration)
 	..()
 
 /datum/reagent/water/gross

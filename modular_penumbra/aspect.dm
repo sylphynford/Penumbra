@@ -214,7 +214,14 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 
 	for(var/mob/living/carbon/human/H in GLOB.alive_mob_list)
 		if(H.client && H.sexcon)
-			H.sexcon.arousal += 0.1  // Small constant increase over time
+			// Check if they have water in their system
+			if(H.reagents && H.reagents.has_reagent(/datum/reagent/water))
+				H.sexcon.set_arousal(H.sexcon.arousal + 0.5)
+				
+				// Check for orgasm conditions
+				if(H.sexcon.arousal >= 100 && H.sexcon.can_ejaculate())
+					H.sexcon.ejaculate()
+					H.sexcon.set_arousal(0)
 
 /datum/round_event_control/roundstart/funky_water
 	name = "Funky Water"
