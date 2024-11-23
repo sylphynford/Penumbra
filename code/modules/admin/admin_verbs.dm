@@ -168,6 +168,7 @@ GLOBAL_PROTECT(admin_verbs_debug)
 	return list(
 	/client/proc/restart_controller,
 	/client/proc/cmd_admin_list_open_jobs,
+	/client/proc/set_time_of_day,
 	/client/proc/Debug2,
 	/client/proc/cmd_debug_make_powernets,
 	/client/proc/cmd_debug_mob_lists,
@@ -860,3 +861,30 @@ GLOBAL_PROTECT(admin_verbs_hideable)
 		message_admins("[src] has amended [book_title]'s [amend_type] to [amend_text]")
 	else
 		to_chat(src, span_notice("Either the book file doesn't exist or you have failed to type something in properly (you can look up the file name by the verb 'database book file names'"))
+
+/client/proc/set_time_of_day()
+	set category = "Debug"
+	set name = "Set Time of Day"
+	set desc = "Manually sets the time of day and updates lighting"
+
+	if(!check_rights(R_DEBUG))
+		return
+
+	var/list/times = list("day", "night", "dawn", "dusk")
+	var/choice = input("Choose time of day:", "Set Time") as null|anything in times
+	
+	if(!choice)
+		return
+
+	GLOB.todoverride = choice
+	GLOB.tod = choice
+	
+	message_admins("[key_name_admin(usr)] set time of day to [choice]")
+	log_admin("[key_name(usr)] set time of day to [choice]")
+	
+	// Force update lighting and time displays
+	for(var/obj/effect/sunlight/L in GLOB.sunlights)
+		L.update()
+	
+	for(var/mob/living/M in GLOB.mob_list)
+		M.do_time_change()

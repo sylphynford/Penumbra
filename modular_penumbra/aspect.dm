@@ -31,18 +31,11 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 
 // Then the rest of your existing event code
 /datum/round_event/roundstart/militia
-    var/static/list/combat_skills = list(
-        /datum/skill/combat/knives,
-        /datum/skill/combat/swords,
-        /datum/skill/combat/polearms,
-        /datum/skill/combat/maces,
-        /datum/skill/combat/axes,
-        /datum/skill/combat/whipsflails,
-        /datum/skill/combat/bows,
-        /datum/skill/combat/crossbows,
-        /datum/skill/combat/wrestling,
-        /datum/skill/combat/unarmed,
-        /datum/skill/combat/shields
+    var/static/list/weapon_skills = list(
+        /obj/item/rogueweapon/sword/short = /datum/skill/combat/swords,
+        /obj/item/rogueweapon/mace/cudgel = /datum/skill/combat/maces,
+        /obj/item/rogueweapon/spear = /datum/skill/combat/polearms,
+        /obj/item/rogueweapon/stoneaxe/woodcut/steel = /datum/skill/combat/axes
     )
 
     var/static/list/basic_weapons = list(
@@ -80,19 +73,24 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
     if(!J || !(J.department_flag & PEASANTS))
         return FALSE
 
-    // Increase combat skills
-    for(var/skill_type in combat_skills)
+    // Give random basic weapon and increase its related skill
+    var/weapon_type = pick(basic_weapons)
+    var/obj/item/weapon = new weapon_type(get_turf(H))
+    H.put_in_hands(weapon)
+    
+    // Increase the specific weapon skill
+    var/skill_type = weapon_skills[weapon_type]
+    if(skill_type)
         H.mind.adjust_skillrank(skill_type, 2, TRUE)
+    
+    // Always increase these basic combat skills
+    H.mind.adjust_skillrank(/datum/skill/combat/wrestling, 1, TRUE)
+    H.mind.adjust_skillrank(/datum/skill/combat/unarmed, 1, TRUE)
 
     // Increase stats
     H.change_stat("strength", 1)
     H.change_stat("endurance", 1)
     H.change_stat("constitution", 1)
-    
-    // Give random basic weapon
-    var/weapon_type = pick(basic_weapons)
-    var/obj/item/weapon = new weapon_type(get_turf(H))
-    H.put_in_hands(weapon)
     
     // Add militia blessing component
     H.AddComponent(/datum/component/militia_blessing)
@@ -411,6 +409,42 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 	weight = 5
 	event_announcement = "The throne crackles with newfound power..."
 	runnable = TRUE
+
+// Eternal Day event
+/datum/round_event/roundstart/eternal_day
+
+/datum/round_event/roundstart/eternal_day/apply_effect()
+    . = ..()
+    is_active = TRUE
+    
+    // Keep sunlight bright
+    for(var/obj/effect/sunlight/S in GLOB.sunlights)
+        S.light_power = 1
+        S.light_color = pick("#dbbfbf", "#ddd7bd", "#add1b0", "#a4c0ca", "#ae9dc6", "#d09fbf")
+        S.set_light(S.brightness)
+        STOP_PROCESSING(SStodchange, S)
+    
+    START_PROCESSING(SSprocessing, src)
+
+/datum/round_event/roundstart/eternal_day/process()
+    if(!is_active)
+        STOP_PROCESSING(SSprocessing, src)
+        return
+
+    // Continuously ensure lights stay bright
+    for(var/obj/effect/sunlight/S in GLOB.sunlights)
+        if(S.light_power != 1 || S.light_color in list("#100a18", "#0c0412", "#0f0012", "#c26f56", "#c05271", "#b84933", "#394579", "#49385d", "#3a1537"))
+            S.light_power = 1
+            S.light_color = pick("#dbbfbf", "#ddd7bd", "#add1b0", "#a4c0ca", "#ae9dc6", "#d09fbf")
+            S.set_light(S.brightness)
+            STOP_PROCESSING(SStodchange, S)
+
+/datum/round_event_control/roundstart/eternal_day
+    name = "Eternal Day"
+    typepath = /datum/round_event/roundstart/eternal_day
+    weight = 5
+    event_announcement = "The sun refuses to set..."
+    runnable = TRUE
 
 // Admin verb for managing roundstart events
 /client/proc/force_roundstart_event()
