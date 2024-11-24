@@ -55,22 +55,15 @@ SUBSYSTEM_DEF(migrants)
 	var/datum/migrant_wave/wave = MIGRANT_WAVE(current_wave)
 	var/total_roles = wave.get_roles_amount()
 	
-	// If we have no more roles or failed due to no players, handle completion
-	if(total_roles <= 0 || !success)
-		if(success)
-			wave_number++
+	// If we have no more roles, handle completion
+	if(total_roles <= 0)
+		wave_number++
 		set_current_wave(null, 0)
-		if(success)
-			time_until_next_wave = time_between_waves
-		else
-			if(wave.downgrade_wave)
-				set_current_wave(wave.downgrade_wave, wave_wait_time)
-			else
-				time_until_next_wave = time_between_fail_wave
+		time_until_next_wave = time_between_waves
 	else
 		// Keep the wave going for remaining roles
 		wave_timer = time_between_fail_wave
-		// Don't reset role_assignments here so we maintain tracking of filled roles
+		role_assignments.Cut() // Reset role assignments for next attempt
 		update_ui() // Update UI to show remaining available roles
 
 /datum/controller/subsystem/migrants/proc/try_spawn_wave()
@@ -103,7 +96,7 @@ SUBSYSTEM_DEF(migrants)
 		if(!length(priority))
 			continue
 
-		// Only pick one player per role type if multiple want it
+		// Track assignments per role type
 		if(!role_assignments[assignment.role_type])
 			role_assignments[assignment.role_type] = list()
 			
@@ -124,6 +117,13 @@ SUBSYSTEM_DEF(migrants)
 		assignment.client = picked
 		picked_migrants += picked
 		role_assignments[assignment.role_type] += picked
+		
+		// Only remove other players from queue if all slots for this role are now filled
+		var/remaining_slots = wave.roles[assignment.role_type] - length(role_assignments[assignment.role_type])
+		if(remaining_slots <= 0)
+			for(var/client/client as anything in active_migrants)
+				if(assignment.role_type in client.prefs.migrant.role_preferences)
+					active_migrants -= client
 
 	// Second pass - fill remaining slots with any available migrants
 	for(var/datum/migrant_assignment/assignment as anything in assignments)
