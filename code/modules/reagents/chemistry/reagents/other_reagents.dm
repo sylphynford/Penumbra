@@ -151,6 +151,7 @@
 /datum/reagent/water/on_mob_life(mob/living/carbon/M)
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
+		SEND_SIGNAL(SSdcs, COMSIG_REAGENT_WATER_CONSUMED, M, metabolization_rate)
 		if(!HAS_TRAIT(H, TRAIT_NOHUNGER))
 			H.adjust_hydration(hydration)
 		if(M.blood_volume < BLOOD_VOLUME_NORMAL)

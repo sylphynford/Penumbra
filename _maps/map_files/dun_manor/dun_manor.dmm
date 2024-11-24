@@ -1540,7 +1540,7 @@
 "kaC" = (/turf/open/floor/rogue/naturalstone,/area/rogue/indoors/shelter/woods)
 "kbt" = (/obj/structure/table/wood{icon_state = "longtable"; dir = 1},/obj/structure/fluff/millstone{pixel_y = 7},/turf/open/floor/rogue/tile{icon_state = "chess"},/area/rogue/indoors/town/church/chapel)
 "kbK" = (/obj/structure/handcart{dir = 4},/turf/open/floor/rogue/blocks,/area/rogue/under/town/basement)
-"kcb" = (/turf/open/floor/rogue/tile{icon_state = "glyph3"},/area/rogue/indoors/town/vault)
+"kcb" = (/obj/item/roguegem/jewel,/turf/open/floor/rogue/tile{icon_state = "glyph3"},/area/rogue/indoors/town/vault)
 "kcj" = (/obj/structure/fluff/statue/knight/interior,/turf/open/floor/rogue/cobble,/area/rogue/under/town/basement)
 "kcM" = (/obj/effect/landmark/observer_start,/turf/open/floor/rogue/cobble,/area/rogue/outdoors/town)
 "kcZ" = (/obj/structure/fluff/railing/border{icon_state = "border"; dir = 10},/turf/open/floor/rogue/blocks/stonered/tiny,/area/rogue/indoors/town/bath)

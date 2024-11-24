@@ -1240,6 +1240,7 @@
 
 /obj/item/clothing/gloves/roguetown/plate/blk
 	name = "darkened steel gauntlets"
+	color = "#414143"
 	icon_state = "bkgloves"
 	icon = 'icons/roguetown/clothing/special/blkknight.dmi'
 	mob_overlay_icon = 'icons/roguetown/clothing/special/onmob/blkknight.dmi'

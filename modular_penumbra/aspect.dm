@@ -1,6 +1,7 @@
 #define COMSIG_GLOB_ROUND_END "!glob_round_end"
 
 GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_events, new)
+
 // Base types
 /datum/round_event_control/roundstart
 	var/runnable = TRUE
@@ -18,6 +19,80 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 	if(!(SSticker.current_state in list(GAME_STATE_PREGAME, GAME_STATE_SETTING_UP, GAME_STATE_PLAYING)))
 		return FALSE
 	return runnable
+
+
+//throne room meeting event
+/datum/round_event/roundstart/throne_meeting
+    var/min_distance = 3
+    var/max_distance = 9
+    var/static/list/valid_jobs = list(
+        "Servant", "Squire", "Town Guard", "Dungeoneer", "Priest", 
+        "Inquisitor", "Templar", "Acolyte", "Churchling", "Merchant",
+        "Shophand", "Town Elder", "Blacksmith", "Smithy Apprentice",
+        "Artificer", "Soilson", "Tailor", "Innkeeper", "Cook",
+        "Bathmaster", "Taven Knave", "Bath Swain", "Towner", "Vagabond"
+    )
+
+/datum/round_event/roundstart/throne_meeting/apply_effect()
+    . = ..()
+    is_active = TRUE
+    
+    var/obj/structure/roguethrone/throne = locate(/obj/structure/roguethrone) in world
+    if(!throne)
+        message_admins("Throne Meeting event failed: No throne found")
+        return
+        
+    // Get all valid spawn points around the throne
+    var/list/valid_turfs = list()
+    var/turf/throne_turf = get_turf(throne)
+    
+    for(var/turf/T in range(max_distance, throne_turf))
+        // Skip if not the right type of floor
+        if(!istype(T, /turf/open/floor/rogue/tile/masonic/single) && !istype(T, /turf/open/floor/rogue/carpet))
+            continue
+            
+        // Skip if blocked
+        if(T.density)
+            continue
+            
+        // Check for dense objects
+        var/blocked = FALSE
+        for(var/atom/A in T)
+            if(A.density)
+                blocked = TRUE
+                break
+        if(blocked)
+            continue
+            
+        // Check distance
+        var/distance = get_dist(T, throne_turf)
+        if(distance >= min_distance && distance <= max_distance)
+            valid_turfs += T
+                
+    if(!length(valid_turfs))
+        message_admins("Throne Meeting event failed: No valid turfs found")
+        return
+        
+    // Teleport valid job holders
+    var/teleported_count = 0
+    for(var/mob/living/carbon/human/H in GLOB.alive_mob_list)
+        if(!H.mind?.assigned_role || !(H.mind.assigned_role in valid_jobs))
+            continue
+            
+        if(length(valid_turfs))
+            var/turf/scatter_loc = pick(valid_turfs)
+            H.forceMove(scatter_loc)
+            valid_turfs -= scatter_loc
+            teleported_count++
+    
+    message_admins("Throne Meeting event: Teleported [teleported_count] players")
+
+/datum/round_event_control/roundstart/throne_meeting
+    name = "Throne Meeting"
+    typepath = /datum/round_event/roundstart/throne_meeting
+    weight = 5
+    event_announcement = "There is an important meeting in the throne room..."
+    runnable = TRUE
 
 //Blackguards event
 
@@ -225,19 +300,21 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 	chosen_guard.mind.add_antag_datum(traitor_datum)
 	
 	// Add traitor objective
-	var/datum/objective/assassinate/kill_objective = new
 	if(consort && !consort.stat == DEAD)
+		var/datum/objective/assassinate/kill_objective = new
 		kill_objective.owner = chosen_guard.mind
 		kill_objective.target = consort.mind
 		kill_objective.explanation_text = "Assassinate [consort.real_name], the Consort."
+		traitor_datum.objectives += kill_objective
 	else
-		kill_objective.owner = chosen_guard.mind
-		kill_objective.explanation_text = "Steal the Baron's Crown Jewels from the treasury."
-	
-	traitor_datum.objectives += kill_objective
+		var/datum/objective/steal/steal_objective = new
+		steal_objective.owner = chosen_guard.mind
+		steal_objective.steal_target = /obj/item/roguegem/jewel
+		steal_objective.explanation_text = "Steal the Baron's Crown Jewel from the treasury."
+		traitor_datum.objectives += steal_objective
 	
 	// Notify the guard of their objective
-	to_chat(chosen_guard, "<B>Objective:</B> [kill_objective.explanation_text]")
+	to_chat(chosen_guard, "<B>Objective:</B> [traitor_datum.objectives[1].explanation_text]")
 
 /datum/round_event/roundstart/guard_rumors/proc/check_completion()
 	if(!chosen_guard || !chosen_guard.mind)
@@ -249,7 +326,12 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 		
 	var/traitorwin = TRUE
 	for(var/datum/objective/objective in traitor_datum.objectives)
-		if(!objective.check_completion())
+		if(istype(objective, /datum/objective/steal))
+			var/datum/objective/steal/steal_objective = objective
+			if(!steal_objective.check_completion())
+				traitorwin = FALSE
+				break
+		else if(!objective.check_completion())
 			traitorwin = FALSE
 			break
 	
@@ -377,7 +459,6 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 	if(!ismob(parent))
 		return COMPONENT_INCOMPATIBLE
 
-// Then the rest of your existing event code
 /datum/round_event/roundstart/militia
 	var/static/list/weapon_skills = list(
 		/obj/item/rogueweapon/sword/short = /datum/skill/combat/swords,
@@ -469,23 +550,18 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 /datum/round_event/roundstart/funky_water/apply_effect()
 	. = ..()
 	is_active = TRUE
-	START_PROCESSING(SSprocessing, src)
+	RegisterSignal(SSdcs, COMSIG_REAGENT_WATER_CONSUMED, PROC_REF(on_water_consumed))
 
-/datum/round_event/roundstart/funky_water/process()
-	if(!is_active)
-		STOP_PROCESSING(SSprocessing, src)
+/datum/round_event/roundstart/funky_water/proc/on_water_consumed(datum/source, mob/living/carbon/human/H, amount)
+	SIGNAL_HANDLER
+	
+	if(!is_active || !H?.client || !H.sexcon)
 		return
-
-	for(var/mob/living/carbon/human/H in GLOB.alive_mob_list)
-		if(H.client && H.sexcon)
-			// Check if they have water in their system
-			if(H.reagents && H.reagents.has_reagent(/datum/reagent/water))
-				H.sexcon.set_arousal(H.sexcon.arousal + 0.5)
-				
-				// Check for orgasm conditions
-				if(H.sexcon.arousal >= 100 && H.sexcon.can_ejaculate())
-					H.sexcon.ejaculate()
-					H.sexcon.set_arousal(0)
+		
+	H.sexcon.set_arousal(H.sexcon.arousal + 0.5)
+	if(H.sexcon.arousal >= 100 && H.sexcon.can_ejaculate())
+		H.sexcon.ejaculate()
+		H.sexcon.set_arousal(0)
 
 /datum/round_event_control/roundstart/funky_water
 	name = "Funky Water"

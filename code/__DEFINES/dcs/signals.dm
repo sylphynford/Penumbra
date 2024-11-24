@@ -8,3 +8,4 @@
 ///Called when the movable tries to toggle its dynamic light LIGHTING_ON status, from base atom/movable/lighting_overlay_toggle_on(): (new_state)
 #define COMSIG_MOVABLE_LIGHT_OVERLAY_TOGGLE_ON "movable_light_overlay_toggle_on"
 
+#define COMSIG_REAGENT_WATER_CONSUMED "!reagent_water_consumed"
