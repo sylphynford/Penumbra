@@ -7,11 +7,12 @@ SUBSYSTEM_DEF(migrants)
 	var/time_until_next_wave = 10 SECONDS
 	var/wave_timer = 0
 
-	var/time_between_waves = 3 MINUTES
+	var/time_between_waves = 10 SECONDS
 	var/time_between_fail_wave = 90 SECONDS
 	var/wave_wait_time = 30 SECONDS
 
 	var/list/spawned_waves = list()
+	var/list/role_assignments = list() // Track assignments per role type
 
 
 /datum/controller/subsystem/migrants/Initialize()
@@ -39,39 +40,55 @@ SUBSYSTEM_DEF(migrants)
 	var/success = try_spawn_wave()
 	if(success)
 		log_game("Migrants: Successfully spawned wave: [current_wave]")
+		// Update available roles by removing filled ones
+		var/datum/migrant_wave/wave = MIGRANT_WAVE(current_wave)
+		for(var/role_type in role_assignments)
+			var/filled_amount = length(role_assignments[role_type])
+			if(filled_amount > 0)
+				wave.roles[role_type] -= filled_amount
+				if(wave.roles[role_type] <= 0)
+					wave.roles -= role_type
 	else
 		log_game("Migrants: FAILED to spawn wave: [current_wave]")
-	// Unset some values, increment wave number if success
-	if(success)
-		wave_number++
+
+	// Check if we need to keep the wave going for unfilled roles
 	var/datum/migrant_wave/wave = MIGRANT_WAVE(current_wave)
-	set_current_wave(null, 0)
-	if(success)
-		time_until_next_wave = time_between_waves
-	else
-		if(wave.downgrade_wave)
-			set_current_wave(wave.downgrade_wave, wave_wait_time)
+	var/total_roles = wave.get_roles_amount()
+	
+	// If we have no more roles or failed due to no players, handle completion
+	if(total_roles <= 0 || !success)
+		if(success)
+			wave_number++
+		set_current_wave(null, 0)
+		if(success)
+			time_until_next_wave = time_between_waves
 		else
-			time_until_next_wave = time_between_fail_wave
+			if(wave.downgrade_wave)
+				set_current_wave(wave.downgrade_wave, wave_wait_time)
+			else
+				time_until_next_wave = time_between_fail_wave
+	else
+		// Keep the wave going for remaining roles
+		wave_timer = time_between_fail_wave
+		// Don't reset role_assignments here so we maintain tracking of filled roles
+		update_ui() // Update UI to show remaining available roles
 
 /datum/controller/subsystem/migrants/proc/try_spawn_wave()
 	var/datum/migrant_wave/wave = MIGRANT_WAVE(current_wave)
 	/// Create initial assignment list
 	var/list/assignments = list()
-	/// Populate it
+	/// Populate it with only available roles
 	for(var/role_type in wave.roles)
 		var/amount = wave.roles[role_type]
 		for(var/i in 1 to amount)
 			assignments += new /datum/migrant_assignment(role_type)
-	/// Shuffle assignments so role rolling is not consistent
+	/// Shuffle assignments so role rolling is not consistent  
 	assignments = shuffle(assignments)
 
 	var/list/active_migrants = get_active_migrants()
 	active_migrants = shuffle(active_migrants)
 
 	var/list/picked_migrants = list()
-	var/list/role_assignments = list() // Track assignments per role type
-
 	if(!length(active_migrants))
 		return FALSE
 
