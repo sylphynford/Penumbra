@@ -202,7 +202,7 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/rp_prompt.txt"))
 #else*/
 
 
-		var/timetojoin = 5 MINUTES
+		var/timetojoin = 15 MINUTES
 #ifdef ALLOWPLAY
 		timetojoin = 1 SECONDS
 #endif
@@ -215,7 +215,7 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/rp_prompt.txt"))
 				timetojoin = 0
 		if(SSticker.round_start_time)
 			if(world.time < SSticker.round_start_time + timetojoin)
-				var/ttime = round((SSticker.round_start_time + timetojoin - world.time) / 10)
+				var/ttime = DisplayTimeText(SSticker.round_start_time + timetojoin - world.time)
 				var/list/choicez = list("Not yet.", "You cannot join yet.", "It won't work yet.", "Please be patient.", "Try again later.", "Late-joining is not yet possible.")
 				to_chat(usr, span_warning("[pick(choicez)] ([ttime])."))
 				return

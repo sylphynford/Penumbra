@@ -5,7 +5,7 @@
 
 #define MATURESERVER
 //#define TESTSERVER
-#define ALLOWPLAY
+//#define ALLOWPLAY
 
 #define RESPAWNTIME (15 MINUTES)
 //0 test
