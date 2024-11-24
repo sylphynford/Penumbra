@@ -1,5 +1,6 @@
-GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_events, new)
+#define COMSIG_GLOB_ROUND_END "!glob_round_end"
 
+GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_events, new)
 // Base types
 /datum/round_event_control/roundstart
 	var/runnable = TRUE
@@ -17,6 +18,255 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 	if(!(SSticker.current_state in list(GAME_STATE_PREGAME, GAME_STATE_SETTING_UP, GAME_STATE_PLAYING)))
 		return FALSE
 	return runnable
+
+//Blackguards event
+
+/datum/antagonist/blackguard
+	name = "Blackguard"
+	roundend_category = "blackguards"
+	antagpanel_category = "Blackguard"
+	antag_moodlet = /datum/mood_event/focused
+	show_in_roundend = TRUE
+	
+	/datum/antagonist/blackguard/on_gain()
+		. = ..()
+		if(owner && owner.current)
+			to_chat(owner.current, "<span class='warning'><B>You are a Blackguard mercenary. Your loyalties lie with coin rather than honor.</B></span>")
+			
+			if(ishuman(owner.current))
+				var/mob/living/carbon/human/H = owner.current
+				
+				// Remove honorary title (Ser/Dame)
+				var/new_name = H.real_name
+				new_name = replacetext(new_name, "Ser ", "")
+				new_name = replacetext(new_name, "Dame ", "")
+				H.real_name = new_name
+				H.name = new_name
+				
+				// Update job titles
+				if(H.mind.assigned_role == "Knight Lieutenant")
+					H.mind.assigned_role = "Blackguard Lieutenant"
+					H.job = "Blackguard Lieutenant"
+				else if(H.mind.assigned_role == "Knight Banneret")
+					H.mind.assigned_role = "Blackguard Banneret"
+					H.job = "Blackguard Banneret"
+				
+				// Cancel adventurer setup
+				H.advsetup = FALSE
+				H.invisibility = 0
+				var/atom/movable/screen/advsetup/GET_IT_OUT = locate() in H.hud_used.static_inventory
+				qdel(GET_IT_OUT)
+				H.cure_blind("advsetup")
+				
+				// Only apply skills and stats to Lieutenants
+				if(H.mind.assigned_role == "Blackguard Lieutenant")
+					H.mind.adjust_skillrank(/datum/skill/combat/polearms, 3, TRUE)
+					H.mind.adjust_skillrank(/datum/skill/combat/swords, 4, TRUE)
+					H.mind.adjust_skillrank(/datum/skill/combat/shields, 4, TRUE)
+					H.mind.adjust_skillrank(/datum/skill/combat/maces, 4, TRUE)
+					H.mind.adjust_skillrank(/datum/skill/combat/wrestling, 3, TRUE)
+					H.mind.adjust_skillrank(/datum/skill/combat/unarmed, 3, TRUE)
+					H.mind.adjust_skillrank(/datum/skill/misc/athletics, 4, TRUE)
+					H.mind.adjust_skillrank(/datum/skill/misc/swimming, 1, TRUE)
+					H.mind.adjust_skillrank(/datum/skill/misc/climbing, 3, TRUE)
+					H.mind.adjust_skillrank(/datum/skill/misc/reading, 3, TRUE)
+					H.mind.adjust_skillrank(/datum/skill/misc/riding, 4, TRUE)
+					
+					H.change_stat("strength", 3)
+					H.change_stat("endurance", 2)
+					H.change_stat("constitution", 3)
+					H.change_stat("intelligence", 1)
+					H.change_stat("speed", 1)
+				
+				H.dna.species.soundpack_m = new /datum/voicepack/male/knight()
+				
+				// Equipment handling
+				if(H.head) qdel(H.head)
+				if(H.wear_neck) qdel(H.wear_neck)
+				if(H.wear_armor) qdel(H.wear_armor)
+				if(H.wear_shirt) qdel(H.wear_shirt)
+				if(H.wear_pants) qdel(H.wear_pants)
+				if(H.gloves) qdel(H.gloves)
+				if(H.wear_wrists) qdel(H.wear_wrists)
+				if(H.shoes) qdel(H.shoes)
+				if(H.cloak) qdel(H.cloak)
+				if(H.backl) qdel(H.backl)
+				
+				// Equipment based on role
+				if(H.mind.assigned_role == "Blackguard Lieutenant")
+					// Lieutenant equipment
+					H.equip_to_slot_or_del(new /obj/item/clothing/head/roguetown/helmet/heavy/knight/black(H), SLOT_HEAD)
+					H.equip_to_slot_or_del(new /obj/item/clothing/neck/roguetown/chaincoif(H), SLOT_NECK)
+					H.equip_to_slot_or_del(new /obj/item/clothing/suit/roguetown/armor/plate/blkknight/death(H), SLOT_ARMOR)
+					H.equip_to_slot_or_del(new /obj/item/clothing/suit/roguetown/armor/chainmail(H), SLOT_SHIRT)
+					H.equip_to_slot_or_del(new /obj/item/clothing/under/roguetown/chainlegs/blk(H), SLOT_PANTS)
+					H.equip_to_slot_or_del(new /obj/item/clothing/gloves/roguetown/plate/blk(H), SLOT_GLOVES)
+					H.equip_to_slot_or_del(new /obj/item/clothing/wrists/roguetown/bracers(H), SLOT_WRISTS)
+					H.equip_to_slot_or_del(new /obj/item/clothing/shoes/roguetown/boots/armor/blk(H), SLOT_SHOES)
+					H.equip_to_slot_or_del(new /obj/item/clothing/cloak/tabard/blkknight(H), SLOT_CLOAK)
+					H.equip_to_slot_or_del(new /obj/item/gwstrap(H), SLOT_BACK_L)
+					H.put_in_active_hand(new /obj/item/rogueweapon/greatsword/zwei)
+					// Lieutenant-specific traits
+					ADD_TRAIT(H, TRAIT_HEAVYARMOR, TRAIT_GENERIC)
+					ADD_TRAIT(H, TRAIT_STEELHEARTED, TRAIT_GENERIC)
+					ADD_TRAIT(H, TRAIT_GUARDSMAN, TRAIT_GENERIC)
+				else if(H.mind.assigned_role == "Blackguard Banneret")
+					// Banneret equipment - lighter armor variant
+					H.equip_to_slot_or_del(new /obj/item/clothing/head/roguetown/helmet/blacksteel/bucket(H), SLOT_HEAD)
+					H.equip_to_slot_or_del(new /obj/item/clothing/neck/roguetown/chaincoif(H), SLOT_NECK)
+					H.equip_to_slot_or_del(new /obj/item/clothing/suit/roguetown/armor/blacksteel/platechest(H), SLOT_ARMOR)
+					H.equip_to_slot_or_del(new /obj/item/clothing/suit/roguetown/armor/chainmail/hauberk(H), SLOT_SHIRT)
+					H.equip_to_slot_or_del(new /obj/item/clothing/under/roguetown/blacksteel/platelegs(H), SLOT_PANTS)
+					H.equip_to_slot_or_del(new /obj/item/clothing/gloves/roguetown/blacksteel/plategloves(H), SLOT_GLOVES)
+					H.equip_to_slot_or_del(new /obj/item/clothing/wrists/roguetown/bracers(H), SLOT_WRISTS)
+					H.equip_to_slot_or_del(new /obj/item/clothing/shoes/roguetown/boots/blacksteel/plateboots(H), SLOT_SHOES)
+					H.equip_to_slot_or_del(new /obj/item/clothing/cloak/cape/blkknight(H), SLOT_CLOAK)
+					H.equip_to_slot_or_del(new /obj/item/rogueweapon/sword/long/blackflamb(H), SLOT_BACK_L)
+
+/datum/round_event/roundstart/blackguards/apply_effect()
+	. = ..()
+	is_active = TRUE
+	convert_existing_knights()
+	RegisterSignal(SSdcs, COMSIG_GLOB_MOB_CREATED, PROC_REF(on_mob_created))
+
+
+/datum/round_event/roundstart/blackguards/proc/convert_existing_knights()
+	for(var/mob/living/carbon/human/H in GLOB.alive_mob_list)
+		if(!H.mind?.assigned_role)
+			continue
+			
+		// Check for original knight roles
+		if(H.mind.assigned_role in list("Knight Lieutenant", "Knight Banneret"))
+			H.mind.add_antag_datum(/datum/antagonist/blackguard)
+
+/datum/round_event/roundstart/blackguards/proc/on_mob_created(datum/source, mob/M)
+	SIGNAL_HANDLER
+	
+	if(!is_active || !istype(M, /mob/living/carbon/human))
+		return
+		
+	var/mob/living/carbon/human/H = M
+	addtimer(CALLBACK(src, .proc/check_and_convert_knight, H), 1 SECONDS)
+
+/datum/round_event/roundstart/blackguards/proc/check_and_convert_knight(mob/living/carbon/human/H)
+	if(!H?.mind?.assigned_role)
+		return
+		
+	if(H.mind.assigned_role in list("Knight Lieutenant", "Knight Banneret"))
+		H.mind.add_antag_datum(/datum/antagonist/blackguard)
+
+/datum/round_event_control/roundstart/blackguards
+	name = "Blackguards"
+	typepath = /datum/round_event/roundstart/blackguards
+	weight = 5
+	event_announcement = "With the Baron's finest knights slain in battle, he has been forced to hire Blackguard mercenaries to lead his forces. They are less loyal, but their skill and cruelty is well proven.."
+	runnable = TRUE
+
+
+//Traitor guard event
+/datum/antagonist/traitor_guard
+	name = "Traitor Guard"
+	roundend_category = "traitor guards"
+	antagpanel_category = "Traitor Guard"
+	job_rank = "Town Guard"
+	antag_moodlet = /datum/mood_event/focused
+	show_in_roundend = TRUE
+	
+	var/triumph_points = 5 // Points awarded for success
+	
+	/datum/antagonist/traitor_guard/on_gain()
+		. = ..()
+		if(owner && owner.current)
+			to_chat(owner.current, "<span class='warning'><B>Enough is enough. You have been offered knighthood by a rival noble family in exchange for betraying the Baron. Prove your loyalty to them by getting revenge on the Baron for their misdeeds..</B></span>")
+			
+	/datum/antagonist/traitor_guard/roundend_report_header()
+		return "<span class='header'>A guard turned traitor...</span><br>"
+		
+	/datum/antagonist/traitor_guard/roundend_report_footer()
+		return "<br>The guard's betrayal will be remembered in the annals of history."
+
+/datum/round_event/roundstart/guard_rumors
+	var/static/list/valid_jobs = list("Town Guard", "Sergeant at Arms")
+	var/mob/living/carbon/human/chosen_guard = null
+	var/mob/living/carbon/human/target = null
+
+/datum/round_event/roundstart/guard_rumors/New()
+	. = ..()
+	RegisterSignal(SSdcs, COMSIG_GLOB_ROUND_END, PROC_REF(check_completion))
+
+/datum/round_event/roundstart/guard_rumors/apply_effect()
+	. = ..()
+	is_active = TRUE
+	
+	// 50% chance for nothing to happen
+	if(prob(50))
+		return
+	
+	var/list/possible_guards = list()
+	var/mob/living/carbon/human/consort = null
+	
+	// Find valid guards and consort
+	for(var/mob/living/carbon/human/H in GLOB.alive_mob_list)
+		if(H.mind?.assigned_role in valid_jobs)
+			possible_guards += H
+		else if(H.mind?.assigned_role == "Consort")
+			consort = H
+	
+	if(!length(possible_guards))
+		return
+	
+	// Pick a random guard
+	chosen_guard = pick(possible_guards)
+	if(!chosen_guard || !chosen_guard.mind)
+		return
+		
+	// Create antag datum for objectives
+	var/datum/antagonist/traitor_guard/traitor_datum = new()
+	chosen_guard.mind.add_antag_datum(traitor_datum)
+	
+	// Add traitor objective
+	var/datum/objective/assassinate/kill_objective = new
+	if(consort && !consort.stat == DEAD)
+		kill_objective.owner = chosen_guard.mind
+		kill_objective.target = consort.mind
+		kill_objective.explanation_text = "Assassinate [consort.real_name], the Consort."
+	else
+		kill_objective.owner = chosen_guard.mind
+		kill_objective.explanation_text = "Steal the Baron's Crown Jewels from the treasury."
+	
+	traitor_datum.objectives += kill_objective
+	
+	// Notify the guard of their objective
+	to_chat(chosen_guard, "<B>Objective:</B> [kill_objective.explanation_text]")
+
+/datum/round_event/roundstart/guard_rumors/proc/check_completion()
+	if(!chosen_guard || !chosen_guard.mind)
+		return
+	
+	var/datum/antagonist/traitor_guard/traitor_datum = chosen_guard.mind.has_antag_datum(/datum/antagonist/traitor_guard)
+	if(!traitor_datum)
+		return
+		
+	var/traitorwin = TRUE
+	for(var/datum/objective/objective in traitor_datum.objectives)
+		if(!objective.check_completion())
+			traitorwin = FALSE
+			break
+	
+	if(traitorwin)
+		chosen_guard.adjust_triumphs(5)
+		to_chat(world, "<span class='greentext'>The Traitor Guard has succeeded in their betrayal!</span>")
+		chosen_guard.playsound_local(get_turf(chosen_guard), 'sound/misc/triumph.ogg', 100, FALSE, pressure_affected = FALSE)
+	else
+		to_chat(world, "<span class='redtext'>The Traitor Guard has failed in their betrayal!</span>")
+		chosen_guard.playsound_local(get_turf(chosen_guard), 'sound/misc/fail.ogg', 100, FALSE, pressure_affected = FALSE)
+
+/datum/round_event_control/roundstart/guard_rumors
+	name = "Guard Rumors"
+	typepath = /datum/round_event/roundstart/guard_rumors
+	weight = 10
+	event_announcement = "Rumors have swirled that one of the guards may be a traitor... Or perhaps it's just a rumor."
+	runnable = TRUE
 
 
 // Matriarchy event
@@ -147,20 +397,22 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 	. = ..()
 	is_active = TRUE
 	bless_existing_players()
-	START_PROCESSING(SSprocessing, src)
+	RegisterSignal(SSdcs, COMSIG_GLOB_MOB_CREATED, PROC_REF(on_mob_created))
 
-/datum/round_event/roundstart/militia/process()
-	if(!is_active)
-		STOP_PROCESSING(SSprocessing, src)
-		return
+/datum/round_event/roundstart/militia/proc/on_mob_created(datum/source, mob/M)
+	SIGNAL_HANDLER
 	
-	for(var/mob/living/carbon/human/H in GLOB.alive_mob_list)
-		if(!H.mind?.key || H.GetComponent(/datum/component/militia_blessing))
-			continue
-		apply_blessing(H)
+	if(!is_active || !istype(M, /mob/living/carbon/human))
+		return
+		
+	var/mob/living/carbon/human/H = M
+	addtimer(CALLBACK(src, .proc/check_and_bless_peasant, H), 1 SECONDS)
 
-/datum/round_event/roundstart/militia/proc/bless_existing_players()
-	for(var/mob/living/carbon/human/H in GLOB.alive_mob_list)
+/datum/round_event/roundstart/militia/proc/check_and_bless_peasant(mob/living/carbon/human/H)
+	if(!H?.mind?.assigned_role)
+		return
+		
+	if(!H.GetComponent(/datum/component/militia_blessing))
 		apply_blessing(H)
 
 /datum/round_event/roundstart/militia/proc/apply_blessing(mob/living/carbon/human/H)
@@ -192,6 +444,18 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 	
 	// Add militia blessing component
 	H.AddComponent(/datum/component/militia_blessing)
+
+/datum/round_event/roundstart/militia/proc/bless_existing_players()
+	for(var/mob/living/carbon/human/H in GLOB.alive_mob_list)
+		if(!H?.mind?.assigned_role)
+			continue
+			
+		var/datum/job/J = SSjob.GetJob(H.job)
+		if(!J || !(J.department_flag & PEASANTS))
+			continue
+			
+		if(!H.GetComponent(/datum/component/militia_blessing))
+			apply_blessing(H)
 
 /datum/round_event_control/roundstart/militia
 	name = "Militia"
@@ -640,8 +904,5 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 
 				// Store the event name globally
 				GLOB.roundstart_event_name = selected_event.name
-
-
-
 
 

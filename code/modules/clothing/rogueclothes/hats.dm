@@ -607,6 +607,10 @@
 
 /obj/item/clothing/head/roguetown/helmet/heavy/knight/black
 	color = CLOTHING_GREY
+	detail_tag = "_detail"
+	detail_color = "#933030"
+
+
 
 /obj/item/clothing/head/roguetown/helmet/heavy/knight/AdjustClothes(mob/user)
 	if(loc == user)

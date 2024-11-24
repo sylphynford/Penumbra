@@ -239,3 +239,12 @@
 	armor = /obj/item/clothing/suit/roguetown/armor/brigandine/coatplates		//given because it's less durability than the steel cuirass but is actually heavy, making use of their heavy skill, unlike cuirass
 
 	backpack_contents = list(/obj/item/rogueweapon/huntingknife/idagger/steel/special = 1, /obj/item/rope/chain = 1)
+
+// used for blackguards event
+/datum/job/roguetown/blackguard_lieutenant
+	title = "Blackguard Lieutenant"
+	flag = KNIGHT
+	department_flag = NOBLEMEN
+	faction = "Station"
+	total_positions = 0 
+	spawn_positions = 0

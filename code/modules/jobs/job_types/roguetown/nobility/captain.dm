@@ -183,3 +183,13 @@
 	if(!.)
 		return
 	recruit.verbs |= /mob/proc/haltyell
+
+
+// used for blackguards event
+/datum/job/roguetown/blackguard_banneret
+	title = "Blackguard Banneret"
+	flag = GUARD_CAPTAIN
+	department_flag = NOBLEMEN
+	faction = "Station"
+	total_positions = 0
+	spawn_positions = 0
