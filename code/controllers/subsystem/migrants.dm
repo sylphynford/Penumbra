@@ -13,6 +13,7 @@ SUBSYSTEM_DEF(migrants)
 
 	var/list/spawned_waves = list()
 	var/list/role_assignments = list() // Track assignments per role type
+	var/consecutive_failures = 0 // Track consecutive failed attempts
 
 
 /datum/controller/subsystem/migrants/Initialize()
@@ -40,6 +41,8 @@ SUBSYSTEM_DEF(migrants)
 	var/success = try_spawn_wave()
 	if(success)
 		log_game("Migrants: Successfully spawned wave: [current_wave]")
+		wave_number++
+		consecutive_failures = 0
 		// Update available roles by removing filled ones
 		var/datum/migrant_wave/wave = MIGRANT_WAVE(current_wave)
 		for(var/role_type in role_assignments)
@@ -50,14 +53,16 @@ SUBSYSTEM_DEF(migrants)
 					wave.roles -= role_type
 	else
 		log_game("Migrants: FAILED to spawn wave: [current_wave]")
+		consecutive_failures++
 
 	// Check if we need to keep the wave going for unfilled roles
 	var/datum/migrant_wave/wave = MIGRANT_WAVE(current_wave)
 	var/total_roles = wave.get_roles_amount()
 	
-	// If we have no more roles, handle completion
-	if(total_roles <= 0)
-		wave_number++
+	// Change wave if all roles are filled or we've had 2 consecutive failures
+	if(total_roles <= 0 || consecutive_failures >= 2)
+		consecutive_failures = 0
+		wave_number = 1 // Reset wave number when changing waves
 		set_current_wave(null, 0)
 		time_until_next_wave = time_between_waves
 	else
