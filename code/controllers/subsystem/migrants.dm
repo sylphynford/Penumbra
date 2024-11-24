@@ -4,7 +4,7 @@ SUBSYSTEM_DEF(migrants)
 	runlevels = RUNLEVEL_GAME
 	var/wave_number = 1
 	var/current_wave = null
-	var/time_until_next_wave = 2 MINUTES
+	var/time_until_next_wave = 10 SECONDS
 	var/wave_timer = 0
 
 	var/time_between_waves = 3 MINUTES
@@ -70,36 +70,48 @@ SUBSYSTEM_DEF(migrants)
 	active_migrants = shuffle(active_migrants)
 
 	var/list/picked_migrants = list()
+	var/list/role_assignments = list() // Track assignments per role type
 
 	if(!length(active_migrants))
 		return FALSE
-	/// Try to assign priority players to positions
+
+	// First pass - assign priority players to roles they want
 	for(var/datum/migrant_assignment/assignment as anything in assignments)
 		if(!length(active_migrants))
-			break // Out of migrants, we're screwed and will fail
+			break
 		if(assignment.client)
 			continue
+			
 		var/list/priority = get_priority_players(active_migrants, assignment.role_type)
 		if(!length(priority))
 			continue
+
+		// Only pick one player per role type if multiple want it
+		if(!role_assignments[assignment.role_type])
+			role_assignments[assignment.role_type] = list()
+			
 		var/client/picked
 		priority = shuffle(priority)
 		for(var/client/client as anything in priority)
 			if(!can_be_role(client, assignment.role_type))
 				continue
+			if(client in role_assignments[assignment.role_type])
+				continue
 			picked = client
 			break
+
 		if(!picked)
 			continue
 
 		active_migrants -= picked
 		assignment.client = picked
 		picked_migrants += picked
+		role_assignments[assignment.role_type] += picked
 
-	/// Assign rest of the players to positions
+	// Second pass - fill remaining slots with any available migrants
 	for(var/datum/migrant_assignment/assignment as anything in assignments)
 		if(!length(active_migrants))
-			break // Out of migrants, we're screwed and will fail
+			break
 		if(assignment.client)
 			continue
 
@@ -107,16 +119,20 @@ SUBSYSTEM_DEF(migrants)
 		for(var/client/client as anything in active_migrants)
 			if(!can_be_role(client, assignment.role_type))
 				continue
+			if(client in role_assignments[assignment.role_type])
+				continue
 			picked = client
 			break
+
 		if(!picked)
 			continue
 
 		active_migrants -= picked
 		assignment.client = picked
 		picked_migrants += picked
+		role_assignments[assignment.role_type] += picked
 
-	/// Find spawn points for the assignments
+	// Find spawn points for assignments
 	var/turf/spawn_location = get_spawn_turf_for_job(wave.spawn_landmark)
 	var/atom/fallback_location = spawn_location
 
@@ -128,24 +144,25 @@ SUBSYSTEM_DEF(migrants)
 		var/datum/migrant_assignment/assignment = assignments[i]
 		assignment.spawn_location = turf
 
-	/// See if anything went wrong and return FALSE if it did
+	// Use fallback location for any assignments without a specific spawn point
 	for(var/datum/migrant_assignment/assignment as anything in assignments)
-		if(!assignment.client)
-			return FALSE
 		if(!assignment.spawn_location)
 			assignment.spawn_location = fallback_location
 
-	/// At this point everything is GOOD and SWELL, we want to spawn the wave
-
-	/// Unset their pref so if they respawn they wont get yoinked into migrants immediately
+	// Only spawn migrants that have clients assigned
+	var/spawned_count = 0
 	for(var/client/client as anything in picked_migrants)
 		client.prefs.migrant.post_spawn()
 
-	/// Spawn the migrants, hooray
 	for(var/datum/migrant_assignment/assignment as anything in assignments)
-		spawn_migrant(wave, assignment, wave.spawn_on_location)
+		if(assignment.client) // Only spawn if we have a client
+			spawn_migrant(wave, assignment, wave.spawn_on_location)
+			spawned_count++
 
-	// Increment wave spawn counter
+	if(!spawned_count) // If no one was spawned, consider it a failure
+		return FALSE
+
+	// Update wave counter
 	var/used_wave_type = wave.type
 	if(wave.shared_wave_type)
 		used_wave_type = wave.shared_wave_type
@@ -153,7 +170,7 @@ SUBSYSTEM_DEF(migrants)
 		spawned_waves[used_wave_type] = 0
 	spawned_waves[used_wave_type] += 1
 
-	message_admins("MIGRANTS: Spawned wave: [wave.name] (players: [assignments.len]) at [ADMIN_VERBOSEJMP(spawn_location)]")
+	message_admins("MIGRANTS: Spawned wave: [wave.name] (players: [spawned_count]) at [ADMIN_VERBOSEJMP(spawn_location)]")
 
 	unset_all_active_migrants()
 
