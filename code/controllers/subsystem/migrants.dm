@@ -403,16 +403,15 @@ SUBSYSTEM_DEF(migrants)
 
 /// Returns a list of all newplayer clients with active migrant pref
 /datum/controller/subsystem/migrants/proc/get_active_migrants()
-	var/list/migrants = list()
-	for(var/mob/dead/new_player/player as anything in GLOB.new_player_list)
-		if(!player.client)
+	var/list/available = list()
+	for(var/client/client as anything in GLOB.clients)
+		if(!client?.prefs?.migrant?.active)
 			continue
-		if(!player.client.prefs)
+		// Only include migrants who have selected a role
+		if(!length(client.prefs.migrant.role_preferences))
 			continue
-		if(!player.client.prefs.migrant.active)
-			continue
-		migrants += player.client
-	return migrants
+		available += client
+	return available
 
 /// Returns a list of all newplayer clients
 /datum/controller/subsystem/migrants/proc/get_all_migrants()

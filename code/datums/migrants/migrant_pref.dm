@@ -17,7 +17,7 @@
 	role_preferences.Cut()
 	if(!silent && prefs.parent)
 		if(new_state)
-			to_chat(prefs.parent, span_notice("You are now in the migrant queue, and will join the game with them when they arrive"))
+			to_chat(prefs.parent, span_notice("You are now in the migrant queue, and must choose your fate"))
 		else
 			to_chat(prefs.parent, span_boldwarning("You are no longer in the migrant queue"))
 
