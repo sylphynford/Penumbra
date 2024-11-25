@@ -7,6 +7,7 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 	var/runnable = TRUE
 	var/event_announcement = ""
 	var/selected_event_name = null
+	weight = 0
 
 /datum/round_event/roundstart
 	var/is_active = FALSE
@@ -262,87 +263,84 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 		return "<br>The guard's betrayal will be remembered in the annals of history."
 
 /datum/round_event/roundstart/guard_rumors
-	var/static/list/valid_jobs = list("Town Guard", "Sergeant at Arms")
-	var/mob/living/carbon/human/chosen_guard = null
-	var/mob/living/carbon/human/target = null
-
-/datum/round_event/roundstart/guard_rumors/New()
-	. = ..()
-	RegisterSignal(SSdcs, COMSIG_GLOB_ROUND_END, PROC_REF(check_completion))
+    var/mob/living/carbon/human/chosen_guard = null
+    var/mob/living/carbon/human/target = null
+    var/traitor_success = FALSE
+    var/announced = FALSE
+    var/static/list/valid_jobs = list("Town Guard", "Sergeant at Arms")
 
 /datum/round_event/roundstart/guard_rumors/apply_effect()
-	. = ..()
-	is_active = TRUE
-	
-	// 50% chance for nothing to happen
-	if(prob(50))
-		return
-	
-	var/list/possible_guards = list()
-	var/mob/living/carbon/human/consort = null
-	
-	// Find valid guards and consort
-	for(var/mob/living/carbon/human/H in GLOB.alive_mob_list)
-		if(H.mind?.assigned_role in valid_jobs)
-			possible_guards += H
-		else if(H.mind?.assigned_role == "Consort")
-			consort = H
-	
-	if(!length(possible_guards))
-		return
-	
-	// Pick a random guard
-	chosen_guard = pick(possible_guards)
-	if(!chosen_guard || !chosen_guard.mind)
-		return
-		
-	// Create antag datum for objectives
-	var/datum/antagonist/traitor_guard/traitor_datum = new()
-	chosen_guard.mind.add_antag_datum(traitor_datum)
-	
-	// Add traitor objective
-	if(consort && !consort.stat == DEAD)
-		var/datum/objective/assassinate/kill_objective = new
-		kill_objective.owner = chosen_guard.mind
-		kill_objective.target = consort.mind
-		kill_objective.explanation_text = "Assassinate [consort.real_name], the Consort."
-		traitor_datum.objectives += kill_objective
-	else
-		var/datum/objective/steal/steal_objective = new
-		steal_objective.owner = chosen_guard.mind
-		steal_objective.steal_target = /obj/item/roguegem/jewel
-		steal_objective.explanation_text = "Steal the Baron's Crown Jewel from the treasury."
-		traitor_datum.objectives += steal_objective
-	
-	// Notify the guard of their objective
-	to_chat(chosen_guard, "<B>Objective:</B> [traitor_datum.objectives[1].explanation_text]")
+    . = ..()
+    is_active = TRUE
+    
+    // 50% chance for nothing to happen
+    if(prob(50))
+        is_active = FALSE
+        return
+    
+    var/list/possible_guards = list()
+    
+    // Find valid guards
+    for(var/mob/living/carbon/human/H in GLOB.alive_mob_list)
+        if(H.mind?.assigned_role in valid_jobs)
+            possible_guards += H
+    
+    if(!length(possible_guards))
+        is_active = FALSE
+        return
+    
+    // Pick a random guard
+    chosen_guard = pick(possible_guards)
+    if(!chosen_guard || !chosen_guard.mind)
+        is_active = FALSE
+        return
+        
+    // Create antag datum for objectives
+    var/datum/antagonist/traitor_guard/traitor_datum = new()
+    chosen_guard.mind.add_antag_datum(traitor_datum)
+    
+    // Add steal objective (removed the consort-related objective since it wasn't being used)
+    var/datum/objective/steal/steal_objective = new
+    steal_objective.owner = chosen_guard.mind
+    steal_objective.steal_target = /obj/item/roguegem/jewel
+    steal_objective.explanation_text = "Steal the Baron's Crown Jewel from the treasury."
+    traitor_datum.objectives += steal_objective
+    
+    // Notify the guard of their objective
+    to_chat(chosen_guard, "<B>Objective:</B> [traitor_datum.objectives[1].explanation_text]")
+    
+    RegisterSignal(SSdcs, COMSIG_GLOB_ROUND_END, PROC_REF(check_completion))
 
 /datum/round_event/roundstart/guard_rumors/proc/check_completion()
-	if(!chosen_guard || !chosen_guard.mind)
-		return
-	
-	var/datum/antagonist/traitor_guard/traitor_datum = chosen_guard.mind.has_antag_datum(/datum/antagonist/traitor_guard)
-	if(!traitor_datum)
-		return
-		
-	var/traitorwin = TRUE
-	for(var/datum/objective/objective in traitor_datum.objectives)
-		if(istype(objective, /datum/objective/steal))
-			var/datum/objective/steal/steal_objective = objective
-			if(!steal_objective.check_completion())
-				traitorwin = FALSE
-				break
-		else if(!objective.check_completion())
-			traitorwin = FALSE
-			break
-	
-	if(traitorwin)
-		chosen_guard.adjust_triumphs(5)
-		to_chat(world, "<span class='greentext'>The Traitor Guard has succeeded in their betrayal!</span>")
-		chosen_guard.playsound_local(get_turf(chosen_guard), 'sound/misc/triumph.ogg', 100, FALSE, pressure_affected = FALSE)
-	else
-		to_chat(world, "<span class='redtext'>The Traitor Guard has failed in their betrayal!</span>")
-		chosen_guard.playsound_local(get_turf(chosen_guard), 'sound/misc/fail.ogg', 100, FALSE, pressure_affected = FALSE)
+    if(!chosen_guard || !chosen_guard.mind || announced)
+        return
+    
+    if(SSticker.current_state < GAME_STATE_FINISHED)
+        return
+        
+    var/datum/antagonist/traitor_guard/traitor_datum = chosen_guard.mind.has_antag_datum(/datum/antagonist/traitor_guard)
+    if(!traitor_datum)
+        return
+        
+    var/traitorwin = TRUE
+    for(var/datum/objective/objective in traitor_datum.objectives)
+        if(istype(objective, /datum/objective/steal))
+            var/datum/objective/steal/steal_objective = objective
+            if(!steal_objective.check_completion())
+                traitorwin = FALSE
+                break
+        else if(!objective.check_completion())
+            traitorwin = FALSE
+            break
+    
+    announced = TRUE
+    if(traitorwin)
+        chosen_guard.adjust_triumphs(5)
+        chosen_guard.playsound_local(get_turf(chosen_guard), 'sound/misc/triumph.ogg', 100, FALSE, pressure_affected = FALSE)
+        to_chat(world, "<span class='greentext'>The Traitor Guard has succeeded in their betrayal!</span>")
+    else
+        chosen_guard.playsound_local(get_turf(chosen_guard), 'sound/misc/fail.ogg', 100, FALSE, pressure_affected = FALSE)
+        to_chat(world, "<span class='redtext'>The Traitor Guard has failed in their betrayal!</span>")
 
 /datum/round_event_control/roundstart/guard_rumors
 	name = "Guard Rumors"
@@ -904,8 +902,8 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 	var/list/event_choices = list()
 	for(var/event_path in subtypesof(/datum/round_event_control/roundstart))
 		var/datum/round_event_control/roundstart/event = new event_path()
-		if(event.runnable)  // Only show events that are marked as runnable
-			event_choices[event.name] = event  // Store the actual event object
+		if(event.runnable && event.weight > 0)  // Only show events with weight > 0
+			event_choices[event.name] = event
 
 	var/choice = input(usr, "Choose an event to trigger", "Force Roundstart Event") as null|anything in event_choices
 	if(!choice)
@@ -958,7 +956,7 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 		var/list/possible_events = list()
 
 		for(var/datum/round_event_control/roundstart/RE as anything in roundstart_events)
-			if(RE.runnable && RE.can_spawn_event())
+			if(RE.runnable && RE.can_spawn_event() && RE.weight > 0)
 				possible_events[RE] = RE.weight
 
 		if(!length(possible_events))
