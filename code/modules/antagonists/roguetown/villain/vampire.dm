@@ -67,22 +67,27 @@
 	ADD_TRAIT(owner.current, TRAIT_TOXIMMUNE, TRAIT_GENERIC)
 	ADD_TRAIT(owner.current, TRAIT_STEELHEARTED, TRAIT_GENERIC)
 	owner.current.cmode_music = 'sound/music/combat_vamp2.ogg'
-	var/obj/item/organ/eyes/eyes = owner.current.getorganslot(ORGAN_SLOT_EYES)
-	if(eyes)
-		eyes.Remove(owner.current,1)
-		QDEL_NULL(eyes)
-	eyes = new /obj/item/organ/eyes/night_vision/zombie
-	eyes.Insert(owner.current)
+	
+	// Store original appearance before changes
+	var/mob/living/carbon/human/H = owner.current
+	if(istype(H))
+		var/obj/item/organ/eyes/E = H.getorganslot(ORGAN_SLOT_EYES)
+		if(E)
+			cache_eyes = E.eye_color
+			message_admins("DEBUG: Base vampire on_gain() - Caching eye color from eyes organ: [cache_eyes]")
+		cache_skin = H.skin_tone
+		cache_hair = H.hair_color
+	
 	if(increase_votepwr)
 		forge_vampire_objectives()
 	finalize_vampire()
-//	if(!is_lesser)
-//		if(isnull(batform))
-//			batform = new
-//			owner.current.AddSpell(batform)
+
+	// Basic vampire abilities
 	owner.current.verbs |= /mob/living/carbon/human/proc/disguise_button
-	owner.current.verbs |= /mob/living/carbon/human/proc/vamp_regenerate
-	if(!is_lesser)
+
+	// Only vampire lords get these abilities
+	if(owner.has_antag_datum(/datum/antagonist/vampirelord))
+		owner.current.verbs |= /mob/living/carbon/human/proc/vamp_regenerate
 		owner.current.verbs |= /mob/living/carbon/human/proc/blood_strength
 		owner.current.verbs |= /mob/living/carbon/human/proc/blood_celerity
 		owner.current.verbs |= /mob/living/carbon/human/proc/blood_fortitude
@@ -151,53 +156,119 @@
 				H.vampire_undisguise(src)
 
 /mob/living/carbon/human/proc/disguise_button()
-	set name = "Disguise"
+	set name = "Toggle Disguise"
 	set category = "VAMPIRE"
-
-	var/datum/antagonist/vampirelord/VD = mind.has_antag_datum(/datum/antagonist/vampirelord)
-	if(!VD)
+	
+	var/datum/antagonist/vampire/V = mind.has_antag_datum(/datum/antagonist/vampire)
+	if(!V)
 		return
-	if(world.time < VD.last_transform + 30 SECONDS)
-		var/timet2 = (VD.last_transform + 30 SECONDS) - world.time
-		to_chat(src, span_warning("No.. not yet. [round(timet2/10)]s"))
-		return
-	if(VD.disguised)
-		VD.last_transform = world.time
-		vampire_undisguise(VD)
+	
+	if(V.disguised)
+		to_chat(src, span_notice("I reveal my true form."))
+		V.disguised = FALSE
+		
+		if(dna)
+			var/datum/organ_dna/eyes/eyes_dna = dna.organ_dna[ORGAN_SLOT_EYES]
+			if(eyes_dna)
+				eyes_dna.eye_color = "#ff0000"
+				eyes_dna.second_color = "#ff0000"
+				var/obj/item/organ/eyes/E = getorganslot(ORGAN_SLOT_EYES)
+				if(E)
+					E.imprint_organ_dna(eyes_dna)
+					E.update_accessory_colors()
+					E.lighting_alpha = LIGHTING_PLANE_ALPHA_MOSTLY_VISIBLE
+		
+		dna?.species.handle_body(src)
+		update_body()
+		update_hair()
+		update_body_parts(TRUE)
+		regenerate_icons()
+		update_sight()
 	else
-		if(VD.vitae < 100)
-			to_chat(src, span_warning("I don't have enough Vitae!"))
-			return
-		VD.last_transform = world.time
-		vampire_disguise(VD)
+		to_chat(src, span_notice("I conceal my vampiric nature."))
+		V.disguised = TRUE
+		
+		if(V.cache_eyes && dna)
+			var/datum/organ_dna/eyes/eyes_dna = dna.organ_dna[ORGAN_SLOT_EYES]
+			if(eyes_dna)
+				eyes_dna.eye_color = "[V.cache_eyes]"
+				eyes_dna.second_color = "[V.cache_eyes]"
+				var/obj/item/organ/eyes/E = getorganslot(ORGAN_SLOT_EYES)
+				if(E)
+					E.imprint_organ_dna(eyes_dna)
+					E.update_accessory_colors()
+					E.lighting_alpha = null
+		
+		dna?.species.handle_body(src)
+		update_body()
+		update_hair()
+		update_body_parts(TRUE)
+		regenerate_icons()
+		update_sight()
 
-/mob/living/carbon/human/proc/vampire_disguise(datum/antagonist/vampirelord/VD)
-	if(!VD)
+/mob/living/carbon/human/proc/vampire_disguise(datum/antagonist/V)
+	if(!V)
 		return
-	VD.disguised = TRUE
-	skin_tone = VD.cache_skin
-	hair_color = VD.cache_hair
-	eye_color = VD.cache_eyes
-	facial_hair_color = VD.cache_hair
-	update_body()
-	update_hair()
-	update_body_parts(redraw = TRUE)
+	
+	if(istype(V, /datum/antagonist/vampire))
+		var/datum/antagonist/vampire/VD = V
+		VD.disguised = TRUE
+		skin_tone = VD.cache_skin
+		hair_color = VD.cache_hair
+		facial_hair_color = VD.cache_hair
+		
+		if(VD.cache_eyes && dna)
+			var/datum/organ_dna/eyes/eyes_dna = dna.organ_dna[ORGAN_SLOT_EYES]
+			if(eyes_dna)
+				eyes_dna.eye_color = "[VD.cache_eyes]"
+				eyes_dna.second_color = "[VD.cache_eyes]"
+				var/obj/item/organ/eyes/E = getorganslot(ORGAN_SLOT_EYES)
+				if(E)
+					E.imprint_organ_dna(eyes_dna)
+					E.update_accessory_colors()
+					E.lighting_alpha = null
+		
+		dna?.species.handle_body(src)
+		update_body()
+		update_hair()
+		update_body_parts(TRUE)
+		regenerate_icons()
+		update_sight()
 
-/mob/living/carbon/human/proc/vampire_undisguise(datum/antagonist/vampirelord/VD)
-	if(!VD)
+/mob/living/carbon/human/proc/vampire_undisguise(datum/antagonist/V)
+	if(!V)
 		return
-	VD.disguised = FALSE
-//	VD.cache_skin = skin_tone
-//	VD.cache_eyes = eye_color
-//	VD.cache_hair = hair_color
+	
+	if(istype(V, /datum/antagonist/vampirelord))
+		var/datum/antagonist/vampirelord/VD = V
+		VD.disguised = FALSE
+	else if(istype(V, /datum/antagonist/vampire))
+		var/datum/antagonist/vampire/VD = V
+		VD.disguised = FALSE
+	else
+		return
+	
 	skin_tone = "c9d3de"
 	hair_color = "181a1d"
 	facial_hair_color = "181a1d"
-	eye_color = "ff0000"
+	
+	if(dna)
+		var/datum/organ_dna/eyes/eyes_dna = dna.organ_dna[ORGAN_SLOT_EYES]
+		if(eyes_dna)
+			eyes_dna.eye_color = "#ff0000"
+			eyes_dna.second_color = "#ff0000"
+			var/obj/item/organ/eyes/E = getorganslot(ORGAN_SLOT_EYES)
+			if(E)
+				E.imprint_organ_dna(eyes_dna)
+				E.update_accessory_colors()
+				E.lighting_alpha = LIGHTING_PLANE_ALPHA_MOSTLY_VISIBLE
+	
+	dna?.species.handle_body(src)
 	update_body()
 	update_hair()
-	update_body_parts(redraw = TRUE)
-
+	update_body_parts(TRUE)
+	regenerate_icons()
+	update_sight()
 
 /mob/living/carbon/human/proc/blood_strength()
 	set name = "Night Muscles"
@@ -205,15 +276,16 @@
 
 	var/datum/antagonist/vampirelord/VD = mind.has_antag_datum(/datum/antagonist/vampirelord)
 	if(!VD)
+		to_chat(src, span_warning("I am not a vampire lord."))
 		return
 	if(VD.disguised)
-		to_chat(src, span_warning("My curse is hidden."))
+		to_chat(src, span_warning("I cannot use Night Muscles while disguised."))
 		return
 	if(VD.vitae < 100)
-		to_chat(src, span_warning("Not enough vitae."))
+		to_chat(src, span_warning("I need at least 100 vitae to use Night Muscles. (Current: [VD.vitae])"))
 		return
 	if(has_status_effect(/datum/status_effect/buff/bloodstrength))
-		to_chat(src, span_warning("Already active."))
+		to_chat(src, span_warning("Night Muscles is already active."))
 		return
 	VD.handle_vitae(-100)
 	apply_status_effect(/datum/status_effect/buff/bloodstrength)
@@ -237,15 +309,16 @@
 
 	var/datum/antagonist/vampirelord/VD = mind.has_antag_datum(/datum/antagonist/vampirelord)
 	if(!VD)
+		to_chat(src, span_warning("I am not a vampire lord."))
 		return
 	if(VD.disguised)
-		to_chat(src, span_warning("My curse is hidden."))
+		to_chat(src, span_warning("I cannot use Quickening while disguised."))
 		return
 	if(VD.vitae < 100)
-		to_chat(src, span_warning("Not enough vitae."))
+		to_chat(src, span_warning("I need at least 100 vitae to use Quickening. (Current: [VD.vitae])"))
 		return
 	if(has_status_effect(/datum/status_effect/buff/celerity))
-		to_chat(src, span_warning("Already active."))
+		to_chat(src, span_warning("Quickening is already active."))
 		return
 	VD.handle_vitae(-100)
 	rogstam_add(2000)
@@ -273,15 +346,16 @@
 
 	var/datum/antagonist/vampire/VD = mind.has_antag_datum(/datum/antagonist/vampire)
 	if(!VD)
+		to_chat(src, span_warning("I am not a vampire lord."))
 		return
 	if(VD.disguised)
-		to_chat(src, span_warning("My curse is hidden."))
+		to_chat(src, span_warning("I cannot use Armor of Darkness while disguised."))
 		return
 	if(VD.vitae < 100)
-		to_chat(src, span_warning("Not enough vitae blood."))
+		to_chat(src, span_warning("I need at least 100 vitae to use Armor of Darkness. (Current: [VD.vitae])"))
 		return
 	if(has_status_effect(/datum/status_effect/buff/fortitude))
-		to_chat(src, span_warning("Already active."))
+		to_chat(src, span_warning("Armor of Darkness is already active."))
 		return
 	VD.vitae -= 100
 	rogstam_add(2000)
@@ -331,22 +405,26 @@
 /mob/living/carbon/human/proc/vamp_regenerate()
 	set name = "Regenerate"
 	set category = "VAMPIRE"
+	
 	var/silver_curse_status = FALSE
 	for(var/datum/status_effect/debuff/silver_curse/silver_curse in status_effects)
 		silver_curse_status = TRUE
 		break
+	
 	var/datum/antagonist/vampirelord/VD = mind.has_antag_datum(/datum/antagonist/vampirelord)
 	if(!VD)
+		to_chat(src, span_warning("I am not a vampire lord."))
 		return
 	if(VD.disguised)
-		to_chat(src, span_warning("My curse is hidden."))
+		to_chat(src, span_warning("I cannot regenerate while disguised."))
 		return
 	if(silver_curse_status)
-		to_chat(src, span_warning("My BANE is not letting me REGEN!."))
+		to_chat(src, span_warning("The silver curse prevents regeneration!"))
 		return
 	if(VD.vitae < 200)
-		to_chat(src, span_warning("Not enough vitae."))
+		to_chat(src, span_warning("I need at least 200 vitae to regenerate. (Current: [VD.vitae])"))
 		return
+	
 	to_chat(src, span_greentext("! REGENERATE !"))
 	src.playsound_local(get_turf(src), 'sound/misc/vampirespell.ogg', 100, FALSE, pressure_affected = FALSE)
 	VD.handle_vitae(-200)

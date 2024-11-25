@@ -21,6 +21,56 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 		return FALSE
 	return runnable
 
+//Bloodlines event
+/datum/round_event/roundstart/noble_vampires
+    is_active = FALSE
+
+    /datum/round_event/roundstart/noble_vampires/apply_effect()
+        . = ..()
+        is_active = TRUE
+        
+        RegisterSignal(SSdcs, COMSIG_GLOB_MOB_CREATED, PROC_REF(on_mob_created))
+        for(var/mob/living/carbon/human/H in GLOB.alive_mob_list)
+            make_vampire(H)
+
+    /datum/round_event/roundstart/noble_vampires/proc/make_vampire(mob/living/carbon/human/H)
+        if(!H.mind?.assigned_role)
+            return
+            
+        var/datum/job/J = SSjob.GetJob(H.mind.assigned_role)
+        if(!J || !(J.department_flag & NOBLEMEN))
+            return
+            
+        if(H.mind.has_antag_datum(/datum/antagonist/vampire))
+            return
+            
+        var/datum/antagonist/vampire/new_antag = new()
+        new_antag.increase_votepwr = FALSE
+        H.mind.add_antag_datum(new_antag)
+        to_chat(H, span_userdanger("You are the true masters of the world. But it is imperative you maintain the Masquerade..."))
+
+    /datum/round_event/roundstart/noble_vampires/proc/on_mob_created(datum/source, mob/M)
+        SIGNAL_HANDLER
+        
+        if(!is_active || !istype(M, /mob/living/carbon/human))
+            return
+            
+        var/mob/living/carbon/human/H = M
+        addtimer(CALLBACK(src, .proc/check_and_convert_noble, H), 1 SECONDS)
+
+    /datum/round_event/roundstart/noble_vampires/proc/check_and_convert_noble(mob/living/carbon/human/H)
+        if(!H?.mind?.assigned_role)
+            return
+            
+        make_vampire(H)
+
+/datum/round_event_control/roundstart/noble_vampires
+    name = "Bloodlines"
+    typepath = /datum/round_event/roundstart/noble_vampires
+    weight = 3
+    event_announcement = ""
+    runnable = TRUE
+
 
 //throne room meeting event
 /datum/round_event/roundstart/throne_meeting
