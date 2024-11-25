@@ -21,6 +21,13 @@ SUBSYSTEM_DEF(job)
 		SetupOccupations()
 	if(CONFIG_GET(flag/load_jobs_from_txt))
 		LoadJobs()
+	
+	// Add Baron/Baroness (Lord job) to prioritized jobs
+	var/datum/job/roguetown/lord/ruler_job = GetJobType(/datum/job/roguetown/lord)
+	if(ruler_job)
+		prioritized_jobs += ruler_job
+		message_admins("Added [ruler_job.title] to prioritized jobs")
+	
 	set_overflow_role(CONFIG_GET(string/overflow_job))
 	return ..()
 
@@ -119,9 +126,37 @@ SUBSYSTEM_DEF(job)
 /datum/controller/subsystem/job/proc/FindOccupationCandidates(datum/job/job, level, flag)
 	JobDebug("Running FOC, Job: [job], Level: [level], Flag: [flag]")
 	var/list/candidates = list()
+	
+	// Special Consort handling
+	if(job.title == "Consort")
+		var/mob/living/carbon/human/ruler
+		for(var/mob/living/carbon/human/potential_ruler in GLOB.human_list)
+			if(potential_ruler?.mind?.assigned_role in list("Baron", "Baroness"))
+				ruler = potential_ruler
+				JobDebug("FOC found ruler: [ruler], Role: [ruler.mind.assigned_role]")
+				break
+		
+		if(ruler && ruler.client?.prefs)
+			var/ruler_has_penis = !isnull(ruler.client.prefs.features["has_penis"]) ? ruler.client.prefs.features["has_penis"] : FALSE
+			var/ruler_has_vagina = !isnull(ruler.client.prefs.features["has_vagina"]) ? ruler.client.prefs.features["has_vagina"] : FALSE
+			
+			for(var/mob/dead/new_player/player in unassigned)
+				if(player.client?.prefs?.job_preferences[job.title] == level)
+					var/consort_has_penis = !isnull(player.client.prefs.features["has_penis"]) ? player.client.prefs.features["has_penis"] : FALSE
+					var/consort_has_vagina = !isnull(player.client.prefs.features["has_vagina"]) ? player.client.prefs.features["has_vagina"] : FALSE
+					
+					if((ruler_has_penis && consort_has_penis && !consort_has_vagina) || (ruler_has_vagina && consort_has_vagina && !consort_has_penis))
+						JobDebug("FOC removing incompatible consort candidate [player]")
+						player.client.prefs.job_preferences[job.title] = 0
+						if(player?.client)
+							to_chat(player, "<span class='warning'>You have been removed from Consort due to sex incompatibility with the [ruler.mind.assigned_role].</span>")
+						continue
+	
+	// Normal candidate finding
 	for(var/mob/dead/new_player/player in unassigned)
+		if(player.client?.prefs?.job_preferences[job.title] != level)
+			continue
 		if(is_banned_from(player.ckey, job.title) || QDELETED(player))
-			JobDebug("FOC isbanned failed, Player: [player]")
 			continue
 		if(!job.player_old_enough(player.client))
 			JobDebug("FOC player not old enough, Player: [player]")
@@ -427,6 +462,32 @@ SUBSYSTEM_DEF(job)
 				if(!job)
 					continue
 
+				// Special Consort handling
+				if(job.title == "Consort")
+					var/mob/living/carbon/human/ruler
+					for(var/mob/living/carbon/human/potential_ruler in GLOB.human_list)
+						if(potential_ruler?.mind?.assigned_role in list("Baron", "Baroness"))
+							ruler = potential_ruler
+							JobDebug("DO found ruler: [ruler], Role: [ruler.mind.assigned_role]")
+							break
+					
+					if(!ruler || !ruler.client?.prefs)
+						JobDebug("DO skipping Consort assignment - no ruler found")
+						continue
+					
+					var/ruler_has_penis = !isnull(ruler.client.prefs.features["has_penis"]) ? ruler.client.prefs.features["has_penis"] : FALSE
+					var/ruler_has_vagina = !isnull(ruler.client.prefs.features["has_vagina"]) ? ruler.client.prefs.features["has_vagina"] : FALSE
+					
+					var/consort_has_penis = !isnull(player.client.prefs.features["has_penis"]) ? player.client.prefs.features["has_penis"] : FALSE
+					var/consort_has_vagina = !isnull(player.client.prefs.features["has_vagina"]) ? player.client.prefs.features["has_vagina"] : FALSE
+					
+					if((ruler_has_penis && consort_has_penis && !consort_has_vagina) || (ruler_has_vagina && consort_has_vagina && !consort_has_penis))
+						JobDebug("DO removing incompatible consort candidate [player]")
+						player.client.prefs.job_preferences[job.title] = 0
+						if(player?.client)
+							to_chat(player, "<span class='warning'>You have been removed from Consort due to sex incompatibility with the [ruler.mind.assigned_role].</span>")
+						continue
+
 				if(is_banned_from(player.ckey, job.title))
 					JobDebug("DO isbanned failed, Player: [player], Job:[job.title]")
 					continue
@@ -517,6 +578,33 @@ SUBSYSTEM_DEF(job)
 
 /datum/controller/subsystem/job/proc/do_required_jobs()
 	var/amt_picked = 0
+	
+	// Handle Baron/Baroness first
+	var/datum/job/roguetown/lord/ruler_job = GetJobType(/datum/job/roguetown/lord)
+	if(ruler_job)
+		for(var/level in level_order)
+			for(var/mob/dead/new_player/player in unassigned)
+				if(player.client.prefs.job_preferences[ruler_job.title] != level)
+					continue
+				
+				if(is_banned_from(player.ckey, ruler_job.title) || QDELETED(player))
+					continue
+				
+				if(!ruler_job.player_old_enough(player.client))
+					continue
+				
+				if(ruler_job.required_playtime_remaining(player.client))
+					continue
+				
+				if((ruler_job.current_positions < 1))
+					if(AssignRole(player, ruler_job.title))
+						unassigned -= player
+						amt_picked++
+						// Force spawn the ruler immediately
+						player.AttemptLateSpawn(ruler_job.title)
+						break
+	
+	// Handle normal required jobs
 	var/require = list()
 	for(var/datum/job/job in occupations)
 		if(job.required)
