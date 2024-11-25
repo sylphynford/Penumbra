@@ -864,6 +864,7 @@
 	max_integrity = 2000
 	over_state = "dunjonopen"
 	var/viewportdir
+	var/last_viewport_toggle = 0
 	kickthresh = 15
 	locksound = 'sound/foley/doors/lockmetal.ogg'
 	unlocksound = 'sound/foley/doors/lockmetal.ogg'
@@ -897,62 +898,25 @@
 	icon_state = base_state
 	..()
 
-/obj/structure/mineral_door/wood/donjon/attack_right(mob/user)
-	if(user.get_active_held_item())  // If holding an item
-		var/obj/item = user.get_active_held_item()
-		if(istype(item, /obj/item/roguekey) || istype(item, /obj/item/storage/keyring))
-			if(locked)
-				to_chat(user, span_warning("It won't turn this way. Try turning to the left."))
-				door_rattle()
-				return
-			trykeylock(item, user)
-			return
-		return ..()  // Handle other items normally
-	
-	// Check belt slots for keys if hands are empty
-	if(ishuman(user))
-		var/mob/living/carbon/human/H = user
-		var/obj/item/belt_l = H.get_item_by_slot(SLOT_BELT_L)
-		var/obj/item/belt_r = H.get_item_by_slot(SLOT_BELT_R)
-		
-		// Check left belt
-		if(istype(belt_l, /obj/item/storage/keyring))
-			var/obj/item/storage/keyring/ring = belt_l
-			for(var/obj/item/roguekey/K in ring.contents)
-				if(K.lockhash == lockhash)
-					trykeylock(ring, user)
-					return
-		else if(istype(belt_l, /obj/item/roguekey))
-			var/obj/item/roguekey/key = belt_l
-			if(key.lockhash == lockhash)
-				trykeylock(key, user)
-				return
-		
-		// Check right belt
-		if(istype(belt_r, /obj/item/storage/keyring))
-			var/obj/item/storage/keyring/ring = belt_r
-			for(var/obj/item/roguekey/K in ring.contents)
-				if(K.lockhash == lockhash)
-					trykeylock(ring, user)
-					return
-		else if(istype(belt_r, /obj/item/roguekey))
-			var/obj/item/roguekey/key = belt_r
-			if(key.lockhash == lockhash)
-				trykeylock(key, user)
-				return
-	
-	// Only handle viewport if no key interactions occurred
+
+/obj/structure/mineral_door/wood/donjon/MiddleClick(mob/user)
 	if(door_opened || isSwitchingStates)
 		return
 	if(brokenstate)
 		to_chat(user, span_warning("There isn't much left of this door."))
 		return
+	if(world.time < last_viewport_toggle + 10)  // 10 = 1 second
+		return
 	if(get_dir(src,user) == viewportdir)
 		view_toggle(user)
+		last_viewport_toggle = world.time
 	else
 		to_chat(user, span_warning("The viewport doesn't toggle from this side."))
 		return
 
+/obj/structure/mineral_door/wood/donjon/attack_right(mob/user)
+	return ..()
+	
 /obj/structure/mineral_door/wood/donjon/proc/view_toggle(mob/user)
 	if(door_opened)
 		return
