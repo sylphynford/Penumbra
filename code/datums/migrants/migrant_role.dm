@@ -27,7 +27,7 @@
 
 /datum/migrant_role/pilgrim
 	name = "Pilgrim"
-	advclass_cat_rolls = list(CTAG_PILGRIM = 20)
+	advclass_cat_rolls = list(CTAG_PILGRIM = 20, CTAG_ADVENTURER = 1)
 
 /datum/migrant_role/adventurer
 	name = "Adventurer"
