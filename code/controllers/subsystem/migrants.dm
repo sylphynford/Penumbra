@@ -63,10 +63,14 @@ SUBSYSTEM_DEF(migrants)
 	if(total_roles <= 0 || consecutive_failures >= 2)
 		consecutive_failures = 0
 		wave_number = 1 // Reset wave number when changing waves
+		// Reset the current wave's roles to original values
+		for(var/role_type in wave.original_roles)
+			wave.roles[role_type] = wave.original_roles[role_type]
 		set_current_wave(null, 0)
 		time_until_next_wave = time_between_waves
 	else
 		// Keep the wave going for remaining roles
+		
 		wave_timer = time_between_fail_wave
 		role_assignments.Cut() // Reset role assignments for next attempt
 		update_ui() // Update UI to show remaining available roles

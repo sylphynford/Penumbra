@@ -28,12 +28,20 @@
 	var/shared_wave_type = null
 	/// Whether we want to spawn people on the rolled location, this may not be desired for bandits or other things that set the location
 	var/spawn_on_location = TRUE
+	/// Original role counts that we can reset to
+	var/list/original_roles = list()
 
 /datum/migrant_wave/proc/get_roles_amount()
 	var/amount = 0
 	for(var/role_type in roles)
 		amount += roles[role_type]
 	return amount
+
+/datum/migrant_wave/New()
+	. = ..()
+	// Store original role counts
+	for(var/role_type in roles)
+		original_roles[role_type] = roles[role_type]
 
 /datum/migrant_wave/pilgrim
 	name = "Pilgrimage"
