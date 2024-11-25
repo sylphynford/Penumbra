@@ -1,4 +1,3 @@
-
 /obj/structure/roguemachine/scomm
 	name = "SCOM"
 	desc = "The Supernatural Communication Optical Machine is a wonder of magic and technology."
@@ -18,6 +17,8 @@
 	var/obj/structure/roguemachine/scomm/calling = null
 	var/obj/structure/roguemachine/scomm/called_by = null
 	var/spawned_rat = FALSE
+	var/paid = FALSE
+	var/static/cost = 1  // Cost in copper coins
 
 /obj/structure/roguemachine/scomm/OnCrafted(dirin, mob/user)
 	. = ..()
@@ -236,7 +237,28 @@
 		return
 	if(!listening)
 		return
+	
 	var/mob/living/carbon/human/H = speaker
+	
+	// Check payment for each message
+	if(!HAS_TRAIT(H, TRAIT_NOBLE))
+		if(!paid)
+			// Try to deduct from bank account
+			var/payment_success = FALSE
+			for(var/acc in SStreasury.bank_accounts)
+				if(acc == H && SStreasury.bank_accounts[acc] >= cost)
+					SStreasury.bank_accounts[acc] -= cost
+					SStreasury.treasury_value += cost
+					payment_success = TRUE
+					say("One copper deducted from account.", spans = list("info"))
+					break
+					
+			if(!payment_success)
+				say("Payment required. Please insert one copper coin or ensure sufficient funds in account.", spans = list("warning"))
+				playsound(loc, 'sound/misc/machineno.ogg', 100, FALSE, -1)
+				return
+		paid = FALSE
+	
 	var/usedcolor = H.voice_color
 	if(H.voicecolor_override)
 		usedcolor = H.voicecolor_override
@@ -245,13 +267,7 @@
 			if(calling.calling == src)
 				calling.repeat_message(raw_message, src, usedcolor, message_language)
 			return
-		if(length(raw_message) > 100) //When these people talk too much, put that shit in slow motion, yeah
-			/*if(length(raw_message) > 200)
-				if(!spawned_rat)
-					visible_message(span_warning("An angered rous emerges from the SCOMlines!"))
-					new /mob/living/simple_animal/hostile/retaliate/rogue/bigrat(get_turf(src))
-					spawned_rat = TRUE
-				return*/
+		if(length(raw_message) > 100)
 			raw_message = "<small>[raw_message]</small>"
 		for(var/obj/structure/roguemachine/scomm/S in SSroguemachine.scomm_machines)
 			if(!S.calling)
@@ -259,7 +275,7 @@
 		for(var/obj/item/scomstone/S in SSroguemachine.scomm_machines)
 			S.repeat_message(raw_message, src, usedcolor, message_language)
 		for(var/obj/item/listenstone/S in SSroguemachine.scomm_machines)
-			S.repeat_message(raw_message, src, usedcolor, message_language)//make the listenstone hear scom
+			S.repeat_message(raw_message, src, usedcolor, message_language)
 
 /obj/structure/roguemachine/scomm/proc/dictate_laws()
 	if(dictating)
@@ -283,6 +299,59 @@
 	for(var/obj/structure/roguemachine/scomm/S in SSroguemachine.scomm_machines)
 		if(S.speaking)
 			S.say(message, spans = list("info"))
+
+/obj/structure/roguemachine/scomm/attackby(obj/item/P, mob/user, params)
+	if(istype(P, /obj/item/roguecoin/copper/pile))
+		var/obj/item/roguecoin/copper/pile/pile = P
+		if(pile.quantity == 1)
+			paid = TRUE
+			qdel(P)
+			playsound(loc, 'sound/misc/coininsert.ogg', 100, TRUE, -1)
+			say("Payment accepted.", spans = list("info"))
+			return
+		else
+			say("Only one copper coin required. Please separate a single coin from the pile.", spans = list("warning"))
+			return
+	else if(P.type == /obj/item/roguecoin/copper)
+		paid = TRUE
+		qdel(P)
+		playsound(loc, 'sound/misc/coininsert.ogg', 100, TRUE, -1)
+		say("Payment accepted.", spans = list("info"))
+		return
+	return ..()
+
+/obj/structure/roguemachine/scomm/proc/check_payment(mob/living/carbon/human/user)
+	if(HAS_TRAIT(user, TRAIT_NOBLE))
+		return TRUE
+		
+	if(paid)
+		paid = FALSE
+		return TRUE
+		
+	// Try to deduct from bank account if no coin inserted
+	for(var/acc in SStreasury.bank_accounts)
+		if(acc == user && SStreasury.bank_accounts[acc] >= cost)
+			SStreasury.bank_accounts[acc] -= cost
+			SStreasury.treasury_value += cost
+			say("One copper deducted from account.", spans = list("info"))
+			return TRUE
+			
+	say("Payment required. Please insert one copper coin or ensure sufficient funds in account.", spans = list("warning"))
+	playsound(loc, 'sound/misc/machineno.ogg', 100, FALSE, -1)
+	return FALSE
+
+/obj/structure/roguemachine/scomm/say_quote(input, list/spans=list(), list/message_mods = list())
+	if(!isliving(loc))
+		return ..()
+		
+	var/mob/living/carbon/human/user = loc
+	if(!istype(user))
+		return ..()
+		
+	if(!check_payment(user))
+		return ""
+		
+	return ..()
 
 
 
