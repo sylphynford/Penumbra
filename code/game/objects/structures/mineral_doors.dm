@@ -362,16 +362,50 @@
 				span_notice("I repaired [src]."))		
 
 /obj/structure/mineral_door/attack_right(mob/user)
-	user.changeNext_move(CLICK_CD_FAST)
-	var/obj/item = user.get_active_held_item()
-	if(istype(item, /obj/item/roguekey) || istype(item, /obj/item/storage/keyring))
-		if(locked)
-			to_chat(user, span_warning("It won't turn this way. Try turning to the left."))
-			door_rattle()
-			return
-		trykeylock(item, user)
-	else
+	if(user.get_active_held_item())
+		// Handle existing behavior for held items
+		var/obj/item = user.get_active_held_item()
+		if(istype(item, /obj/item/roguekey) || istype(item, /obj/item/storage/keyring))
+			if(locked)
+				to_chat(user, span_warning("It won't turn this way. Try turning to the left."))
+				door_rattle()
+				return
+			trykeylock(item, user)
 		return ..()
+		
+	// Check belt slots for keys if hands are empty
+	if(ishuman(user))
+		var/mob/living/carbon/human/H = user
+		var/obj/item/belt_l = H.get_item_by_slot(SLOT_BELT_L)
+		var/obj/item/belt_r = H.get_item_by_slot(SLOT_BELT_R)
+		
+		// Check left belt
+		if(istype(belt_l, /obj/item/storage/keyring))
+			var/obj/item/storage/keyring/ring = belt_l
+			for(var/obj/item/roguekey/K in ring.contents)
+				if(K.lockhash == lockhash)
+					lock_toggle(user)
+					return
+		else if(istype(belt_l, /obj/item/roguekey))
+			var/obj/item/roguekey/key = belt_l
+			if(key.lockhash == lockhash)
+				lock_toggle(user)
+				return
+			
+		// Check right belt
+		if(istype(belt_r, /obj/item/storage/keyring))
+			var/obj/item/storage/keyring/ring = belt_r
+			for(var/obj/item/roguekey/K in ring.contents)
+				if(K.lockhash == lockhash)
+					lock_toggle(user)
+					return
+		else if(istype(belt_r, /obj/item/roguekey))
+			var/obj/item/roguekey/key = belt_r
+			if(key.lockhash == lockhash)
+				lock_toggle(user)
+				return
+	
+	return ..()
 
 /obj/structure/mineral_door/proc/trykeylock(obj/item/I, mob/user)
 	if(door_opened || isSwitchingStates)
@@ -622,10 +656,6 @@
 	else
 		return ..()
 
-/obj/structure/mineral_door/transparent/plasma/temperature_expose(datum/gas_mixture/air, exposed_temperature, exposed_volume)
-	if(exposed_temperature > 300)
-		TemperatureAct()
-
 /obj/structure/mineral_door/transparent/plasma/proc/TemperatureAct()
 	atmos_spawn_air("plasma=500;TEMP=1000")
 	deconstruct(FALSE)
@@ -746,7 +776,6 @@
 
 /obj/structure/mineral_door/wood/attackby(obj/item/I, mob/living/user)
 	return ..()
-
 /obj/structure/mineral_door/wood/fire_act(added, maxstacks)
 	testing("added [added]")
 	if(!added)
@@ -869,9 +898,50 @@
 	..()
 
 /obj/structure/mineral_door/wood/donjon/attack_right(mob/user)
-	if(user.get_active_held_item())
-		..()
-		return
+	if(user.get_active_held_item())  // If holding an item
+		var/obj/item = user.get_active_held_item()
+		if(istype(item, /obj/item/roguekey) || istype(item, /obj/item/storage/keyring))
+			if(locked)
+				to_chat(user, span_warning("It won't turn this way. Try turning to the left."))
+				door_rattle()
+				return
+			trykeylock(item, user)
+			return
+		return ..()  // Handle other items normally
+	
+	// Check belt slots for keys if hands are empty
+	if(ishuman(user))
+		var/mob/living/carbon/human/H = user
+		var/obj/item/belt_l = H.get_item_by_slot(SLOT_BELT_L)
+		var/obj/item/belt_r = H.get_item_by_slot(SLOT_BELT_R)
+		
+		// Check left belt
+		if(istype(belt_l, /obj/item/storage/keyring))
+			var/obj/item/storage/keyring/ring = belt_l
+			for(var/obj/item/roguekey/K in ring.contents)
+				if(K.lockhash == lockhash)
+					trykeylock(ring, user)
+					return
+		else if(istype(belt_l, /obj/item/roguekey))
+			var/obj/item/roguekey/key = belt_l
+			if(key.lockhash == lockhash)
+				trykeylock(key, user)
+				return
+		
+		// Check right belt
+		if(istype(belt_r, /obj/item/storage/keyring))
+			var/obj/item/storage/keyring/ring = belt_r
+			for(var/obj/item/roguekey/K in ring.contents)
+				if(K.lockhash == lockhash)
+					trykeylock(ring, user)
+					return
+		else if(istype(belt_r, /obj/item/roguekey))
+			var/obj/item/roguekey/key = belt_r
+			if(key.lockhash == lockhash)
+				trykeylock(key, user)
+				return
+	
+	// Only handle viewport if no key interactions occurred
 	if(door_opened || isSwitchingStates)
 		return
 	if(brokenstate)
@@ -950,3 +1020,4 @@
 	closeSound = 'modular/Neu_Food/sound/blindsclose.ogg'
 	dir = NORTH
 	locked = TRUE
+

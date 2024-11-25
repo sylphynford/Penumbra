@@ -32,7 +32,7 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
         "Inquisitor", "Templar", "Acolyte", "Churchling", "Merchant",
         "Shophand", "Town Elder", "Blacksmith", "Smithy Apprentice",
         "Artificer", "Soilson", "Tailor", "Innkeeper", "Cook",
-        "Bathmaster", "Taven Knave", "Bath Swain", "Towner", "Vagabond"
+        "Bathmaster", "Taven Knave", "Bath Swain", "Bath Wench", "Tavern Wench", "Towner", "Maid", "Vagabond"
     )
 
 /datum/round_event/roundstart/throne_meeting/proc/get_valid_turfs(turf/throne_turf)
