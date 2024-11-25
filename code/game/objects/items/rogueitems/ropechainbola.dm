@@ -218,6 +218,16 @@
 				buckled_mob.Knockdown(60)
 	return ..()
 
+
+/obj/structure/noose/gallows/post_buckle_mob(mob/living/M)
+	if(has_buckled_mobs())
+		START_PROCESSING(SSobj, src)
+		M.set_mob_offsets("bed_buckle", _x = 5, _y = 12)  // Adjusted x and y values for gallows
+
+/obj/structure/noose/gallows/post_unbuckle_mob(mob/living/M)
+	STOP_PROCESSING(SSobj, src)
+	M.reset_offsets("bed_buckle")
+
 /obj/structure/noose/user_buckle_mob(mob/living/M, mob/user, check_loc)
 	if(!in_range(user, src) || user.stat != CONSCIOUS || !iscarbon(M))
 		return FALSE
