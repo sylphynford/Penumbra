@@ -105,30 +105,16 @@ SUBSYSTEM_DEF(migrants)
 		if(!role_assignments[assignment.role_type])
 			role_assignments[assignment.role_type] = list()
 			
-		var/client/picked
+		// Shuffle and pick randomly from valid candidates
 		priority = shuffle(priority)
-		for(var/client/client as anything in priority)
-			if(!can_be_role(client, assignment.role_type))
-				continue
-			if(client in role_assignments[assignment.role_type])
-				continue
-			picked = client
-			break
-
-		if(!picked)
-			continue
-
-		active_migrants -= picked
-		assignment.client = picked
-		picked_migrants += picked
-		role_assignments[assignment.role_type] += picked
-		
-		// Only remove other players from queue if all slots for this role are now filled
-		var/remaining_slots = wave.roles[assignment.role_type] - length(role_assignments[assignment.role_type])
-		if(remaining_slots <= 0)
-			for(var/client/client as anything in active_migrants)
-				if(assignment.role_type in client.prefs.migrant.role_preferences)
-					active_migrants -= client
+		var/slots_available = wave.roles[assignment.role_type] - length(role_assignments[assignment.role_type])
+		if(slots_available > 0)
+			var/client/picked = pick(priority)
+			if(can_be_role(picked, assignment.role_type))
+				active_migrants -= picked
+				assignment.client = picked
+				picked_migrants += picked
+				role_assignments[assignment.role_type] += picked
 
 	// Second pass - fill remaining slots with any available migrants
 	for(var/datum/migrant_assignment/assignment as anything in assignments)
