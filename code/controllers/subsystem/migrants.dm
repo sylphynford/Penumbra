@@ -63,9 +63,12 @@ SUBSYSTEM_DEF(migrants)
 	if(total_roles <= 0 || consecutive_failures >= 2)
 		consecutive_failures = 0
 		wave_number = 1 // Reset wave number when changing waves
-		// Reset the current wave's roles to original values
-		for(var/role_type in wave.original_roles)
-			wave.roles[role_type] = wave.original_roles[role_type]
+		// Reset ALL waves to their original values, not just the current one
+		for(var/wave_type in GLOB.migrant_waves)
+			var/datum/migrant_wave/reset_wave = MIGRANT_WAVE(wave_type)
+			for(var/role_type in reset_wave.original_roles)
+				reset_wave.roles[role_type] = reset_wave.original_roles[role_type]
+
 		set_current_wave(null, 0)
 		time_until_next_wave = time_between_waves
 	else
