@@ -41,13 +41,27 @@
 	var/obj/item/organ/penis/penis = H.getorganslot(ORGAN_SLOT_PENIS)
 	var/adjective
 	var/arousal_modifier
+	
 	switch(penis.penis_size)
-		if(1)
-			adjective = "a small"
-		if(2)
-			adjective = "an average"
-		if(3)
-			adjective = "a large"
+		if(0 to 1.9)
+			adjective = "tiny"
+		if(2 to 3.9)
+			adjective = "small"
+		if(4 to 5.9)
+			adjective = "below average"
+		if(6 to 7.9)
+			adjective = "average"
+		if(8 to 9.9)
+			adjective = "above average"
+		if(10 to 11.9)
+			adjective = "large"
+		if(12 to 13.9)
+			adjective = "huge"
+		if(14 to 15.9)
+			adjective = "massive"
+		if(16 to INFINITY)
+			adjective = "monstrous"
+			
 	switch(H.sexcon.arousal)
 		if(80 to INFINITY)
 			arousal_modifier = ", throbbing violently"
@@ -57,19 +71,21 @@
 			arousal_modifier = ", stiffened and twitching"
 		else
 			arousal_modifier = ", soft and flaccid"
+			
 	var/used_name
 	if(penis.erect_state != ERECT_STATE_HARD && penis.sheath_type != SHEATH_TYPE_NONE)
 		switch(penis.sheath_type)
 			if(SHEATH_TYPE_NORMAL)
-				if(penis.penis_size == 3)
+				if(penis.penis_size >= 8)
 					used_name = "a fat sheath"
 				else
 					used_name = "a sheath"
 			if(SHEATH_TYPE_SLIT)
 				used_name = "a genital slit"
 	else
-		used_name = "[adjective] [penis.name][arousal_modifier]"
-	return "[used_name]"
+		used_name = "a [adjective] [round(penis.penis_size, 0.1)] inch [penis.name][arousal_modifier]"
+	
+	return "<font color='#e9a8d1'>[used_name]</font>"
 
 /datum/mob_descriptor/testicles
 	name = "balls"
@@ -104,7 +120,7 @@
 			adjective = "an average"
 		if(3)
 			adjective = "a large"
-	return "[adjective] pair of balls"
+	return "<font color='#e9a8d1'>[adjective] pair of balls</font>"
 
 /datum/mob_descriptor/vagina
 	name = "vagina"
@@ -150,7 +166,7 @@
 			arousal_modifier = ", slickened with arousal"
 		if(20 to 50)
 			arousal_modifier = ", wet with arousal"
-	return "a [vagina_type][arousal_modifier]"
+	return "<font color='#e9a8d1'>a [vagina_type][arousal_modifier]</font>"
 
 /datum/mob_descriptor/breasts
 	name = "breasts"
@@ -175,17 +191,18 @@
 	var/mob/living/carbon/human/H = described
 	var/obj/item/organ/breasts/breasts = H.getorganslot(ORGAN_SLOT_BREASTS)
 	var/adjective
+	
 	switch(breasts.breast_size)
 		if(0)
-			adjective = "a flat"
-		if(1)
-			adjective = "a very small"
+			adjective = "perky"  // A-cup
 		if(2)
-			adjective = "a small"
+			adjective = "pert"   // B-cup
 		if(3)
-			adjective = "an average"
+			adjective = "full"   // C-cup
 		if(4)
-			adjective = "a large"
+			adjective = "heavy"  // D-cup
 		if(5)
-			adjective = "an enormous"
-	return "[adjective] pair of breasts"
+			adjective = "massive" // E-cup
+			
+	var/cup_size = find_key_by_value(GLOB.named_breast_sizes, breasts.breast_size)
+	return "<font color='#e9a8d1'>[adjective] [cup_size] breasts</font>"

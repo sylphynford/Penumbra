@@ -9,7 +9,8 @@
 	var/sheath_type = SHEATH_TYPE_NONE
 	var/erect_state = ERECT_STATE_NONE
 	var/penis_type = PENIS_TYPE_PLAIN
-	var/penis_size = DEFAULT_PENIS_SIZE
+	var/penis_size = DEFAULT_PENIS_INCHES
+	var/sprite_size = PENIS_SPRITE_AVERAGE
 
 /obj/item/organ/penis/Initialize()
 	. = ..()

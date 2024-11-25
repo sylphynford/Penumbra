@@ -22,9 +22,9 @@
 				else
 					return "slit_2"
 	if(pp.erect_state == ERECT_STATE_HARD)
-		return "[icon_state]_[min(3,pp.penis_size+1)]"
+		return "[icon_state]_[min(3, pp.sprite_size+1)]"
 	else
-		return "[icon_state]_[pp.penis_size]"
+		return "[icon_state]_[pp.sprite_size]"
 
 /datum/sprite_accessory/penis/is_visible(obj/item/organ/organ, obj/item/bodypart/bodypart, mob/living/carbon/owner)
 	if(owner.underwear)

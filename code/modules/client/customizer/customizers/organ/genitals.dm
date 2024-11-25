@@ -24,7 +24,8 @@
 /datum/customizer_choice/organ/penis/validate_entry(datum/preferences/prefs, datum/customizer_entry/entry)
 	..()
 	var/datum/customizer_entry/organ/penis/penis_entry = entry
-	penis_entry.penis_size = sanitize_integer(penis_entry.penis_size, MIN_PENIS_SIZE, MAX_PENIS_SIZE, DEFAULT_PENIS_SIZE)
+	var/max_size = (prefs.pref_species.id == "tiefling") ? MAX_PENIS_INCHES_TIEFLING : MAX_PENIS_INCHES
+	penis_entry.penis_size = clamp(penis_entry.penis_size, MIN_PENIS_INCHES, max_size)
 
 /datum/customizer_choice/organ/penis/imprint_organ_dna(datum/organ_dna/organ_dna, datum/customizer_entry/entry, datum/preferences/prefs)
 	..()
@@ -35,21 +36,21 @@
 /datum/customizer_choice/organ/penis/generate_pref_choices(list/dat, datum/preferences/prefs, datum/customizer_entry/entry, customizer_type)
 	..()
 	var/datum/customizer_entry/organ/penis/penis_entry = entry
-	dat += "<br>Penis size: <a href='?_src_=prefs;task=change_customizer;customizer=[customizer_type];customizer_task=penis_size''>[find_key_by_value(GLOB.named_penis_sizes, penis_entry.penis_size)]</a>"
+	dat += "<br>Penis size: <a href='?_src_=prefs;task=change_customizer;customizer=[customizer_type];customizer_task=penis_size''>[penis_entry.penis_size] inches</a>"
 
 /datum/customizer_choice/organ/penis/handle_topic(mob/user, list/href_list, datum/preferences/prefs, datum/customizer_entry/entry, customizer_type)
 	..()
 	var/datum/customizer_entry/organ/penis/penis_entry = entry
 	switch(href_list["customizer_task"])
 		if("penis_size")
-			var/named_size = input(user, "Choose your penis size:", "Character Preference", find_key_by_value(GLOB.named_penis_sizes, penis_entry.penis_size)) as anything in GLOB.named_penis_sizes
-			if(isnull(named_size))
+			var/max_size = (prefs.pref_species.id == "tiefling") ? MAX_PENIS_INCHES_TIEFLING : MAX_PENIS_INCHES
+			var/new_size = input(user, "Choose your penis size (1.0-[max_size] inches):", "Character Preference", "[penis_entry.penis_size]") as num|null
+			if(isnull(new_size))
 				return
-			var/new_size = GLOB.named_penis_sizes[named_size]
-			penis_entry.penis_size = sanitize_integer(new_size, MIN_PENIS_SIZE, MAX_PENIS_SIZE, DEFAULT_PENIS_SIZE)
+			penis_entry.penis_size = clamp(new_size, MIN_PENIS_INCHES, max_size)
 
 /datum/customizer_entry/organ/penis
-	var/penis_size = DEFAULT_PENIS_SIZE
+	var/penis_size = DEFAULT_PENIS_INCHES
 
 /datum/customizer/organ/penis/human
 	customizer_choices = list(/datum/customizer_choice/organ/penis/human)

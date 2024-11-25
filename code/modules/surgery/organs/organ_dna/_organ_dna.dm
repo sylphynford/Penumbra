@@ -37,12 +37,21 @@
 	eyes_organ.second_color = second_color
 
 /datum/organ_dna/penis
-	var/penis_size = DEFAULT_PENIS_SIZE
+	var/penis_size = DEFAULT_PENIS_INCHES
+	var/sprite_size = PENIS_SPRITE_AVERAGE
 
 /datum/organ_dna/penis/imprint_organ(obj/item/organ/organ)
 	..()
 	var/obj/item/organ/penis/penis_organ = organ
 	penis_organ.penis_size = penis_size
+	penis_organ.sprite_size = inches_to_sprite_size(penis_size)
+
+/datum/organ_dna/penis/proc/inches_to_sprite_size(inches)
+	if(inches < 4)
+		return PENIS_SPRITE_SMALL
+	if(inches < 8)
+		return PENIS_SPRITE_AVERAGE
+	return PENIS_SPRITE_LARGE
 
 /datum/organ_dna/testicles
 	var/ball_size = DEFAULT_TESTICLES_SIZE
