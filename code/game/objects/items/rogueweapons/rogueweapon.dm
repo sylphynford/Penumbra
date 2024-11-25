@@ -28,7 +28,7 @@
 	experimental_onhip = TRUE
 	experimental_onback = TRUE
 	embedding = list(
-		"embed_chance" = 20,
+		"embed_chance" = 0,
 		"embedded_pain_multiplier" = 1,
 		"embedded_fall_chance" = 0,
 	)
@@ -78,7 +78,7 @@
 	if(nuforce < 10)
 		return 0
 
-	var/probability = nuforce * (total_dam / affecting.max_damage)
+	var/probability = (nuforce * 1.5) * (total_dam / affecting.max_damage)
 	var/hard_dismember = HAS_TRAIT(affecting, TRAIT_HARDDISMEMBER)
 	var/easy_dismember = affecting.rotted || affecting.skeletonized || HAS_TRAIT(affecting, TRAIT_EASYDISMEMBER)
 	if(affecting.owner)
@@ -87,7 +87,7 @@
 		if(!easy_dismember)
 			easy_dismember = HAS_TRAIT(affecting.owner, TRAIT_EASYDISMEMBER)
 	if(hard_dismember)
-		return min(probability, 5)
+		return min(probability, 10)
 	else if(easy_dismember)
-		return probability * 1.5
+		return probability * 2.0
 	return probability
