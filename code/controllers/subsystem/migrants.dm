@@ -132,9 +132,14 @@ SUBSYSTEM_DEF(migrants)
 
 		var/client/picked
 		for(var/client/client as anything in active_migrants)
+			// Skip if client can't be this role
 			if(!can_be_role(client, assignment.role_type))
 				continue
-			if(client in role_assignments[assignment.role_type])
+			// Skip if client is already assigned to ANY role
+			if(client in picked_migrants)
+				continue
+			// Skip if client hasn't specifically chosen this role
+			if(!(assignment.role_type in client.prefs.migrant.role_preferences))
 				continue
 			picked = client
 			break
