@@ -183,40 +183,47 @@
 	var/total_dam = get_damage()
 	var/damage_dividend = (total_dam / max_damage)
 	var/resistance = HAS_TRAIT(owner, TRAIT_CRITICAL_RESISTANCE)
-	if (user && dam)
-		if(user.goodluck(2))
-			dam += 10
-	if ((bclass = BCLASS_PUNCH) && (user && dam))
-		if(user && HAS_TRAIT(user, TRAIT_CIVILIZEDBARBARIAN))
-			dam += 15
-	if(bclass in GLOB.dislocation_bclasses)
-		used = round(damage_dividend * 20 + (dam / 3 - 10 * resistance), 1)
-		if(user && istype(user.rmb_intent, /datum/rmb_intent/strong))
-			used += 10
-		if(prob(used))
-			if(HAS_TRAIT(src, TRAIT_BRITTLE))
-				attempted_wounds += /datum/wound/fracture
-			else
-				attempted_wounds += /datum/wound/dislocation
-	if(bclass in GLOB.fracture_bclasses)
-		used = round(damage_dividend * 20 + (dam / 3) - 10 * resistance, 1)
-		if(user)
-			if(istype(user.rmb_intent, /datum/rmb_intent/strong))
+	
+	// Prevent cutting weapons from causing fractures/dislocations
+	var/is_cutting = (bclass in list(BCLASS_CUT, BCLASS_CHOP, BCLASS_STAB, BCLASS_PICK))
+	
+	if(!is_cutting)
+		if(bclass in GLOB.dislocation_bclasses)
+			used = round(damage_dividend * 20 + (dam / 3 - 10 * resistance), 1)
+			if(user && istype(user.rmb_intent, /datum/rmb_intent/strong))
 				used += 10
-		if(HAS_TRAIT(src, TRAIT_BRITTLE))
-			used += 10
-		if(prob(used))
-			attempted_wounds += /datum/wound/dislocation
-			attempted_wounds += /datum/wound/fracture
+			if(prob(used))
+				if(HAS_TRAIT(src, TRAIT_BRITTLE))
+					attempted_wounds += /datum/wound/fracture
+				else
+					attempted_wounds += /datum/wound/dislocation
+					
+		if(bclass in GLOB.fracture_bclasses)
+			used = round(damage_dividend * 20 + (dam / 3) - 10 * resistance, 1)
+			if(user)
+				if(istype(user.rmb_intent, /datum/rmb_intent/strong))
+					used += 10
+			if(HAS_TRAIT(src, TRAIT_BRITTLE))
+				used += 10
+			if(prob(used))
+				attempted_wounds += /datum/wound/dislocation
+				attempted_wounds += /datum/wound/fracture
+	
+	// Allow artery wounds for all appropriate weapons
 	if(bclass in GLOB.artery_bclasses)
 		used = round(damage_dividend * 20 + (dam / 3) - 10 * resistance, 1)
 		if(user)
-			if((bclass in GLOB.artery_strong_bclasses) && istype(user.rmb_intent, /datum/rmb_intent/strong))
-				used += 10
-			else if(istype(user.rmb_intent, /datum/rmb_intent/aimed))
-				used += 10
+			if(bclass == BCLASS_CHOP)
+				if(istype(user.rmb_intent, /datum/rmb_intent/strong))
+					used += 10
+			else
+				if(istype(user.rmb_intent, /datum/rmb_intent/aimed))
+					used += 10
+		var/artery_type = /datum/wound/artery
+		if(zone_precise == BODY_ZONE_PRECISE_NECK)
+			artery_type = /datum/wound/artery/neck
 		if(prob(used))
-			attempted_wounds += /datum/wound/artery
+			attempted_wounds += artery_type
 
 	for(var/wound_type in shuffle(attempted_wounds))
 		var/datum/wound/applied = add_wound(wound_type, silent, crit_message)
@@ -313,11 +320,11 @@
 				winset(owner.client, "outputwindow.output", "max-lines=100")
 		var/dislocation_type
 		var/fracture_type = /datum/wound/fracture/head
-		var/necessary_damage = 0.8
+		var/necessary_damage = 0.7
 		if(resistance)
 			fracture_type = /datum/wound/fracture
 		else if(zone_precise == BODY_ZONE_PRECISE_SKULL)
-			necessary_damage = 0.7
+			necessary_damage = 0.6
 			used += 5
 		else if(zone_precise == BODY_ZONE_PRECISE_MOUTH)
 			fracture_type = /datum/wound/fracture/mouth
@@ -325,7 +332,7 @@
 		else if(zone_precise == BODY_ZONE_PRECISE_NECK)
 			fracture_type = /datum/wound/fracture/neck
 			dislocation_type = /datum/wound/dislocation/neck
-			necessary_damage = 0.8
+			necessary_damage = 0.7
 		if(prob(used) && (damage_dividend >= necessary_damage))
 			if(dislocation_type)
 				attempted_wounds += dislocation_type
