@@ -5,9 +5,15 @@
 	default_disabled = TRUE
 
 /datum/customizer/organ/penis/is_allowed(datum/preferences/prefs)
+	if(prefs.gender == MALE)
+		allows_disabling = FALSE
+		default_disabled = FALSE
+		return TRUE
 	for(var/datum/customizer_entry/entry as anything in prefs.customizer_entries)
 		if(istype(entry,/datum/customizer_entry/organ/vagina))
 			return entry.disabled
+	allows_disabling = TRUE
+	default_disabled = TRUE
 	return TRUE
 
 /datum/customizer_choice/organ/penis
@@ -79,24 +85,39 @@
 	allows_accessory_color_customization = TRUE
 
 /datum/customizer_choice/organ/penis/knotted
-    name = "Knotted Penis"
-    organ_type = /obj/item/organ/penis/knotted
-    sprite_accessories = list(/datum/sprite_accessory/penis/knotted)
+	name = "Knotted Penis"
+	organ_type = /obj/item/organ/penis/knotted
+	sprite_accessories = list(/datum/sprite_accessory/penis/knotted)
 
 /datum/customizer_choice/organ/penis/knotted/is_allowed(datum/preferences/prefs)
-    return istype(prefs.pref_species, /datum/species/demihuman)
+	return istype(prefs.pref_species, /datum/species/demihuman)
 
 /datum/customizer/organ/testicles
 	abstract_type = /datum/customizer/organ/testicles
 	name = "Testicles"
-	allows_disabling = TRUE
-	default_disabled = TRUE
-	gender_enabled = MALE
+	allows_disabling = FALSE
+	default_disabled = FALSE
+	gender_enabled = null
 
 /datum/customizer/organ/testicles/is_allowed(datum/preferences/prefs)
+	// Males should always have testicles if they have a penis
+	if(prefs.gender == MALE)
+		for(var/datum/customizer_entry/entry as anything in prefs.customizer_entries)
+			if(istype(entry, /datum/customizer_entry/organ/penis))
+				return !entry.disabled
+		return TRUE
+
+	// For non-males, check both penis and vagina status
+	var/has_vagina = FALSE
+	var/has_enabled_penis = FALSE
+	
 	for(var/datum/customizer_entry/entry as anything in prefs.customizer_entries)
-		if(istype(entry,/datum/customizer_entry/organ/penis))
-			return !entry.disabled
+		if(istype(entry, /datum/customizer_entry/organ/penis) && !entry.disabled)
+			has_enabled_penis = TRUE
+		if(istype(entry, /datum/customizer_entry/organ/vagina) && !entry.disabled)
+			has_vagina = TRUE
+	
+	return has_enabled_penis && !has_vagina
 
 /datum/customizer_choice/organ/testicles
 	abstract_type = /datum/customizer_choice/organ/testicles
@@ -146,14 +167,8 @@
 /datum/customizer/organ/testicles/human
 	customizer_choices = list(/datum/customizer_choice/organ/testicles/human)
 
-/datum/customizer/organ/testicles/internal
-	customizer_choices = list(/datum/customizer_choice/organ/testicles/internal)
-
 /datum/customizer/organ/testicles/anthro
-	customizer_choices = list(
-		/datum/customizer_choice/organ/testicles/external,
-		/datum/customizer_choice/organ/testicles/internal,
-	)
+	customizer_choices = list(/datum/customizer_choice/organ/testicles/external)
 
 /datum/customizer_choice/organ/testicles/external
 	name = "Testicles"
@@ -164,11 +179,7 @@
 	sprite_accessories = list(/datum/sprite_accessory/testicles/pair)
 	allows_accessory_color_customization = FALSE
 
-/datum/customizer_choice/organ/testicles/internal
-	name = "Internal testicles"
-	organ_type = /obj/item/organ/testicles/internal
-	sprite_accessories = null
-	can_customize_size = FALSE
+
 
 /datum/customizer_entry/organ/testicles
 	var/ball_size = DEFAULT_TESTICLES_SIZE
@@ -252,8 +263,12 @@
 	gender_enabled = FEMALE
 
 /datum/customizer/organ/vagina/is_allowed(datum/preferences/prefs)
-	if(prefs.gender != FEMALE)
+	if(prefs.gender == MALE)
 		return FALSE
+	if(prefs.gender == FEMALE)
+		allows_disabling = TRUE
+		default_disabled = FALSE
+		return TRUE
 	for(var/datum/customizer_entry/entry as anything in prefs.customizer_entries)
 		if(istype(entry, /datum/customizer_entry/organ/penis))
 			return entry.disabled

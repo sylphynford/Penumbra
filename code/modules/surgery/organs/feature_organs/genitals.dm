@@ -128,7 +128,3 @@
 	var/ball_size = DEFAULT_TESTICLES_SIZE
 	var/virility = TRUE
 
-/obj/item/organ/testicles/internal
-	name = "internal testicles"
-	visible_organ = FALSE
-	accessory_type = /datum/sprite_accessory/none

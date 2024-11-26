@@ -1129,9 +1129,9 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 				dat += "<label>[kb.full_name]</label> <a href ='?_src_=prefs;preference=keybinds;task=keybindings_capture;keybinding=[kb.name];old_key=[bound_key]'>[bound_key]</a>"
 				for(var/bound_key_index in 2 to length(user_binds[kb.name]))
 					bound_key = user_binds[kb.name][bound_key_index]
-					dat += " | <a href ='?_src_=prefs;preference=keybinds;task=keybindings_capture;keybinding=[kb.name];old_key=[bound_key]'>[bound_key]</a>"
+					dat += " | <a href ='?_src_=prefs;preference=keybindings_capture;keybinding=[kb.name];old_key=[bound_key]'>[bound_key]</a>"
 				if(length(user_binds[kb.name]) < MAX_KEYS_PER_KEYBIND)
-					dat += "| <a href ='?_src_=prefs;preference=keybinds;task=keybindings_capture;keybinding=[kb.name]'>Add Secondary</a>"
+					dat += "| <a href ='?_src_=prefs;preference=keybindings_capture;keybinding=[kb.name]'>Add Secondary</a>"
 				dat += "<br>"
 
 	dat += "<br><br>"
@@ -1314,7 +1314,6 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 		return
 	else if(href_list["preference"] == "descriptors")
 		show_descriptors_ui(user)
-		return
 
 	else if(href_list["preference"] == "customizers")
 		ShowCustomizers(user)
@@ -1858,16 +1857,17 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 					if(gender == "male")
 						pickedGender = "female"
 					if(pickedGender && pickedGender != gender)
-						gender = pickedGender
+						set_gender(pickedGender)
 						// Automatically update pronouns based on body type
-						switch(gender)
+						switch(pickedGender)
 							if("male")
-								pronouns = HE_HIM  // Assuming these are defined constants
+								pronouns = HE_HIM
 								voice_type = VOICE_TYPE_MASC
 							if("female") 
 								pronouns = SHE_HER
 								voice_type = VOICE_TYPE_FEM
 						genderize_customizer_entries()
+						update_gender_customization()
 				if("domhand")
 					if(domhand == 1)
 						domhand = 2
@@ -1967,6 +1967,7 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 					hotkeys = (choice == "Do It")
 					key_bindings = (hotkeys) ? deepCopyList(GLOB.hotkey_keybinding_list_by_key) : deepCopyList(GLOB.classic_keybinding_list_by_key)
 					user.client.update_movement_keys()
+					SetKeybinds(user)
 				if("chat_on_map")
 					chat_on_map = !chat_on_map
 				if("see_chat_non_mob")
@@ -2346,3 +2347,49 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 	if(!migrant.active)
 		return FALSE
 	return TRUE
+
+/datum/preferences/proc/update_gender_customization()
+	var/list/new_entries = list()
+	// Keep non-genital entries
+	for(var/datum/customizer_entry/entry as anything in customizer_entries)
+		if(!istype(entry, /datum/customizer_entry/organ/penis) && !istype(entry, /datum/customizer_entry/organ/vagina) && !istype(entry, /datum/customizer_entry/organ/breasts) && !istype(entry, /datum/customizer_entry/organ/testicles))
+			new_entries += entry
+			new_entries += entry
+	
+	var/datum/species/species = pref_species
+	var/list/customizers = species.customizers
+	
+	// First pass: Add vagina and breasts
+	for(var/customizer_type in customizers)
+		var/datum/customizer/customizer = CUSTOMIZER(customizer_type)
+		if(!customizer.is_allowed(src))
+			continue
+		
+		if(istype(customizer, /datum/customizer/organ/vagina) || istype(customizer, /datum/customizer/organ/breasts))
+			var/datum/customizer_entry/entry = customizer.make_default_customizer_entry(src, gender != FEMALE)
+			new_entries += entry
+	
+	// Second pass: Add penis and testicles together
+	var/penis_enabled = FALSE
+	var/datum/customizer_entry/penis_entry
+	for(var/customizer_type in customizers)
+		var/datum/customizer/customizer = CUSTOMIZER(customizer_type)
+		if(!customizer.is_allowed(src))
+			continue
+		
+		if(istype(customizer, /datum/customizer/organ/penis))
+			penis_entry = customizer.make_default_customizer_entry(src, gender != MALE)
+			new_entries += penis_entry
+			penis_enabled = !penis_entry.disabled
+		else if(istype(customizer, /datum/customizer/organ/testicles) && penis_enabled)
+			var/datum/customizer_entry/entry = customizer.make_default_customizer_entry(src, FALSE)
+			new_entries += entry
+	
+	customizer_entries = new_entries
+	validate_customizer_entries()
+
+/datum/preferences/proc/set_gender(new_gender)
+	if(!(new_gender in list("male", "female")))
+		return
+	gender = new_gender
+	update_gender_customization()
