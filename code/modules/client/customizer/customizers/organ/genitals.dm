@@ -56,11 +56,13 @@
 	customizer_choices = list(/datum/customizer_choice/organ/penis/human)
 
 /datum/customizer/organ/penis/anthro
-	customizer_choices = list(/datum/customizer_choice/organ/penis/human)
+	customizer_choices = list(
+		/datum/customizer_choice/organ/penis/human_anthro
+	)
 
 /datum/customizer/organ/penis/demihuman
 	customizer_choices = list(
-		/datum/customizer_choice/organ/penis/human,
+		/datum/customizer_choice/organ/penis/human_anthro,
 		/datum/customizer_choice/organ/penis/knotted
 	)
 

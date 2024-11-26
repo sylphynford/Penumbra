@@ -83,9 +83,9 @@
 			if(SHEATH_TYPE_SLIT)
 				used_name = "a genital slit"
 	else
-		used_name = "a [adjective] [round(penis.penis_size, 0.1)] inch [penis.name][arousal_modifier]"
+		used_name = "a <font color='#e9a8d1'>[adjective] [round(penis.penis_size, 0.1)] inch penis</font>[arousal_modifier]"
 	
-	return "<font color='#e9a8d1'>[used_name]</font>"
+	return "[used_name]"
 
 /datum/mob_descriptor/testicles
 	name = "balls"
@@ -115,12 +115,12 @@
 	var/adjective
 	switch(testes.ball_size)
 		if(1)
-			adjective = "a small"
+			adjective = "small"
 		if(2)
-			adjective = "an average"
+			adjective = "average"
 		if(3)
-			adjective = "a large"
-	return "<font color='#e9a8d1'>[adjective] pair of balls</font>"
+			adjective = "large"
+	return "a <font color='#e9a8d1'>[adjective] pair of balls</font>"
 
 /datum/mob_descriptor/vagina
 	name = "vagina"
