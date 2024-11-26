@@ -388,11 +388,15 @@ SUBSYSTEM_DEF(job)
 								consort_has_vagina = (entry.disabled == 0)
 						
 						if((ruler_has_penis && consort_has_penis) || (ruler_has_vagina && consort_has_vagina))
-							player.client.prefs.job_preferences -= job.title
+							player.client.prefs.job_preferences[job.title] = 0  // Set preference to 0 instead of removing
 							to_chat(player, "<span class='warning'>You have been removed from Consort selection due to sex incompatibility with the ruler.</span>")
 							continue
 					
 					AssignRole(player, job.title)
+
+	// Reject any remaining unassigned players
+	for(var/mob/dead/new_player/player in unassigned)
+		RejectPlayer(player)
 
 	return TRUE
 
