@@ -63,7 +63,7 @@
 	/// Most head fractures are serious enough to cause paralysis
 	var/paralysis = TRUE
 	/// Some head fractures are so serious they cause instant death
-	var/mortal = FALSE
+	var/mortal = TRUE
 	/// Funny easter egg
 	var/dents_brain = TRUE
 
@@ -82,7 +82,7 @@
 		if(iscarbon(affected))
 			var/mob/living/carbon/carbon_affected = affected
 			carbon_affected.update_disabled_bodyparts()
-	if(mortal || HAS_TRAIT(affected, TRAIT_CRITICAL_WEAKNESS))
+	if(mortal)
 		affected.death()
 
 /datum/wound/fracture/head/on_mob_loss(mob/living/affected)
