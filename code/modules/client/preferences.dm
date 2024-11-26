@@ -2393,3 +2393,21 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 		return
 	gender = new_gender
 	update_gender_customization()
+
+/datum/preferences/proc/ensure_genital_defaults()
+    var/has_penis = FALSE
+    var/has_vagina = FALSE
+    
+    // Check if we have any genitals set
+    for(var/datum/customizer_entry/entry as anything in customizer_entries)
+        if(istype(entry, /datum/customizer_entry/organ/penis) && !entry.disabled)
+            has_penis = TRUE
+        if(istype(entry, /datum/customizer_entry/organ/vagina) && !entry.disabled)
+            has_vagina = TRUE
+    
+    // If no genitals are set, set defaults based on gender
+    if(!has_penis && !has_vagina)
+        if(gender == MALE)
+            update_gender_customization() // This will add default penis and testicles
+        else if(gender == FEMALE)
+            update_gender_customization() // This will add default vagina
