@@ -23,6 +23,7 @@
 	organ_slot = ORGAN_SLOT_PENIS
 	organ_dna_type = /datum/organ_dna/penis
 	customizer_entry_type = /datum/customizer_entry/organ/penis
+	allows_accessory_color_customization = FALSE
 
 	proc/is_allowed(datum/preferences/prefs)
 		return TRUE
@@ -58,6 +59,7 @@
 /datum/customizer_entry/organ/penis
 	var/penis_size = DEFAULT_PENIS_INCHES
 
+
 /datum/customizer/organ/penis/human
 	customizer_choices = list(/datum/customizer_choice/organ/penis/human)
 
@@ -82,7 +84,7 @@
 	name = "Plain Penis"
 	organ_type = /obj/item/organ/penis
 	sprite_accessories = list(/datum/sprite_accessory/penis/human)
-	allows_accessory_color_customization = TRUE
+	allows_accessory_color_customization = FALSE
 
 /datum/customizer_choice/organ/penis/knotted
 	name = "Knotted Penis"
@@ -173,6 +175,7 @@
 /datum/customizer_choice/organ/testicles/external
 	name = "Testicles"
 	sprite_accessories = list(/datum/sprite_accessory/testicles/pair)
+	allows_accessory_color_customization = FALSE
 
 /datum/customizer_choice/organ/testicles/human
 	name = "Testicles"
