@@ -262,6 +262,10 @@ SUBSYSTEM_DEF(ticker)
 						if(player.IsJobUnavailable(V) != JOB_AVAILABLE)
 							to_chat(player, span_warning("You cannot be [V] and thus are not considered."))
 							continue
+					// Store ruler preferences as soon as they're selected
+					if(V in list("Baron", "Baroness"))
+						GLOB.preferences_datums[player.ckey] = player.client.prefs
+						message_admins("DEBUG: Stored ruler ([player.ckey]) preferences early for genital checks")
 				readied_jobs.Add(V)
 		/*
 			// These else conditions stop the round from starting unless there is a merchant, king, and queen.

@@ -22,11 +22,12 @@ SUBSYSTEM_DEF(job)
 	if(CONFIG_GET(flag/load_jobs_from_txt))
 		LoadJobs()
 	
-	// Add Baron/Baroness (Lord job) to prioritized jobs
+	// Instead of adding to prioritized_jobs, set up special handling
 	var/datum/job/roguetown/lord/ruler_job = GetJobType(/datum/job/roguetown/lord)
 	if(ruler_job)
-		prioritized_jobs += ruler_job
-		message_admins("Added [ruler_job.title] to prioritized jobs")
+		ruler_job.spawn_positions = 1
+		ruler_job.total_positions = 1
+		message_admins("Set up ruler job positions")
 	
 	set_overflow_role(CONFIG_GET(string/overflow_job))
 	return ..()
@@ -127,30 +128,6 @@ SUBSYSTEM_DEF(job)
 	JobDebug("Running FOC, Job: [job], Level: [level], Flag: [flag]")
 	var/list/candidates = list()
 	
-	// Special Consort handling
-	if(job.title == "Consort")
-		var/mob/living/carbon/human/ruler
-		for(var/mob/living/carbon/human/potential_ruler in GLOB.human_list)
-			if(potential_ruler?.mind?.assigned_role in list("Baron", "Baroness"))
-				ruler = potential_ruler
-				JobDebug("FOC found ruler: [ruler], Role: [ruler.mind.assigned_role]")
-				break
-		
-		if(ruler && ruler.client?.prefs)
-			var/ruler_has_penis = !isnull(ruler.client.prefs.features["has_penis"]) ? ruler.client.prefs.features["has_penis"] : FALSE
-			var/ruler_has_vagina = !isnull(ruler.client.prefs.features["has_vagina"]) ? ruler.client.prefs.features["has_vagina"] : FALSE
-			
-			for(var/mob/dead/new_player/player in unassigned)
-				if(player.client?.prefs?.job_preferences[job.title] == level)
-					var/consort_has_penis = !isnull(player.client.prefs.features["has_penis"]) ? player.client.prefs.features["has_penis"] : FALSE
-					var/consort_has_vagina = !isnull(player.client.prefs.features["has_vagina"]) ? player.client.prefs.features["has_vagina"] : FALSE
-					
-					if((ruler_has_penis && consort_has_penis && !consort_has_vagina) || (ruler_has_vagina && consort_has_vagina && !consort_has_penis))
-						JobDebug("FOC removing incompatible consort candidate [player]")
-						player.client.prefs.job_preferences[job.title] = 0
-						if(player?.client)
-							to_chat(player, "<span class='warning'>You have been removed from Consort due to sex incompatibility with the [ruler.mind.assigned_role].</span>")
-						continue
 	
 	// Normal candidate finding
 	for(var/mob/dead/new_player/player in unassigned)
@@ -167,43 +144,8 @@ SUBSYSTEM_DEF(job)
 		if(flag && (!(flag in player.client.prefs.be_special)))
 			JobDebug("FOC flag failed, Player: [player], Flag: [flag], ")
 			continue
-		if(player.mind && (job.title in player.mind.restricted_roles))
-			JobDebug("FOC incompatible with antagonist role, Player: [player]")
-			continue
-		if(length(job.allowed_races) && !(player.client.prefs.pref_species.type in job.allowed_races))
-			JobDebug("FOC incompatible with species, Player: [player], Job: [job.title], Race: [player.client.prefs.pref_species.name]")
-			continue
-		if(length(job.allowed_patrons) && !(player.client.prefs.selected_patron.type in job.allowed_patrons))
-			JobDebug("FOC incompatible with patron, Player: [player], Job: [job.title], Race: [player.client.prefs.pref_species.name]")
-			continue
-		if(job.plevel_req > player.client.patreonlevel())
-			JobDebug("FOC incompatible with PATREON LEVEL, Player: [player], Job: [job.title], Race: [player.client.prefs.pref_species.name]")
-			continue
-		if(!isnull(job.min_pq) && (get_playerquality(player.ckey) < job.min_pq))
-			continue
-		if(!isnull(job.max_pq) && (get_playerquality(player.ckey) > job.max_pq))
-			continue
-		if(!(player.client.prefs.gender in job.allowed_sexes))
-			JobDebug("FOC incompatible with sex, Player: [player], Job: [job.title]")
-			continue
-		if(length(job.allowed_ages) && !(player.client.prefs.age in job.allowed_ages))
-			JobDebug("FOC incompatible with age, Player: [player], Job: [job.title], Age: [player.client.prefs.age]")
-			continue
-		if(check_blacklist(player.client.ckey) && !job.bypass_jobban)
-			JobDebug("FOC incompatible with blacklist, Player: [player], Job: [job.title]")
-			continue
-		if((player.client.prefs.lastclass == job.title) && !job.bypass_lastclass)
-			JobDebug("FOC incompatible with lastclass, Player: [player], Job: [job.title]")
-			continue
-		if(!job.special_job_check(player))
-			JobDebug("FOC player did not pass special check, Player: [player], Job:[job.title]")
-			continue
-		if(CONFIG_GET(flag/usewhitelist))
-			if(job.whitelist_req && (!player.client.whitelisted()))
-				continue
-		if(player.client.prefs.job_preferences[job.title] == level)
-			JobDebug("FOC pass, Player: [player], Level:[level]")
-			candidates += player
+		candidates += player
+	
 	return candidates
 
 /datum/controller/subsystem/job/proc/GiveRandomJob(mob/dead/new_player/player)
@@ -377,32 +319,24 @@ SUBSYSTEM_DEF(job)
  *  fills var "assigned_role" for all ready players.
  *  This proc must not have any side effect besides of modifying "assigned_role".
  **/
-/datum/controller/subsystem/job/proc/DivideOccupations(list/required_jobs)
+/datum/controller/subsystem/job/proc/DivideOccupations()
+	message_admins("===== Starting DivideOccupations =====")
 	//Setup new player list and get the jobs list
 	JobDebug("Running DO")
-
-	//Holder for Triumvirate is stored in the SSticker, this just processes it
-	if(SSticker.triai)
-		for(var/datum/job/ai/A in occupations)
-			A.spawn_positions = 3
-		for(var/obj/effect/landmark/start/ai/secondary/S in GLOB.start_landmarks_list)
-			S.latejoin_active = TRUE
-
+	
 	//Get the players who are ready
-	for(var/i in GLOB.new_player_list)
-		var/mob/dead/new_player/player = i
+	unassigned = list()
+	for(var/mob/dead/new_player/player in GLOB.player_list)
 		if(player.ready == PLAYER_READY_TO_PLAY && player.check_preferences() && player.mind && !player.mind.assigned_role)
 			unassigned += player
-
+	
 	initial_players_to_assign = unassigned.len
-
-	JobDebug("DO, Len: [unassigned.len]")
-	if(unassigned.len == 0)
-		return validate_required_jobs(required_jobs)
-
-	//Scale number of open security officer slots to population
-//	setup_officer_positions()
-
+	
+	// Select ruler first
+	if(!SSticker.HasRoundStarted())
+		if(!SelectRuler())
+			return FALSE
+	
 	//Jobs will have fewer access permissions if the number of players exceeds the threshold defined in game_options.txt
 	var/mat = CONFIG_GET(number/minimal_access_threshold)
 	if(mat)
@@ -411,170 +345,79 @@ SUBSYSTEM_DEF(job)
 		else
 			CONFIG_SET(flag/jobs_have_minimal_access, TRUE)
 
-	//Shuffle players and jobs
-	unassigned = shuffle(unassigned)
+	// Handle remaining job assignments
+	for(var/datum/job/job in occupations)
+		for(var/level in level_order)
+			for(var/mob/dead/new_player/player in unassigned)
+				if(player.client?.prefs?.job_preferences[job.title] == level)
+					// Add genital check for Consort role
+					if(job.title == "Consort")
+						// Find ruler's ckey from stored preferences
+						var/ruler_ckey
+						for(var/ckey in GLOB.preferences_datums)
+							var/datum/preferences/prefs = GLOB.preferences_datums[ckey]
+							if(prefs.job_preferences["Baron"] == JP_HIGH || prefs.job_preferences["Baroness"] == JP_HIGH)
+								ruler_ckey = ckey
+								break
+						
+						if(!ruler_ckey)
+							player.client.prefs.job_preferences -= job.title
+							to_chat(player, "<span class='warning'>You have been removed from Consort selection as there is no ruler.</span>")
+							continue
+							
+						var/datum/preferences/ruler_prefs = GLOB.preferences_datums[ruler_ckey]
+						if(!ruler_prefs)
+							continue
+							
+						// Get ruler genital preferences
+						var/ruler_has_penis = FALSE
+						var/ruler_has_vagina = FALSE
+						for(var/datum/customizer_entry/entry as anything in ruler_prefs.customizer_entries)
+							if(istype(entry, /datum/customizer_entry/organ/penis))
+								ruler_has_penis = (entry.disabled == 0)
+							if(istype(entry, /datum/customizer_entry/organ/vagina))
+								ruler_has_vagina = (entry.disabled == 0)
+						
+						// Check candidate genitals
+						var/consort_has_penis = FALSE
+						var/consort_has_vagina = FALSE
+						for(var/datum/customizer_entry/entry as anything in player.client.prefs.customizer_entries)
+							if(istype(entry, /datum/customizer_entry/organ/penis))
+								consort_has_penis = (entry.disabled == 0)
+							if(istype(entry, /datum/customizer_entry/organ/vagina))
+								consort_has_vagina = (entry.disabled == 0)
+						
+						if((ruler_has_penis && consort_has_penis) || (ruler_has_vagina && consort_has_vagina))
+							player.client.prefs.job_preferences -= job.title
+							to_chat(player, "<span class='warning'>You have been removed from Consort selection due to sex incompatibility with the ruler.</span>")
+							continue
+					
+					AssignRole(player, job.title)
 
-	HandleFeedbackGathering()
+	return TRUE
 
-	//People who wants to be the overflow role, sure, go on.
-//	JobDebug("DO, Running Overflow Check 1")
-//	var/datum/job/overflow = GetJob(SSjob.overflow_role)
-//	var/list/overflow_candidates = FindOccupationCandidates(overflow, JP_LOW)
-//	JobDebug("AC1, Candidates: [overflow_candidates.len]")
-//	for(var/mob/dead/new_player/player in overflow_candidates)
-//		JobDebug("AC1 pass, Player: [player]")
-//		AssignRole(player, SSjob.overflow_role)
-//		overflow_candidates -= player
-//	JobDebug("DO, AC1 end")
-
-	//Select one head
-	JobDebug("DO, Running Head Check")
-//	FillHeadPosition()
-	do_required_jobs()
-	JobDebug("DO, Head Check end")
-
-	//Check for an AI
-//	JobDebug("DO, Running AI Check")
-//	FillAIPosition()
-//	JobDebug("DO, AI Check end")
-
-	//Other jobs are now checked
-	JobDebug("DO, Running Standard Check")
-
-
-	// New job giving system by Donkie
-	// This will cause lots of more loops, but since it's only done once it shouldn't really matter much at all.
-	// Hopefully this will add more randomness and fairness to job giving.
-
-	// Loop through all levels from high to low
-	var/list/shuffledoccupations = shuffle(occupations)
-	for(var/level in level_order)
-		//Check the head jobs first each level
-//		CheckHeadPositions(level)
-
-		// Loop through all unassigned players
+/datum/controller/subsystem/job/proc/SelectRuler()
+	var/datum/job/roguetown/lord/ruler_job = GetJobType(/datum/job/roguetown/lord)
+	if(!ruler_job)
+		message_admins("WARNING: No ruler job found, continuing without ruler")
+		return TRUE // Allow game to continue
+	
+	// Try each preference level in order
+	for(var/pref_level in level_order)
 		for(var/mob/dead/new_player/player in unassigned)
-			if(PopcapReached())
-				RejectPlayer(player)
-
-			// Loop through all jobs
-			for(var/datum/job/job in shuffledoccupations) // SHUFFLE ME BABY
-				if(!job)
+			if(player.client?.prefs?.job_preferences[ruler_job.title] == pref_level)
+				if(!ruler_job.player_old_enough(player.client))
 					continue
-
-				// Special Consort handling
-				if(job.title == "Consort")
-					var/mob/living/carbon/human/ruler
-					for(var/mob/living/carbon/human/potential_ruler in GLOB.human_list)
-						if(potential_ruler?.mind?.assigned_role in list("Baron", "Baroness"))
-							ruler = potential_ruler
-							JobDebug("DO found ruler: [ruler], Role: [ruler.mind.assigned_role]")
-							break
-					
-					if(!ruler || !ruler.client?.prefs)
-						JobDebug("DO skipping Consort assignment - no ruler found")
-						continue
-					
-					var/ruler_has_penis = !isnull(ruler.client.prefs.features["has_penis"]) ? ruler.client.prefs.features["has_penis"] : FALSE
-					var/ruler_has_vagina = !isnull(ruler.client.prefs.features["has_vagina"]) ? ruler.client.prefs.features["has_vagina"] : FALSE
-					
-					var/consort_has_penis = !isnull(player.client.prefs.features["has_penis"]) ? player.client.prefs.features["has_penis"] : FALSE
-					var/consort_has_vagina = !isnull(player.client.prefs.features["has_vagina"]) ? player.client.prefs.features["has_vagina"] : FALSE
-					
-					if((ruler_has_penis && consort_has_penis && !consort_has_vagina) || (ruler_has_vagina && consort_has_vagina && !consort_has_penis))
-						JobDebug("DO removing incompatible consort candidate [player]")
-						player.client.prefs.job_preferences[job.title] = 0
-						if(player?.client)
-							to_chat(player, "<span class='warning'>You have been removed from Consort due to sex incompatibility with the [ruler.mind.assigned_role].</span>")
-						continue
-
-				if(is_banned_from(player.ckey, job.title))
-					JobDebug("DO isbanned failed, Player: [player], Job:[job.title]")
+				
+				if(ruler_job.required_playtime_remaining(player.client))
 					continue
-
-				if(QDELETED(player))
-					JobDebug("DO player deleted during job ban check")
-					break
-
-				if(!job.player_old_enough(player.client))
-					JobDebug("DO player not old enough, Player: [player], Job:[job.title]")
-					continue
-
-				if(job.required_playtime_remaining(player.client))
-					JobDebug("DO player not enough xp, Player: [player], Job:[job.title]")
-					continue
-
-				if(player.mind && (job.title in player.mind.restricted_roles))
-					JobDebug("DO incompatible with antagonist role, Player: [player], Job:[job.title]")
-					continue
-
-				if(length(job.allowed_races) && !(player.client.prefs.pref_species.type in job.allowed_races))
-					JobDebug("DO incompatible with species, Player: [player], Job: [job.title], Race: [player.client.prefs.pref_species.name]")
-					continue
-
-				if(length(job.allowed_patrons) && !(player.client.prefs.selected_patron.type in job.allowed_patrons))
-					JobDebug("DO incompatible with patron, Player: [player], Job: [job.title], Race: [player.client.prefs.pref_species.name]")
-					continue
-
-				if(job.plevel_req > player.client.patreonlevel())
-					JobDebug("DO incompatible with PATREON LEVEL, Player: [player], Job: [job.title], Race: [player.client.prefs.pref_species.name]")
-					continue
-
-				if(!isnull(job.min_pq) && (get_playerquality(player.ckey) < job.min_pq))
-					continue
-
-				if(!isnull(job.max_pq) && (get_playerquality(player.ckey) > job.max_pq))
-					continue
-
-				if((player.client.prefs.lastclass == job.title) && (!job.bypass_lastclass))
-					continue
-
-				if(check_blacklist(player.client.ckey) && !job.bypass_jobban)
-					JobDebug("DO incompatible with blacklist, Player: [player], Job: [job.title]")
-					continue
-
-				if(CONFIG_GET(flag/usewhitelist))
-					if(job.whitelist_req && (!player.client.whitelisted()))
-						continue
-
-				if(length(job.allowed_ages) && !(player.client.prefs.age in job.allowed_ages))
-					JobDebug("DO incompatible with age, Player: [player], Job: [job.title]")
-					continue
-
-				if(length(job.allowed_sexes) && !(player.client.prefs.gender in job.allowed_sexes))
-					JobDebug("DO incompatible with gender preference, Player: [player], Job: [job.title]")
-					continue
-
-				if(!job.special_job_check(player))
-					JobDebug("DO player did not pass special check, Player: [player], Job:[job.title]")
-					continue
-
-				// If the player wants that job on this level, then try give it to him.
-				if(player.client.prefs.job_preferences[job.title] == level)
-					// If the job isn't filled
-					if((job.current_positions < job.spawn_positions) || job.spawn_positions == -1)
-						testing("DO pass, Player: [player], Level:[level], Job:[job.title]")
-						AssignRole(player, job.title)
-						unassigned -= player
-						break
-
-
-	JobDebug("DO, Handling unassigned.")
-	// Hand out random jobs to the people who didn't get any in the last check
-	// Also makes sure that they got their preference correct
-	for(var/mob/dead/new_player/player in unassigned)
-		HandleUnassigned(player)
-
-	JobDebug("DO, Handling unrejectable unassigned")
-	//Mop up people who can't leave.
-	for(var/mob/dead/new_player/player in unassigned) //Players that wanted to back out but couldn't because they're antags (can you feel the edge case?)
-		RejectPlayer(player)
-//		if(!GiveRandomJob(player))
-//			if(!AssignRole(player, SSjob.overflow_role)) //If everything is already filled, make them an assistant
-//				return FALSE //Living on the edge, the forced antagonist couldn't be assigned to overflow role (bans, client age) - just reroll
-
-	return validate_required_jobs(required_jobs)
-
+				
+				if((ruler_job.current_positions < 1))
+					if(AssignRole(player, ruler_job.title))
+						return TRUE
+	
+	message_admins("WARNING: No qualified ruler found, continuing without ruler")
+	return TRUE // Allow game to continue without ruler
 
 /datum/controller/subsystem/job/proc/do_required_jobs()
 	var/amt_picked = 0
@@ -1020,3 +863,4 @@ SUBSYSTEM_DEF(job)
 
 /datum/controller/subsystem/job/proc/JobDebug(message)
 	log_job_debug(message)
+

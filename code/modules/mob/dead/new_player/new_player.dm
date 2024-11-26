@@ -202,7 +202,7 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/rp_prompt.txt"))
 #else*/
 
 
-		var/timetojoin = 15 MINUTES
+		var/timetojoin = 1 SECONDS
 #ifdef ALLOWPLAY
 		timetojoin = 1 SECONDS
 #endif
@@ -244,6 +244,45 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/rp_prompt.txt"))
 		ViewManifest()
 
 	if(href_list["SelectedJob"])
+		if(href_list["SelectedJob"] == "Consort")
+			// Check for ruler
+			var/mob/living/carbon/human/ruler
+			for(var/mob/living/carbon/human/potential_ruler in GLOB.human_list)
+				if(potential_ruler?.mind?.assigned_role in list("Baron", "Baroness"))
+					ruler = potential_ruler
+					break
+			
+			if(!ruler)
+				to_chat(src, "<span class='warning'>There must be a Baron/Baroness for you to join as Consort!</span>")
+				message_admins("DEBUG: Consort join failed - No ruler found")
+				return
+			
+			// Get player genital preferences from customizer entries
+			var/player_has_penis = FALSE
+			var/player_has_vagina = FALSE
+			for(var/datum/customizer_entry/entry as anything in client.prefs.customizer_entries)
+				if(istype(entry, /datum/customizer_entry/organ/penis))
+					player_has_penis = (entry.disabled == 0)
+				if(istype(entry, /datum/customizer_entry/organ/vagina))
+					player_has_vagina = (entry.disabled == 0)
+			
+			// Get ruler genital preferences from customizer entries using stored preferences
+			var/ruler_has_penis = FALSE
+			var/ruler_has_vagina = FALSE
+			var/datum/preferences/ruler_prefs = GLOB.preferences_datums[ruler.ckey]
+			for(var/datum/customizer_entry/entry as anything in ruler_prefs.customizer_entries)
+				if(istype(entry, /datum/customizer_entry/organ/penis))
+					ruler_has_penis = (entry.disabled == 0)
+				if(istype(entry, /datum/customizer_entry/organ/vagina))
+					ruler_has_vagina = (entry.disabled == 0)
+			
+			
+			// Simple check - if they have the same genitals, deny
+			if((ruler_has_penis && player_has_penis) || (ruler_has_vagina && player_has_vagina))
+				to_chat(src, "<span class='warning'>You cannot join as Consort due to having the same genitals as the [ruler.mind.assigned_role]!</span>")
+				return
+
+
 		if(!SSticker?.IsRoundInProgress())
 			to_chat(usr, span_danger("The round is either not ready, or has already finished..."))
 			return
