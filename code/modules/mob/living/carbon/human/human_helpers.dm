@@ -200,17 +200,15 @@
 		used_str = get_str_arms(used_hand)
 
 	if(used_str >= 11)
-		damage = max(damage + (damage * ((used_str - 10) * 0.3)), 1)
-
-	if(used_str <= 9)
-		damage = max(damage - (damage * ((10 - used_str) * 0.1)), 1)
+		damage = damage + (damage * ((used_str - 10) * 0.2))  // Each point above 10 adds 20% damage
+	else if(used_str <= 9)
+		damage = damage - (damage * ((10 - used_str) * 0.2))  // Each point below 10 reduces damage by 10%
 
 	if(mind)
 		if(mind.has_antag_datum(/datum/antagonist/werewolf))
 			return 30
 
 	return damage
-
 /mob/living/carbon/human/proc/is_noble()
 	var/noble = FALSE
 	if (job in GLOB.noble_positions)
@@ -225,3 +223,4 @@
 
 /mob/living/carbon/human/proc/is_courtier()
 	return job in GLOB.courtier_positions
+
