@@ -542,6 +542,7 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 
 	S["customizer_entries"] >> customizer_entries
 	validate_customizer_entries()
+	ensure_genital_defaults()
 
 	return TRUE
 
