@@ -18,7 +18,7 @@
 	. = ..()
 	var/datum/component/storage/STR = GetComponent(/datum/component/storage)
 	if(STR)
-		STR.max_combined_w_class = 6
+		STR.max_combined_w_class = 10
 		STR.max_w_class = WEIGHT_CLASS_SMALL
 		STR.max_items = heldz_items
 
@@ -42,6 +42,7 @@
 /obj/item/storage/belt/rogue/leather/plaquegold
 	name = "plaque belt"
 	icon_state = "goldplaque"
+	heldz_items = 5
 	sellprice = 50
 	sewrepair = FALSE
 	anvilrepair = /datum/skill/craft/armorsmithing
@@ -59,6 +60,7 @@
 /obj/item/storage/belt/rogue/leather/plaquesilver
 	name = "plaque belt"
 	icon_state = "silverplaque"
+	heldz_items = 4
 	sellprice = 30
 	sewrepair = FALSE
 	anvilrepair = /datum/skill/craft/armorsmithing
@@ -66,6 +68,7 @@
 /obj/item/storage/belt/rogue/leather/steel
 	name = "steel belt"
 	icon_state = "steelplaque"
+	heldz_items = 4
 	sellprice = 30
 	sewrepair = FALSE
 	anvilrepair = /datum/skill/craft/armorsmithing
@@ -218,7 +221,7 @@
 	if(STR)
 		STR.max_combined_w_class = 21
 		STR.max_w_class = WEIGHT_CLASS_NORMAL
-		STR.max_items = 5
+		STR.max_items = 3
 		STR.click_gather = TRUE
 		STR.allow_quick_empty = TRUE
 		STR.allow_dump_out = TRUE
