@@ -23,128 +23,128 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 
 //Bloodlines event
 /datum/round_event/roundstart/noble_vampires
-    is_active = FALSE
+	is_active = FALSE
 
-    /datum/round_event/roundstart/noble_vampires/apply_effect()
-        . = ..()
-        is_active = TRUE
-        
-        RegisterSignal(SSdcs, COMSIG_GLOB_MOB_CREATED, PROC_REF(on_mob_created))
-        for(var/mob/living/carbon/human/H in GLOB.alive_mob_list)
-            make_vampire(H)
+	/datum/round_event/roundstart/noble_vampires/apply_effect()
+		. = ..()
+		is_active = TRUE
+		
+		RegisterSignal(SSdcs, COMSIG_GLOB_MOB_CREATED, PROC_REF(on_mob_created))
+		for(var/mob/living/carbon/human/H in GLOB.alive_mob_list)
+			make_vampire(H)
 
-    /datum/round_event/roundstart/noble_vampires/proc/make_vampire(mob/living/carbon/human/H)
-        if(!H.mind?.assigned_role)
-            return
-            
-        var/datum/job/J = SSjob.GetJob(H.mind.assigned_role)
-        if(!J || !(J.department_flag & NOBLEMEN))
-            return
-            
-        if(H.mind.has_antag_datum(/datum/antagonist/vampire))
-            return
-            
-        var/datum/antagonist/vampire/new_antag = new()
-        new_antag.increase_votepwr = FALSE
-        H.mind.add_antag_datum(new_antag)
-        to_chat(H, span_userdanger("You are the true masters of the world. But it is imperative you maintain the Masquerade..."))
+	/datum/round_event/roundstart/noble_vampires/proc/make_vampire(mob/living/carbon/human/H)
+		if(!H.mind?.assigned_role)
+			return
+			
+		var/datum/job/J = SSjob.GetJob(H.mind.assigned_role)
+		if(!J || !(J.department_flag & NOBLEMEN))
+			return
+			
+		if(H.mind.has_antag_datum(/datum/antagonist/vampire))
+			return
+			
+		var/datum/antagonist/vampire/new_antag = new()
+		new_antag.increase_votepwr = FALSE
+		H.mind.add_antag_datum(new_antag)
+		to_chat(H, span_userdanger("You are the true masters of the world. But it is imperative you maintain the Masquerade..."))
 
-    /datum/round_event/roundstart/noble_vampires/proc/on_mob_created(datum/source, mob/M)
-        SIGNAL_HANDLER
-        
-        if(!is_active || !istype(M, /mob/living/carbon/human))
-            return
-            
-        var/mob/living/carbon/human/H = M
-        addtimer(CALLBACK(src, .proc/check_and_convert_noble, H), 1 SECONDS)
+	/datum/round_event/roundstart/noble_vampires/proc/on_mob_created(datum/source, mob/M)
+		SIGNAL_HANDLER
+		
+		if(!is_active || !istype(M, /mob/living/carbon/human))
+			return
+			
+		var/mob/living/carbon/human/H = M
+		addtimer(CALLBACK(src, .proc/check_and_convert_noble, H), 1 SECONDS)
 
-    /datum/round_event/roundstart/noble_vampires/proc/check_and_convert_noble(mob/living/carbon/human/H)
-        if(!H?.mind?.assigned_role)
-            return
-            
-        make_vampire(H)
+	/datum/round_event/roundstart/noble_vampires/proc/check_and_convert_noble(mob/living/carbon/human/H)
+		if(!H?.mind?.assigned_role)
+			return
+			
+		make_vampire(H)
 
 /datum/round_event_control/roundstart/noble_vampires
-    name = "Bloodlines"
-    typepath = /datum/round_event/roundstart/noble_vampires
-    weight = 3
-    event_announcement = ""
-    runnable = TRUE
+	name = "Bloodlines"
+	typepath = /datum/round_event/roundstart/noble_vampires
+	weight = 3
+	event_announcement = ""
+	runnable = TRUE
 
 
 //throne room meeting event
 /datum/round_event/roundstart/throne_meeting
-    var/min_distance = 3
-    var/max_distance = 9
-    var/list/all_valid_turfs = list()  // Store all valid turfs
-    var/list/available_turfs = list()   // Current pool of available turfs
-    var/static/list/valid_jobs = list(
-        "Servant", "Squire", "Town Guard", "Dungeoneer", "Priest", 
-        "Inquisitor", "Templar", "Acolyte", "Churchling", "Merchant",
-        "Shophand", "Town Elder", "Blacksmith", "Smithy Apprentice",
-        "Artificer", "Soilson", "Tailor", "Innkeeper", "Cook",
-        "Bathmaster", "Taven Knave", "Bath Swain", "Bath Wench", "Tavern Wench", "Towner", "Maid", "Vagabond"
-    )
+	var/min_distance = 3
+	var/max_distance = 9
+	var/list/all_valid_turfs = list()  // Store all valid turfs
+	var/list/available_turfs = list()   // Current pool of available turfs
+	var/static/list/valid_jobs = list(
+		"Servant", "Squire", "Town Guard", "Dungeoneer", "Priest", 
+		"Inquisitor", "Templar", "Acolyte", "Churchling", "Merchant",
+		"Shophand", "Town Elder", "Blacksmith", "Smithy Apprentice",
+		"Artificer", "Soilson", "Tailor", "Innkeeper", "Cook",
+		"Bathmaster", "Taven Knave", "Bath Swain", "Bath Wench", "Tavern Wench", "Towner", "Maid", "Vagabond"
+	)
 
 /datum/round_event/roundstart/throne_meeting/proc/get_valid_turfs(turf/throne_turf)
-    var/list/turfs = list()
-    for(var/turf/T in range(max_distance, throne_turf))
-        if(!istype(T, /turf/open/floor/rogue/tile/masonic/single) && !istype(T, /turf/open/floor/rogue/carpet))
-            continue
-        if(T.density)
-            continue
-        var/blocked = FALSE
-        for(var/atom/A in T)
-            if(A.density)
-                blocked = TRUE
-                break
-        if(blocked)
-            continue
-        var/distance = get_dist(T, throne_turf)
-        if(distance >= min_distance && distance <= max_distance)
-            turfs += T
-    return turfs
+	var/list/turfs = list()
+	for(var/turf/T in range(max_distance, throne_turf))
+		if(!istype(T, /turf/open/floor/rogue/tile/masonic/single) && !istype(T, /turf/open/floor/rogue/carpet))
+			continue
+		if(T.density)
+			continue
+		var/blocked = FALSE
+		for(var/atom/A in T)
+			if(A.density)
+				blocked = TRUE
+				break
+		if(blocked)
+			continue
+		var/distance = get_dist(T, throne_turf)
+		if(distance >= min_distance && distance <= max_distance)
+			turfs += T
+	return turfs
 
 /datum/round_event/roundstart/throne_meeting/proc/refill_available_turfs()
-    available_turfs = all_valid_turfs.Copy()
-    shuffle_inplace(available_turfs)
+	available_turfs = all_valid_turfs.Copy()
+	shuffle_inplace(available_turfs)
 
 /datum/round_event/roundstart/throne_meeting/apply_effect()
-    . = ..()
-    is_active = TRUE
-    
-    var/obj/structure/roguethrone/throne = locate(/obj/structure/roguethrone) in world
-    if(!throne)
-        message_admins("Throne Meeting event failed: No throne found")
-        return
-        
-    all_valid_turfs = get_valid_turfs(get_turf(throne))
-    if(!length(all_valid_turfs))
-        message_admins("Throne Meeting event failed: No valid turfs found")
-        return
-    
-    refill_available_turfs()
-    
-    var/teleported_count = 0
-    for(var/mob/living/carbon/human/H in GLOB.alive_mob_list)
-        if(!H.mind?.assigned_role || !(H.mind.assigned_role in valid_jobs))
-            continue
-            
-        if(!length(available_turfs))
-            refill_available_turfs()
-            
-        var/turf/scatter_loc = pick_n_take(available_turfs)
-        H.forceMove(scatter_loc)
-        teleported_count++
-    
-    message_admins("Throne Meeting event: Teleported [teleported_count] players")
+	. = ..()
+	is_active = TRUE
+	
+	var/obj/structure/roguethrone/throne = locate(/obj/structure/roguethrone) in world
+	if(!throne)
+		message_admins("Throne Meeting event failed: No throne found")
+		return
+		
+	all_valid_turfs = get_valid_turfs(get_turf(throne))
+	if(!length(all_valid_turfs))
+		message_admins("Throne Meeting event failed: No valid turfs found")
+		return
+	
+	refill_available_turfs()
+	
+	var/teleported_count = 0
+	for(var/mob/living/carbon/human/H in GLOB.alive_mob_list)
+		if(!H.mind?.assigned_role || !(H.mind.assigned_role in valid_jobs))
+			continue
+			
+		if(!length(available_turfs))
+			refill_available_turfs()
+			
+		var/turf/scatter_loc = pick_n_take(available_turfs)
+		H.forceMove(scatter_loc)
+		teleported_count++
+	
+	message_admins("Throne Meeting event: Teleported [teleported_count] players")
 
 /datum/round_event_control/roundstart/throne_meeting
-    name = "Throne Meeting"
-    typepath = /datum/round_event/roundstart/throne_meeting
-    weight = 5
-    event_announcement = "There is an important meeting in the throne room..."
-    runnable = TRUE
+	name = "Throne Meeting"
+	typepath = /datum/round_event/roundstart/throne_meeting
+	weight = 5
+	event_announcement = "There is an important meeting in the throne room..."
+	runnable = TRUE
 
 //Blackguards event
 
@@ -313,84 +313,84 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 		return "<br>The guard's betrayal will be remembered in the annals of history."
 
 /datum/round_event/roundstart/guard_rumors
-    var/mob/living/carbon/human/chosen_guard = null
-    var/mob/living/carbon/human/target = null
-    var/traitor_success = FALSE
-    var/announced = FALSE
-    var/static/list/valid_jobs = list("Town Guard", "Sergeant at Arms")
+	var/mob/living/carbon/human/chosen_guard = null
+	var/mob/living/carbon/human/target = null
+	var/traitor_success = FALSE
+	var/announced = FALSE
+	var/static/list/valid_jobs = list("Town Guard", "Sergeant at Arms")
 
 /datum/round_event/roundstart/guard_rumors/apply_effect()
-    . = ..()
-    is_active = TRUE
-    
-    // 50% chance for nothing to happen
-    if(prob(50))
-        is_active = FALSE
-        return
-    
-    var/list/possible_guards = list()
-    
-    // Find valid guards
-    for(var/mob/living/carbon/human/H in GLOB.alive_mob_list)
-        if(H.mind?.assigned_role in valid_jobs)
-            possible_guards += H
-    
-    if(!length(possible_guards))
-        is_active = FALSE
-        return
-    
-    // Pick a random guard
-    chosen_guard = pick(possible_guards)
-    if(!chosen_guard || !chosen_guard.mind)
-        is_active = FALSE
-        return
-        
-    // Create antag datum for objectives
-    var/datum/antagonist/traitor_guard/traitor_datum = new()
-    chosen_guard.mind.add_antag_datum(traitor_datum)
-    
-    // Add steal objective (removed the consort-related objective since it wasn't being used)
-    var/datum/objective/steal/steal_objective = new
-    steal_objective.owner = chosen_guard.mind
-    steal_objective.steal_target = /obj/item/roguegem/jewel
-    steal_objective.explanation_text = "Steal the Baron's Crown Jewel from the treasury."
-    traitor_datum.objectives += steal_objective
-    
-    // Notify the guard of their objective
-    to_chat(chosen_guard, "<B>Objective:</B> [traitor_datum.objectives[1].explanation_text]")
-    
-    RegisterSignal(SSdcs, COMSIG_GLOB_ROUND_END, PROC_REF(check_completion))
+	. = ..()
+	is_active = TRUE
+	
+	// 50% chance for nothing to happen
+	if(prob(50))
+		is_active = FALSE
+		return
+	
+	var/list/possible_guards = list()
+	
+	// Find valid guards
+	for(var/mob/living/carbon/human/H in GLOB.alive_mob_list)
+		if(H.mind?.assigned_role in valid_jobs)
+			possible_guards += H
+	
+	if(!length(possible_guards))
+		is_active = FALSE
+		return
+	
+	// Pick a random guard
+	chosen_guard = pick(possible_guards)
+	if(!chosen_guard || !chosen_guard.mind)
+		is_active = FALSE
+		return
+		
+	// Create antag datum for objectives
+	var/datum/antagonist/traitor_guard/traitor_datum = new()
+	chosen_guard.mind.add_antag_datum(traitor_datum)
+	
+	// Add steal objective (removed the consort-related objective since it wasn't being used)
+	var/datum/objective/steal/steal_objective = new
+	steal_objective.owner = chosen_guard.mind
+	steal_objective.steal_target = /obj/item/roguegem/jewel
+	steal_objective.explanation_text = "Steal the Baron's Crown Jewel from the treasury."
+	traitor_datum.objectives += steal_objective
+	
+	// Notify the guard of their objective
+	to_chat(chosen_guard, "<B>Objective:</B> [traitor_datum.objectives[1].explanation_text]")
+	
+	RegisterSignal(SSdcs, COMSIG_GLOB_ROUND_END, PROC_REF(check_completion))
 
 /datum/round_event/roundstart/guard_rumors/proc/check_completion()
-    if(!chosen_guard || !chosen_guard.mind || announced)
-        return
-    
-    if(SSticker.current_state < GAME_STATE_FINISHED)
-        return
-        
-    var/datum/antagonist/traitor_guard/traitor_datum = chosen_guard.mind.has_antag_datum(/datum/antagonist/traitor_guard)
-    if(!traitor_datum)
-        return
-        
-    var/traitorwin = TRUE
-    for(var/datum/objective/objective in traitor_datum.objectives)
-        if(istype(objective, /datum/objective/steal))
-            var/datum/objective/steal/steal_objective = objective
-            if(!steal_objective.check_completion())
-                traitorwin = FALSE
-                break
-        else if(!objective.check_completion())
-            traitorwin = FALSE
-            break
-    
-    announced = TRUE
-    if(traitorwin)
-        chosen_guard.adjust_triumphs(5)
-        chosen_guard.playsound_local(get_turf(chosen_guard), 'sound/misc/triumph.ogg', 100, FALSE, pressure_affected = FALSE)
-        to_chat(world, "<span class='greentext'>The Traitor Guard has succeeded in their betrayal!</span>")
-    else
-        chosen_guard.playsound_local(get_turf(chosen_guard), 'sound/misc/fail.ogg', 100, FALSE, pressure_affected = FALSE)
-        to_chat(world, "<span class='redtext'>The Traitor Guard has failed in their betrayal!</span>")
+	if(!chosen_guard || !chosen_guard.mind || announced)
+		return
+	
+	if(SSticker.current_state < GAME_STATE_FINISHED)
+		return
+		
+	var/datum/antagonist/traitor_guard/traitor_datum = chosen_guard.mind.has_antag_datum(/datum/antagonist/traitor_guard)
+	if(!traitor_datum)
+		return
+		
+	var/traitorwin = TRUE
+	for(var/datum/objective/objective in traitor_datum.objectives)
+		if(istype(objective, /datum/objective/steal))
+			var/datum/objective/steal/steal_objective = objective
+			if(!steal_objective.check_completion())
+				traitorwin = FALSE
+				break
+		else if(!objective.check_completion())
+			traitorwin = FALSE
+			break
+	
+	announced = TRUE
+	if(traitorwin)
+		chosen_guard.adjust_triumphs(5)
+		chosen_guard.playsound_local(get_turf(chosen_guard), 'sound/misc/triumph.ogg', 100, FALSE, pressure_affected = FALSE)
+		to_chat(world, "<span class='greentext'>The Traitor Guard has succeeded in their betrayal!</span>")
+	else
+		chosen_guard.playsound_local(get_turf(chosen_guard), 'sound/misc/fail.ogg', 100, FALSE, pressure_affected = FALSE)
+		to_chat(world, "<span class='redtext'>The Traitor Guard has failed in their betrayal!</span>")
 
 /datum/round_event_control/roundstart/guard_rumors
 	name = "Guard Rumors"
@@ -405,12 +405,38 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 
 /datum/round_event/roundstart/matriarchy/apply_effect()
 	. = ..()
-	is_active = TRUE
-	
-	var/mob/living/carbon/human/baron
+
+	// Find the Consort first
 	var/mob/living/carbon/human/consort
+	for(var/mob/living/carbon/human/H in GLOB.alive_mob_list)
+		if(H.mind?.assigned_role == "Consort")
+			consort = H
+			break
 	
-	// Find the Baron and Consort
+	// If no consort exists, remove this event from the control list and return
+	if(!consort)
+		for(var/datum/round_event_control/E in SSevents.control)
+			if(istype(E, /datum/round_event_control/roundstart/matriarchy))
+				SSevents.control -= E
+				break
+		return
+	
+	// Find the Baron/Baroness
+	var/mob/living/carbon/human/baron
+	for(var/mob/living/carbon/human/H in GLOB.alive_mob_list)
+		if(H.mind?.assigned_role == "Baron" || H.mind?.assigned_role == "Baroness")
+			baron = H
+			break
+	
+	if(!baron)
+		for(var/datum/round_event_control/E in SSevents.control)
+			if(istype(E, /datum/round_event_control/roundstart/matriarchy))
+				SSevents.control -= E
+				break
+		return
+		
+	is_active = TRUE
+		// Find the Baron and Consort
 	for(var/mob/living/carbon/human/H in GLOB.alive_mob_list)
 		if(H.mind?.assigned_role == "Baron" || H.mind?.assigned_role == "Baroness")
 			baron = H
