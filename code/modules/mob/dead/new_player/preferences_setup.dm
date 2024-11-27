@@ -1,5 +1,3 @@
-
-	//The mob should have a gender you want before running this proc. Will run fine without H
 /datum/preferences/proc/random_character(gender_override, antag_override = FALSE)
 	if(!pref_species)
 		random_species()
@@ -15,6 +13,38 @@
 	features = pref_species.get_random_features()
 	body_markings = pref_species.get_random_body_markings(features)
 	accessory = "Nothing"
+	
+	// Set up default genitals based on gender
+	var/list/new_entries = list()
+	var/datum/species/species = pref_species
+	var/list/customizers = species.customizers
+	
+	for(var/customizer_type in customizers)
+		var/datum/customizer/customizer = CUSTOMIZER(customizer_type)
+		if(!customizer.is_allowed(src))
+			continue
+		
+		if(gender == MALE)
+			if(istype(customizer, /datum/customizer/organ/penis))
+				var/datum/customizer_entry/entry = customizer.make_default_customizer_entry(src, FALSE)  // Not disabled
+				new_entries += entry
+			else if(istype(customizer, /datum/customizer/organ/testicles))
+				var/datum/customizer_entry/entry = customizer.make_default_customizer_entry(src, FALSE)  // Not disabled
+				new_entries += entry
+			else if(istype(customizer, /datum/customizer/organ/vagina))
+				var/datum/customizer_entry/entry = customizer.make_default_customizer_entry(src, TRUE)   // Disabled
+				new_entries += entry
+		else
+			if(istype(customizer, /datum/customizer/organ/vagina))
+				var/datum/customizer_entry/entry = customizer.make_default_customizer_entry(src, FALSE)  // Not disabled
+				new_entries += entry
+			else if(istype(customizer, /datum/customizer/organ/penis))
+				var/datum/customizer_entry/entry = customizer.make_default_customizer_entry(src, TRUE)   // Disabled
+				new_entries += entry
+	
+	customizer_entries = new_entries
+	validate_customizer_entries()
+	
 	reset_all_customizer_accessory_colors()
 	randomize_all_customizer_accessories()
 

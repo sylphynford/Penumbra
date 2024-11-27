@@ -405,36 +405,26 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 
 /datum/round_event/roundstart/matriarchy/apply_effect()
 	. = ..()
-
-	// Find the Consort first
-	var/mob/living/carbon/human/consort
-	for(var/mob/living/carbon/human/H in GLOB.alive_mob_list)
-		if(H.mind?.assigned_role == "Consort")
-			consort = H
-			break
 	
-	// If no consort exists, remove this event from the control list and return
-	if(!consort)
-		for(var/datum/round_event_control/E in SSevents.control)
-			if(istype(E, /datum/round_event_control/roundstart/matriarchy))
-				SSevents.control -= E
-				break
-		return
-	
-	// Find the Baron/Baroness
+	// Find the Baron and Consort
 	var/mob/living/carbon/human/baron
+	var/mob/living/carbon/human/consort
+	
+	// Find the Baron and Consort
 	for(var/mob/living/carbon/human/H in GLOB.alive_mob_list)
 		if(H.mind?.assigned_role == "Baron" || H.mind?.assigned_role == "Baroness")
 			baron = H
-			break
+		else if(H.mind?.assigned_role == "Consort")
+			consort = H
 	
-	if(!baron)
+	// If either is missing, remove this event and try to select another
+	if(!baron || !consort)
 		for(var/datum/round_event_control/E in SSevents.control)
 			if(istype(E, /datum/round_event_control/roundstart/matriarchy))
 				SSevents.control -= E
-				break
-		return
-		
+				SSevents.spawnEvent() // Trigger a new event selection
+				return
+	
 	is_active = TRUE
 		// Find the Baron and Consort
 	for(var/mob/living/carbon/human/H in GLOB.alive_mob_list)

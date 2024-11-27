@@ -75,6 +75,11 @@
 
 			if(!(H in SStreasury.bank_accounts))
 				return
+				
+			// Check if target is a blackguard
+			if(H.job in list("Blackguard Lieutenant", "Blackguard Banneret"))
+				to_chat(user, span_warning("The rod's power seems ineffective against the blackguard!"))
+				return
 
 			if(istype(user.used_intent, /datum/intent/lord_electrocute))
 				HU.visible_message(span_warning("[HU] electrocutes [H] with the [src]."))
