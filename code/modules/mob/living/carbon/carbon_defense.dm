@@ -343,7 +343,7 @@
 				affecting = bodypart
 	if(affecting)
 		dam_zone = affecting.body_zone
-		if(affecting.get_damage() >= (affecting.max_damage * 0.5))
+		if(affecting.get_damage() >= (affecting.max_damage))
 			affecting.dismember(BRUTE, attacker.a_intent.blade_class, attacker, attacker.zone_selected)
 			return null
 		return affecting.body_zone

@@ -320,11 +320,11 @@
 				winset(owner.client, "outputwindow.output", "max-lines=100")
 		var/dislocation_type
 		var/fracture_type = /datum/wound/fracture/head
-		var/necessary_damage = 0.7
+		var/necessary_damage = 0.9
 		if(resistance)
 			fracture_type = /datum/wound/fracture
 		else if(zone_precise == BODY_ZONE_PRECISE_SKULL)
-			necessary_damage = 0.6
+			necessary_damage = 0.8
 			used += 5
 		else if(zone_precise == BODY_ZONE_PRECISE_MOUTH)
 			fracture_type = /datum/wound/fracture/mouth
@@ -332,7 +332,7 @@
 		else if(zone_precise == BODY_ZONE_PRECISE_NECK)
 			fracture_type = /datum/wound/fracture/neck
 			dislocation_type = /datum/wound/dislocation/neck
-			necessary_damage = 0.7
+			necessary_damage = 0.9
 		if(prob(used) && (damage_dividend >= necessary_damage))
 			if(dislocation_type)
 				attempted_wounds += dislocation_type
