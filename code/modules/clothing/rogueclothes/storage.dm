@@ -18,7 +18,7 @@
 	. = ..()
 	var/datum/component/storage/STR = GetComponent(/datum/component/storage)
 	if(STR)
-		STR.max_combined_w_class = 12
+		STR.max_combined_w_class = 10
 		STR.max_w_class = WEIGHT_CLASS_SMALL
 		STR.max_items = heldz_items
 
