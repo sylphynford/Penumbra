@@ -959,7 +959,7 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 // Admin verb for managing roundstart events
 /client/proc/force_roundstart_event()
 	set category = "Admin"
-	set name = "Force Roundstart Event"
+	set name = "Fire Roundstart Event"
 	set desc = "Triggers a specific roundstart event"
 
 	if(!check_rights(R_ADMIN))
@@ -990,6 +990,37 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 		message_admins("[key_name_admin(usr)] forced the roundstart event: [chosen_event.name]")
 		log_admin("[key_name(usr)] forced the roundstart event: [chosen_event.name]")
 
+/client/proc/force_aspect_picker()
+	set category = "Admin"
+	set name = "Force Aspect Picker"
+	set desc = "Forces the aspect picker to select a specific event during pregame"
+
+	if(!check_rights(R_ADMIN))
+		return
+        
+	if(SSticker.current_state != GAME_STATE_PREGAME)
+		to_chat(usr, "<span class='warning'>This can only be used during pregame! If it is pregame, please wait for the server to finish setting up.</span>")
+		return
+
+	var/list/event_choices = list()
+	for(var/event_path in subtypesof(/datum/round_event_control/roundstart))
+		var/datum/round_event_control/roundstart/event = new event_path()
+		if(event.runnable && event.weight > 0)  // Only show events with weight > 0
+			event_choices[event.name] = event
+
+	var/choice = input(usr, "Choose an event to force the picker to select", "Force Aspect Picker") as null|anything in event_choices
+	if(!choice)
+		return
+
+	var/datum/round_event_control/roundstart/chosen_event = event_choices[choice]
+	var/confirm = alert(usr, "Force the aspect picker to select [chosen_event.name]? \nAnnouncement: [chosen_event.event_announcement]", "Confirm Event", "Yes", "No")
+	if(confirm != "Yes")
+		return
+
+	GLOB.SSroundstart_events.forced_event = chosen_event  // Store as forced_event instead of selected_event
+	message_admins("[key_name_admin(usr)] queued the aspect picker to select [chosen_event.name] when the round starts")
+	log_admin("[key_name(usr)] queued the aspect picker to select [chosen_event.name] when the round starts")
+
 /datum/controller/subsystem/roundstart_events
 	name = "Roundstart Events"
 	flags = SS_NO_FIRE
@@ -997,6 +1028,7 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 
 	var/list/datum/round_event_control/roundstart/roundstart_events = list()
 	var/datum/round_event_control/roundstart/selected_event
+	var/datum/round_event_control/roundstart/forced_event  // New var for forced events
 	var/has_fired = FALSE
 	var/list/active_events = list()
 	var/eternal_night_active = FALSE
@@ -1019,8 +1051,12 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 		fire_event()
 
 	proc/pick_roundstart_event()
+		if(forced_event)  // Check for forced event first
+			selected_event = forced_event
+			forced_event = null  // Clear it after use
+			return TRUE
+			
 		var/list/possible_events = list()
-
 		for(var/datum/round_event_control/roundstart/RE as anything in roundstart_events)
 			if(RE.runnable && RE.can_spawn_event() && RE.weight > 0)
 				possible_events[RE] = RE.weight
