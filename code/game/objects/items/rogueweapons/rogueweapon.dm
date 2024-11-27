@@ -49,6 +49,7 @@
 /obj/item/rogueweapon/get_dismemberment_chance(obj/item/bodypart/affecting, mob/user)
 	if(!get_sharpness() || !affecting.can_dismember(src))
 		return 0
+	return 100
 
 	var/total_dam = affecting.get_damage()
 	var/nuforce = get_complex_damage(src, user)

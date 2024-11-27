@@ -291,7 +291,7 @@
 	if(!is_organic_limb() || !owner)
 		return
 	var/old_max_damage = max_damage
-	var/new_max_damage = initial(max_damage) * (owner.STACON / 10)
+	var/new_max_damage = initial(max_damage) + ((owner.STACON - 10) * 20)
 	if(new_max_damage != old_max_damage)
 		max_damage = new_max_damage
 
@@ -310,6 +310,11 @@
 		return FALSE
 
 	var/dmg_mlt = CONFIG_GET(number/damage_multiplier) * hit_percent
+	// Apply 50% damage reduction to chest
+	if(body_zone == BODY_ZONE_CHEST)
+		brute *= 0.25
+		burn *= 0.25
+	
 	brute = round(max(brute * dmg_mlt, 0),DAMAGE_PRECISION)
 	burn = round(max(burn * dmg_mlt, 0),DAMAGE_PRECISION)
 	stamina = round(max(stamina * dmg_mlt, 0),DAMAGE_PRECISION)
@@ -354,7 +359,6 @@
 	consider_processing()
 	update_disabled()
 	return update_bodypart_damage_state() || .
-
 //Heals brute and burn damage for the organ. Returns 1 if the damage-icon states changed at all.
 //Damage cannot go below zero.
 //Cannot remove negative damage (i.e. apply damage)
@@ -979,3 +983,4 @@
 	dismemberable = 0
 	max_damage = 5000
 	animal_origin = DEVIL_BODYPART
+

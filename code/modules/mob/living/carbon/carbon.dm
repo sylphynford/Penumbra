@@ -671,7 +671,7 @@
 	if(status_flags & GODMODE)
 		return
 	var/total_burn	= 0
-//	var/total_brute	= 0
+	var/total_brute	= 0
 	var/total_stamina = 0
 	var/total_tox = getToxLoss()
 	var/total_oxy = getOxyLoss()
@@ -680,16 +680,12 @@
 		BODY_ZONE_HEAD,
 		BODY_ZONE_CHEST,
 	)
-	for(var/obj/item/bodypart/bodypart as anything in bodyparts) //hardcoded to streamline things a bit
+	for(var/obj/item/bodypart/bodypart as anything in bodyparts)
 		if(!(bodypart.body_zone in lethal_zones))
 			continue
-		var/my_burn = abs((bodypart.burn_dam / bodypart.max_damage) * DAMAGE_THRESHOLD_FIRE_CRIT)
-		total_burn = max(total_burn, my_burn)
-		used_damage = max(used_damage, my_burn)
-	if(used_damage < total_tox)
-		used_damage = total_tox
-	if(used_damage < total_oxy)
-		used_damage = total_oxy
+		total_burn += bodypart.burn_dam
+		total_brute += bodypart.brute_dam
+	used_damage = max(total_burn, total_brute, total_tox, total_oxy)
 	health = round(maxHealth - used_damage, DAMAGE_PRECISION)
 	staminaloss = round(total_stamina, DAMAGE_PRECISION)
 	update_stat()

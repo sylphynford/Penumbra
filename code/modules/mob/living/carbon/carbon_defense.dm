@@ -40,7 +40,8 @@
 /mob/living/carbon/check_projectile_dismemberment(obj/projectile/P, def_zone)
 	var/obj/item/bodypart/affecting = get_bodypart(check_zone(def_zone))
 	if(affecting && affecting.dismemberable && affecting.get_damage() >= (affecting.max_damage - P.dismemberment))
-		affecting.dismember(P.damtype, P.woundclass)
+		if(P.woundclass != BCLASS_BLUNT && P.woundclass != BCLASS_SMASH && P.woundclass != BCLASS_PUNCH)
+			affecting.dismember(P.damtype, P.woundclass)
 
 /mob/living/carbon/proc/can_catch_item(skip_throw_mode_check)
 	. = FALSE
@@ -341,9 +342,10 @@
 			var/obj/item/bodypart/bodypart = B
 			if(bodypart.dismemberable)
 				affecting = bodypart
+				break
 	if(affecting)
 		dam_zone = affecting.body_zone
-		if(affecting.get_damage() >= (affecting.max_damage))
+		if(affecting.get_damage() >= affecting.max_damage)
 			affecting.dismember(BRUTE, attacker.a_intent.blade_class, attacker, attacker.zone_selected)
 			return null
 		return affecting.body_zone

@@ -1,4 +1,3 @@
-
 /obj/item/bodypart/proc/can_dismember(obj/item/I)
 	return dismemberable
 
@@ -21,6 +20,8 @@
 
 //Dismember a limb
 /obj/item/bodypart/proc/dismember(dam_type = BRUTE, bclass = BCLASS_CUT, mob/living/user, zone_precise = src.body_zone)
+	if(bclass == BCLASS_BLUNT || bclass == BCLASS_SMASH || bclass == BCLASS_PUNCH)
+		return FALSE
 	if(!owner)
 		return FALSE
 	var/mob/living/carbon/C = owner
