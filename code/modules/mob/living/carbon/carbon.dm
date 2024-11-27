@@ -670,8 +670,8 @@
 /mob/living/carbon/updatehealth()
 	if(status_flags & GODMODE)
 		return
-	var/total_burn	= 0
-	var/total_brute	= 0
+	var/total_burn = 0
+	var/total_brute = 0
 	var/total_stamina = 0
 	var/total_tox = getToxLoss()
 	var/total_oxy = getOxyLoss()
@@ -685,7 +685,7 @@
 			continue
 		total_burn += bodypart.burn_dam
 		total_brute += bodypart.brute_dam
-	used_damage = max(total_burn, total_brute, total_tox, total_oxy)
+	used_damage = total_burn + total_brute + total_tox + total_oxy
 	health = round(maxHealth - used_damage, DAMAGE_PRECISION)
 	staminaloss = round(total_stamina, DAMAGE_PRECISION)
 	update_stat()

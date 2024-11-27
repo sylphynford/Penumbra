@@ -189,7 +189,7 @@
 	
 	if(!is_cutting)
 		if(bclass in GLOB.dislocation_bclasses)
-			used = round(damage_dividend * 20 + (dam / 3 - 10 * resistance), 1)
+			used = round(damage_dividend * 10 + (dam / 3 - 10 * resistance), 1)
 			if(user && istype(user.rmb_intent, /datum/rmb_intent/strong))
 				used += 10
 			if(prob(used))
@@ -199,7 +199,7 @@
 					attempted_wounds += /datum/wound/dislocation
 					
 		if(bclass in GLOB.fracture_bclasses)
-			used = round(damage_dividend * 20 + (dam / 3) - 10 * resistance, 1)
+			used = round(damage_dividend * 10 + (dam / 3) - 10 * resistance, 1)
 			if(user)
 				if(istype(user.rmb_intent, /datum/rmb_intent/strong))
 					used += 10
@@ -320,11 +320,11 @@
 				winset(owner.client, "outputwindow.output", "max-lines=100")
 		var/dislocation_type
 		var/fracture_type = /datum/wound/fracture/head
-		var/necessary_damage = 0.9
+		var/necessary_damage = 0.8
 		if(resistance)
 			fracture_type = /datum/wound/fracture
 		else if(zone_precise == BODY_ZONE_PRECISE_SKULL)
-			necessary_damage = 0.8
+			necessary_damage = 0.7
 			used += 5
 		else if(zone_precise == BODY_ZONE_PRECISE_MOUTH)
 			fracture_type = /datum/wound/fracture/mouth
@@ -332,7 +332,7 @@
 		else if(zone_precise == BODY_ZONE_PRECISE_NECK)
 			fracture_type = /datum/wound/fracture/neck
 			dislocation_type = /datum/wound/dislocation/neck
-			necessary_damage = 0.9
+			necessary_damage = 0.8
 		if(prob(used) && (damage_dividend >= necessary_damage))
 			if(dislocation_type)
 				attempted_wounds += dislocation_type
