@@ -299,28 +299,24 @@
 //Damage will not exceed max_damage using this proc
 //Cannot apply negative damage
 /obj/item/bodypart/proc/receive_damage(brute = 0, burn = 0, stamina = 0, blocked = 0, updating_health = TRUE, required_status = null)
-	update_HP()
-	var/hit_percent = (100-blocked)/100
-	if((!brute && !burn && !stamina) || hit_percent <= 0)
-		return FALSE
-	if(owner && (owner.status_flags & GODMODE))
-		return FALSE	//godmode
+    update_HP()
+    var/hit_percent = (100-blocked)/100
+    if((!brute && !burn && !stamina) || hit_percent <= 0)
+        return FALSE
+    if(owner && (owner.status_flags & GODMODE))
+        return FALSE    //godmode
 
-	if(required_status && (status != required_status))
-		return FALSE
+    if(required_status && (status != required_status))
+        return FALSE
 
-	var/dmg_mlt = CONFIG_GET(number/damage_multiplier) * hit_percent
-	// Apply 50% damage reduction to chest
-	if(body_zone == BODY_ZONE_CHEST)
-		brute *= 0.25
-		burn *= 0.25
-	
-	brute = round(max(brute * dmg_mlt, 0),DAMAGE_PRECISION)
-	burn = round(max(burn * dmg_mlt, 0),DAMAGE_PRECISION)
-	stamina = round(max(stamina * dmg_mlt, 0),DAMAGE_PRECISION)
-	brute = max(0, brute - brute_reduction)
-	burn = max(0, burn - burn_reduction)
-	//No stamina scaling.. for now..
+    var/dmg_mlt = CONFIG_GET(number/damage_multiplier) * hit_percent
+    
+    brute = round(max(brute * dmg_mlt, 0), DAMAGE_PRECISION)
+    burn = round(max(burn * dmg_mlt, 0), DAMAGE_PRECISION)
+    stamina = round(max(stamina * dmg_mlt, 0), DAMAGE_PRECISION)
+    brute = max(0, brute - brute_reduction)
+    burn = max(0, burn - burn_reduction)
+    //No stamina scaling.. for now..
 
 	if(!brute && !burn && !stamina)
 		return FALSE
