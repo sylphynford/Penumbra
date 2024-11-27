@@ -16,6 +16,21 @@
 	default_disabled = TRUE
 	return TRUE
 
+/datum/customizer/organ/penis/validate_entry(datum/preferences/prefs, datum/customizer_entry/entry)
+	. = ..()
+	// If we're enabling penis
+	if(!entry.disabled)
+		for(var/datum/customizer_entry/other_entry as anything in prefs.customizer_entries)
+			if(istype(other_entry, /datum/customizer_entry/organ/vagina))
+				other_entry.disabled = TRUE
+				break
+	// If we're disabling penis
+	else
+		for(var/datum/customizer_entry/other_entry as anything in prefs.customizer_entries)
+			if(istype(other_entry, /datum/customizer_entry/organ/vagina))
+				other_entry.disabled = FALSE
+				break
+
 /datum/customizer_choice/organ/penis
 	abstract_type = /datum/customizer_choice/organ/penis
 	name = "Penis"
@@ -276,6 +291,21 @@
 		if(istype(entry, /datum/customizer_entry/organ/penis))
 			return entry.disabled
 	return TRUE
+
+/datum/customizer/organ/vagina/validate_entry(datum/preferences/prefs, datum/customizer_entry/entry)
+	. = ..()
+	// If we're enabling vagina
+	if(!entry.disabled)
+		for(var/datum/customizer_entry/other_entry as anything in prefs.customizer_entries)
+			if(istype(other_entry, /datum/customizer_entry/organ/penis))
+				other_entry.disabled = TRUE
+				break
+	// If we're disabling vagina
+	else
+		for(var/datum/customizer_entry/other_entry as anything in prefs.customizer_entries)
+			if(istype(other_entry, /datum/customizer_entry/organ/penis))
+				other_entry.disabled = FALSE
+				break
 
 /datum/customizer_choice/organ/vagina
 	abstract_type = /datum/customizer_choice/organ/vagina
