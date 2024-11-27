@@ -291,15 +291,7 @@
 	if(!is_organic_limb() || !owner)
 		return
 	var/old_max_damage = max_damage
-	var/new_max_damage = initial(max_damage)
-	
-	// Double HP for head and chest
-	if(body_zone == BODY_ZONE_HEAD || body_zone == BODY_ZONE_CHEST)
-		new_max_damage *= 2
-	
-	// Apply STACON modifier after doubling if applicable
-	new_max_damage += ((owner.STACON - 10) * 20)
-	
+	var/new_max_damage = initial(max_damage) + ((owner.STACON - 10) * 20)
 	if(new_max_damage != old_max_damage)
 		max_damage = new_max_damage
 
@@ -312,22 +304,23 @@
 	if((!brute && !burn && !stamina) || hit_percent <= 0)
 		return FALSE
 	if(owner && (owner.status_flags & GODMODE))
+		return FALSE	//godmode
+
+	if(required_status && (status != required_status))
 		return FALSE
 
-	// First apply damage reductions
+	var/dmg_mlt = CONFIG_GET(number/damage_multiplier) * hit_percent
+	// Apply 50% damage reduction to chest
+	if(body_zone == BODY_ZONE_CHEST)
+		brute *= 0.25
+		burn *= 0.25
+	
+	brute = round(max(brute * dmg_mlt, 0),DAMAGE_PRECISION)
+	burn = round(max(burn * dmg_mlt, 0),DAMAGE_PRECISION)
+	stamina = round(max(stamina * dmg_mlt, 0),DAMAGE_PRECISION)
 	brute = max(0, brute - brute_reduction)
 	burn = max(0, burn - burn_reduction)
-	
-	// Then apply vital area multiplier
-	if(body_zone == BODY_ZONE_HEAD || body_zone == BODY_ZONE_CHEST)
-		brute *= 0.5
-		burn *= 0.5
-	
-	// Finally apply global damage multiplier
-	var/dmg_mlt = CONFIG_GET(number/damage_multiplier) * hit_percent
-	brute = round(max(brute * dmg_mlt, 0), DAMAGE_PRECISION)
-	burn = round(max(burn * dmg_mlt, 0), DAMAGE_PRECISION)
-	stamina = round(max(stamina * dmg_mlt, 0), DAMAGE_PRECISION)
+	//No stamina scaling.. for now..
 
 	if(!brute && !burn && !stamina)
 		return FALSE
