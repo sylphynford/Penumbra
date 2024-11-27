@@ -123,6 +123,34 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 		message_admins("Throne Meeting event failed: No valid turfs found")
 		return
 	
+	// Check if any key holders exist
+	var/list/key_holder_jobs = list(
+		"Sergeant at Arms",
+		"Town Guard",
+		"Baron",
+		"Baroness",
+		"Consort",
+		"Knight Lieutenant",
+		"Knight Banneret",
+		"Servant",
+		"Dungeoneer",
+		"Squire",
+		"Inquisitor"
+	)
+	
+	var/has_key_holders = FALSE
+	for(var/mob/living/carbon/human/H in GLOB.alive_mob_list)
+		if(H.mind?.assigned_role in key_holder_jobs)
+			has_key_holders = TRUE
+			break
+	
+	// If no key holders, spawn manor key
+	if(!has_key_holders)
+		var/turf/throne_front = get_step(get_turf(throne), SOUTH)
+		if(throne_front)
+			new /obj/item/roguekey/manor(throne_front)
+			message_admins("Throne Meeting: No key holders found, spawned manor key")
+	
 	refill_available_turfs()
 	
 	var/teleported_count = 0
@@ -997,27 +1025,28 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 
 	if(!check_rights(R_ADMIN))
 		return
-        
+
 	if(SSticker.current_state != GAME_STATE_PREGAME)
-		to_chat(usr, "<span class='warning'>This can only be used during pregame! If it is pregame, please wait for the server to finish setting up.</span>")
+		to_chat(usr, "<span class='warning'>This can only be used during pregame! If it is pregame, please wait for the game to finish setting up.</span>")
 		return
 
 	var/list/event_choices = list()
 	for(var/event_path in subtypesof(/datum/round_event_control/roundstart))
 		var/datum/round_event_control/roundstart/event = new event_path()
-		if(event.runnable && event.weight > 0)  // Only show events with weight > 0
-			event_choices[event.name] = event
+		if(event.runnable && event.weight > 0)
+			event_choices[event.name] = event_path  // Store the path instead of the instance
 
 	var/choice = input(usr, "Choose an event to force the picker to select", "Force Aspect Picker") as null|anything in event_choices
 	if(!choice)
 		return
 
-	var/datum/round_event_control/roundstart/chosen_event = event_choices[choice]
+	var/event_path = event_choices[choice]
+	var/datum/round_event_control/roundstart/chosen_event = new event_path()
 	var/confirm = alert(usr, "Force the aspect picker to select [chosen_event.name]? \nAnnouncement: [chosen_event.event_announcement]", "Confirm Event", "Yes", "No")
 	if(confirm != "Yes")
 		return
 
-	GLOB.SSroundstart_events.forced_event = chosen_event  // Store as forced_event instead of selected_event
+	GLOB.SSroundstart_events.forced_event_path = event_path  // Store the path instead of the instance
 	message_admins("[key_name_admin(usr)] queued the aspect picker to select [chosen_event.name] when the round starts")
 	log_admin("[key_name(usr)] queued the aspect picker to select [chosen_event.name] when the round starts")
 
@@ -1028,10 +1057,11 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 
 	var/list/datum/round_event_control/roundstart/roundstart_events = list()
 	var/datum/round_event_control/roundstart/selected_event
-	var/datum/round_event_control/roundstart/forced_event  // New var for forced events
 	var/has_fired = FALSE
 	var/list/active_events = list()
-	var/eternal_night_active = FALSE
+	var/forced_event_path = null
+	var/eternal_night_active = FALSE  // Keep existing variables
+	var/is_active = FALSE            // Keep existing variables
 
 	Initialize()
 		. = ..()
@@ -1039,7 +1069,6 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 			var/datum/round_event_control/roundstart/RE = new path()
 			roundstart_events += RE
 
-		// Create callback for ticker setup
 		var/datum/callback/cb = CALLBACK(src, .proc/early_round_start)
 		if(SSticker.round_start_events)
 			SSticker.round_start_events += cb
@@ -1047,28 +1076,39 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 			SSticker.round_start_events = list(cb)
 
 	proc/early_round_start()
-		pick_roundstart_event()
+		if(has_fired)
+			return
+		has_fired = TRUE
+		
+		if(!pick_roundstart_event())
+			message_admins("Failed to pick a roundstart event")
+			return
 		fire_event()
 
 	proc/pick_roundstart_event()
-		if(forced_event)  // Check for forced event first
-			selected_event = forced_event
-			forced_event = null  // Clear it after use
-			return TRUE
+		selected_event = null
+		
+		if(forced_event_path)
+			var/datum/round_event_control/roundstart/forced = new forced_event_path()
+			if(forced?.runnable)
+				selected_event = forced
+				message_admins("DEBUG: Using forced event: [forced.name]")
+				forced_event_path = null
+				return TRUE
 			
 		var/list/possible_events = list()
 		for(var/datum/round_event_control/roundstart/RE as anything in roundstart_events)
 			if(RE.runnable && RE.can_spawn_event() && RE.weight > 0)
 				possible_events[RE] = RE.weight
 
-		if(!length(possible_events))
-			return FALSE
-
-		selected_event = pickweight(possible_events)
-		return TRUE
+		if(length(possible_events))
+			selected_event = pickweight(possible_events)
+			return TRUE
+			
+		return FALSE
 
 	proc/fire_event()
-		if(!selected_event || !selected_event.typepath)
+		if(!selected_event?.typepath)
 			return
 
 		var/datum/round_event/roundstart/E = new selected_event.typepath()
@@ -1078,8 +1118,6 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 				E.apply_effect()
 				if(selected_event.event_announcement && length(selected_event.event_announcement) > 0)
 					priority_announce(selected_event.event_announcement, "Arcyne Phenomena")
-
-				// Store the event name globally
 				GLOB.roundstart_event_name = selected_event.name
 
 
