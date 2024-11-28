@@ -21,6 +21,20 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 		return FALSE
 	return runnable
 
+
+//event that does nothing to prevent metagaming
+/datum/round_event_control/roundstart/nothing
+    name = "Nothing happened."
+    typepath = /datum/round_event/roundstart/nothing
+    weight = 1
+    event_announcement = ""
+    runnable = TRUE
+
+/datum/round_event/roundstart/nothing/apply_effect()
+    . = ..()
+    is_active = TRUE
+    // This event intentionally does nothing
+
 //Bloodlines event
 /datum/round_event/roundstart/noble_vampires
 	is_active = FALSE
