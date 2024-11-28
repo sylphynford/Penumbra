@@ -2408,6 +2408,10 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
     // If no genitals are set, set defaults based on gender
     if(!has_penis && !has_vagina)
         if(gender == MALE)
+            pronouns = "he/him"
+            voice_type = "Masculine"
             update_gender_customization() // This will add default penis and testicles
         else if(gender == FEMALE)
+            pronouns = "she/her"
+            voice_type = "Feminine"
             update_gender_customization() // This will add default vagina
