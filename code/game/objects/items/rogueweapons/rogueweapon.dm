@@ -49,7 +49,6 @@
 /obj/item/rogueweapon/get_dismemberment_chance(obj/item/bodypart/affecting, mob/user)
 	if(!get_sharpness() || !affecting.can_dismember(src))
 		return 0
-	return 100
 
 	var/total_dam = affecting.get_damage()
 	var/nuforce = get_complex_damage(src, user)
@@ -79,7 +78,7 @@
 	if(nuforce < 10)
 		return 0
 
-	var/probability = (nuforce * 1.7) * (total_dam / affecting.max_damage)
+	var/probability = (nuforce) * (total_dam / affecting.max_damage)
 	var/hard_dismember = HAS_TRAIT(affecting, TRAIT_HARDDISMEMBER)
 	var/easy_dismember = affecting.rotted || affecting.skeletonized || HAS_TRAIT(affecting, TRAIT_EASYDISMEMBER)
 	if(affecting.owner)

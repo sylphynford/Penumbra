@@ -675,7 +675,7 @@
 	name = BODY_ZONE_CHEST
 	desc = ""
 	icon_state = "default_human_chest"
-	max_damage = 300
+	max_damage = 200
 	body_zone = BODY_ZONE_CHEST
 	body_part = CHEST
 	px_x = 0

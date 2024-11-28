@@ -162,7 +162,7 @@
 /mob/living/proc/adjustBruteLoss(amount, updating_health = TRUE, forced = FALSE, required_status)
 	if(!forced && (status_flags & GODMODE))
 		return FALSE
-	bruteloss += (amount * CONFIG_GET(number/damage_multiplier))
+	bruteloss = CLAMP((bruteloss + (amount * CONFIG_GET(number/damage_multiplier))), 0, maxHealth * 2)
 	if(updating_health)
 		updatehealth()
 	return amount
@@ -238,7 +238,6 @@
 	if(updating_health)
 		updatehealth()
 	return amount
-
 /mob/living/proc/adjustOrganLoss(slot, amount, maximum)
 	return
 
@@ -304,3 +303,4 @@
 		if(!amount)
 			break
 	. -= amount //if there's leftover healing, remove it from what we return
+

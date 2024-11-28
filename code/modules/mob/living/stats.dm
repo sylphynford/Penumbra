@@ -1,4 +1,3 @@
-
 #define STAT_STRENGTH "strength"
 #define STAT_PERCEPTION "perception"
 #define STAT_INTELLIGENCE "intelligence"
@@ -188,7 +187,33 @@
 			while(newamt > 20)
 				newamt--
 				BUFCON++
+			
+			// Store old CON for health calculation
+			var/oldCON = STACON
 			STACON = newamt
+			
+			// Only update health if this is a human
+			if(ishuman(src))
+				// Calculate old and new max health
+				var/oldMax = 200  // Base health for CON 10
+				var/newMax = 200  // Base health for CON 10
+				
+				// Old health calculation
+				if(oldCON > 10)
+					oldMax += (oldCON - 10) * 30
+				else if(oldCON < 10)
+					oldMax += (oldCON - 10) * 20
+					
+				// New health calculation
+				if(STACON > 10)
+					newMax += (STACON - 10) * 30
+				else if(STACON < 10)
+					newMax += (STACON - 10) * 20
+					
+				// Update maxHealth and current health
+				var/healthPercent = health / maxHealth  // Store health percentage
+				maxHealth = max(newMax, 20)  // Ensure minimum health of 20
+				health = min(maxHealth, health + (newMax - oldMax))  // Add/subtract the difference in max health
 
 		if("endurance")
 			newamt = STAEND + amt
