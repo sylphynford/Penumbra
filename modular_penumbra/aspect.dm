@@ -26,7 +26,7 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 /datum/round_event_control/roundstart/nothing
     name = "Nothing happened."
     typepath = /datum/round_event/roundstart/nothing
-    weight = 1
+    weight = 5
     event_announcement = ""
     runnable = TRUE
 
