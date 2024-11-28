@@ -782,11 +782,15 @@ SUBSYSTEM_DEF(job)
 	if(M.mind && M.mind.assigned_role && length(GLOB.jobspawn_overrides[M.mind.assigned_role])) //We're doing something special today.
 		destination = pick(GLOB.jobspawn_overrides[M.mind.assigned_role])
 		destination.JoinPlayerHere(M, FALSE)
+		if(istype(M, /mob/living/carbon/human))
+			addtimer(CALLBACK(GLOBAL_PROC, GLOBAL_PROC_REF(announce_active_events), M), 3*10)
 		return
 
 	if(latejoin_trackers.len)
 		destination = pick(latejoin_trackers)
 		destination.JoinPlayerHere(M, buckle)
+		if(istype(M, /mob/living/carbon/human))
+			addtimer(CALLBACK(GLOBAL_PROC, GLOBAL_PROC_REF(announce_active_events), M), 3*10)
 		return
 
 	//bad mojo
@@ -796,6 +800,8 @@ SUBSYSTEM_DEF(job)
 		var/obj/structure/chair/C = locate() in A
 		if(C)
 			C.JoinPlayerHere(M, buckle)
+			if(istype(M, /mob/living/carbon/human))
+				addtimer(CALLBACK(GLOBAL_PROC, GLOBAL_PROC_REF(announce_active_events), M), 3*10)
 			return
 
 		//last hurrah
@@ -806,6 +812,8 @@ SUBSYSTEM_DEF(job)
 		if(avail.len)
 			destination = pick(avail)
 			destination.JoinPlayerHere(M, FALSE)
+			if(istype(M, /mob/living/carbon/human))
+				addtimer(CALLBACK(GLOBAL_PROC, GLOBAL_PROC_REF(announce_active_events), M), 3*10)
 			return
 
 	//pick an open spot on arrivals and dump em
@@ -814,10 +822,14 @@ SUBSYSTEM_DEF(job)
 		for(var/turf/T in arrivals_turfs)
 			if(!is_blocked_turf(T, TRUE))
 				T.JoinPlayerHere(M, FALSE)
+				if(istype(M, /mob/living/carbon/human))
+					addtimer(CALLBACK(GLOBAL_PROC, GLOBAL_PROC_REF(announce_active_events), M), 3*10)
 				return
 		//last chance, pick ANY spot on arrivals and dump em
 		destination = arrivals_turfs[1]
 		destination.JoinPlayerHere(M, FALSE)
+		if(istype(M, /mob/living/carbon/human))
+			addtimer(CALLBACK(GLOBAL_PROC, GLOBAL_PROC_REF(announce_active_events), M), 3*10)
 	else
 		var/msg = "Unable to send mob [M] to late join!"
 		message_admins(msg)
