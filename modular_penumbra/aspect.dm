@@ -1,5 +1,5 @@
 #define COMSIG_GLOB_ROUND_END "!glob_round_end"
-
+GLOBAL_LIST_EMPTY(active_roundstart_events)
 GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_events, new)
 
 // Base types
@@ -14,6 +14,7 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 
 	proc/apply_effect()
 		SHOULD_CALL_PARENT(TRUE)
+		GLOB.active_roundstart_events += src
 		return
 
 /datum/round_event_control/roundstart/proc/can_spawn_event()
@@ -1164,3 +1165,17 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 				if(selected_event.event_announcement && length(selected_event.event_announcement) > 0)
 					priority_announce(selected_event.event_announcement, "Arcyne Phenomena")
 				GLOB.roundstart_event_name = selected_event.name
+
+/proc/announce_active_events(mob/M)
+	if(!M)
+		return
+	to_chat(M, "<br>")
+	for(var/datum/round_event/roundstart/RE in GLOB.active_roundstart_events)
+		// Get the control type by looking for a control type with matching typepath
+		for(var/control_path in subtypesof(/datum/round_event_control/roundstart))
+			var/datum/round_event_control/roundstart/REC = new control_path()
+			if(REC.typepath == RE.type)
+				if(REC?.event_announcement && REC.event_announcement != "")
+					to_chat(M, "<span class='big bold'><font color='purple'>Arcyne Phenomena:</font color><BR>[REC.event_announcement]</span><BR>")
+				qdel(REC)
+				break
