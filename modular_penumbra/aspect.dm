@@ -653,7 +653,7 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 		
 	H.sexcon.set_arousal(H.sexcon.arousal + 0.5)
 	if(H.sexcon.arousal >= 100 && H.sexcon.can_ejaculate())
-		H.sexcon.ejaculate()
+		addtimer(CALLBACK(H.sexcon, /datum/sex_controller/proc/ejaculate), 0)
 		H.sexcon.set_arousal(0)
 
 /datum/round_event_control/roundstart/funky_water
