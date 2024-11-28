@@ -1021,34 +1021,46 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 /client/proc/force_aspect_picker()
 	set category = "Admin"
 	set name = "Force Aspect Picker"
-	set desc = "Forces the aspect picker to select a specific event during pregame"
+	set desc = "Forces a specific aspect event to run at round start"
 
 	if(!check_rights(R_ADMIN))
 		return
 
-	if(SSticker.current_state != GAME_STATE_PREGAME)
-		to_chat(usr, "<span class='warning'>This can only be used during pregame! If it is pregame, please wait for the game to finish setting up.</span>")
+	if(SSticker.current_state > GAME_STATE_PREGAME)
+		to_chat(usr, "<span class='warning'>The round has already started!</span>")
 		return
 
 	var/list/event_choices = list()
 	for(var/event_path in subtypesof(/datum/round_event_control/roundstart))
 		var/datum/round_event_control/roundstart/event = new event_path()
-		if(event.runnable && event.weight > 0)
-			event_choices[event.name] = event_path  // Store the path instead of the instance
+		if(event.runnable)
+			event_choices[event.name] = event_path
 
-	var/choice = input(usr, "Choose an event to force the picker to select", "Force Aspect Picker") as null|anything in event_choices
+	var/choice = input(usr, "Choose an event to force at round start", "Force Aspect") as null|anything in event_choices
 	if(!choice)
 		return
 
 	var/event_path = event_choices[choice]
 	var/datum/round_event_control/roundstart/chosen_event = new event_path()
-	var/confirm = alert(usr, "Force the aspect picker to select [chosen_event.name]? \nAnnouncement: [chosen_event.event_announcement]", "Confirm Event", "Yes", "No")
-	if(confirm != "Yes")
-		return
-
-	GLOB.SSroundstart_events.forced_event_path = event_path  // Store the path instead of the instance
-	message_admins("[key_name_admin(usr)] queued the aspect picker to select [chosen_event.name] when the round starts")
-	log_admin("[key_name(usr)] queued the aspect picker to select [chosen_event.name] when the round starts")
+	
+	// Disable the normal event system
+	GLOB.SSroundstart_events.has_fired = TRUE
+	GLOB.SSroundstart_events.selected_event = null
+	GLOB.SSroundstart_events.roundstart_events.Cut()
+	
+	// Create and store the event to be fired
+	var/datum/round_event/roundstart/E = new chosen_event.typepath()
+	var/datum/callback/cb = CALLBACK(E, /datum/round_event/roundstart/proc/apply_effect)
+	
+	// Replace existing callbacks
+	SSticker.round_start_events = list(cb)
+	
+	if(chosen_event.event_announcement && length(chosen_event.event_announcement) > 0)
+		var/datum/callback/announce_cb = CALLBACK(GLOBAL_PROC, /proc/priority_announce, chosen_event.event_announcement, "Arcyne Phenomena")
+		SSticker.round_start_events += announce_cb
+	
+	message_admins("[key_name_admin(usr)] forced the aspect: [chosen_event.name] to run at round start")
+	log_admin("[key_name(usr)] forced the aspect: [chosen_event.name] to run at round start")
 
 /datum/controller/subsystem/roundstart_events
 	name = "Roundstart Events"
@@ -1120,4 +1132,14 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 					priority_announce(selected_event.event_announcement, "Arcyne Phenomena")
 				GLOB.roundstart_event_name = selected_event.name
 
+/proc/force_roundstart_event(event_path)
+	var/datum/round_event_control/roundstart/event_control = new event_path()
+	var/datum/round_event/roundstart/E = new event_control.typepath()
+	
+	if(event_control.event_announcement && length(event_control.event_announcement) > 0)
+		priority_announce(event_control.event_announcement, "Arcyne Phenomena")
+	
+	if(E && istype(E))
+		E.apply_effect()
+		GLOB.roundstart_event_name = event_control.name
 
