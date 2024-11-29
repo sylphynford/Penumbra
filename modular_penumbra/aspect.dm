@@ -512,7 +512,6 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 	var/mob/living/carbon/human/baron
 	var/mob/living/carbon/human/consort
 	
-	// Find the Baron and Consort
 	for(var/mob/living/carbon/human/H in GLOB.alive_mob_list)
 		if(H.mind?.assigned_role == "Baron" || H.mind?.assigned_role == "Baroness")
 			baron = H
@@ -523,8 +522,10 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 	if(!baron || !consort)
 		for(var/datum/round_event_control/E in SSevents.control)
 			if(istype(E, /datum/round_event_control/roundstart/matriarchy))
-				SSevents.control -= E
-				SSevents.spawnEvent() // Trigger a new event selection
+				var/datum/round_event_control/roundstart/matriarchy/ME = E
+				ME.runnable = FALSE
+				message_admins("Matriarchy event failed: Missing [!baron ? "Baron/Baroness" : ""][!baron && !consort ? " and " : ""][!consort ? "Consort" : ""]")
+				addtimer(CALLBACK(SSevents, /datum/controller/subsystem/events/proc/spawnEvent), 0)
 				return
 	
 	is_active = TRUE
