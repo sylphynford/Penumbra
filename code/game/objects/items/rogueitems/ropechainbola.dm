@@ -222,7 +222,16 @@
 /obj/structure/noose/gallows/post_buckle_mob(mob/living/M)
 	if(has_buckled_mobs())
 		START_PROCESSING(SSobj, src)
-		M.set_mob_offsets("bed_buckle", _x = 5, _y = 12)  // Adjusted x and y values for gallows
+		if(ishuman(M))
+			var/mob/living/carbon/human/H = M
+			if(istype(H, /mob/living/carbon/human/species/kobold) || istype(H, /mob/living/carbon/human/species/dwarf/mountain))
+				M.set_mob_offsets("bed_buckle", _x = 6, _y = 17)
+			else if(H.gender == FEMALE)
+				M.set_mob_offsets("bed_buckle", _x = 6, _y = 14)
+			else
+				M.set_mob_offsets("bed_buckle", _x = 6, _y = 13)
+		else
+			M.set_mob_offsets("bed_buckle", _x = 6, _y = 13)
 
 /obj/structure/noose/gallows/post_unbuckle_mob(mob/living/M)
 	STOP_PROCESSING(SSobj, src)
