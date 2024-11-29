@@ -19,7 +19,11 @@ GLOBAL_LIST_INIT(artery_strong_bclasses, list(
 
 GLOBAL_LIST_INIT(dislocation_bclasses, list(
 	BCLASS_TWIST,
+	BCLASS_BLUNT,
+	BCLASS_SMASH,
+	BCLASS_PUNCH,
 ))
+
 GLOBAL_LIST_INIT(cbt_classes, list(
 	BCLASS_BLUNT,
 	BCLASS_SMASH,
