@@ -3,7 +3,7 @@
 	for(var/file in args)
 		src << browse_rsc(file)
 
-/client/proc/browse_files(root="data/logs/", max_iterations=10, list/valid_extensions=list("txt","log","htm", "html"))
+/client/proc/browse_files(root="data/logs/", max_iterations=10, list/valid_extensions=list("txt","log","htm", "html"), directory_only = FALSE)
 	var/path = root
 
 	for(var/i=0, i<max_iterations, i++)
@@ -21,7 +21,20 @@
 		path += choice
 
 		if(copytext(path,-1,0) != "/")		//didn't choose a directory, no need to iterate again
+			if(directory_only)
+				return // Invalid selection for directory_only
 			break
+		
+		// For directory_only mode, check if this is a round directory (contains log files)
+		if(directory_only)
+			var/list/dir_contents = flist(path)
+			if(dir_contents.Find("game.log") || dir_contents.Find("attack.log"))
+				return path // Found a round directory with logs
+			// Otherwise continue browsing
+		
+	if(directory_only)
+		return // Shouldn't reach here with directory_only
+		
 	var/extensions
 	for(var/i in valid_extensions)
 		if(extensions)
