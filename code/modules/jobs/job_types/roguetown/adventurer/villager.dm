@@ -19,7 +19,6 @@
 	round_contrib_points = 2
 	wanderer_examine = FALSE
 	advjob_examine = TRUE
-	always_show_on_latechoices = TRUE
 	same_job_respawn_delay = 0
 
 /datum/job/roguetown/villager/after_spawn(mob/living/L, mob/M, latejoin = TRUE)

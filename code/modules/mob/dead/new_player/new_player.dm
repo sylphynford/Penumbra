@@ -192,6 +192,10 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/rp_prompt.txt"))
 			to_chat(usr, span_boldwarning("You are in the migrant queue."))
 			return
 
+		if(!(client?.prefs?.selected_patron?.type in ALL_DIVINE_PATRONS))
+			to_chat(usr, span_warning("You may not latejoin as a heretic. Please set your faith to PSYDON."))
+			return
+
 		if(href_list["late_join"] == "override")
 			LateChoices()
 			return
@@ -403,6 +407,8 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/rp_prompt.txt"))
 			return "[jobtitle] requires more faith."
 		if(JOB_UNAVAILABLE_LASTCLASS)
 			return "You have played [jobtitle] recently."
+		if(JOB_UNAVAILABLE_FAITH)
+			return "You may not latejoin as a heretic. Please set your faith to PSYDON."
 		if(JOB_UNAVAILABLE_JOB_COOLDOWN)
 			if(usr.ckey in GLOB.job_respawn_delays)
 				var/remaining_time = round((GLOB.job_respawn_delays[usr.ckey] - world.time) / 10)
@@ -411,8 +417,13 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/rp_prompt.txt"))
 
 //used for latejoining
 /mob/dead/new_player/proc/IsJobUnavailable(rank, latejoin = FALSE)
+	// Block ALL late joins for heretics
+	if(latejoin && !(client?.prefs?.selected_patron?.type in ALL_DIVINE_PATRONS))
+		return JOB_UNAVAILABLE_FAITH
+	
 	if(QDELETED(src))
 		return JOB_UNAVAILABLE_GENERIC
+	
 	if(istype(SSticker.mode, /datum/game_mode/chaosmode))
 		var/datum/game_mode/chaosmode/C = SSticker.mode
 		if(C.skeletons)
