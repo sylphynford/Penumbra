@@ -23,6 +23,43 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 	return runnable
 
 
+
+//no gates event
+/datum/round_event/roundstart/drunk_jester
+
+/datum/round_event/roundstart/drunk_jester/apply_effect()
+	. = ..()
+	is_active = TRUE
+	
+	var/passages_removed = 0
+	// Find all passage bars
+	for(var/obj/structure/bars/passage/P in world)
+		// Check if this passage has any redstone connections
+		if(!length(P.redstone_attached))
+			continue
+			
+		// Check if the passage is in the town area
+		var/area/A = get_area(P)
+		if(!istype(A, /area/rogue/outdoors/town))
+			continue
+			
+		// Check if any of the attached objects are wall levers
+		for(var/obj/structure/lever/wall/L in P.redstone_attached)
+			// Found a connected wall lever, delete the passage
+			qdel(P)
+			passages_removed++
+			break
+
+	message_admins("Drunk Jester event: Removed [passages_removed] passage bars in town")
+
+/datum/round_event_control/roundstart/drunk_jester
+	name = "Drunk Jester"
+	typepath = /datum/round_event/roundstart/drunk_jester
+	weight = 5
+	event_announcement = "After an accident with a drunk jester, all the gates in town have been destroyed..."
+	runnable = TRUE
+
+
 //great season event
 /datum/round_event/roundstart/great_season
 

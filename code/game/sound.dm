@@ -183,9 +183,10 @@
 			client.played_loops[D]["SOUND"] = S
 			client.played_loops[D]["VOL"] = S.volume
 			client.played_loops[D]["MUTESTATUS"] = null
-//			if(D.persistent_loop) //shut up music because we're hearing ingame music
-//				play_ambience(get_area(src))
 			S.repeat = 1
+		else
+			// If it's not a looping_sound datum, it's a one-shot sound that shouldn't loop
+			S.repeat = 0
 
 	SEND_SOUND(src, S)
 
