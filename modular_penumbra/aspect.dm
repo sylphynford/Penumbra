@@ -23,6 +23,67 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 	return runnable
 
 
+//great season event
+/datum/round_event/roundstart/great_season
+
+
+/datum/round_event/roundstart/great_season/apply_effect()
+	. = ..()
+	is_active = TRUE
+	
+	for(var/type in subtypesof(/datum/plant_def))
+		var/datum/plant_def/P = GLOB.plant_defs[type]
+		if(!P)
+			continue
+		// Double minimum yield
+		P.produce_amount_min *= 2
+		// Double maximum yield
+		P.produce_amount_max *= 2
+		// Decrease time needed to produce crops
+		P.produce_time *= 0.75
+		// Decrease nutrition requirements
+		P.maturation_nutrition *= 0.8
+		P.produce_nutrition *= 0.8
+
+/datum/round_event_control/roundstart/great_season
+	name = "Great Season"
+	typepath = /datum/round_event/roundstart/great_season
+	weight = 5
+	event_announcement = "The weather has been perfect for crops this season. Farmers report bountiful yields and faster growth across all farmlands."
+	runnable = TRUE
+
+
+
+//farming blight event
+/datum/round_event/roundstart/blight
+
+
+/datum/round_event/roundstart/blight/apply_effect()
+	. = ..()
+	is_active = TRUE
+	
+	for(var/type in subtypesof(/datum/plant_def))
+		var/datum/plant_def/P = GLOB.plant_defs[type]
+		if(!P)
+			continue
+		// Reduce minimum yield but don't let it go below 1
+		P.produce_amount_min = max(1, P.produce_amount_min - 2)
+		// Reduce maximum yield but don't let it go below minimum
+		P.produce_amount_max = max(P.produce_amount_min, P.produce_amount_max - 2)
+		// Increase time needed to produce crops
+		P.produce_time *= 1.5
+		// Increase nutrition requirements
+		P.maturation_nutrition *= 1.2
+		P.produce_nutrition *= 1.2
+
+/datum/round_event_control/roundstart/blight
+	name = "Blight"
+	typepath = /datum/round_event/roundstart/blight
+	weight = 5
+	event_announcement = "The crops seem sickly this season. Farmers report reduced yields and slower growth across all farmlands."
+	runnable = TRUE
+
+
 
 // Competent Ruler event
 /datum/round_event/roundstart/competent_ruler
