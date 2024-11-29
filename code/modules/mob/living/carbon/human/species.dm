@@ -1709,9 +1709,9 @@ GLOBAL_LIST_EMPTY(roundstart_races)
 	var/hit_percent = (100-blocked)/100
 	
 	// Scale base damage based on constitution - lower constitution means taking more damage
-	var/con_modifier = 2 - (H.STACON/10)  // At CON 1, this is 1.9x damage. At CON 20, this is 0x damage
+	var/end_modifier = 2 - (H.STAEND/10)  // At END 1, this is 2x damage. At END 20, this is 0x damage
 	var/base_damage = forced ? damage : damage * hit_percent
-	base_damage *= con_modifier
+	base_damage *= end_modifier
 
 	if(!base_damage || (!forced && hit_percent <= 0))
 		return 0
@@ -1735,11 +1735,11 @@ GLOBAL_LIST_EMPTY(roundstart_races)
 				if(final_damage > 5)
 					H.AdjustSleeping(-50)
 					if(prob(final_damage * 3))
-						if(final_damage > ((H.STACON*10) / 3))
+						if(final_damage > ((H.STAEND*10) / 3))
 							H.emote("painscream")
 						else
 							H.emote("pain")
-				if(final_damage > ((H.STACON*10) / 3) && !HAS_TRAIT(H, TRAIT_NOPAINSTUN))
+				if(final_damage > ((H.STAEND*10) / 3) && !HAS_TRAIT(H, TRAIT_NOPAINSTUN))
 					H.Immobilize(8)
 					shake_camera(H, 2, 2)
 					H.stuttering += 5

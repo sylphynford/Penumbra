@@ -291,7 +291,7 @@
 	if(!is_organic_limb() || !owner)
 		return
 	var/old_max_damage = max_damage
-	var/new_max_damage = initial(max_damage) + ((owner.STACON - 10) * 20)
+	var/new_max_damage = initial(max_damage) + ((owner.STAEND - 10) * 20)
 	if(new_max_damage != old_max_damage)
 		max_damage = new_max_damage
 
