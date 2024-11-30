@@ -139,7 +139,6 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 		return FALSE
 	if(!fexists(path))
 		return FALSE
-
 	var/savefile/S = new /savefile(path)
 	if(!S)
 		return FALSE
@@ -439,6 +438,14 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	S["joblessrole"] >> joblessrole
 	//Load prefs
 	S["job_preferences"] >> job_preferences
+	S["preferred_advclass"] >> preferred_advclass
+
+	//Needs to be updated to current format.
+	if(!job_preferences)
+		job_preferences = list()
+
+	if(!preferred_advclass)
+		preferred_advclass = list()
 
 	//Quirks
 	S["all_quirks"] >> all_quirks
@@ -597,6 +604,7 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	WRITE_FILE(S["joblessrole"]		, joblessrole)
 	//Write prefs
 	WRITE_FILE(S["job_preferences"] , job_preferences)
+	S["preferred_advclass"] << preferred_advclass
 
 	//Quirks
 	WRITE_FILE(S["all_quirks"]			, all_quirks)

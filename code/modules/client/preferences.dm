@@ -104,7 +104,10 @@ GLOBAL_LIST_EMPTY(chosen_names)
 	//Job preferences 2.0 - indexed by job title , no key or value implies never
 	var/list/job_preferences = list()
 
-		// Want randomjob if preferences already filled - Donkie
+	// Map of job title -> preferred advanced class
+	var/list/preferred_advclass = list()
+
+	// Want randomjob if preferences already filled - Donkie
 	var/joblessrole = RETURNTOLOBBY  //defaults to 1 for fewer assistants
 
 	// 0 = character settings, 1 = game preferences
@@ -928,6 +931,13 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 			HTML += "<font color=[prefLevelColor]>[prefLevelLabel]</font>"
 			HTML += "</a></td></tr>"
 
+			// Add advclass selection for mercenary
+			if(rank == "Mercenary" && job_preferences[job.title] != null)
+				HTML += "<tr bgcolor='#000000'><td width='60%' align='right'>"
+				HTML += "Class:</td><td><a href='?_src_=prefs;preference=advclass;job=[rank]'>"
+				HTML += "[preferred_advclass[job.title] ? preferred_advclass[job.title] : "Random"]"
+				HTML += "</a></td></tr>"
+
 		for(var/i = 1, i < (limit - index), i += 1) // Finish the column so it is even
 			HTML += "<tr bgcolor='000000'><td width='60%' align='right'>&nbsp</td><td>&nbsp</td></tr>"
 
@@ -988,6 +998,8 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 			jpval = JP_MEDIUM
 		if(1)
 			jpval = JP_HIGH
+		else
+			jpval = null
 
 	if(job.required && !isnull(job.min_pq) && (get_playerquality(user.ckey) < job.min_pq))
 		if(job_preferences[job.title] == JP_LOW)
@@ -1408,20 +1420,19 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 					key_bindings[old_key] -= kb_name
 					if(!length(key_bindings[old_key]))
 						key_bindings -= old_key
-				key_bindings[full_key] += list(kb_name)
-				key_bindings[full_key] = sortList(key_bindings[full_key])
+					key_bindings[full_key] += list(kb_name)
+					key_bindings[full_key] = sortList(key_bindings[full_key])
 
-				user << browse(null, "window=capturekeypress")
-				user.client.update_movement_keys()
-				save_preferences()
-				SetKeybinds(user)
+					user << browse(null, "window=capturekeypress")
+					user.client.update_movement_keys()
+					save_preferences()
+					SetKeybinds(user)
 
 			if("keybindings_reset")
 				var/choice = tgalert(user, "Do you really want to reset your keybindings?", "Setup keybindings", "Do It", "Cancel")
 				if(choice == "Cancel")
 					ShowChoices(user,3)
 					return
-				hotkeys = (choice == "Do It")
 				key_bindings = (hotkeys) ? deepCopyList(GLOB.hotkey_keybinding_list_by_key) : deepCopyList(GLOB.classic_keybinding_list_by_key)
 				user.client.update_movement_keys()
 				SetKeybinds(user)
@@ -1964,7 +1975,6 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 					if(choice == "Cancel")
 						ShowChoices(user,3)
 						return
-					hotkeys = (choice == "Do It")
 					key_bindings = (hotkeys) ? deepCopyList(GLOB.hotkey_keybinding_list_by_key) : deepCopyList(GLOB.classic_keybinding_list_by_key)
 					user.client.update_movement_keys()
 					SetKeybinds(user)
@@ -2152,6 +2162,25 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 				if("tab")
 					if (href_list["tab"])
 						current_tab = text2num(href_list["tab"])
+
+				if("advclass")
+					var/job = href_list["job"]
+					var/list/available_classes = list("Random")
+					for(var/type in subtypesof(/datum/advclass/mercenary))
+						var/datum/advclass/mercenary/AC = new type()
+						if(AC.name)
+							// Check if class is allowed for player's race
+							if(!AC.allowed_races?.len || (pref_species.type in AC.allowed_races))
+								available_classes += AC.name
+						qdel(AC)
+					
+					var/choice = input(user, "Choose your preferred class for [job]:", "Class Selection") as null|anything in available_classes
+					if(choice)
+						if(choice == "Random")
+							preferred_advclass[job] = null
+						else
+							preferred_advclass[job] = choice
+					ShowChoices(user)
 
 	ShowChoices(user)
 	return 1
