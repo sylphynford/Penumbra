@@ -146,7 +146,8 @@
 		if(burn)
 			status += burn >= 10 ? span_danger("[burn] BURN") : span_warning("[burn] BURN")
 	else
-		if(brute >= DAMAGE_PRECISION)
+		// Only show MANGLED if we have fracture/dislocation
+		if(brute >= DAMAGE_PRECISION && (has_wound(/datum/wound/fracture) || has_wound(/datum/wound/dislocation)))
 			switch(brute/max_damage)
 				if(0.75 to INFINITY)
 					status += span_userdanger("<B>[heavy_brute_msg]</B>")
@@ -167,7 +168,7 @@
 					status += span_danger("[medium_burn_msg]")
 				else
 					status += span_warning("[light_burn_msg]")
-	
+
 	var/bleed_rate = get_bleed_rate()
 	if(bleed_rate)
 		if(bleed_rate > 1) //Totally arbitrary value
@@ -183,7 +184,7 @@
 			continue
 		wound_strings |= wound.get_check_name(user)
 	status += wound_strings
-
+	
 	if(crazy_infection)
 		status += span_infection("INFECTION")
 
@@ -205,7 +206,8 @@
 		else
 			status += "<a href='?src=[owner_ref];bandaged_limb=[REF(src)];bandage=[REF(bandage)]' class='info'>[uppertext(bandage.name)]</a>"
 
-	if(disabled)
+	// Only show CRIPPLED if we have disabling wounds
+	if(disabled && (length(wounds) && (has_wound(/datum/wound/fracture) || has_wound(/datum/wound/dislocation))))
 		status += span_deadsay("CRIPPLED")
 
 	return status
@@ -417,3 +419,4 @@
 	for(var/obj/item/I in FB.embedded_objects)
 		to_chat(src, "\t <a href='?src=[REF(src)];embedded_object=[REF(I)];embedded_limb=[REF(FB)]' class='warning'>There is \a [I] in my [FB.name]!</a>")
 */
+

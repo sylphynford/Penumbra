@@ -132,6 +132,14 @@
 		if(istype(user.rmb_intent, /datum/rmb_intent/weak))
 			do_crit = FALSE
 	testing("bodypart_attacked_by() dam [dam]")
+
+	// Do critical effects first
+	if(do_crit)
+		var/crit_attempt = try_crit(bclass, dam, user, zone_precise, silent, crit_message)
+		if(crit_attempt)
+			return crit_attempt
+
+	// Then do regular wounds
 	var/added_wound
 	switch(bclass) //do stuff but only when we are a blade that adds wounds
 		if(BCLASS_SMASH, BCLASS_BLUNT)
@@ -168,10 +176,6 @@
 					added_wound = /datum/wound/bite/small
 	if(added_wound)
 		added_wound = add_wound(added_wound, silent, crit_message)
-	if(do_crit)
-		var/crit_attempt = try_crit(bclass, dam, user, zone_precise, silent, crit_message)
-		if(crit_attempt)
-			return crit_attempt
 	return added_wound
 
 /// Behemoth of a proc used to apply a wound after a bodypart is damaged in an attack
@@ -179,7 +183,6 @@
 	if(!bclass || !dam || (owner.status_flags & GODMODE))
 		return FALSE
 	var/list/attempted_wounds = list()
-	var/used
 	var/total_dam = get_damage()
 	var/damage_dividend = (total_dam / max_damage)
 	var/resistance = HAS_TRAIT(owner, TRAIT_CRITICAL_RESISTANCE)
@@ -188,41 +191,38 @@
 	var/is_cutting = (bclass in list(BCLASS_CUT, BCLASS_CHOP, BCLASS_STAB, BCLASS_PICK))
 	
 	if(!is_cutting)
+		var/probability = (dam) * (total_dam / max_damage)
+		var/hard_break = HAS_TRAIT(src, TRAIT_HARDDISMEMBER)
+		var/easy_break = HAS_TRAIT(src, TRAIT_EASYDISMEMBER)
+		if(owner)
+			if(!hard_break)
+				hard_break = HAS_TRAIT(owner, TRAIT_HARDDISMEMBER)
+			if(!easy_break)
+				easy_break = HAS_TRAIT(owner, TRAIT_EASYDISMEMBER)
+		if(hard_break)
+			probability = min(probability, 5)
+		else if(easy_break)
+			probability *= 1.5
+		
+		// Dislocation check - happens first
 		if(bclass in GLOB.dislocation_bclasses)
-			used = round(damage_dividend * 10 + (dam / 3 - 10 * resistance), 1)
-			if(user && istype(user.rmb_intent, /datum/rmb_intent/strong))
-				used += 10
-			if(prob(used))
+			if(damage_dividend >= 0.5 && prob(probability)) // Requires 70% damage
 				if(HAS_TRAIT(src, TRAIT_BRITTLE))
 					attempted_wounds += /datum/wound/fracture
 				else
 					attempted_wounds += /datum/wound/dislocation
 					
+		// Fracture check - only happens if already dislocated
 		if(bclass in GLOB.fracture_bclasses)
-			used = round(damage_dividend * 10 + (dam / 3) - 10 * resistance, 1)
-			if(user)
-				if(istype(user.rmb_intent, /datum/rmb_intent/strong))
-					used += 10
-			if(HAS_TRAIT(src, TRAIT_BRITTLE))
-				used += 10
-			if(prob(used))
-				attempted_wounds += /datum/wound/dislocation
+			if(has_wound(/datum/wound/dislocation) && damage_dividend >= 1 && prob(probability)) // Requires 80% damage and a dislocation
 				attempted_wounds += /datum/wound/fracture
-	
+
 	// Allow artery wounds for all appropriate weapons
 	if(bclass in GLOB.artery_bclasses)
-		used = round(damage_dividend * 20 + (dam / 3) - 10 * resistance, 1)
-		if(user)
-			if(bclass == BCLASS_CHOP)
-				if(istype(user.rmb_intent, /datum/rmb_intent/strong))
-					used += 10
-			else
-				if(istype(user.rmb_intent, /datum/rmb_intent/aimed))
-					used += 10
-		var/artery_type = /datum/wound/artery
-		if(zone_precise == BODY_ZONE_PRECISE_NECK)
-			artery_type = /datum/wound/artery/neck
-		if(prob(used))
+		if(damage_dividend >= 0.6) // Requires 60% damage
+			var/artery_type = /datum/wound/artery
+			if(zone_precise == BODY_ZONE_PRECISE_NECK)
+				artery_type = /datum/wound/artery/neck
 			attempted_wounds += artery_type
 
 	for(var/wound_type in shuffle(attempted_wounds))

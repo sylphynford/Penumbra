@@ -212,13 +212,37 @@
 	var/mob/living/carbon/C = grabbed
 	var/armor_block = C.run_armor_check(limb_grabbed, "slash")
 	var/damage = user.get_punch_dmg()
+	
+	// Check for dislocation and attempt to relocate if present
+	if(istype(limb_grabbed, /obj/item/bodypart))
+		var/obj/item/bodypart/affected = limb_grabbed
+		for(var/datum/wound/dislocation/D in affected.wounds)
+			if(D.can_relocate)
+				// We already have a grab since we're using a grabbing item
+				if(user == C)
+					user.visible_message(span_danger("[user] attempts to wrench [user.p_their()] dislocated [parse_zone(affected.body_zone)] back into place!"), \
+									span_userdanger("You attempt to wrench your dislocated [parse_zone(affected.body_zone)] back into place!"), \
+									span_hear("You hear bones shifting!"), COMBAT_MESSAGE_RANGE)
+				else
+					C.visible_message(span_danger("[user] attempts to wrench [C]'s dislocated [parse_zone(affected.body_zone)] back into place!"), \
+									span_userdanger("[user] attempts to wrench your dislocated [parse_zone(affected.body_zone)] back into place!"), \
+									span_hear("You hear bones shifting!"), COMBAT_MESSAGE_RANGE)
+				D.attempt_manual_relocation(user, C)
+				return
+	
+	// If no dislocation or relocation failed, proceed with normal twisting damage
 	playsound(C.loc, "genblunt", 100, FALSE, -1)
 	C.next_attack_msg.Cut()
 	C.apply_damage(damage, BRUTE, limb_grabbed, armor_block)
 	limb_grabbed.bodypart_attacked_by(BCLASS_TWIST, damage, user, sublimb_grabbed, crit_message = TRUE)
-	C.visible_message(span_danger("[user] twists [C]'s [parse_zone(sublimb_grabbed)]![C.next_attack_msg.Join()]"), \
-					span_userdanger("[user] twists my [parse_zone(sublimb_grabbed)]![C.next_attack_msg.Join()]"), span_hear("I hear a sickening sound of pugilism!"), COMBAT_MESSAGE_RANGE, user)
-	to_chat(user, span_warning("I twist [C]'s [parse_zone(sublimb_grabbed)].[C.next_attack_msg.Join()]"))
+	if(user == C)
+		C.visible_message(span_danger("[user] twists [user.p_their()] [parse_zone(sublimb_grabbed)]![C.next_attack_msg.Join()]"), \
+						span_userdanger("You twist your [parse_zone(sublimb_grabbed)]![C.next_attack_msg.Join()]"), span_hear("I hear a sickening sound of pugilism!"), COMBAT_MESSAGE_RANGE)
+		to_chat(user, span_warning("I twist my [parse_zone(sublimb_grabbed)].[C.next_attack_msg.Join()]"))
+	else
+		C.visible_message(span_danger("[user] twists [C]'s [parse_zone(sublimb_grabbed)]![C.next_attack_msg.Join()]"), \
+						span_userdanger("[user] twists my [parse_zone(sublimb_grabbed)]![C.next_attack_msg.Join()]"), span_hear("I hear a sickening sound of pugilism!"), COMBAT_MESSAGE_RANGE, user)
+		to_chat(user, span_warning("I twist [C]'s [parse_zone(sublimb_grabbed)].[C.next_attack_msg.Join()]"))
 	C.next_attack_msg.Cut()
 	log_combat(user, C, "limbtwisted [sublimb_grabbed] ")
 

@@ -101,13 +101,21 @@
 		used_limb = parse_zone(I.sublimb_grabbed)
 
 	if(used_limb)
-		target.visible_message(span_warning("[src] grabs [target]'s [used_limb]."), \
+		if(src == target)
+			visible_message(span_warning("[src] grabs [p_their()] [used_limb]."), \
+						span_warning("I grab my [used_limb]."), span_hear("I hear shuffling."))
+		else
+			target.visible_message(span_warning("[src] grabs [target]'s [used_limb]."), \
 						span_warning("[src] grabs my [used_limb]."), span_hear("I hear shuffling."), null, src)
-		to_chat(src, span_info("I grab [target]'s [used_limb]."))
+			to_chat(src, span_info("I grab [target]'s [used_limb]."))
 	else
-		target.visible_message(span_warning("[src] grabs [target]."), \
+		if(src == target)
+			visible_message(span_warning("[src] grabs [p_them()]self."), \
+						span_warning("I grab myself."), span_hear("I hear shuffling."))
+		else
+			target.visible_message(span_warning("[src] grabs [target]."), \
 						span_warning("[src] grabs me."), span_hear("I hear shuffling."), null, src)
-		to_chat(src, span_info("I grab [target]."))
+			to_chat(src, span_info("I grab [target]."))
 
 /mob/living/carbon/send_grabbed_message(mob/living/carbon/user)
 	var/used_limb = "chest"

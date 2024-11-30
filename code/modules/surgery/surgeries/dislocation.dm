@@ -1,4 +1,4 @@
-/datum/surgery/relocate_bone
+/*/datum/surgery/relocate_bone
 	name = "Bone relocation"
 	target_mobtypes = list(/mob/living/carbon/human, /mob/living/carbon/monkey)
 	possible_locs = list(
@@ -58,3 +58,4 @@
 		for(var/datum/wound/dislocation/bone in bodypart.wounds)
 			bone.relocate_bone()
 	return TRUE
+*/
