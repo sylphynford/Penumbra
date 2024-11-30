@@ -223,6 +223,10 @@
 		if(effective > user.STASTR)
 			newforce = max(newforce*0.3, 1)
 
+	// Skip blade dulling for blunt weapons
+	if(blade_dulling && user?.used_intent?.blade_class in list(BCLASS_BLUNT, BCLASS_SMASH, BCLASS_PUNCH))
+		blade_dulling = null
+
 	switch(blade_dulling)
 		if(DULLING_CUT) //wooden that can't be attacked by clubs (trees, bushes, grass)
 			switch(user.used_intent.blade_class)

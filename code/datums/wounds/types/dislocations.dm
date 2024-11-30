@@ -9,7 +9,7 @@
 		"The %BODYPART is dislocated!",
 	)
 	sound_effect = "fracturedry"
-	whp = 40
+	whp = 75
 	woundpain = 40
 	mob_overlay = ""
 	sewn_overlay = ""
@@ -17,7 +17,7 @@
 	can_cauterize = FALSE
 	disabling = FALSE
 	critical = TRUE
-	passive_healing = 0.25
+	passive_healing = 0
 	qdel_on_droplimb = TRUE
 	zombie_infection_probability = 0
 	werewolf_infection_probability = 0
@@ -66,7 +66,6 @@
 	else if(owner)
 		owner.simple_remove_wound(src)
 	return TRUE
-
 /datum/wound/dislocation/proc/attempt_manual_relocation(mob/living/user, mob/living/carbon/victim)
 	if(!can_relocate)
 		return FALSE
@@ -182,3 +181,4 @@
 	if(iscarbon(affected))
 		var/mob/living/carbon/carbon_affected = affected
 		carbon_affected.update_disabled_bodyparts()
+

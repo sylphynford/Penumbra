@@ -123,9 +123,6 @@
 		var/mob/living/carbon/human/human_owner = owner
 		if(human_owner.checkcritarmor(zone_precise, bclass))
 			return FALSE
-		if(owner.mind && get_damage() < max_damage/2) //No crits except if it hits a damage threshold on players.
-			if(owner.mobility_flags & MOBILITY_STAND && !owner.buckled) //Unless they're buckled or lying down.
-				do_crit = FALSE
 	if(user)
 		if(user.goodluck(2))
 			dam += 10
@@ -187,34 +184,74 @@
 	var/damage_dividend = (total_dam / max_damage)
 	var/resistance = HAS_TRAIT(owner, TRAIT_CRITICAL_RESISTANCE)
 	
-	// Prevent cutting weapons from causing fractures/dislocations
-	var/is_cutting = (bclass in list(BCLASS_CUT, BCLASS_CHOP, BCLASS_STAB, BCLASS_PICK))
+	// Only allow non-cutting weapons to cause fractures/dislocations
+	if(!(bclass in list(BCLASS_BLUNT, BCLASS_SMASH, BCLASS_PUNCH, BCLASS_TWIST)))
+		return FALSE
 	
-	if(!is_cutting)
-		var/probability = (dam) * (total_dam / max_damage)
+	// Get complex damage like dismemberment does
+	var/nuforce = dam
+	if(user?.get_active_held_item())
+		var/obj/item/I = user.get_active_held_item()
+		nuforce = get_complex_damage(I, user)
+	
+	// Dislocation check - happens first
+	if(bclass in GLOB.dislocation_bclasses)
+		if(nuforce < 10)
+			return FALSE
+			
+		var/probability = (nuforce) * (damage_dividend)
 		var/hard_break = HAS_TRAIT(src, TRAIT_HARDDISMEMBER)
-		var/easy_break = HAS_TRAIT(src, TRAIT_EASYDISMEMBER)
+		var/easy_break = src.rotted || src.skeletonized || HAS_TRAIT(src, TRAIT_EASYDISMEMBER)
 		if(owner)
 			if(!hard_break)
 				hard_break = HAS_TRAIT(owner, TRAIT_HARDDISMEMBER)
 			if(!easy_break)
 				easy_break = HAS_TRAIT(owner, TRAIT_EASYDISMEMBER)
+				
 		if(hard_break)
 			probability = min(probability, 5)
 		else if(easy_break)
 			probability *= 1.5
 		
-		// Dislocation check - happens first
-		if(bclass in GLOB.dislocation_bclasses)
-			if(damage_dividend >= 0.5 && prob(probability)) // Requires 70% damage
-				if(HAS_TRAIT(src, TRAIT_BRITTLE))
-					attempted_wounds += /datum/wound/fracture
-				else
-					attempted_wounds += /datum/wound/dislocation
-					
-		// Fracture check - only happens if already dislocated
-		if(bclass in GLOB.fracture_bclasses)
-			if(has_wound(/datum/wound/dislocation) && damage_dividend >= 1 && prob(probability)) // Requires 80% damage and a dislocation
+		if(user)
+			if(istype(user.rmb_intent, /datum/rmb_intent/weak))
+				probability = 0
+			else if(istype(user.rmb_intent, /datum/rmb_intent/strong))
+				probability *= 1.1
+				
+		if(prob(probability))
+			if(HAS_TRAIT(src, TRAIT_BRITTLE))
+				attempted_wounds += /datum/wound/fracture
+			else
+				attempted_wounds += /datum/wound/dislocation
+				
+	// Fracture check - only happens if already dislocated
+	if(bclass in GLOB.fracture_bclasses)
+		if(nuforce < 10)
+			return FALSE
+			
+		var/probability = (nuforce) * (damage_dividend)
+		var/hard_break = HAS_TRAIT(src, TRAIT_HARDDISMEMBER)
+		var/easy_break = src.rotted || src.skeletonized || HAS_TRAIT(src, TRAIT_EASYDISMEMBER)
+		if(owner)
+			if(!hard_break)
+				hard_break = HAS_TRAIT(owner, TRAIT_HARDDISMEMBER)
+			if(!easy_break)
+				easy_break = HAS_TRAIT(owner, TRAIT_EASYDISMEMBER)
+				
+		if(has_wound(/datum/wound/dislocation))
+			if(hard_break)
+				probability = min(probability, 5)
+			else if(easy_break)
+				probability *= 1.5
+			
+			if(user)
+				if(istype(user.rmb_intent, /datum/rmb_intent/weak))
+					probability = 0
+				else if(istype(user.rmb_intent, /datum/rmb_intent/strong))
+					probability *= 1.1
+				
+			if(prob(probability))
 				attempted_wounds += /datum/wound/fracture
 
 	// Allow artery wounds for all appropriate weapons
