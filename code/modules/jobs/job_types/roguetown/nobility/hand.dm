@@ -155,6 +155,40 @@
 /datum/outfit/job/roguetown/hand/spymaster
 	backr = /obj/item/storage/backpack/rogue/satchel/black
 	backpack_contents = list(/obj/item/rogueweapon/huntingknife/idagger/dtace = 1, /obj/item/storage/keyring/hand = 1, /obj/item/lockpickring/mundane = 1)
+	var/non_dwarf_equipment = list(
+		"shirt" = /obj/item/clothing/suit/roguetown/armor/gambeson/shadowrobe,
+		"cloak" = /obj/item/clothing/cloak/half/shadowcloak,
+		"gloves" = /obj/item/clothing/gloves/roguetown/fingerless/shadowgloves,
+		"mask" = /obj/item/clothing/mask/rogue/shepherd/shadowmask,
+		"pants" = /obj/item/clothing/under/roguetown/trou/shadowpants
+	)
+	var/dwarf_equipment = list(
+		"cloak" = /obj/item/clothing/cloak/raincloak/mortus,
+		"shirt" = /obj/item/clothing/suit/roguetown/shirt/undershirt/guard,
+		"armor" = /obj/item/clothing/suit/roguetown/armor/leather/vest/hand,
+		"pants" = /obj/item/clothing/under/roguetown/tights/black
+	)
+
+/datum/outfit/job/roguetown/hand/spymaster/pre_equip(mob/living/carbon/human/H, visualsOnly = FALSE)
+	..()
+	if(!H)
+		return
+	
+	// Apply race-specific equipment
+	var/list/equipment = (H.dna.species.type in NON_DWARVEN_RACE_TYPES) ? non_dwarf_equipment : dwarf_equipment
+	
+	if(equipment["shirt"])
+		shirt = equipment["shirt"]
+	if(equipment["cloak"])
+		cloak = equipment["cloak"]
+	if(equipment["gloves"])
+		gloves = equipment["gloves"]
+	if(equipment["mask"])
+		mask = equipment["mask"]
+	if(equipment["pants"])
+		pants = equipment["pants"]
+	if(equipment["armor"])
+		armor = equipment["armor"]
 
 /datum/advclass/hand/spymaster/equipme(mob/living/carbon/human/H)
 	if(!H)
@@ -187,27 +221,9 @@
 		H.change_stat("speed", 2)
 		H.change_stat("intelligence", 2)
 
-	ADD_TRAIT(H, TRAIT_NOBLE, TRAIT_GENERIC)
-	ADD_TRAIT(H, TRAIT_MEDIUMARMOR, TRAIT_GENERIC)
-	ADD_TRAIT(H, TRAIT_DODGEEXPERT, TRAIT_GENERIC)
-
-	H.equip_to_slot_or_del(new /obj/item/storage/backpack/rogue/satchel/black(H), SLOT_BACK_R)
-	H.equip_to_slot_or_del(new /obj/item/rogueweapon/huntingknife/idagger/dtace(H), SLOT_IN_BACKPACK)
-	H.equip_to_slot_or_del(new /obj/item/storage/keyring/hand(H), SLOT_IN_BACKPACK)
-	H.equip_to_slot_or_del(new /obj/item/lockpickring/mundane(H), SLOT_IN_BACKPACK)
-
-	if(H.dna.species.type in NON_DWARVEN_RACE_TYPES)
-		H.equip_to_slot_or_del(new /obj/item/clothing/suit/roguetown/armor/gambeson/shadowrobe(H), SLOT_SHIRT)
-		H.equip_to_slot_or_del(new /obj/item/clothing/cloak/half/shadowcloak(H), SLOT_CLOAK)
-		H.equip_to_slot_or_del(new /obj/item/clothing/gloves/roguetown/fingerless/shadowgloves(H), SLOT_GLOVES)
-		H.equip_to_slot_or_del(new /obj/item/clothing/mask/rogue/shepherd/shadowmask(H), SLOT_WEAR_MASK)
-		H.equip_to_slot_or_del(new /obj/item/clothing/under/roguetown/trou/shadowpants(H), SLOT_PANTS)
-	else
-		H.equip_to_slot_or_del(new /obj/item/clothing/cloak/raincloak/mortus(H), SLOT_CLOAK)
-		H.equip_to_slot_or_del(new /obj/item/clothing/suit/roguetown/shirt/undershirt/guard(H), SLOT_SHIRT)
-		H.equip_to_slot_or_del(new /obj/item/storage/backpack/rogue/satchel/black(H), SLOT_BACK_R)
-		H.equip_to_slot_or_del(new /obj/item/clothing/suit/roguetown/armor/leather/vest/hand(H), SLOT_ARMOR)
-		H.equip_to_slot_or_del(new /obj/item/clothing/under/roguetown/tights/black(H), SLOT_PANTS)
+		ADD_TRAIT(H, TRAIT_NOBLE, TRAIT_GENERIC)
+		ADD_TRAIT(H, TRAIT_MEDIUMARMOR, TRAIT_GENERIC)
+		ADD_TRAIT(H, TRAIT_DODGEEXPERT, TRAIT_GENERIC)
 
 	return TRUE
 
