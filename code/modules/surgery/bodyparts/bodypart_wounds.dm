@@ -203,39 +203,55 @@
 		if(!easy_break)
 			easy_break = HAS_TRAIT(owner, TRAIT_EASYDISMEMBER)
 	
-	var/damage_threshold = max_damage
+	var/damage_threshold = max_damage * 1 
 	if(hard_break)
-		damage_threshold = max_damage * 1.5
+		damage_threshold = max_damage * 1.5 // Harder to break
 	else if(easy_break)
-		damage_threshold = max_damage * 0.75
+		damage_threshold = max_damage * 0.5 // Easier to break
 	
-	// Dislocation check - happens first
-	if(bclass in GLOB.dislocation_bclasses)
+	// GURPS style roll for fractures/dislocations
+	if((bclass in GLOB.dislocation_bclasses) || (bclass in GLOB.fracture_bclasses))
 		if(nuforce < 10)
 			return FALSE
 			
 		if(total_dam >= damage_threshold)
-			if(HAS_TRAIT(src, TRAIT_BRITTLE))
-				attempted_wounds += /datum/wound/fracture
-			else
-				attempted_wounds += /datum/wound/dislocation
-				
-	// Fracture check - only happens if already dislocated
-	if(bclass in GLOB.fracture_bclasses)
-		if(nuforce < 10)
-			return FALSE
+			var/health_roll = 0
+			if(owner)
+				health_roll = owner.STACON || 10 // Default to 10 if no STACON stat
 			
-		var/fracture_threshold = damage_threshold * 1.5
-		if(total_dam >= fracture_threshold)
-			attempted_wounds += /datum/wound/fracture
+			// Roll 3d6 against health stat
+			var/roll = rand(1,6) + rand(1,6) + rand(1,6)
+			if(roll <= 4) // Critical success (3-4)
+				return FALSE
+			else if(roll <= health_roll) // Success
+				return FALSE
+			else if(roll >= 16 || roll >= (health_roll + 8)) // High failure = fracture
+				if(HAS_TRAIT(src, TRAIT_BRITTLE))
+					attempted_wounds += /datum/wound/fracture
+				else
+					attempted_wounds += /datum/wound/fracture
+			else // Regular failure = dislocation
+				attempted_wounds += /datum/wound/dislocation
 
-	// Allow artery wounds for all appropriate weapons
+	// GURPS style roll for artery wounds
 	if(bclass in GLOB.artery_bclasses)
-		if(damage_dividend >= 0.6) // Requires 60% damage
-			var/artery_type = /datum/wound/artery
-			if(zone_precise == BODY_ZONE_PRECISE_NECK)
-				artery_type = /datum/wound/artery/neck
-			attempted_wounds += artery_type
+		var/artery_threshold = max_damage * 0.5 // Always 50% max health for arteries
+		if(total_dam >= artery_threshold) // Must be at half health
+			var/health_roll = 0
+			if(owner)
+				health_roll = owner.STACON || 10 // Default to 10 if no STACON stat
+			
+			// Roll 3d6 against health stat
+			var/roll = rand(1,6) + rand(1,6) + rand(1,6)
+			if(roll <= 4) // Critical success (3-4)
+				return FALSE
+			else if(roll <= health_roll) // Success
+				return FALSE
+			else if(roll >= 16 || roll >= (health_roll + 8)) // Critical failure = artery hit
+				var/artery_type = /datum/wound/artery
+				if(zone_precise == BODY_ZONE_PRECISE_NECK)
+					artery_type = /datum/wound/artery/neck
+				attempted_wounds += artery_type
 
 	for(var/wound_type in shuffle(attempted_wounds))
 		var/datum/wound/applied = add_wound(wound_type, silent, crit_message)
