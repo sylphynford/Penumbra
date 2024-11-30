@@ -21,7 +21,8 @@
 		var/tries = 0
 		while(!H?.client && tries < 10)
 			tries++
-			
+			sleep(5)
+		
 		if(!H?.client)
 			var/classchoice = pick(list("Doppelsoldner", "Halberdier"))
 			apply_class_equipment(H, classchoice)

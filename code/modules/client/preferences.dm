@@ -168,6 +168,17 @@ GLOBAL_LIST_EMPTY(chosen_names)
 
 	var/ooc_notes
 
+	// Class preferences for each job
+	var/town_guard_class = null
+	var/sergeant_class = null
+	var/templar_class = null
+	var/knight_lieutenant_class = null
+	var/hand_class = null
+	var/squire_class = null
+	var/inquisitor_class = null
+	var/mercenary_class = null
+	var/heir_class = null
+
 /datum/preferences/New(client/C)
 	parent = C
 	migrant  = new /datum/migrant_pref(src)
@@ -931,11 +942,31 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 			HTML += "<font color=[prefLevelColor]>[prefLevelLabel]</font>"
 			HTML += "</a></td></tr>"
 
-			// Add advclass selection for mercenary
-			if(rank == "Mercenary" && job_preferences[job.title] != null)
+			// Add advclass selection for jobs with advanced classes
+			if(job.advclass_cat_rolls?.len && job_preferences[job.title] != null && job.title != "Towner" && job.title != "Vagabond")
 				HTML += "<tr bgcolor='#000000'><td width='60%' align='right'>"
 				HTML += "Class:</td><td><a href='?_src_=prefs;preference=advclass;job=[rank]'>"
-				HTML += "[preferred_advclass[job.title] ? preferred_advclass[job.title] : "Random"]"
+				var/selected_class
+				switch(rank)
+					if("Town Guard")
+						selected_class = town_guard_class
+					if("Sergeant at Arms")
+						selected_class = sergeant_class
+					if("Templar")
+						selected_class = templar_class
+					if("Knight Lieutenant")
+						selected_class = knight_lieutenant_class
+					if("Hand")
+						selected_class = hand_class
+					if("Squire")
+						selected_class = squire_class
+					if("Inquisitor")
+						selected_class = inquisitor_class
+					if("Mercenary")
+						selected_class = mercenary_class
+					if("Heir")
+						selected_class = heir_class
+				HTML += "[selected_class ? selected_class : "Random"]"
 				HTML += "</a></td></tr>"
 
 		for(var/i = 1, i < (limit - index), i += 1) // Finish the column so it is even
@@ -1141,7 +1172,7 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 				dat += "<label>[kb.full_name]</label> <a href ='?_src_=prefs;preference=keybinds;task=keybindings_capture;keybinding=[kb.name];old_key=[bound_key]'>[bound_key]</a>"
 				for(var/bound_key_index in 2 to length(user_binds[kb.name]))
 					bound_key = user_binds[kb.name][bound_key_index]
-					dat += " | <a href ='?_src_=prefs;preference=keybindings_capture;keybinding=[kb.name];old_key=[bound_key]'>[bound_key]</a>"
+					dat += " | <a href ='?_src_=prefs;preference=keybinds;task=keybindings_capture;keybinding=[kb.name];old_key=[bound_key]'>[bound_key]</a>"
 				if(length(user_binds[kb.name]) < MAX_KEYS_PER_KEYBIND)
 					dat += "| <a href ='?_src_=prefs;preference=keybindings_capture;keybinding=[kb.name]'>Add Secondary</a>"
 				dat += "<br>"
@@ -2166,21 +2197,70 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 				if("advclass")
 					var/job = href_list["job"]
 					var/list/available_classes = list("Random")
-					for(var/type in subtypesof(/datum/advclass/mercenary))
-						var/datum/advclass/mercenary/AC = new type()
-						if(AC.name)
-							// Check if class is allowed for player's race
-							if(!AC.allowed_races?.len || (pref_species.type in AC.allowed_races))
-								available_classes += AC.name
-						qdel(AC)
+					var/list/class_tutorials = list()  // Store tutorials for each class
+					
+					// Get the appropriate class type based on job
+					var/class_type
+					switch(job)
+						if("Town Guard")
+							class_type = /datum/advclass/watchman
+						if("Sergeant at Arms")
+							class_type = /datum/advclass/manorguard
+						if("Templar")
+							class_type = /datum/advclass/templar
+						if("Knight Lieutenant")
+							class_type = /datum/advclass/knight
+						if("Hand")
+							class_type = /datum/advclass/hand
+						if("Squire")
+							class_type = /datum/advclass/squire
+						if("Inquisitor")
+							class_type = /datum/advclass/inquisitor
+						if("Mercenary")
+							class_type = /datum/advclass/mercenary
+						if("Heir")
+							class_type = /datum/advclass/heir
+					
+					if(class_type)
+						for(var/type in subtypesof(class_type))
+							var/datum/advclass/AC = new type()
+							if(AC.name)
+								// Check if class is allowed for player's race
+								if(!AC.allowed_races?.len || (pref_species.type in AC.allowed_races))
+									available_classes += AC.name
+									class_tutorials[AC.name] = AC.tutorial
+							qdel(AC)
 					
 					var/choice = input(user, "Choose your preferred class for [job]:", "Class Selection") as null|anything in available_classes
 					if(choice)
-						if(choice == "Random")
-							preferred_advclass[job] = null
-						else
-							preferred_advclass[job] = choice
-					ShowChoices(user)
+						switch(job)
+							if("Town Guard")
+								town_guard_class = (choice == "Random" ? null : choice)
+							if("Sergeant at Arms")
+								sergeant_class = (choice == "Random" ? null : choice)
+							if("Templar")
+								templar_class = (choice == "Random" ? null : choice)
+							if("Knight Lieutenant")
+								knight_lieutenant_class = (choice == "Random" ? null : choice)
+							if("Hand")
+								hand_class = (choice == "Random" ? null : choice)
+							if("Squire")
+								squire_class = (choice == "Random" ? null : choice)
+							if("Inquisitor")
+								inquisitor_class = (choice == "Random" ? null : choice)
+							if("Mercenary")
+								mercenary_class = (choice == "Random" ? null : choice)
+							if("Heir")
+								heir_class = (choice == "Random" ? null : choice)
+						
+						// Show tutorial text if a class was selected
+						if(choice != "Random")
+							to_chat(user, span_notice("<b>[choice]:</b> [class_tutorials[choice]]"))
+						
+						// Refresh the job preferences window
+						SetChoices(user)
+					else
+						ShowChoices(user)
 
 	ShowChoices(user)
 	return 1

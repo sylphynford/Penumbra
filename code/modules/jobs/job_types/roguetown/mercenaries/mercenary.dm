@@ -22,7 +22,7 @@
 	if(L && M?.client)  // Make sure we have both L and a client
 		var/mob/living/carbon/human/H = L
 		var/list/valid_classes = list()
-		var/preferred_class = M.client?.prefs?.preferred_advclass[title]
+		var/preferred_class = M.client?.prefs?.mercenary_class
 
 		// Build list of valid classes for this character
 		for(var/type in subtypesof(/datum/advclass/mercenary))
@@ -53,16 +53,16 @@
 		if(preferred_class && valid_classes[preferred_class])
 			// Use preferred class if it's valid
 			chosen_class = valid_classes[preferred_class]
+			to_chat(M, span_notice("Using your preferred class: [preferred_class]"))
 			// Clean up other classes
 			for(var/name in valid_classes)
 				if(name != preferred_class)
 					qdel(valid_classes[name])
 		else
-			if(preferred_class)
-				to_chat(M, span_warning("Your preferred class [preferred_class] is not available. Selecting randomly from valid classes."))
 			// Choose random class from valid options
 			var/chosen_name = pick(valid_classes)
 			chosen_class = valid_classes[chosen_name]
+			to_chat(M, span_warning("No class preference set. You have been randomly assigned: [chosen_name]"))
 			// Clean up other classes
 			for(var/name in valid_classes)
 				if(name != chosen_name)

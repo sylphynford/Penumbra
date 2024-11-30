@@ -522,18 +522,79 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/rp_prompt.txt"))
 	if(SSticker.late_join_disabled)
 		alert(src, "Something went bad.")
 		return FALSE
-/*
-	var/arrivals_docked = TRUE
-	if(SSshuttle.arrivals)
-		close_spawn_windows()	//In case we get held up
-		if(SSshuttle.arrivals.damaged && CONFIG_GET(flag/arrivals_shuttle_require_safe_latejoin))
-			src << alert("WEIRD!")
-			return FALSE
 
-		if(CONFIG_GET(flag/arrivals_shuttle_require_undocked))
-			SSshuttle.arrivals.RequireUndocked(src)
-		arrivals_docked = SSshuttle.arrivals.mode != SHUTTLE_CALL
-*/
+	// Handle class selection for jobs with advanced classes
+	var/datum/job/latejoin_job = SSjob.GetJob(rank)
+	if(latejoin_job?.advclass_cat_rolls?.len)
+		var/client/C = src.client
+		var/list/available_classes = list()
+		var/class_type
+		switch(rank)
+			if("Town Guard")
+				class_type = /datum/advclass/watchman
+			if("Sergeant at Arms")
+				class_type = /datum/advclass/manorguard
+			if("Templar")
+				class_type = /datum/advclass/templar
+			if("Knight Lieutenant")
+				class_type = /datum/advclass/knight
+			if("Hand")
+				class_type = /datum/advclass/hand
+			if("Squire")
+				class_type = /datum/advclass/squire
+			if("Inquisitor")
+				class_type = /datum/advclass/inquisitor
+			if("Mercenary")
+				class_type = /datum/advclass/mercenary
+			if("Heir")
+				class_type = /datum/advclass/heir
+
+		if(class_type)
+			for(var/type in subtypesof(class_type))
+				var/datum/advclass/AC = new type()
+				if(AC.name)
+					if(!AC.allowed_races?.len || (C?.prefs?.pref_species?.type in AC.allowed_races))
+						available_classes += AC.name
+				qdel(AC)
+
+			var/choice = input(src, "Choose your class:", "Class Selection") as null|anything in available_classes
+			if(choice)
+				// Get the tutorial text for the selected class
+				var/tutorial_text
+				for(var/type in subtypesof(class_type))
+					var/datum/advclass/AC = new type()
+					if(AC.name == choice)
+						tutorial_text = AC.tutorial
+						qdel(AC)
+						break
+				
+				// Show confirmation window with tutorial text
+				var/confirm = alert(src, "[tutorial_text]\n\nDo you want to spawn as [choice]?", "Confirm Class Selection", "Yes", "No")
+				if(confirm == "Yes")
+					switch(rank)
+						if("Town Guard")
+							C.prefs.town_guard_class = choice
+						if("Sergeant at Arms")
+							C.prefs.sergeant_class = choice
+						if("Templar")
+							C.prefs.templar_class = choice
+						if("Knight Lieutenant")
+							C.prefs.knight_lieutenant_class = choice
+						if("Hand")
+							C.prefs.hand_class = choice
+						if("Squire")
+							C.prefs.squire_class = choice
+						if("Inquisitor")
+							C.prefs.inquisitor_class = choice
+						if("Mercenary")
+							C.prefs.mercenary_class = choice
+						if("Heir")
+							C.prefs.heir_class = choice
+					C.prefs.save_preferences()
+				else
+					return FALSE // Cancel spawn if they didn't confirm
+			else
+				return FALSE // Cancel spawn if they didn't pick a class
 
 	//Remove the player from the join queue if he was in one and reset the timer
 	SSticker.queued_players -= src

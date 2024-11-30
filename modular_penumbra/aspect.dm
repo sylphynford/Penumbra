@@ -363,6 +363,10 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 			if(ishuman(owner.current))
 				var/mob/living/carbon/human/H = owner.current
 				
+				// Remove noble trait
+				REMOVE_TRAIT(H, TRAIT_NOBLE, ROUNDSTART_TRAIT)
+				REMOVE_TRAIT(H, TRAIT_NOBLE, TRAIT_GENERIC)
+				
 				// Remove honorary title (Ser/Dame)
 				var/new_name = H.real_name
 				new_name = replacetext(new_name, "Ser ", "")
@@ -384,26 +388,6 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 				var/atom/movable/screen/advsetup/GET_IT_OUT = locate() in H.hud_used.static_inventory
 				qdel(GET_IT_OUT)
 				H.cure_blind("advsetup")
-				
-				// Only apply skills and stats to Lieutenants
-				if(H.mind.assigned_role == "Blackguard Lieutenant")
-					H.mind.adjust_skillrank(/datum/skill/combat/polearms, 3, TRUE)
-					H.mind.adjust_skillrank(/datum/skill/combat/swords, 4, TRUE)
-					H.mind.adjust_skillrank(/datum/skill/combat/shields, 4, TRUE)
-					H.mind.adjust_skillrank(/datum/skill/combat/maces, 4, TRUE)
-					H.mind.adjust_skillrank(/datum/skill/combat/wrestling, 3, TRUE)
-					H.mind.adjust_skillrank(/datum/skill/combat/unarmed, 3, TRUE)
-					H.mind.adjust_skillrank(/datum/skill/misc/athletics, 4, TRUE)
-					H.mind.adjust_skillrank(/datum/skill/misc/swimming, 1, TRUE)
-					H.mind.adjust_skillrank(/datum/skill/misc/climbing, 3, TRUE)
-					H.mind.adjust_skillrank(/datum/skill/misc/reading, 3, TRUE)
-					H.mind.adjust_skillrank(/datum/skill/misc/riding, 4, TRUE)
-					
-					H.change_stat("strength", 3)
-					H.change_stat("endurance", 2)
-					H.change_stat("constitution", 3)
-					H.change_stat("intelligence", 1)
-					H.change_stat("speed", 1)
 				
 				H.dna.species.soundpack_m = new /datum/voicepack/male/knight()
 				
@@ -431,12 +415,8 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 					H.equip_to_slot_or_del(new /obj/item/clothing/wrists/roguetown/bracers(H), SLOT_WRISTS)
 					H.equip_to_slot_or_del(new /obj/item/clothing/shoes/roguetown/boots/armor/blk(H), SLOT_SHOES)
 					H.equip_to_slot_or_del(new /obj/item/clothing/cloak/tabard/blkknight(H), SLOT_CLOAK)
-					H.equip_to_slot_or_del(new /obj/item/gwstrap(H), SLOT_BACK_L)
-					H.put_in_active_hand(new /obj/item/rogueweapon/greatsword/zwei)
-					// Lieutenant-specific traits
-					ADD_TRAIT(H, TRAIT_HEAVYARMOR, TRAIT_GENERIC)
-					ADD_TRAIT(H, TRAIT_STEELHEARTED, TRAIT_GENERIC)
-					ADD_TRAIT(H, TRAIT_GUARDSMAN, TRAIT_GENERIC)
+
+
 				else if(H.mind.assigned_role == "Blackguard Banneret")
 					// Banneret equipment - lighter armor variant
 					H.equip_to_slot_or_del(new /obj/item/clothing/head/roguetown/helmet/blacksteel/bucket(H), SLOT_HEAD)

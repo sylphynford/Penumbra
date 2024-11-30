@@ -345,58 +345,66 @@ SUBSYSTEM_DEF(job)
 		else
 			CONFIG_SET(flag/jobs_have_minimal_access, TRUE)
 
-	// Handle remaining job assignments
-	for(var/datum/job/job in occupations)
-		for(var/level in level_order)
-			for(var/mob/dead/new_player/player in unassigned)
-				if(player.client?.prefs?.job_preferences[job.title] == level)
-					// Add genital check for Consort role
-					if(job.title == "Consort")
-						// Find ruler's ckey from stored preferences
-						var/ruler_ckey
-						for(var/ckey in GLOB.preferences_datums)
-							var/datum/preferences/prefs = GLOB.preferences_datums[ckey]
-							if(prefs.job_preferences["Baron"] == JP_HIGH || prefs.job_preferences["Baroness"] == JP_HIGH)
-								ruler_ckey = ckey
-								break
-						
-						if(!ruler_ckey)
-							player.client.prefs.job_preferences -= job.title
-							to_chat(player, "<span class='warning'>You have been removed from Consort selection as there is no ruler.</span>")
-							continue
-							
-						var/datum/preferences/ruler_prefs = GLOB.preferences_datums[ruler_ckey]
-						if(!ruler_prefs)
-							continue
-							
-						// Get ruler genital preferences
-						var/ruler_has_penis = FALSE
-						var/ruler_has_vagina = FALSE
-						for(var/datum/customizer_entry/entry as anything in ruler_prefs.customizer_entries)
-							if(istype(entry, /datum/customizer_entry/organ/penis))
-								ruler_has_penis = (entry.disabled == 0)
-							if(istype(entry, /datum/customizer_entry/organ/vagina))
-								ruler_has_vagina = (entry.disabled == 0)
-						
-						// Check candidate genitals
-						var/consort_has_penis = FALSE
-						var/consort_has_vagina = FALSE
-						for(var/datum/customizer_entry/entry as anything in player.client.prefs.customizer_entries)
-							if(istype(entry, /datum/customizer_entry/organ/penis))
-								consort_has_penis = (entry.disabled == 0)
-							if(istype(entry, /datum/customizer_entry/organ/vagina))
-								consort_has_vagina = (entry.disabled == 0)
-						
-						if((ruler_has_penis && consort_has_penis) || (ruler_has_vagina && consort_has_vagina))
-							player.client.prefs.job_preferences[job.title] = 0  // Set preference to 0 instead of removing
-							to_chat(player, "<span class='warning'>You have been removed from Consort selection due to sex incompatibility with the ruler.</span>")
-							continue
+	// Process jobs by preference level
+	for(var/level in level_order)
+		JobDebug("Processing preference level [level]")
+		// First pass - try to fill all high preference jobs
+		for(var/mob/dead/new_player/player in unassigned)
+			for(var/datum/job/job in occupations)
+				if(player.client?.prefs?.job_preferences[job.title] != level)
+					continue
+				if(job.current_positions >= job.spawn_positions && job.spawn_positions != -1)
+					continue
+				
+				// Add genital check for Consort role
+				if(job.title == "Consort")
+					// Find ruler's ckey from stored preferences
+					var/ruler_ckey
+					for(var/ckey in GLOB.preferences_datums)
+						var/datum/preferences/prefs = GLOB.preferences_datums[ckey]
+						if(prefs.job_preferences["Baron"] == JP_HIGH || prefs.job_preferences["Baroness"] == JP_HIGH)
+							ruler_ckey = ckey
+							break
 					
-					AssignRole(player, job.title)
+					if(!ruler_ckey)
+						player.client.prefs.job_preferences -= job.title
+						to_chat(player, "<span class='warning'>You have been removed from Consort selection as there is no ruler.</span>")
+						continue
+						
+					var/datum/preferences/ruler_prefs = GLOB.preferences_datums[ruler_ckey]
+					if(!ruler_prefs)
+						continue
+						
+					// Get ruler genital preferences
+					var/ruler_has_penis = FALSE
+					var/ruler_has_vagina = FALSE
+					for(var/datum/customizer_entry/entry as anything in ruler_prefs.customizer_entries)
+						if(istype(entry, /datum/customizer_entry/organ/penis))
+							ruler_has_penis = (entry.disabled == 0)
+						if(istype(entry, /datum/customizer_entry/organ/vagina))
+							ruler_has_vagina = (entry.disabled == 0)
+					
+					// Check candidate genitals
+					var/consort_has_penis = FALSE
+					var/consort_has_vagina = FALSE
+					for(var/datum/customizer_entry/entry as anything in player.client.prefs.customizer_entries)
+						if(istype(entry, /datum/customizer_entry/organ/penis))
+							consort_has_penis = (entry.disabled == 0)
+						if(istype(entry, /datum/customizer_entry/organ/vagina))
+							consort_has_vagina = (entry.disabled == 0)
+					
+					if((ruler_has_penis && consort_has_penis) || (ruler_has_vagina && consort_has_vagina))
+						player.client.prefs.job_preferences[job.title] = 0  // Set preference to 0 instead of removing
+						to_chat(player, "<span class='warning'>You have been removed from Consort selection due to sex incompatibility with the ruler.</span>")
+						continue
+				
+				if(AssignRole(player, job.title))
+					JobDebug("Successfully assigned [player] to [job.title]")
+					break
 
-	// Reject any remaining unassigned players
+	// Handle remaining unassigned players
 	for(var/mob/dead/new_player/player in unassigned)
-		RejectPlayer(player)
+		HandleUnassigned(player)
 
 	return TRUE
 

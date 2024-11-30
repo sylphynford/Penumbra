@@ -31,6 +31,60 @@
 		Q.invisibility = INVISIBILITY_MAXIMUM
 		Q.become_blind("advsetup")
 
+		if(M?.client)
+			var/list/valid_classes = list()
+			var/preferred_class = M.client?.prefs?.heir_class
+
+			// Build list of valid classes for this character
+			for(var/type in subtypesof(/datum/advclass/heir))
+				var/datum/advclass/heir/AC = new type()
+				if(!AC.name)
+					qdel(AC)
+					continue
+				
+				// Check if class is allowed for this player
+				if(AC.allowed_sexes?.len && !(Q.gender in AC.allowed_sexes))
+					qdel(AC)
+					continue
+				if(AC.allowed_races?.len && !(Q.dna.species.type in AC.allowed_races))
+					qdel(AC)
+					continue
+				if(AC.min_pq != -100 && !(get_playerquality(M.client.ckey) >= AC.min_pq))
+					qdel(AC)
+					continue
+				
+				valid_classes[AC.name] = AC
+
+			// If no valid classes found, something is wrong
+			if(!length(valid_classes))
+				to_chat(M, span_warning("No valid classes found! Please report this to an admin."))
+				return
+
+			var/datum/advclass/heir/chosen_class
+			if(preferred_class && valid_classes[preferred_class])
+				// Use preferred class if it's valid
+				chosen_class = valid_classes[preferred_class]
+				to_chat(M, span_notice("Using your preferred class: [preferred_class]"))
+				// Clean up other classes
+				for(var/name in valid_classes)
+					if(name != preferred_class)
+						qdel(valid_classes[name])
+			else
+				// Choose random class from valid options
+				var/chosen_name = pick(valid_classes)
+				chosen_class = valid_classes[chosen_name]
+				to_chat(M, span_warning("No class preference set. You have been randomly assigned: [chosen_name]"))
+				// Clean up other classes
+				for(var/name in valid_classes)
+					if(name != chosen_name)
+						qdel(valid_classes[name])
+
+			// Let the class handle everything through its own equipme()
+			if(chosen_class)
+				Q.mind?.transfer_to(Q) // Ensure mind is properly set up
+				chosen_class.equipme(Q)
+				qdel(chosen_class)
+
 /datum/advclass/heir/daring
 	name = "Daring Twit"
 	tutorial = "You're a somebody, someone important. It only makes sense you want to make a name for yourself, to gain your own glory so people see how great you really are beyond your bloodline. Plus, if you're beloved by the people for your exploits you'll be chosen! Probably. Shame you're as useful and talented as a squire, despite your delusions to the contrary."
