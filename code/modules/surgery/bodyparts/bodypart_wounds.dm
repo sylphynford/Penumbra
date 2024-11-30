@@ -194,32 +194,27 @@
 		var/obj/item/I = user.get_active_held_item()
 		nuforce = get_complex_damage(I, user)
 	
+	// Calculate damage threshold based on traits
+	var/hard_break = HAS_TRAIT(src, TRAIT_HARDDISMEMBER)
+	var/easy_break = src.rotted || src.skeletonized || HAS_TRAIT(src, TRAIT_EASYDISMEMBER)
+	if(owner)
+		if(!hard_break)
+			hard_break = HAS_TRAIT(owner, TRAIT_HARDDISMEMBER)
+		if(!easy_break)
+			easy_break = HAS_TRAIT(owner, TRAIT_EASYDISMEMBER)
+	
+	var/damage_threshold = max_damage
+	if(hard_break)
+		damage_threshold = max_damage * 1.5
+	else if(easy_break)
+		damage_threshold = max_damage * 0.75
+	
 	// Dislocation check - happens first
 	if(bclass in GLOB.dislocation_bclasses)
 		if(nuforce < 10)
 			return FALSE
 			
-		var/probability = (nuforce) * (damage_dividend)
-		var/hard_break = HAS_TRAIT(src, TRAIT_HARDDISMEMBER)
-		var/easy_break = src.rotted || src.skeletonized || HAS_TRAIT(src, TRAIT_EASYDISMEMBER)
-		if(owner)
-			if(!hard_break)
-				hard_break = HAS_TRAIT(owner, TRAIT_HARDDISMEMBER)
-			if(!easy_break)
-				easy_break = HAS_TRAIT(owner, TRAIT_EASYDISMEMBER)
-				
-		if(hard_break)
-			probability = min(probability, 5)
-		else if(easy_break)
-			probability *= 1.5
-		
-		if(user)
-			if(istype(user.rmb_intent, /datum/rmb_intent/weak))
-				probability = 0
-			else if(istype(user.rmb_intent, /datum/rmb_intent/strong))
-				probability *= 1.1
-				
-		if(prob(probability))
+		if(total_dam >= damage_threshold)
 			if(HAS_TRAIT(src, TRAIT_BRITTLE))
 				attempted_wounds += /datum/wound/fracture
 			else
@@ -230,29 +225,9 @@
 		if(nuforce < 10)
 			return FALSE
 			
-		var/probability = (nuforce) * (damage_dividend)
-		var/hard_break = HAS_TRAIT(src, TRAIT_HARDDISMEMBER)
-		var/easy_break = src.rotted || src.skeletonized || HAS_TRAIT(src, TRAIT_EASYDISMEMBER)
-		if(owner)
-			if(!hard_break)
-				hard_break = HAS_TRAIT(owner, TRAIT_HARDDISMEMBER)
-			if(!easy_break)
-				easy_break = HAS_TRAIT(owner, TRAIT_EASYDISMEMBER)
-				
-		if(has_wound(/datum/wound/dislocation))
-			if(hard_break)
-				probability = min(probability, 5)
-			else if(easy_break)
-				probability *= 1.5
-			
-			if(user)
-				if(istype(user.rmb_intent, /datum/rmb_intent/weak))
-					probability = 0
-				else if(istype(user.rmb_intent, /datum/rmb_intent/strong))
-					probability *= 1.1
-				
-			if(prob(probability))
-				attempted_wounds += /datum/wound/fracture
+		var/fracture_threshold = damage_threshold * 1.5
+		if(total_dam >= fracture_threshold)
+			attempted_wounds += /datum/wound/fracture
 
 	// Allow artery wounds for all appropriate weapons
 	if(bclass in GLOB.artery_bclasses)
