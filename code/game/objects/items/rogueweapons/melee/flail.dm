@@ -168,7 +168,6 @@
 
 /obj/item/rogueweapon/flail/peasantwarflail
 	force = 10
-	force_wielded = 35
 	possible_item_intents = list(/datum/intent/flail/strike)
 	gripped_intents = list(/datum/intent/flail/strikerange, /datum/intent/flail/strike/smashrange)
 	name = "peasant war flail"

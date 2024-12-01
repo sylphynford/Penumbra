@@ -200,9 +200,9 @@
 		used_str = get_str_arms(used_hand)
 
 	if(used_str >= 11)
-		damage = damage + (damage * ((used_str - 10) * 0.2))  // Each point above 10 adds 20% damage
+		damage = damage + (damage * ((used_str - 10) * 0.4))  // Each point above 10 adds 20% damage
 	else if(used_str <= 9)
-		damage = damage - (damage * ((10 - used_str) * 0.2))  // Each point below 10 reduces damage by 10%
+		damage = damage - (damage * ((10 - used_str) * 0.4))  // Each point below 10 reduces damage by 10%
 
 	if(mind)
 		if(mind.has_antag_datum(/datum/antagonist/werewolf))

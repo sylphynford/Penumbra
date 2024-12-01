@@ -193,27 +193,35 @@
 			STACON = newamt
 			
 			// Only update health if this is a human
+			// Hacky code for bodyparts and health because I don't want to rewrite the entire system to only use bodyparts
 			if(ishuman(src))
-				// Calculate old and new max health
-				var/oldMax = 200  // Base health for CON 10
-				var/newMax = 200  // Base health for CON 10
-				
-				// Old health calculation
-				if(oldCON > 10)
-					oldMax += (oldCON - 10) * 30
-				else if(oldCON < 10)
-					oldMax += (oldCON - 10) * 20
+				var/mob/living/carbon/human/H = src
+				var/obj/item/bodypart/head/head = H.get_bodypart(BODY_ZONE_HEAD)
+				if(head)
+					// Calculate old and new head max damage
+					// Base is 100 at CON 10
+					// +20 per point above 10
+					// -10 per point below 10
+					var/old_head_max = 100
+					var/new_head_max = 100
 					
-				// New health calculation
-				if(STACON > 10)
-					newMax += (STACON - 10) * 30
-				else if(STACON < 10)
-					newMax += (STACON - 10) * 20
+					if(oldCON > 10)
+						old_head_max += (oldCON - 10) * 20
+					else if(oldCON < 10)
+						old_head_max -= (10 - oldCON) * 10
+						
+					if(STACON > 10)
+						new_head_max += (STACON - 10) * 20
+					else if(STACON < 10)
+						new_head_max -= (10 - STACON) * 10
 					
-				// Update maxHealth and current health
-				var/healthPercent = health / maxHealth  // Store health percentage
-				maxHealth = max(newMax, 20)  // Ensure minimum health of 20
-				health = min(maxHealth, health + (newMax - oldMax))  // Add/subtract the difference in max health
+					// Update head max_damage
+					head.max_damage = new_head_max
+					
+					// Update maxHealth and current health
+					var/healthPercent = health / maxHealth  // Store health percentage
+					maxHealth = new_head_max
+					health = maxHealth * healthPercent  // Scale health according to the percentage
 
 		if("endurance")
 			newamt = STAEND + amt

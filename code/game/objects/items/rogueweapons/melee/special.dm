@@ -1,6 +1,5 @@
 /obj/item/rogueweapon/lordscepter
 	force = 20
-	force_wielded = 20
 	possible_item_intents = list(/datum/intent/lordbash, /datum/intent/lord_electrocute, /datum/intent/lord_silence)
 	gripped_intents = list(/datum/intent/lordbash)
 	name = "master's rod"
@@ -100,7 +99,6 @@
 		..() // Call parent behavior
 
 	force = 15
-	force_wielded = 15
 	name = "holy stunmace"
 	icon_state = "stunmace0"
 	desc = "Pain is our currency here."

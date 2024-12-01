@@ -1,7 +1,6 @@
 /obj/item/rogueweapon/stoneaxe
 	slot_flags = ITEM_SLOT_HIP | ITEM_SLOT_BACK
 	force = 18
-	force_wielded = 20
 	possible_item_intents = list(/datum/intent/axe/chop/stone)
 	name = "stone axe"
 	desc = "A rough stone axe. Badly balanced."
@@ -109,7 +108,6 @@
 
 /obj/item/rogueweapon/stoneaxe/battle
 	force = 25
-	force_wielded = 30
 	possible_item_intents = list(/datum/intent/axe/cut/battle, /datum/intent/axe/chop/battle)
 	name = "battle axe"
 	desc = "A steel battleaxe of war. Has a wicked edge."
@@ -134,7 +132,6 @@
 
 /obj/item/rogueweapon/stoneaxe/oath
 	force = 30
-	force_wielded = 40
 	possible_item_intents = list(/datum/intent/axe/cut/battle, /datum/intent/axe/chop/battle)
 	name = "oath"
 	desc = "A hefty, steel-forged axe marred by the touch of countless Wardens. Despite it's weathered etchings and worn grip, the blade has been honed to a razor's edge and you can see your reflection in the finely polished metal."
@@ -168,7 +165,6 @@
 /obj/item/rogueweapon/stoneaxe/woodcut
 	name = "axe"
 	force = 20
-	force_wielded = 26
 	possible_item_intents = list(/datum/intent/axe/cut,/datum/intent/axe/chop)
 	desc = "A regular iron woodcutting axe."
 	icon_state = "axe"
@@ -193,7 +189,6 @@
 	desc = "A multi-use axe smithed by the Wardens since time immemorial for both it's use as a tool and a weapon."
 	icon_state = "wardenpax"
 	force = 22
-	force_wielded = 28
 	possible_item_intents = list(/datum/intent/axe/cut,/datum/intent/axe/chop, /datum/intent/pick)
 	gripped_intents = list(/datum/intent/axe/cut,/datum/intent/axe/chop, /datum/intent/pick)
 	smeltresult = /obj/item/ingot/steel
@@ -216,7 +211,6 @@
 /obj/item/rogueweapon/stoneaxe/woodcut/steel
 	icon_state = "saxe"
 	force = 22
-	force_wielded = 28
 	desc = "A steel woodcutting axe. Performs much better than its iron counterpart."
 	force = 26
 	max_blade_int = 500
@@ -237,7 +231,6 @@
 /obj/item/rogueweapon/stoneaxe/boneaxe
 	slot_flags = ITEM_SLOT_HIP | ITEM_SLOT_BACK
 	force = 18
-	force_wielded = 22
 	possible_item_intents = list(/datum/intent/axe/cut,/datum/intent/axe/chop)
 	name = "bone axe"
 	desc = "A rough axe made of bones"

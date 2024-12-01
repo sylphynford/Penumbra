@@ -1,5 +1,3 @@
-
-
 /obj/item/rogueweapon
 	name = ""
 	desc = ""
@@ -39,10 +37,10 @@
 
 /obj/item/rogueweapon/Initialize()
 	. = ..()
+	force_wielded = force + (force * 0.4) // This is equivilant to 1 point of strength
 	if(!destroy_message)
 		var/yea = pick("[src] is broken!", "[src] is useless!", "[src] is destroyed!")
 		destroy_message = span_warning("[yea]")
-
 /obj/item/rogueweapon/get_examine_string(mob/user, thats = FALSE)
 	return "[thats? "That's ":""]<b>[get_examine_name(user)]</b>"
 
@@ -91,3 +89,4 @@
 	else if(easy_dismember)
 		return probability * 1.5
 	return probability
+

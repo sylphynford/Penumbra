@@ -1,6 +1,5 @@
 /obj/item/rogueweapon/mace
 	force = 20
-	force_wielded = 25
 	possible_item_intents = list(/datum/intent/mace/strike)
 	gripped_intents = list(/datum/intent/mace/strike, /datum/intent/mace/smash)
 	name = "mace"
@@ -28,7 +27,6 @@
 
 /obj/item/rogueweapon/mace/church
 	force = 25
-	force_wielded = 30
 	name = "bell ringer"
 	desc = "This heavy hammer is used to ring the church's bell."
 	icon_state = "churchmace"
@@ -39,7 +37,6 @@
 
 /obj/item/rogueweapon/mace/steel
 	force = 25
-	force_wielded = 32
 	name = "steel mace"
 	desc = "This steel mace is objectively superior to an iron one."
 	icon_state = "smace"
@@ -152,7 +149,6 @@
 
 /obj/item/rogueweapon/mace/woodclub
 	force = 15
-	force_wielded = 18
 	name = "wooden club"
 	desc = "A primitive cudgel carved of a stout piece of treefall."
 	icon_state = "club1"
@@ -183,7 +179,6 @@
 	desc = "A stubby little club for brigands."
 	force = 25
 	icon_state = "cudgel"
-	force_wielded = 25
 	gripped_intents = list(/datum/intent/mace/strike,/datum/intent/mace/smash)
 	smeltresult = /obj/item/ash
 	wlength = WLENGTH_SHORT
@@ -198,7 +193,6 @@
 	desc = "The icon of the right of office of the Magistrate. While mostly ceremonial in design, it serves it's purpose in dishing out some much needed justice."
 	force = 30
 	icon_state = "justice"
-	force_wielded = 30
 	gripped_intents = list(/datum/intent/mace/strike,/datum/intent/mace/smash)
 	smeltresult = /obj/item/ingot/steel
 	wlength = WLENGTH_SHORT
@@ -220,7 +214,6 @@
 	name = "wooden sword"
 	desc = "This wooden sword is great for training."
 	force = 5
-	force_wielded = 8
 	icon_state = "wsword"
 	//dropshrink = 0.75
 	possible_item_intents = list(/datum/intent/mace/strike/wood)
@@ -287,7 +280,6 @@
 
 /obj/item/rogueweapon/mace/goden
 	force = 15
-	force_wielded = 30
 	possible_item_intents = list(/datum/intent/mace/strike)
 	gripped_intents = list(/datum/intent/mace/strike, /datum/intent/mace/smash, /datum/intent/mace/rangedthrust)
 	name = "Goedendag"
@@ -328,7 +320,6 @@
 	desc = "Good morning, sire."
 	icon_state = "polemace"
 	force = 15
-	force_wielded = 35
 	smeltresult = /obj/item/ingot/steel
 	smelt_bar_num = 2
 

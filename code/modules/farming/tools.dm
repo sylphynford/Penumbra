@@ -1,6 +1,5 @@
 /obj/item/rogueweapon/thresher
 	force = 10
-	force_wielded = 15
 	possible_item_intents = list(MACE_STRIKE)
 	gripped_intents = list(/datum/intent/flailthresh,MACE_STRIKE)
 	name = "thresher"
@@ -76,7 +75,6 @@
 
 /obj/item/rogueweapon/hoe
 	force = 10
-	force_wielded = 15
 	possible_item_intents = list(/datum/intent/pick)
 	gripped_intents = list(/datum/intent/pick,SPEAR_BASH,TILL_INTENT)
 	name = "hoe"
@@ -97,7 +95,6 @@
 
 /obj/item/rogueweapon/hoe/stone
 	force = 7
-	force_wielded = 12
 	name = "stone hoe"
 	desc = "A makeshift hoe made out of stone, brittle."
 	icon_state = "stonehoe"
@@ -236,7 +233,6 @@
 /obj/item/rogueweapon/pitchfork
 
 	force = 10
-	force_wielded = 15
 	possible_item_intents = list(SPEAR_BASH)
 	gripped_intents = list(SPEAR_BASH,SPEAR_THRUST,DUMP_INTENT)
 	name = "pitchfork"

@@ -33,7 +33,6 @@
 
 /obj/item/rogueweapon/woodstaff
 	force = 10
-	force_wielded = 15
 	possible_item_intents = list(SPEAR_BASH)
 	gripped_intents = list(SPEAR_BASH,/datum/intent/mace/smash/wood)
 	name = "wooden staff"
@@ -75,7 +74,6 @@
 	name = "staff of the shepherd"
 	desc = "This staff makes you look important to any peasante."
 	force = 25
-	force_wielded = 28
 	icon_state = "aries"
 	icon = 'icons/roguetown/weapons/32.dmi'
 	pixel_y = 0
@@ -98,7 +96,6 @@
 
 /obj/item/rogueweapon/spear
 	force = 18
-	force_wielded = 30
 	possible_item_intents = list(SPEAR_THRUST, SPEAR_BASH) //bash is for nonlethal takedowns, only targets limbs
 	gripped_intents = list(SPEAR_THRUST, SPEAR_CUT, SPEAR_BASH)
 	name = "spear"
@@ -136,7 +133,6 @@
 
 /obj/item/rogueweapon/spear/bonespear
 	force = 18
-	force_wielded = 22
 	name = "bone spear"
 	desc = "A spear made of bones..."
 	icon_state = "bonespear"
@@ -170,7 +166,6 @@
 
 /obj/item/rogueweapon/spear/improvisedbillhook
 	force = 12
-	force_wielded = 25
 	name = "improvised billhook"
 	desc = "Looks hastily made."
 	icon_state = "billhook"
@@ -181,7 +176,6 @@
 
 /obj/item/rogueweapon/spear/stone
 	force = 15
-	force_wielded = 18
 	name = "stone spear"
 	desc = "This handmade spear is simple, but does the job."
 	icon_state = "stonespear"
@@ -204,7 +198,6 @@
 
 /obj/item/rogueweapon/halberd
 	force = 15
-	force_wielded = 30
 	possible_item_intents = list(SPEAR_THRUST, SPEAR_BASH) //bash is for nonlethal takedowns, only targets limbs
 	gripped_intents = list(SPEAR_THRUST, /datum/intent/spear/cut/halberd, /datum/intent/sword/chop, SPEAR_BASH)
 	name = "halberd"
@@ -256,7 +249,6 @@
 
 /obj/item/rogueweapon/eaglebeak
 	force = 15
-	force_wielded = 30
 	possible_item_intents = list(/datum/intent/spear/thrust/eaglebeak, SPEAR_BASH) //bash is for nonlethal takedowns, only targets limbs
 	gripped_intents = list(/datum/intent/spear/thrust/eaglebeak, /datum/intent/mace/smash/eaglebeak, SPEAR_BASH)
 	name = "eagle's beak"
@@ -298,7 +290,6 @@
 	name = "lucerne"
 	desc = "A polehammer of simple iron. Fracture bone and dissent with simple brute force."
 	force = 12
-	force_wielded = 25
 	icon_state = "polehammer"
 	smeltresult = /obj/item/ingot/iron
 	max_blade_int = 300
@@ -325,7 +316,6 @@
 
 /obj/item/rogueweapon/greatsword
 	force = 12
-	force_wielded = 30
 	possible_item_intents = list(/datum/intent/sword/chop,/datum/intent/sword/strike) //bash is for nonlethal takedowns, only targets limbs
 	gripped_intents = list(/datum/intent/sword/cut/zwei, /datum/intent/sword/chop, /datum/intent/sword/thrust/zwei, /datum/intent/sword/strike)
 	name = "greatsword"
@@ -391,7 +381,6 @@
 	inhand_x_dimension = 64
 	inhand_y_dimension = 64
 	force = 12
-	force_wielded = 25
 	possible_item_intents = list(
 		/datum/intent/sword/chop,
 		/datum/intent/sword/strike,

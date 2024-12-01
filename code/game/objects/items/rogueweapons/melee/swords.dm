@@ -2,7 +2,6 @@
 /obj/item/rogueweapon/sword
 	slot_flags = ITEM_SLOT_HIP | ITEM_SLOT_BACK
 	force = 22
-	force_wielded = 25
 	possible_item_intents = list(/datum/intent/sword/cut, /datum/intent/sword/thrust)
 	gripped_intents = list(/datum/intent/sword/cut, /datum/intent/sword/thrust)
 	name = "sword"
@@ -105,7 +104,6 @@
 
 /obj/item/rogueweapon/sword/long
 	force = 25
-	force_wielded = 30
 	possible_item_intents = list(/datum/intent/sword/cut, /datum/intent/sword/thrust, /datum/intent/sword/strike)
 	gripped_intents = list(/datum/intent/sword/cut, /datum/intent/sword/thrust, /datum/intent/sword/strike, /datum/intent/sword/chop)
 	icon_state = "longsword"
@@ -146,7 +144,6 @@
 
 /obj/item/rogueweapon/sword/long/heirloom
 	force = 20
-	force_wielded = 32
 	possible_item_intents = list(/datum/intent/sword/cut, /datum/intent/sword/thrust, /datum/intent/sword/strike)
 	gripped_intents = list(/datum/intent/sword/cut, /datum/intent/sword/thrust, /datum/intent/sword/strike, /datum/intent/sword/chop)
 	icon_state = "heirloom"
@@ -184,7 +181,6 @@
 
 /obj/item/rogueweapon/sword/long/judgement
 	force = 40
-	force_wielded = 55
 	possible_item_intents = list(/datum/intent/sword/cut, /datum/intent/sword/thrust, /datum/intent/sword/strike)
 	gripped_intents = list(/datum/intent/sword/cut, /datum/intent/sword/thrust, /datum/intent/sword/strike, /datum/intent/sword/chop)
 	icon_state = "judgement"
@@ -223,7 +219,6 @@
 
 /obj/item/rogueweapon/sword/long/judgement/ascendant //meant to be insanely OP; solo antag wep
 	force = 50
-	force_wielded = 70
 	possible_item_intents = list(/datum/intent/sword/cut, /datum/intent/sword/thrust, /datum/intent/sword/strike)
 	gripped_intents = list(/datum/intent/sword/cut, /datum/intent/sword/thrust, /datum/intent/sword/strike, /datum/intent/sword/chop)
 	icon_state = "crucified"
@@ -255,7 +250,6 @@
 
 /obj/item/rogueweapon/sword/long/vlord
 	force = 40
-	force_wielded = 55
 	possible_item_intents = list(/datum/intent/sword/cut, /datum/intent/sword/thrust, /datum/intent/sword/strike)
 	gripped_intents = list(/datum/intent/sword/cut, /datum/intent/sword/thrust, /datum/intent/sword/strike, /datum/intent/sword/chop)
 	icon_state = "vlord"
@@ -295,7 +289,6 @@
 
 /obj/item/rogueweapon/sword/long/rider
 	force = 26
-	force_wielded = 31
 	possible_item_intents = list(/datum/intent/sword/cut, /datum/intent/sword/strike)
 	gripped_intents = list(/datum/intent/sword/cut, /datum/intent/sword/strike, /datum/intent/sword/chop)
 	icon_state = "tabi"
@@ -334,7 +327,6 @@
 
 /obj/item/rogueweapon/sword/long/marlin
 	force = 26
-	force_wielded = 31
 	possible_item_intents = list(/datum/intent/sword/cut, /datum/intent/sword/strike)
 	gripped_intents = list(/datum/intent/sword/cut, /datum/intent/sword/strike, /datum/intent/sword/chop)
 	icon_state = "marlin"
@@ -661,13 +653,11 @@
 
 /obj/item/rogueweapon/sword/long/blackflamb
 	force = 20
-	force_wielded = 32
 	icon_state = "blackflamb"
 	name = "blacksteel flamberge"
 	desc = "A strange sword with a winding blade forged of blacksteel and a rontz pommel."
 	smeltresult = /obj/item/ingot/blacksteel
 	max_integrity = 200
-
 /obj/item/rogueweapon/sword/long/blackflamb/getonmobprop(tag)
 	. = ..()
 	if(tag)
@@ -764,3 +754,4 @@
 				"eastabove" = 1,
 				"westabove" = 0,
 				)
+
