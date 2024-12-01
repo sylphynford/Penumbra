@@ -26,6 +26,32 @@
 	var/list/statindex = list()
 	var/datum/patron/patron = /datum/patron/godless
 
+/mob/living/vv_edit_var(var_name, var_value)
+	. = ..()
+	if(.)
+		switch(var_name)
+			if("STACON")
+				if(ishuman(src))
+					var/mob/living/carbon/human/H = src
+					// Update all bodyparts based on new CON
+					for(var/obj/item/bodypart/BP in H.bodyparts)
+						var/new_max = 100  // Base value
+						if(STACON > 10)
+							new_max += (STACON - 10) * 20
+						else if(STACON < 10)
+							new_max -= (10 - STACON) * 10
+							
+						// Apply bodypart-specific modifiers
+						if(istype(BP, /obj/item/bodypart/head))
+							BP.update_max_damage(new_max)
+						else if(istype(BP, /obj/item/bodypart/chest))
+							BP.update_max_damage(new_max * 1.5)  // Chest has more health
+						else
+							BP.update_max_damage(new_max * 0.75)  // Limbs have less health
+					
+					// Update overall health
+					H.updatehealth()
+
 /mob/living/proc/init_faith()
 	set_patron(/datum/patron/godless)
 
@@ -188,40 +214,28 @@
 				newamt--
 				BUFCON++
 			
-			// Store old CON for health calculation
-			var/oldCON = STACON
 			STACON = newamt
 			
-			// Only update health if this is a human
-			// Hacky code for bodyparts and health because I don't want to rewrite the entire system to only use bodyparts
 			if(ishuman(src))
 				var/mob/living/carbon/human/H = src
-				var/obj/item/bodypart/head/head = H.get_bodypart(BODY_ZONE_HEAD)
-				if(head)
-					// Calculate old and new head max damage
-					// Base is 100 at CON 10
-					// +20 per point above 10
-					// -10 per point below 10
-					var/old_head_max = 100
-					var/new_head_max = 100
-					
-					if(oldCON > 10)
-						old_head_max += (oldCON - 10) * 20
-					else if(oldCON < 10)
-						old_head_max -= (10 - oldCON) * 10
-						
+				// Update all bodyparts based on new CON
+				for(var/obj/item/bodypart/BP in H.bodyparts)
+					var/new_max = 100  // Base value
 					if(STACON > 10)
-						new_head_max += (STACON - 10) * 20
+						new_max += (STACON - 10) * 20
 					else if(STACON < 10)
-						new_head_max -= (10 - STACON) * 10
-					
-					// Update head max_damage
-					head.max_damage = new_head_max
-					
-					// Update maxHealth and current health
-					var/healthPercent = health / maxHealth  // Store health percentage
-					maxHealth = new_head_max
-					health = maxHealth * healthPercent  // Scale health according to the percentage
+						new_max -= (10 - STACON) * 10
+						
+					// Apply bodypart-specific modifiers
+					if(istype(BP, /obj/item/bodypart/head))
+						BP.update_max_damage(new_max)
+					else if(istype(BP, /obj/item/bodypart/chest))
+						BP.update_max_damage(new_max * 1.5)  // Chest has more health
+					else
+						BP.update_max_damage(new_max * 0.75)  // Limbs have less health
+				
+				// Update overall health
+				H.updatehealth()
 
 		if("endurance")
 			newamt = STAEND + amt

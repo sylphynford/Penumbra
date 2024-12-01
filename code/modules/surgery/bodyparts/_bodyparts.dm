@@ -1,4 +1,3 @@
-
 /obj/item/bodypart
 	name = "limb"
 	desc = ""
@@ -32,6 +31,9 @@
 	var/stamina_dam = 0
 	var/max_stamina_damage = 0
 	var/max_damage = 0
+	var/base_max_damage = 100  // New var for base max damage
+
+	var/last_max_damage_update = 0 // Tracks when max_damage was last updated
 
 	var/cremation_progress = 0 //Gradually increases while burning when at full damage, destroys the limb when at 100
 
@@ -285,21 +287,27 @@
 
 /obj/item/bodypart/Initialize()
 	. = ..()
-	update_HP()
+	base_max_damage = initial(max_damage)  // Store the initial max_damage
+	max_damage = base_max_damage  // Set initial max_damage
 
-/obj/item/bodypart/proc/update_HP()
-	if(!is_organic_limb() || !owner)
-		return
-	var/old_max_damage = max_damage
-	var/new_max_damage = initial(max_damage) + ((owner.STACON - 10) * 20)
-	if(new_max_damage != old_max_damage)
-		max_damage = new_max_damage
+/obj/item/bodypart/proc/update_max_damage(new_max)
+	if(new_max == last_max_damage_update)
+		return FALSE
+	var/health_percent = (max_damage - (brute_dam + burn_dam)) / max_damage
+	max_damage = new_max
+	last_max_damage_update = new_max
+	// Scale current damage to maintain the same percentage of health
+	var/current_damage = (1 - health_percent) * max_damage
+	brute_dam = round(current_damage / 2)
+	burn_dam = round(current_damage / 2)
+	if(owner)
+		owner.updatehealth()
+	return TRUE
 
 //Applies brute and burn damage to the organ. Returns 1 if the damage-icon states changed at all.
 //Damage will not exceed max_damage using this proc
 //Cannot apply negative damage
 /obj/item/bodypart/proc/receive_damage(brute = 0, burn = 0, stamina = 0, blocked = 0, updating_health = TRUE, required_status = null)
-	update_HP()
 	var/hit_percent = (100-blocked)/100
 	if((!brute && !burn && !stamina) || hit_percent <= 0)
 		return FALSE
@@ -359,7 +367,6 @@
 //Damage cannot go below zero.
 //Cannot remove negative damage (i.e. apply damage)
 /obj/item/bodypart/proc/heal_damage(brute, burn, stamina, required_status, updating_health = TRUE)
-	update_HP()
 	if(required_status && (status != required_status)) //So we can only heal certain kinds of limbs, ie robotic vs organic.
 		return
 	if(owner && owner.has_status_effect(/datum/status_effect/buff/fortify))
@@ -386,7 +393,6 @@
 
 //Checks disabled status thresholds
 /obj/item/bodypart/proc/update_disabled()
-	update_HP()
 	set_disabled(is_disabled())
 
 /obj/item/bodypart/proc/is_disabled()
