@@ -684,17 +684,6 @@
 	skillcraft = /datum/skill/craft/crafting
 	craftdiff = 4
 
-/datum/crafting_recipe/roguetown/tarot_deck
-	name = "tarot deck"
-	result = list(/obj/item/toy/cards/deck/tarot)
-	reqs = list(/obj/item/paper/scroll = 3,
-				/obj/item/grown/log/tree/small = 1,
-				/obj/item/ash = 1)
-	skillcraft = /datum/skill/misc/reading
-	tools = list(/obj/item/natural/feather)
-	req_table = TRUE
-	craftdiff = 2
-
 // Woodcutting recipe
 /datum/crafting_recipe/roguetown/lumberjacking
 	skillcraft = /datum/skill/labor/lumberjacking

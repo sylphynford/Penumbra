@@ -218,7 +218,6 @@
 		/obj/effect/proc_holder/spell/invoked/blindness,
 		/obj/effect/proc_holder/spell/invoked/projectile/acidsplash5e,
 //		/obj/effect/proc_holder/spell/invoked/frostbite5e,
-		/obj/effect/proc_holder/spell/invoked/guidance,
 		/obj/effect/proc_holder/spell/invoked/fortitude,
 		/obj/effect/proc_holder/spell/invoked/snap_freeze,
 		/obj/effect/proc_holder/spell/invoked/projectile/frostbolt,
