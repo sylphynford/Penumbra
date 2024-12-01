@@ -28,10 +28,16 @@
 			apply_class_equipment(H, classchoice)
 			return
 
-	// CLASS ARCHETYPES
-	H.adjust_blindness(-3)
-	var/classes = list("Janissary","Blade Dancer","Blade Caster")
-	var/classchoice = input("Choose your archetypes", "Available archetypes") as anything in classes
+		to_chat(H, span_notice("\n\nChoose your Desert Rider archetype..."))
+		var/classchoice = alert(H, "Choose your Desert Rider archetype", "Class Selection", "Janissary", "Blade Dancer")
+		
+		if(!classchoice)
+			classchoice = pick(list("Janissary", "Blade Dancer"))
+			to_chat(H, span_warning("No selection made. Random archetype selected: [classchoice]"))
+		
+		apply_class_equipment(H, classchoice)
+	
+	return TRUE
 
 /datum/advclass/mercenary/desert_rider/proc/apply_class_equipment(mob/living/carbon/human/H, classchoice)
 	switch(classchoice)
@@ -57,14 +63,10 @@
 			H.change_stat("strength", 2)
 			H.change_stat("endurance", 1)
 			H.change_stat("speed", 2)
-			backl = /obj/item/rogueweapon/shield/wood
-			r_hand = /obj/item/rogueweapon/mace/steel
-			neck = /obj/item/clothing/neck/roguetown/chaincoif/full
-			shirt = /obj/item/clothing/suit/roguetown/armor/gambeson/heavy
-			armor = /obj/item/clothing/suit/roguetown/armor/plate/scale
-			pants = /obj/item/clothing/under/roguetown/chainlegs
-			H.grant_language(/datum/language/celestial)
-
+			var/obj/item/rogueweapon/shield/wood/shield = new(get_turf(H))
+			H.put_in_hands(shield)
+			var/obj/item/rogueweapon/mace/steel/mace = new(get_turf(H))
+			H.put_in_hands(mace)
 		if("Blade Dancer")
 			H.set_blindness(0)
 			to_chat(H, span_warning("Zybantian 'Blade Dancers' are famed and feared the world over. Their expertise in blades both long and short is well known..."))
@@ -86,42 +88,9 @@
 				H.mind.adjust_skillrank(/datum/skill/misc/riding, 3, TRUE)
 			H.change_stat("strength", 1)
 			H.change_stat("endurance", 2)
-			H.change_stat("intelligence", 1)
-			H.change_stat("speed", 3)
-			backl = /obj/item/rogueweapon/sword/long/rider
-			shirt = /obj/item/clothing/suit/roguetown/armor/gambeson
-			armor = /obj/item/clothing/suit/roguetown/armor/leather/heavy/coat
-			pants = /obj/item/clothing/under/roguetown/heavy_leather_pants
-			H.grant_language(/datum/language/celestial)
-
-		if("Blade Caster")
-			H.set_blindness(0)
-			to_chat(H, span_warning("Blade Casters are those skilled in both magyck and swordsmanship, but excelling in nothing."))
-			H.mind.adjust_skillrank(/datum/skill/combat/wrestling, 2, TRUE)
-			H.mind.adjust_skillrank(/datum/skill/combat/unarmed, 2, TRUE)
-			H.mind.adjust_skillrank(/datum/skill/misc/swimming, 1, TRUE)
-			H.mind.adjust_skillrank(/datum/skill/misc/climbing, 1, TRUE)
-			H.mind.adjust_skillrank(/datum/skill/misc/athletics, 3, TRUE)
-			H.mind.adjust_skillrank(/datum/skill/craft/crafting, 1, TRUE)
-			H.mind.adjust_skillrank(/datum/skill/misc/medicine, 1, TRUE)
-			H.mind.adjust_skillrank(/datum/skill/misc/reading, 4, TRUE)
-			H.mind.adjust_skillrank(/datum/skill/magic/arcane, 2, TRUE)
-			H.mind.adjust_skillrank(/datum/skill/combat/swords, 3, TRUE)
-			H.mind.adjust_skillrank(/datum/skill/misc/alchemy, 2, TRUE)
-			H.mind.adjust_skillrank(/datum/skill/combat/crossbows, 2, TRUE)
-			H.mind.adjust_skillrank(/datum/skill/misc/sewing, 2, TRUE)
-			H.mind.adjust_spellpoints(1)
-			H.change_stat("endurance", 2)
-			H.change_stat("intelligence", 3)
-			H.change_stat("speed", 3)
-			H.mind.AddSpell(new /obj/effect/proc_holder/spell/targeted/touch/prestidigitation)
-			H.mind.AddSpell(new /obj/effect/proc_holder/spell/invoked/push_spell)
-			r_hand = /obj/item/rogueweapon/sword/long/rider
-			armor = /obj/item/clothing/suit/roguetown/shirt/robe/magered
-			backl = /obj/item/rogueweapon/sword/long/rider
-
-			H.grant_language(/datum/language/celestial)
-			shirt = /obj/item/clothing/suit/roguetown/armor/gambeson/lord
+			H.change_stat("speed", 2)
+			var/obj/item/rogueweapon/sword/long/rider/sword = new(get_turf(H))
+			H.put_in_hands(sword)
 
 	ADD_TRAIT(H, TRAIT_MEDIUMARMOR, TRAIT_GENERIC)
 	ADD_TRAIT(H, TRAIT_DODGEEXPERT, TRAIT_GENERIC)
@@ -137,7 +106,7 @@
 	beltr = /obj/item/storage/belt/rogue/pouch/coins/poor
 	backr = /obj/item/storage/backpack/rogue/satchel/black
 	beltl = /obj/item/flashlight/flare/torch
-	wrists = /obj/item/clothing/wrists/roguetown/bracers/leather
+	shirt = /obj/item/clothing/suit/roguetown/shirt/undershirt/black
+	pants = /obj/item/clothing/under/roguetown/chainlegs/iron
 	
-
 	backpack_contents = list(/obj/item/roguekey/mercenary, /obj/item/rogueweapon/huntingknife/idagger/navaja, /obj/item/clothing/neck/roguetown/shalal)
