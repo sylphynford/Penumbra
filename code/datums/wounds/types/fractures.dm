@@ -108,7 +108,7 @@
 	)
 	embed_chance = 100
 	paralysis = TRUE
-	mortal = FALSE
+	mortal = TRUE
 	dents_brain = TRUE
 
 /datum/wound/fracture/head/eyes
