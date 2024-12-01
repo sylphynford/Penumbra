@@ -659,32 +659,30 @@
 /datum/crafting_recipe/roguetown/prosthetic/woodleft
 	name = "wood arm (L)"
 	result = list(/obj/item/bodypart/l_arm/prosthetic/woodleft)
-	reqs = list(/obj/item/grown/log/tree/small = 1,
-	/obj/item/roguegear = 1)
-	skillcraft = /datum/skill/craft/engineering
-	craftdiff = 3
+	reqs = list(/obj/item/grown/log/tree/small = 1)
+	skillcraft = /datum/skill/craft/crafting
+	craftdiff = 4
 
 /datum/crafting_recipe/roguetown/prosthetic/woodright
 	name = "wood arm (R)"
 	result = list(/obj/item/bodypart/r_arm/prosthetic/woodright)
-	reqs = list(/obj/item/grown/log/tree/small = 1,
-	/obj/item/roguegear = 1)
-	skillcraft = /datum/skill/craft/engineering
-	craftdiff = 3
+	reqs = list(/obj/item/grown/log/tree/small = 1)
+	skillcraft = /datum/skill/craft/crafting
+	craftdiff = 4
 
 /datum/crafting_recipe/roguetown/prosthetic/woodleft
 	name = "wood leg (L)"
 	result = list(/obj/item/bodypart/l_leg/prosthetic)
 	reqs = list(/obj/item/grown/log/tree/small = 1)
 	skillcraft = /datum/skill/craft/crafting
-	craftdiff = 3
+	craftdiff = 4
 
 /datum/crafting_recipe/roguetown/prosthetic/woodright
 	name = "wood leg (R)"
 	result = list(/obj/item/bodypart/r_leg/prosthetic)
 	reqs = list(/obj/item/grown/log/tree/small = 1)
 	skillcraft = /datum/skill/craft/crafting
-	craftdiff = 3
+	craftdiff = 4
 
 /datum/crafting_recipe/roguetown/tarot_deck
 	name = "tarot deck"
