@@ -41,13 +41,17 @@
 						else if(STACON < 10)
 							new_max -= (10 - STACON) * 10
 							
-						// Apply bodypart-specific modifiers
-						if(istype(BP, /obj/item/bodypart/head))
-							BP.update_max_damage(new_max)
-						else if(istype(BP, /obj/item/bodypart/chest))
-							BP.update_max_damage(new_max * 1.5)  // Chest has more health
-						else
-							BP.update_max_damage(new_max * 0.75)  // Limbs have less health
+						BP.update_max_damage(new_max)
+					
+					// Get head values to scale health/maxhealth
+					var/obj/item/bodypart/head/head = H.get_bodypart(BODY_ZONE_HEAD)
+					if(head)
+						// Calculate health percentage to maintain damage ratio
+						var/health_percent = H.health / H.maxHealth
+						// Set new maxHealth based on head's max_damage
+						H.maxHealth = head.max_damage
+						// Scale current health to maintain the same percentage
+						H.health = H.maxHealth * health_percent
 					
 					// Update overall health
 					H.updatehealth()
@@ -225,14 +229,18 @@
 						new_max += (STACON - 10) * 20
 					else if(STACON < 10)
 						new_max -= (10 - STACON) * 10
-						
-					// Apply bodypart-specific modifiers
-					if(istype(BP, /obj/item/bodypart/head))
-						BP.update_max_damage(new_max)
-					else if(istype(BP, /obj/item/bodypart/chest))
-						BP.update_max_damage(new_max * 1.5)  // Chest has more health
-					else
-						BP.update_max_damage(new_max * 0.75)  // Limbs have less health
+					
+					BP.update_max_damage(new_max)
+				
+				// Get head values to scale health/maxhealth
+				var/obj/item/bodypart/head/head = H.get_bodypart(BODY_ZONE_HEAD)
+				if(head)
+					// Calculate health percentage to maintain damage ratio
+					var/health_percent = H.health / H.maxHealth
+					// Set new maxHealth based on head's max_damage
+					H.maxHealth = head.max_damage
+					// Scale current health to maintain the same percentage
+					H.health = H.maxHealth * health_percent
 				
 				// Update overall health
 				H.updatehealth()
@@ -244,18 +252,18 @@
 				if(BUFEND > 0)
 					newamt = STAEND + BUFEND
 					BUFEND = 0
-			if(BUFEND > 0)
-				BUFEND = BUFEND + amt
-				if(BUFEND < 0)
-					newamt = STAEND + BUFEND
-					BUFEND = 0
-			while(newamt < 1)
-				newamt++
-				BUFEND--
-			while(newamt > 20)
-				newamt--
-				BUFEND++
-			STAEND = newamt
+				if(BUFEND > 0)
+					BUFEND = BUFEND + amt
+					if(BUFEND < 0)
+						newamt = STAEND + BUFEND
+						BUFEND = 0
+				while(newamt < 1)
+					newamt++
+					BUFEND--
+				while(newamt > 20)
+					newamt--
+					BUFEND++
+				STAEND = newamt
 
 		if("speed")
 			newamt = STASPD + amt
