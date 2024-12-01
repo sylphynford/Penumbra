@@ -139,7 +139,7 @@
 	else
 		thing.spark_act()
 		user.visible_message(span_notice("[user] snaps [user.p_their()] fingers, and a spark leaps forth towards [thing]!"), span_notice("I will forth a tiny spark and direct it towards [thing]."))
-	
+
 	return TRUE
 
 /obj/item/melee/touch_attack/prestidigitation/proc/clean_thing(atom/target, mob/living/carbon/human/user)
@@ -943,40 +943,6 @@
 		user.visible_message("[user] mutters an incantation and [spelltarget] briefly shines green.")
 	else
 		user.visible_message("[user] mutters an incantation and they briefly shine green.")
-
-	return TRUE
-
-/obj/effect/proc_holder/spell/invoked/guidance
-	name = "Guidance"
-	desc = "Makes one's hand travel true, blessing them with arcyne luck in combat."
-	cost = 2
-	xp_gain = TRUE
-	releasedrain = 60
-	chargedrain = 1
-	chargetime = 4 SECONDS
-	charge_max = 5 MINUTES
-	warnie = "spellwarning"
-	school = "transmutation"
-	no_early_release = TRUE
-	movement_interrupt = FALSE
-	charging_slowdown = 2
-	chargedloop = /datum/looping_sound/invokegen
-	associated_skill = /datum/skill/magic/arcane
-
-/obj/effect/proc_holder/spell/invoked/fortitude/cast(list/targets, mob/user)
-	var/atom/A = targets[1]
-	if(!isliving(A))
-		revert_cast()
-		return
-
-	var/mob/living/spelltarget = A
-	spelltarget.apply_status_effect(/datum/status_effect/buff/guidance)
-	playsound(get_turf(spelltarget), 'sound/magic/haste.ogg', 80, TRUE, soundping = TRUE)
-
-	if(spelltarget != user)
-		user.visible_message("[user] mutters an incantation and [spelltarget] briefly shines orange.")
-	else
-		user.visible_message("[user] mutters an incantation and they briefly shine orange.")
 
 	return TRUE
 

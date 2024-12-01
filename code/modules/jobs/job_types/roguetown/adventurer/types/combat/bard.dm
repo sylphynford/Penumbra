@@ -211,8 +211,6 @@
 			backr = /obj/item/rogue/instrument/hurdygurdy
 		if("Viola")
 			backr = /obj/item/rogue/instrument/viola
-		if("Vocal Talisman")
-			backr = /obj/item/rogue/instrument/vocals
 
 
 	ADD_TRAIT(H, TRAIT_EMPATH, TRAIT_GENERIC)
