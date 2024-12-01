@@ -231,6 +231,7 @@ GLOBAL_LIST_EMPTY(chosen_names)
 	reset_all_customizer_accessory_colors()
 	randomize_all_customizer_accessories()
 	reset_descriptors()
+	update_preview_icon() // Update the preview mannequin when species changes
 
 #define APPEARANCE_CATEGORY_COLUMN "<td valign='top' width='14%'>"
 #define MAX_MUTANT_ROWS 4
@@ -241,6 +242,7 @@ GLOBAL_LIST_EMPTY(chosen_names)
 	if(slot_randomized)
 		load_character(default_slot) // Reloads the character slot. Prevents random features from overwriting the slot if saved.
 		slot_randomized = FALSE
+	update_preview_icon() // Ensure preview is shown when UI opens
 	var/list/dat = list("<center>")
 	if(tabchoice)
 		current_tab = tabchoice
