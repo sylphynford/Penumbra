@@ -63,7 +63,6 @@
 			H.change_stat("speed", 1)
 			ADD_TRAIT(H, TRAIT_MEDIUMARMOR, TRAIT_GENERIC)
 			ADD_TRAIT(H, TRAIT_SEEPRICES_SHITTY, TRAIT_GENERIC)
-			H.mind.AddSpell(new /obj/effect/proc_holder/spell/invoked/mockery)
 		if("Skald") // Less skilled, better martial prowess. Also a sword!
 			to_chat(H, span_warning("Skalds are wandering storytellers, and for many villages they are local historians keeping the tales of great legends and heroes alive."))
 			H.mind.adjust_skillrank(/datum/skill/combat/crossbows, 2, TRUE)
@@ -138,8 +137,7 @@
 			backpack_contents = list(/obj/item/lockpickring/one = 1)
 			H.change_stat("intelligence", 2)
 			H.change_stat("perception", 2)
-			H.change_stat("speed", 2)
-			H.mind.AddSpell(new /obj/effect/proc_holder/spell/invoked/mockery)
+			H.change_stat("speed", 1)
 		if("Hymnist") //Azure Peak Update, Miracles and some utility skills, less combat prowess
 			to_chat(H, span_warning("The tales of the gods are mighty indeed, though your skill in their retelling through song has granted you a touch of their favor as thanks."))
 			H.mind.adjust_skillrank(/datum/skill/combat/wrestling, 2, TRUE)
@@ -211,9 +209,6 @@
 			backr = /obj/item/rogue/instrument/hurdygurdy
 		if("Viola")
 			backr = /obj/item/rogue/instrument/viola
-		if("Vocal Talisman")
-			backr = /obj/item/rogue/instrument/vocals
-
 
 	ADD_TRAIT(H, TRAIT_EMPATH, TRAIT_GENERIC)
 	ADD_TRAIT(H, TRAIT_DODGEEXPERT, TRAIT_GENERIC)

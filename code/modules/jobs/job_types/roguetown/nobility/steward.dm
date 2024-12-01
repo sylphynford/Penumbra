@@ -20,14 +20,16 @@
 /datum/outfit/job/roguetown/steward/pre_equip(mob/living/carbon/human/H)
 	..()
 	if(H.pronouns == SHE_HER || H.pronouns == THEY_THEM_F)
-		shirt = /obj/item/clothing/suit/roguetown/shirt/dress/silkdress/steward
+		shirt = /obj/item/clothing/suit/roguetown/shirt/undershirt/sailor
+		armor = /obj/item/clothing/suit/roguetown/shirt/dress/silkdress/green
+		cloak = /obj/item/clothing/cloak/tabard/knight
 		pants = /obj/item/clothing/under/roguetown/tights/stockings/silk/random	//Added Silk Stockings for the female nobles
 	else
-		shirt = /obj/item/clothing/suit/roguetown/shirt/undershirt/guard
+		shirt = /obj/item/clothing/suit/roguetown/shirt/undershirt/sailor
 		pants = /obj/item/clothing/under/roguetown/tights/random
-		armor = /obj/item/clothing/suit/roguetown/shirt/tunic/silktunic
+		armor = /obj/item/clothing/cloak/tabard/knight
 	shoes = /obj/item/clothing/shoes/roguetown/shortboots
-	belt = /obj/item/storage/belt/rogue/leather/plaquegold/steward
+	belt = /obj/item/storage/belt/rogue/leather/plaquesilver
 	beltr = /obj/item/storage/keyring/steward
 	backr = /obj/item/storage/backpack/rogue/satchel
 

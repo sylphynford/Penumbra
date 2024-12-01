@@ -263,9 +263,3 @@ obj/item/storage/belt/rogue/leather/exoticsilkbelt
 	icon_state = "exoticsilkbelt"
 	heldz_items = 1
 	sewrepair = TRUE
-
-/obj/item/storage/belt/rogue/leather/plaquegold/steward
-	name = "fancy gold belt"
-	desc = "A dark belt with real gold making up the buckle and highlights. How bougie."
-	icon_state = "stewardbelt"
-	item_state = "stewardbelt"
