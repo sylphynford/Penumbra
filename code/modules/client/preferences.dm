@@ -2553,3 +2553,25 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
             pronouns = "she/her"
             voice_type = "Feminine"
             update_gender_customization() // This will add default vagina
+
+/datum/preferences/proc/validate_genitals()
+	var/has_genitals = FALSE
+	for(var/datum/customizer_entry/entry as anything in customizer_entries)
+		if(istype(entry, /datum/customizer_entry/organ/vagina) || istype(entry, /datum/customizer_entry/organ/penis))
+			if(!entry.disabled)
+				has_genitals = TRUE
+				break
+	return has_genitals
+
+/datum/preferences/proc/validate_genitals_with_message()
+	var/has_genitals = validate_genitals()
+	if(!has_genitals)
+		to_chat(parent?.mob, span_warning("You must have at least one genital enabled to proceed."))
+	return has_genitals
+
+/datum/preferences/proc/close_latejoin_menu(mob/user)
+	if(!user?.client)
+		return
+	
+	// Close latejoin menu
+	user << browse(null, "window=latechoices")

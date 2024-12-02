@@ -158,25 +158,18 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/rp_prompt.txt"))
 		//Avoid updating ready if we're after PREGAME (they should use latejoin instead)
 		//This is likely not an actual issue but I don't have time to prove that this
 		//no longer is required
-		if(tready == PLAYER_NOT_READY)
-			if(SSticker.job_change_locked)
-				return
 		if(SSticker.current_state <= GAME_STATE_PREGAME)
-			if(tready == PLAYER_READY_TO_PLAY && length(client.prefs.flavortext) < MINIMUM_FLAVOR_TEXT)
-				to_chat(src, span_boldwarning("You need a minimum of [MINIMUM_FLAVOR_TEXT] characters in your flavor text in order to play."))
+			if(!client.prefs.validate_genitals_with_message())
 				return
-			if(ready != tready)
-				ready = tready
-		//if it's post initialisation and they're trying to observe we do the needful
+			ready = tready
+		//if it's post initialisation and they're trying to observe they shouldn't be able to ready up, but startjoining instead
 		if(!SSticker.current_state < GAME_STATE_PREGAME && tready == PLAYER_READY_TO_OBSERVE)
 			ready = tready
 			make_me_an_observer()
 			return
 
 	if(href_list["refresh"])
-		winshow(src, "preferencess_window", FALSE)
-		src << browse(null, "window=preferences_browser")
-//		src << browse(null, "window=playersetup") //closes the player setup window
+		src << browse(null, "window=playersetup") //closes the player setup window
 		new_player_panel()
 
 //	if(href_list["rpprompt"])
@@ -184,6 +177,8 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/rp_prompt.txt"))
 //		return
 
 	if(href_list["late_join"])
+		if(!client.prefs.validate_genitals_with_message())
+			return
 		if(!SSticker?.IsRoundInProgress())
 			to_chat(usr, span_boldwarning("The game is starting. You cannot join yet."))
 			return
@@ -523,6 +518,10 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/rp_prompt.txt"))
 		alert(src, "Something went bad.")
 		return FALSE
 
+	// Final genital validation check
+	if(!client.prefs.validate_genitals_with_message())
+		return FALSE
+
 	// Final faith check to prevent faith-switching exploit
 	if(!(client?.prefs?.selected_patron?.type in ALL_DIVINE_PATRONS))
 		to_chat(src, span_warning("You may not latejoin as a heretic. Please set your faith to PSYDON."))
@@ -707,8 +706,7 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/rp_prompt.txt"))
 	dat += "<table><tr><td valign='top'>"
 	var/column_counter = 0
 
-	var/list/omegalist = list()
-	omegalist += list(GLOB.noble_positions)
+	var/list/omegalist = list(GLOB.noble_positions)
 	omegalist += list(GLOB.courtier_positions)
 	omegalist += list(GLOB.garrison_positions)
 	omegalist += list(GLOB.church_positions)

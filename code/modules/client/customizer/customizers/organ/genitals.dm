@@ -30,6 +30,9 @@
 			if(istype(other_entry, /datum/customizer_entry/organ/vagina))
 				other_entry.disabled = FALSE
 				break
+	// Close latejoin menu and unready when genitals are changed
+	if(prefs.parent?.mob)
+		prefs.close_latejoin_menu(prefs.parent.mob)
 
 /datum/customizer_choice/organ/penis
 	abstract_type = /datum/customizer_choice/organ/penis
@@ -70,6 +73,12 @@
 			if(isnull(new_size))
 				return
 			penis_entry.penis_size = clamp(new_size, MIN_PENIS_INCHES, max_size)
+			if(user && istype(user, /mob/dead/new_player))
+				var/mob/dead/new_player/NP = user
+				if(NP.ready == PLAYER_READY_TO_PLAY)
+					NP.ready = PLAYER_NOT_READY
+					to_chat(user, span_warning("Your ready status has been reset due to changing genital configuration."))
+			prefs.close_latejoin_menu(user)
 
 /datum/customizer_entry/organ/penis
 	var/penis_size = DEFAULT_PENIS_INCHES
@@ -175,8 +184,20 @@
 				return
 			var/new_size = GLOB.named_ball_sizes[named_size]
 			testicles_entry.ball_size = sanitize_integer(new_size, MIN_TESTICLES_SIZE, MAX_TESTICLES_SIZE, DEFAULT_TESTICLES_SIZE)
+			if(user && istype(user, /mob/dead/new_player))
+				var/mob/dead/new_player/NP = user
+				if(NP.ready == PLAYER_READY_TO_PLAY)
+					NP.ready = PLAYER_NOT_READY
+					to_chat(user, span_warning("Your ready status has been reset due to changing genital configuration."))
+			prefs.close_latejoin_menu(user)
 		if("virile")
 			testicles_entry.virility = !testicles_entry.virility
+			if(user && istype(user, /mob/dead/new_player))
+				var/mob/dead/new_player/NP = user
+				if(NP.ready == PLAYER_READY_TO_PLAY)
+					NP.ready = PLAYER_NOT_READY
+					to_chat(user, span_warning("Your ready status has been reset due to changing genital configuration."))
+			prefs.close_latejoin_menu(user)
 
 /datum/customizer/organ/testicles/external
 	customizer_choices = list(/datum/customizer_choice/organ/testicles/external)
@@ -249,8 +270,20 @@
 				return
 			var/new_size = GLOB.named_breast_sizes[named_size]
 			breasts_entry.breast_size = sanitize_integer(new_size, MIN_BREASTS_SIZE, MAX_BREASTS_SIZE, DEFAULT_BREASTS_SIZE)
+			if(user && istype(user, /mob/dead/new_player))
+				var/mob/dead/new_player/NP = user
+				if(NP.ready == PLAYER_READY_TO_PLAY)
+					NP.ready = PLAYER_NOT_READY
+					to_chat(user, span_warning("Your ready status has been reset due to changing genital configuration."))
+			prefs.close_latejoin_menu(user)
 		if("lactating")
 			breasts_entry.lactating = !breasts_entry.lactating
+			if(user && istype(user, /mob/dead/new_player))
+				var/mob/dead/new_player/NP = user
+				if(NP.ready == PLAYER_READY_TO_PLAY)
+					NP.ready = PLAYER_NOT_READY
+					to_chat(user, span_warning("Your ready status has been reset due to changing genital configuration."))
+			prefs.close_latejoin_menu(user)
 
 /datum/customizer_entry/organ/breasts
 	var/breast_size = DEFAULT_BREASTS_SIZE
@@ -306,6 +339,9 @@
 			if(istype(other_entry, /datum/customizer_entry/organ/penis))
 				other_entry.disabled = FALSE
 				break
+	// Close latejoin menu and unready when genitals are changed
+	if(prefs.parent?.mob)
+		prefs.close_latejoin_menu(prefs.parent.mob)
 
 /datum/customizer_choice/organ/vagina
 	abstract_type = /datum/customizer_choice/organ/vagina
@@ -335,6 +371,12 @@
 	switch(href_list["customizer_task"])
 		if("fertile")
 			vagina_entry.fertility = !vagina_entry.fertility
+			if(user && istype(user, /mob/dead/new_player))
+				var/mob/dead/new_player/NP = user
+				if(NP.ready == PLAYER_READY_TO_PLAY)
+					NP.ready = PLAYER_NOT_READY
+					to_chat(user, span_warning("Your ready status has been reset due to changing genital configuration."))
+			prefs.close_latejoin_menu(user)
 
 
 /datum/customizer/organ/vagina/human

@@ -186,6 +186,13 @@
 		if("toggle_missing")
 			if(customizer.allows_disabling)
 				entry.disabled = !entry.disabled
+				// Unready player if genital configuration changes and they were ready
+				if(istype(entry, /datum/customizer_entry/organ/penis) || istype(entry, /datum/customizer_entry/organ/vagina))
+					if(user && istype(user, /mob/dead/new_player))
+						var/mob/dead/new_player/NP = user
+						if(NP.ready == PLAYER_READY_TO_PLAY)
+							NP.ready = PLAYER_NOT_READY
+							to_chat(user, span_warning("Your ready status has been reset due to changing genital configuration."))
 		if("change_choice")
 			var/list/choice_list = list()
 			for(var/choice_type in customizer.customizer_choices)
@@ -199,6 +206,13 @@
 				return
 			customizer_entries -= entry
 			customizer_entries += customizer.create_customizer_entry(src, choice_type)
+			// Unready player if genital configuration changes and they were ready
+			if(istype(entry, /datum/customizer_entry/organ/penis) || istype(entry, /datum/customizer_entry/organ/vagina))
+				if(user && istype(user, /mob/dead/new_player))
+					var/mob/dead/new_player/NP = user
+					if(NP.ready == PLAYER_READY_TO_PLAY)
+						NP.ready = PLAYER_NOT_READY
+						to_chat(user, span_warning("Your ready status has been reset due to changing genital configuration."))
 		else
 			choice.handle_topic(user, href_list, src, entry, customizer_type)
 	if(ishuman(user))
@@ -279,3 +293,8 @@
 			else
 				entry.disabled = TRUE
 			break
+
+/datum/customizer_entry/proc/toggle_disabled(mob/user, datum/preferences/prefs)
+	disabled = !disabled
+	if(prefs?.parent?.mob)
+		prefs.close_latejoin_menu(prefs.parent.mob)
