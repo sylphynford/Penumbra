@@ -68,6 +68,9 @@
 	var/tempatarget = null
 	var/pegleg = 0			//Handles check & slowdown for peglegs. Fuckin' bootleg, literally, but hey it at least works.
 
+// This might be scuffed but it works
+var/global/current_attack_crit = FALSE
+
 /obj/item/proc/attack(mob/living/M, mob/living/user)
 	if(SEND_SIGNAL(src, COMSIG_ITEM_ATTACK, M, user) & COMPONENT_ITEM_NO_ATTACK)
 		return FALSE
@@ -78,6 +81,33 @@
 	if(force && HAS_TRAIT(user, TRAIT_PACIFISM))
 		to_chat(user, span_warning("I don't want to harm other living beings!"))
 		return
+
+	global.current_attack_crit = FALSE  // Reset at start of attack
+	if(force)
+		var/roll = rand(1,6) + rand(1,6) + rand(1,6)
+		//to_chat(user, "DEBUG: Roll is [roll]")
+		if(roll >= 17)
+			global.current_attack_crit = TRUE
+			//to_chat(user, "DEBUG: Critical success set to TRUE")
+		else if(roll <= 4)
+			//to_chat(user, "DEBUG: Critical failure! Roll: [roll]")
+			var/fail_type = rand(1,3)
+			switch(fail_type)
+				if(1)
+					user.visible_message(span_danger("[user] loses [user.p_their()] grip on [src]!"))
+					user.dropItemToGround(src, TRUE)
+					return FALSE
+				if(2)
+					user.visible_message(span_danger("[user]'s attack sends [user.p_their()] off balance!"))
+					user.Knockdown(100)
+					return FALSE
+				if(3)
+					var/arm_zone = (user.active_hand_index % 2) ? BODY_ZONE_L_ARM : BODY_ZONE_R_ARM
+					var/obj/item/bodypart/affecting = user.get_bodypart(arm_zone)
+					if(affecting)
+						user.visible_message(span_danger("[user] dislocates [user.p_their()] [affecting.name] with a harsh swing!"))
+						affecting.add_wound(/datum/wound/dislocation)
+					return FALSE
 
 	M.lastattacker = user.real_name
 	M.lastattackerckey = user.ckey
@@ -92,8 +122,6 @@
 	else
 		return
 
-//	if(force)
-//		user.emote("attackgrunt")
 	var/datum/intent/cached_intent = user.used_intent
 	if(user.used_intent.swingdelay)
 		if(!user.used_intent.noaa)
@@ -125,13 +153,13 @@
 					user.tempatarget = BODY_ZONE_L_ARM
 				else
 					user.tempatarget = BODY_ZONE_R_ARM
-				if(M.attacked_by(src, user)) //we change intents when attacking sometimes so don't play if we do (embedding items)
+				if(M.attacked_by(src, user, FALSE)) //Never crit on a parry
 					if(user.used_intent == cached_intent)
 						var/tempsound = user.used_intent.hitsound
 						if(tempsound)
-							playsound(M.loc,  tempsound, 100, FALSE, -1)
+							playsound(M.loc, tempsound, 100, FALSE, -1)
 						else
-							playsound(M.loc,  "nodmg", 100, FALSE, -1)
+							playsound(M.loc, "nodmg", 100, FALSE, -1)
 				log_combat(user, M, "attacked", src.name, "(INTENT: [uppertext(user.used_intent.name)]) (DAMTYPE: [uppertext(damtype)])")
 				add_fingerprint(user)
 		if(M.d_intent == INTENT_DODGE)
@@ -163,13 +191,15 @@
 							span_boldwarning("I'm disarmed by [user]!"))
 			return
 
+	// Main attack - only one chance for crit
 	if(M.attacked_by(src, user))
+	//	to_chat(user, "DEBUG: Current attack crit is [global.current_attack_crit]")
 		if(user.used_intent == cached_intent)
 			var/tempsound = user.used_intent.hitsound
 			if(tempsound)
-				playsound(M.loc,  tempsound, 100, FALSE, -1)
+				playsound(M.loc, tempsound, 100, FALSE, -1)
 			else
-				playsound(M.loc,  "nodmg", 100, FALSE, -1)
+				playsound(M.loc, "nodmg", 100, FALSE, -1)
 
 	log_combat(user, M, "attacked", src.name, "(INTENT: [uppertext(user.used_intent.name)]) (DAMTYPE: [uppertext(damtype)])")
 	add_fingerprint(user)
@@ -195,7 +225,7 @@
 	return FALSE
 
 
-/proc/get_complex_damage(obj/item/I, mob/living/user, blade_dulling, turf/closed/mineral/T)
+/proc/get_complex_damage(obj/item/I, mob/living/user, blade_dulling, turf/closed/mineral/T, crit_success)
 	var/dullfactor = 1
 	if(!I?.force)
 		return 0
@@ -205,6 +235,10 @@
 		return newforce
 	var/cont = FALSE
 	var/used_str = user.STASTR
+
+	if(crit_success)
+		newforce *= 4 // Quadrouple damage on critical hit
+
 	if(iscarbon(user))
 		var/mob/living/carbon/C = user
 		if(C.domhand)
@@ -457,21 +491,15 @@
 /mob/living/attacked_by(obj/item/I, mob/living/user)
 	var/hitlim = simple_limb_hit(user.zone_selected)
 	testing("[src] attacked_by")
+	//to_chat(user, "DEBUG: Inside attacked_by, current_attack_crit is [global.current_attack_crit]")
 	I.funny_attack_effects(src, user)
 	if(I.force)
-		var/newforce = get_complex_damage(I, user)
+		var/newforce = get_complex_damage(I, user, null, null, global.current_attack_crit)
 		apply_damage(newforce, I.damtype, def_zone = hitlim)
 		if(I.damtype == BRUTE)
 			next_attack_msg.Cut()
 			if(HAS_TRAIT(src, TRAIT_SIMPLE_WOUNDS))
 				simple_woundcritroll(user.used_intent.blade_class, newforce, user, hitlim)
-				/* No embedding on simple mobs, thank you!
-				var/datum/wound/crit_wound  = simple_woundcritroll(user.used_intent.blade_class, newforce, user, hitlim)
-				if(should_embed_weapon(crit_wound, I))
-					// throw_alert("embeddedobject", /atom/movable/screen/alert/embeddedobject)
-					simple_add_embedded_object(I, silent = FALSE, crit_message = TRUE)
-					src.grabbedby(user, 1, item_override = I)
-				*/
 			var/haha = user.used_intent.blade_class
 			if(newforce > 5)
 				if(haha != BCLASS_BLUNT)
@@ -487,9 +515,11 @@
 					add_splatter_floor(location)
 					if(get_dist(user, src) <= 1)	//people with TK won't get smeared with blood
 						user.add_mob_blood(src)
-	send_item_attack_message(I, user, hitlim)
-	if(I.force)
-		return TRUE
+		//to_chat(user, "DEBUG: About to call send_item_attack_message")
+		send_item_attack_message(I, user, hitlim)
+		if(I.force)
+			return TRUE
+	return FALSE
 
 /mob/living/simple_animal/attacked_by(obj/item/I, mob/living/user)
 	if(I.force < force_threshold || I.damtype == STAMINA)
@@ -541,16 +571,30 @@
 	if(user.used_intent)
 		message_verb = "[pick(user.used_intent.attack_verb)]"
 	else if(!I.force)
-		return
+		return FALSE
 	var/message_hit_area = ""
 	if(hit_area)
 		message_hit_area = " in the [hit_area]"
-	var/attack_message = "[src] is [message_verb][message_hit_area] with [I]!"
-	var/attack_message_local = "I'm [message_verb][message_hit_area] with [I]!"
+	
+	var/attack_message
+	var/attack_message_local
+	
 	if(user in viewers(src, null))
 		attack_message = "[user] [message_verb] [src][message_hit_area] with [I]!"
 		attack_message_local = "[user] [message_verb] me[message_hit_area] with [I]!"
-	visible_message(span_danger("[attack_message][next_attack_msg.Join()]"),\
-		span_danger("[attack_message_local][next_attack_msg.Join()]"), null, COMBAT_MESSAGE_RANGE)
+	else
+		attack_message = "[src] is [message_verb][message_hit_area] with [I]!"
+		attack_message_local = "I'm [message_verb][message_hit_area] with [I]!"
+
+	if(global.current_attack_crit)
+		attack_message = "[attack_message] [span_userdanger("A powerful blow!")]"
+		attack_message_local = "[attack_message_local] [span_userdanger("A powerful blow!")]"
+	
+	visible_message(
+		span_danger("[attack_message][next_attack_msg.Join()]"), 
+		span_danger("[attack_message_local][next_attack_msg.Join()]"), 
+		null, 
+		COMBAT_MESSAGE_RANGE
+	)
 	next_attack_msg.Cut()
-	return 1
+	return TRUE
