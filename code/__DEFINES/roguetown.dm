@@ -83,7 +83,6 @@
 	/datum/species/elf/dark,\
 	/datum/species/elf/wood,\
 	/datum/species/dwarf/mountain,\
-	/datum/species/tieberian,\
 	/datum/species/demihuman,\
 )
 
