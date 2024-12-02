@@ -219,19 +219,22 @@
 			if(owner)
 				health_roll = owner.STACON || 10 // Default to 10 if no STACON stat
 			
-			// Roll 3d6 against health stat
-			var/roll = rand(1,6) + rand(1,6) + rand(1,6)
-			if(roll <= 4) // Critical success (3-4)
+			// Roll 3d6 and adjust based on difference from CON 10
+			var/roll = rand(1,6) + rand(1,6) + rand(1,6) + (10 - health_roll)
+			
+			// At CON 10:
+			// 3-8 (33%): No wound
+			// 9-14 (33%): Dislocation
+			// 15-18 (33%): Fracture
+			if(roll <= 8) // No wound
 				return FALSE
-			else if(roll <= health_roll) // Success
-				return FALSE
-			else if(roll >= 16 || roll >= (health_roll + 8)) // High failure = fracture
+			else if(roll <= 14) // Dislocation
+				attempted_wounds += /datum/wound/dislocation
+			else // Fracture
 				if(HAS_TRAIT(src, TRAIT_BRITTLE))
 					attempted_wounds += /datum/wound/fracture
 				else
 					attempted_wounds += /datum/wound/fracture
-			else // Regular failure = dislocation
-				attempted_wounds += /datum/wound/dislocation
 
 	// GURPS style roll for artery wounds
 	if(bclass in GLOB.artery_bclasses)
@@ -241,13 +244,18 @@
 			if(owner)
 				health_roll = owner.STACON || 10 // Default to 10 if no STACON stat
 			
-			// Roll 3d6 against health stat
-			var/roll = rand(1,6) + rand(1,6) + rand(1,6)
-			if(roll <= 4) // Critical success (3-4)
+			// Roll 3d6 and adjust based on difference from CON 10
+			var/roll = rand(1,6) + rand(1,6) + rand(1,6) + (10 - health_roll)
+			
+			// At CON 10:
+			// 3-9 (~33%): No wound
+			// 10-12 (~33%): Minor bleed
+			// 13+ (~33%): Artery hit
+			if(roll <= 9) // No wound
 				return FALSE
-			else if(roll <= health_roll) // Success
+			else if(roll <= 12) // Minor bleed - no artery wound
 				return FALSE
-			else if(roll >= 16 || roll >= (health_roll + 8)) // Critical failure = artery hit
+			else // Artery hit
 				var/artery_type = /datum/wound/artery
 				if(zone_precise == BODY_ZONE_PRECISE_NECK)
 					artery_type = /datum/wound/artery/neck
@@ -465,6 +473,8 @@
 	return TRUE
 
 /obj/item/bodypart/proc/try_bandage_expire()
+	if(!owner)
+		return FALSE
 	if(!bandage)
 		return FALSE
 	var/bandage_effectiveness = 0.5
