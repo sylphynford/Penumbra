@@ -1,6 +1,6 @@
 /datum/advclass/mercenary/grenzelhoft
 	name = "Grenzelhoft"
-	tutorial = "A mercenary company from the far north, known for their discipline and heavy armor."
+	tutorial = "A mercenary company from the far north, known for their discipline and heavy weapons."
 	allowed_sexes = list(MALE, FEMALE)
 	allowed_races = RACES_ALL_KINDS
 	outfit = /datum/outfit/job/roguetown/mercenary/grenzelhoft
