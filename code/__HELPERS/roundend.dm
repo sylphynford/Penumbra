@@ -84,6 +84,11 @@ GLOBAL_VAR(roundstart_event_name)
 	.[POPCOUNT_SHUTTLE_ESCAPEES] = num_shuttle_escapees
 	.["station_integrity"] = station_integrity
 
+	// Write individual player logs
+	for(var/client/C in GLOB.clients)
+		if(C.ckey)
+			write_key_logs_for_round(C.ckey)
+
 /datum/controller/subsystem/ticker/proc/gather_antag_data()
 	var/team_gid = 1
 	var/list/team_ids = list()
