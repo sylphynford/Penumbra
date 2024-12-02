@@ -231,6 +231,34 @@ GLOBAL_LIST_EMPTY(chosen_names)
 	reset_all_customizer_accessory_colors()
 	randomize_all_customizer_accessories()
 	reset_descriptors()
+	update_gender_customization()
+	
+	// Enforce genital rules
+	var/datum/customizer_entry/organ/penis/penis_entry
+	var/datum/customizer_entry/organ/vagina/vagina_entry
+	
+	for(var/datum/customizer_entry/entry as anything in customizer_entries)
+		if(istype(entry, /datum/customizer_entry/organ/penis))
+			penis_entry = entry
+		else if(istype(entry, /datum/customizer_entry/organ/vagina))
+			vagina_entry = entry
+	
+	// For males: Penis must always be enabled
+	if(gender == MALE && penis_entry)
+		penis_entry.disabled = FALSE
+	
+	// For females: Must have at least one genital enabled
+	else if(gender == FEMALE && penis_entry && vagina_entry)
+		// If both are disabled, enable vagina
+		if(penis_entry.disabled && vagina_entry.disabled)
+			vagina_entry.disabled = FALSE
+		// If penis is enabled, disable vagina
+		else if(!penis_entry.disabled)
+			vagina_entry.disabled = TRUE
+		// If vagina is enabled, disable penis
+		else if(!vagina_entry.disabled)
+			penis_entry.disabled = TRUE
+
 	update_preview_icon() // Update the preview mannequin when species changes
 
 #define APPEARANCE_CATEGORY_COLUMN "<td valign='top' width='14%'>"
@@ -2464,7 +2492,6 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 	// Keep non-genital entries
 	for(var/datum/customizer_entry/entry as anything in customizer_entries)
 		if(!istype(entry, /datum/customizer_entry/organ/penis) && !istype(entry, /datum/customizer_entry/organ/vagina) && !istype(entry, /datum/customizer_entry/organ/breasts) && !istype(entry, /datum/customizer_entry/organ/testicles))
-			new_entries += entry
 			new_entries += entry
 	
 	var/datum/species/species = pref_species

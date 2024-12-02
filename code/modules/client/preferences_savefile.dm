@@ -582,6 +582,28 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	validate_customizer_entries()
 	ensure_genital_defaults()
 
+	// Additional validation for genital rules
+	var/datum/customizer_entry/organ/penis/penis_entry
+	var/datum/customizer_entry/organ/vagina/vagina_entry
+	
+	for(var/datum/customizer_entry/entry as anything in customizer_entries)
+		if(istype(entry, /datum/customizer_entry/organ/penis))
+			penis_entry = entry
+		else if(istype(entry, /datum/customizer_entry/organ/vagina))
+			vagina_entry = entry
+	
+	// If we have both entries available
+	if(penis_entry && vagina_entry)
+		// If both are disabled, enable vagina by default
+		if(penis_entry.disabled && vagina_entry.disabled)
+			vagina_entry.disabled = FALSE
+		// If vagina is disabled, enable penis
+		else if(vagina_entry.disabled)
+			penis_entry.disabled = FALSE
+		// If penis is disabled, enable vagina
+		else if(penis_entry.disabled)
+			vagina_entry.disabled = FALSE
+
 	return TRUE
 
 /datum/preferences/proc/save_character()
