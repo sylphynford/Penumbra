@@ -15,7 +15,7 @@
 	sewn_overlay = ""
 	can_sew = FALSE
 	can_cauterize = FALSE
-	disabling = FALSE
+	disabling = TRUE
 	critical = TRUE
 	passive_healing = 0
 	qdel_on_droplimb = TRUE

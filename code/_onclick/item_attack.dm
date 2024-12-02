@@ -65,7 +65,7 @@
 /mob/living
 	var/tempatarget = null
 
-/obj/item/proc/attack(mob/living/M, mob/living/user)
+/obj/item/proc/attack(mob/living/M, mob/living/user, params)
 	if(SEND_SIGNAL(src, COMSIG_ITEM_ATTACK, M, user) & COMPONENT_ITEM_NO_ATTACK)
 		return FALSE
 	SEND_SIGNAL(user, COMSIG_MOB_ITEM_ATTACK, M, user)
@@ -75,6 +75,11 @@
 	if(force && HAS_TRAIT(user, TRAIT_PACIFISM))
 		to_chat(user, span_warning("I don't want to harm other living beings!"))
 		return
+
+	// Check for critical failure before any attack logic
+	var/damage_data = get_complex_damage(src, user)
+	if(isnull(damage_data))  // Critical failure occurred
+		return FALSE
 
 	M.lastattacker = user.real_name
 	M.lastattackerckey = user.ckey
@@ -89,8 +94,6 @@
 	else
 		return
 
-//	if(force)
-//		user.emote("attackgrunt")
 	var/datum/intent/cached_intent = user.used_intent
 	if(user.used_intent.swingdelay)
 		if(!user.used_intent.noaa)
@@ -303,12 +306,51 @@
 		newforce *= 0.5
 	newforce = round(newforce,1)
 	newforce = max(newforce, 1)
+	var/roll = roll_3d6()
+	
+	// Check for critical failure first
+	if(roll <= 5)
+		var/fail_type = rand(1,3)
+		if(fail_type == 1 && !istype(user.used_intent, /datum/intent/unarmed/punch)) // If they roll weapon drop but aren't punching
+			fail_type = rand(2,3) // Pick a different fail type
+		switch(fail_type)
+			if(1)
+				user.visible_message(span_danger("[user] loses [user.p_their()] grip on [src]!"))
+				user.dropItemToGround(src, TRUE)
+			if(2)
+				user.visible_message(span_danger("[user] loses [user.p_their()] balance!"))
+				user.Knockdown(20)
+			if(3)
+				var/arm_zone = (user.active_hand_index % 2) ? BODY_ZONE_L_ARM : BODY_ZONE_R_ARM
+				var/obj/item/bodypart/affecting = user.get_bodypart(arm_zone)
+				if(affecting)
+					user.visible_message(span_danger("[user] dislocates [user.p_their()] [affecting.name]!"))
+					affecting.add_wound(/datum/wound/dislocation)
+		return null
+
+	var/armor_pen = 0
+	var/message = ""
+	
+	if(roll >= 16)  // Critical hit on 16+ (about 2.7% chance)
+		newforce *= 4
+		armor_pen = 100  // Bypass all armor on critical hit
+		message = " <span class='danger'>(Strong hit!)</span>"
+	
+	// Keep existing caps and floors
+	newforce = round(newforce,1)
+	newforce = max(newforce, 1)
 	testing("endforce [newforce]")
-	return newforce
+	if(message != "")
+		user.visible_message(message)
+	return list(newforce, armor_pen)  // Return both the damage and armor penetration
 
 /obj/attacked_by(obj/item/I, mob/living/user)
 	user.changeNext_move(CLICK_CD_MELEE)
-	var/newforce = get_complex_damage(I, user, blade_dulling)
+	var/damage_data = get_complex_damage(I, user, blade_dulling)
+	if(isnull(damage_data))  // Critical failure occurred
+		return FALSE
+	var/newforce = damage_data[1]
+	var/armor_pen = damage_data[2]
 	if(!newforce)
 		testing("dam33")
 		return 0
@@ -328,7 +370,7 @@
 			newforce = 1
 	else
 		user.visible_message(span_warning("[user] [verbu] [src] with [I]!"))
-	take_damage(newforce, I.damtype, I.d_type, 1)
+	take_damage(newforce, I.damtype, I.d_type, 1, armor_penetration = armor_pen)
 	if(newforce > 1)
 		I.take_damage(1, BRUTE, I.d_type)
 	return TRUE
@@ -551,3 +593,12 @@
 		span_danger("[attack_message_local][next_attack_msg.Join()]"), null, COMBAT_MESSAGE_RANGE)
 	next_attack_msg.Cut()
 	return 1
+
+/proc/roll_3d6()
+	// For testing: always return 3
+	//return 3
+	
+	var/result = 0
+	for(var/i in 1 to 3)
+		result += rand(1,6)
+	return result
