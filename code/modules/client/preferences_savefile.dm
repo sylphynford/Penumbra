@@ -139,7 +139,6 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 		return FALSE
 	if(!fexists(path))
 		return FALSE
-
 	var/savefile/S = new /savefile(path)
 	if(!S)
 		return FALSE
@@ -239,6 +238,26 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	//ROGUETOWN
 	parallax = PARALLAX_INSANE
 
+	//Class preferences
+	S["town_guard_class"] >> town_guard_class
+	S["sergeant_class"] >> sergeant_class
+	S["templar_class"] >> templar_class
+	S["knight_lieutenant_class"] >> knight_lieutenant_class
+	S["hand_class"] >> hand_class
+	S["squire_class"] >> squire_class
+	S["inquisitor_class"] >> inquisitor_class
+	S["mercenary_class"] >> mercenary_class
+
+	//Sanitize
+	town_guard_class = sanitize_text(town_guard_class)
+	sergeant_class = sanitize_text(sergeant_class)
+	templar_class = sanitize_text(templar_class)
+	knight_lieutenant_class = sanitize_text(knight_lieutenant_class)
+	hand_class = sanitize_text(hand_class)
+	squire_class = sanitize_text(squire_class)
+	inquisitor_class = sanitize_text(inquisitor_class)
+	mercenary_class = sanitize_text(mercenary_class)
+
 	return TRUE
 
 /datum/preferences/proc/save_preferences()
@@ -249,56 +268,67 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 		return FALSE
 	S.cd = "/"
 
-	parallax = PARALLAX_INSANE
-
-	WRITE_FILE(S["version"] , SAVEFILE_VERSION_MAX)		//updates (or failing that the sanity checks) will ensure data is not invalid at load. Assume up-to-date
+	S["version"] << SAVEFILE_VERSION_MAX
 
 	//general preferences
-	WRITE_FILE(S["asaycolor"], asaycolor)
-	WRITE_FILE(S["triumphs"], triumphs)
-	WRITE_FILE(S["musicvol"], musicvol)
-	WRITE_FILE(S["anonymize"], anonymize)
-	WRITE_FILE(S["crt"], crt)
-	WRITE_FILE(S["sexable"], sexable)
-	WRITE_FILE(S["shake"], shake)
-	WRITE_FILE(S["lastclass"], lastclass)
-	WRITE_FILE(S["mastervol"], mastervol)
-	WRITE_FILE(S["ooccolor"], ooccolor)
-	WRITE_FILE(S["lastchangelog"], lastchangelog)
-	WRITE_FILE(S["UI_style"], UI_style)
-	WRITE_FILE(S["hotkeys"], hotkeys)
-	WRITE_FILE(S["chat_on_map"], chat_on_map)
-	WRITE_FILE(S["showrolls"], showrolls)
-	WRITE_FILE(S["max_chat_length"], max_chat_length)
-	WRITE_FILE(S["see_chat_non_mob"], see_chat_non_mob)
-	WRITE_FILE(S["tgui_fancy"], tgui_fancy)
-	WRITE_FILE(S["tgui_lock"], tgui_lock)
-	WRITE_FILE(S["buttons_locked"], buttons_locked)
-	WRITE_FILE(S["windowflash"], windowflashing)
-	WRITE_FILE(S["be_special"], be_special)
-	WRITE_FILE(S["default_slot"], default_slot)
-	WRITE_FILE(S["toggles"], toggles)
-	WRITE_FILE(S["chat_toggles"], chat_toggles)
-	WRITE_FILE(S["ghost_form"], ghost_form)
-	WRITE_FILE(S["ghost_orbit"], ghost_orbit)
-	WRITE_FILE(S["ghost_accs"], ghost_accs)
-	WRITE_FILE(S["ghost_others"], ghost_others)
-	WRITE_FILE(S["preferred_map"], preferred_map)
-	WRITE_FILE(S["ignoring"], ignoring)
-	WRITE_FILE(S["ghost_hud"], ghost_hud)
-	WRITE_FILE(S["inquisitive_ghost"], inquisitive_ghost)
-	WRITE_FILE(S["uses_glasses_colour"], uses_glasses_colour)
-	WRITE_FILE(S["clientfps"], clientfps)
-	WRITE_FILE(S["parallax"], parallax)
-	WRITE_FILE(S["ambientocclusion"], ambientocclusion)
-	WRITE_FILE(S["auto_fit_viewport"], auto_fit_viewport)
-	WRITE_FILE(S["widescreenpref"], widescreenpref)
-	WRITE_FILE(S["menuoptions"], menuoptions)
-	WRITE_FILE(S["enable_tips"], enable_tips)
-	WRITE_FILE(S["tip_delay"], tip_delay)
-	WRITE_FILE(S["pda_style"], pda_style)
-	WRITE_FILE(S["pda_color"], pda_color)
-	WRITE_FILE(S["key_bindings"], key_bindings)
+	S["asaycolor"]			<< asaycolor
+	S["ooccolor"]			<< ooccolor
+	S["lastchangelog"]		<< lastchangelog
+	S["UI_style"]			<< UI_style
+	S["hotkeys"]			<< hotkeys
+	S["chat_on_map"]		<< chat_on_map
+	S["showrolls"]			<< showrolls
+	S["max_chat_length"]	<< max_chat_length
+	S["see_chat_non_mob"]	<< see_chat_non_mob
+	S["tgui_fancy"]			<< tgui_fancy
+	S["tgui_lock"]			<< tgui_lock
+	S["buttons_locked"]		<< buttons_locked
+	S["windowflash"]		<< windowflashing
+	S["be_special"]			<< be_special
+	S["triumphs"]			<< triumphs
+	S["musicvol"]			<< musicvol
+	S["anonymize"]			<< anonymize
+	S["crt"]				<< crt
+	S["grain"]				<< grain
+	S["sexable"]			<< sexable
+	S["shake"]				<< shake
+	S["mastervol"]			<< mastervol
+	S["lastclass"]			<< lastclass
+
+	S["default_slot"]		<< default_slot
+	S["chat_toggles"]		<< chat_toggles
+	S["toggles"]			<< toggles
+	S["ghost_form"]			<< ghost_form
+	S["ghost_orbit"]		<< ghost_orbit
+	S["ghost_accs"]			<< ghost_accs
+	S["ghost_others"]		<< ghost_others
+	S["preferred_map"]		<< preferred_map
+	S["ignoring"]			<< ignoring
+	S["ghost_hud"]			<< ghost_hud
+	S["inquisitive_ghost"]	<< inquisitive_ghost
+	S["uses_glasses_colour"]<< uses_glasses_colour
+	S["clientfps"]			<< clientfps
+	S["parallax"]			<< parallax
+	S["ambientocclusion"]	<< ambientocclusion
+	S["auto_fit_viewport"]	<< auto_fit_viewport
+	S["widescreenpref"]		<< widescreenpref
+	S["menuoptions"]		<< menuoptions
+	S["enable_tips"]		<< enable_tips
+	S["tip_delay"]			<< tip_delay
+	S["pda_style"]			<< pda_style
+	S["pda_color"]			<< pda_color
+	S["key_bindings"]		<< key_bindings
+
+	//Class preferences
+	S["town_guard_class"] << town_guard_class
+	S["sergeant_class"] << sergeant_class
+	S["templar_class"] << templar_class
+	S["knight_lieutenant_class"] << knight_lieutenant_class
+	S["hand_class"] << hand_class
+	S["squire_class"] << squire_class
+	S["inquisitor_class"] << inquisitor_class
+	S["mercenary_class"] << mercenary_class
+
 	return TRUE
 
 
@@ -439,6 +469,14 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	S["joblessrole"] >> joblessrole
 	//Load prefs
 	S["job_preferences"] >> job_preferences
+	S["preferred_advclass"] >> preferred_advclass
+
+	//Needs to be updated to current format.
+	if(!job_preferences)
+		job_preferences = list()
+
+	if(!preferred_advclass)
+		preferred_advclass = list()
 
 	//Quirks
 	S["all_quirks"] >> all_quirks
@@ -544,6 +582,28 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	validate_customizer_entries()
 	ensure_genital_defaults()
 
+	// Additional validation for genital rules
+	var/datum/customizer_entry/organ/penis/penis_entry
+	var/datum/customizer_entry/organ/vagina/vagina_entry
+	
+	for(var/datum/customizer_entry/entry as anything in customizer_entries)
+		if(istype(entry, /datum/customizer_entry/organ/penis))
+			penis_entry = entry
+		else if(istype(entry, /datum/customizer_entry/organ/vagina))
+			vagina_entry = entry
+	
+	// If we have both entries available
+	if(penis_entry && vagina_entry)
+		// If both are disabled, enable vagina by default
+		if(penis_entry.disabled && vagina_entry.disabled)
+			vagina_entry.disabled = FALSE
+		// If vagina is disabled, enable penis
+		else if(vagina_entry.disabled)
+			penis_entry.disabled = FALSE
+		// If penis is disabled, enable vagina
+		else if(penis_entry.disabled)
+			vagina_entry.disabled = FALSE
+
 	return TRUE
 
 /datum/preferences/proc/save_character()
@@ -597,6 +657,7 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	WRITE_FILE(S["joblessrole"]		, joblessrole)
 	//Write prefs
 	WRITE_FILE(S["job_preferences"] , job_preferences)
+	S["preferred_advclass"] << preferred_advclass
 
 	//Quirks
 	WRITE_FILE(S["all_quirks"]			, all_quirks)

@@ -8,7 +8,7 @@
 	allowed_races = OTAVAN_RACE_TYPES
 	allowed_sexes = list(MALE, FEMALE)
 	allowed_ages = list(AGE_ADULT, AGE_MIDDLEAGED)
-	tutorial = "The Huskar is a seasoned knight assigned to the unenviable task of ensuring the consort's safety during their diplomatic mission, failure carries dire consequences for both them personally and those they know back home. Behind closed doors, their counsel is sharp and invaluable. In public, they remain subservient to the consort's authority."
+	tutorial = "The Huskar is a foreign knight assigned to the unenviable task of ensuring the consort's safety during their diplomatic mission, failure carries dire consequences for both them personally and those they know back home. Behind closed doors, their counsel is sharp and invaluable. In public, they remain subservient to the consort's authority."
 	display_order = JDO_HUSKAR
 	whitelist_req = TRUE
 	outfit = /datum/outfit/job/roguetown/huskar
@@ -57,7 +57,7 @@
 /datum/outfit/job/roguetown/huskar
 	wrists = /obj/item/clothing/wrists/roguetown/bracers
 	belt = /obj/item/storage/belt/rogue/leather
-	beltl = /obj/item/storage/belt/rogue/pouch/coins/rich
+	beltl = /obj/item/storage/keyring/guardcastle
 	beltr = /obj/item/rogueweapon/sword/falchion
 	neck = /obj/item/clothing/neck/roguetown/fencerguard
 	shirt = /obj/item/clothing/suit/roguetown/armor/gambeson/otavan
@@ -68,4 +68,4 @@
 	gloves = /obj/item/clothing/gloves/roguetown/otavan
 	backr = /obj/item/storage/backpack/rogue/satchel/black
 	backl = /obj/item/rogueweapon/shield/tower/metal
-	backpack_contents = list(/obj/item/rogueweapon/huntingknife/idagger/steel/special = 1, /obj/item/rope/chain = 1, /obj/item/storage/keyring/guardcastle = 1)
+	backpack_contents = list(/obj/item/rogueweapon/huntingknife/idagger/steel/special = 1, /obj/item/rope/chain = 1, /obj/item/storage/belt/rogue/pouch/coins/rich = 1)

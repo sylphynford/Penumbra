@@ -24,19 +24,62 @@
 
 /datum/job/roguetown/knight/after_spawn(mob/living/L, mob/M, latejoin = TRUE)
 	..()
-	if(ishuman(L))
+	if(L && M?.client)
 		var/mob/living/carbon/human/H = L
-		H.advsetup = 1
-		H.invisibility = INVISIBILITY_MAXIMUM
-		H.become_blind("advsetup")
-		if(istype(H.cloak, /obj/item/clothing/cloak/stabard/surcoat/guard))
-			var/obj/item/clothing/S = H.cloak
-			var/index = findtext(H.real_name, " ")
-			if(index)
-				index = copytext(H.real_name, 1,index)
-			if(!index)
-				index = H.real_name
-			S.name = "knight's tabard ([index])"
+		var/list/valid_classes = list()
+		var/preferred_class = M.client?.prefs?.knight_lieutenant_class
+
+		// Build list of valid classes for this character
+		for(var/type in subtypesof(/datum/advclass/knight))
+			var/datum/advclass/knight/AC = new type()
+			if(!AC.name)
+				qdel(AC)
+				continue
+			
+			// Check if class is allowed for this player
+			if(AC.allowed_sexes?.len && !(H.gender in AC.allowed_sexes))
+				qdel(AC)
+				continue
+			if(AC.allowed_races?.len && !(H.dna.species.type in AC.allowed_races))
+				qdel(AC)
+				continue
+			if(AC.min_pq != -100 && !(get_playerquality(M.client.ckey) >= AC.min_pq))
+				qdel(AC)
+				continue
+			
+			valid_classes[AC.name] = AC
+
+		// If no valid classes found, something is wrong
+		if(!length(valid_classes))
+			to_chat(M, span_warning("No valid classes found! Please report this to an admin."))
+			return
+
+		var/datum/advclass/knight/chosen_class
+		if(preferred_class && valid_classes[preferred_class])
+			// Use preferred class if it's valid
+			chosen_class = valid_classes[preferred_class]
+			to_chat(M, span_notice("Using your preferred class: [preferred_class]"))
+			// Clean up other classes
+			for(var/name in valid_classes)
+				if(name != preferred_class)
+					qdel(valid_classes[name])
+		else
+			// Choose random class from valid options
+			var/chosen_name = pick(valid_classes)
+			chosen_class = valid_classes[chosen_name]
+			to_chat(M, span_warning("No class preference set. You have been randomly assigned: [chosen_name]"))
+			// Clean up other classes
+			for(var/name in valid_classes)
+				if(name != chosen_name)
+					qdel(valid_classes[name])
+
+		// Let the class handle everything through its own equipme()
+		if(chosen_class)
+			H.mind?.transfer_to(H) // Ensure mind is properly set up
+			chosen_class.equipme(H)
+			qdel(chosen_class)
+
+		// Apply knight title after class setup
 		var/prev_real_name = H.real_name
 		var/prev_name = H.name
 		var/honorary = "Ser"
@@ -68,177 +111,303 @@
 	name = "Heavy Knight"
 	tutorial = "You are the indisputed master of man-on-man combat. Shockingly adept with massive swords, axes, and maces. People may fear the mounted knights, but they should truly fear those who come off their mount.."
 	outfit = /datum/outfit/job/roguetown/knight/heavy
-
 	category_tags = list(CTAG_ROYALGUARD)
 
 /datum/outfit/job/roguetown/knight/heavy/pre_equip(mob/living/carbon/human/H)
 	..()
-	H.mind.adjust_skillrank(/datum/skill/combat/polearms, 3, TRUE)		//swapped with sword skill to make it fair for them to use the iconic high-strength two-handed swords
-	H.mind.adjust_skillrank(/datum/skill/combat/swords, 4, TRUE)
-	H.mind.adjust_skillrank(/datum/skill/combat/axes, 4, TRUE)		//axes are a two-handed weapon
-	H.mind.adjust_skillrank(/datum/skill/combat/whipsflails, 2, TRUE)
-	H.mind.adjust_skillrank(/datum/skill/combat/maces, 4, TRUE)
-	H.mind.adjust_skillrank(/datum/skill/combat/shields, 2, TRUE)
-	H.mind.adjust_skillrank(/datum/skill/misc/riding, 1, TRUE)			//Heavy-knight so not as good at riding. Don't crush your mount!
-
-	//Normal shared skill section.
-	H.mind.adjust_skillrank(/datum/skill/combat/wrestling, 4, TRUE)
-	H.mind.adjust_skillrank(/datum/skill/combat/unarmed, 4, TRUE)
-	H.mind.adjust_skillrank(/datum/skill/misc/climbing, 2, TRUE)
-	H.mind.adjust_skillrank(/datum/skill/misc/sneaking, 1, TRUE)
-	H.mind.adjust_skillrank(/datum/skill/misc/reading, 2, TRUE)
-	H.mind.adjust_skillrank(/datum/skill/misc/athletics, 3, TRUE)
-	H.mind.adjust_skillrank(/datum/skill/combat/crossbows, 2, TRUE)
-	H.mind.adjust_skillrank(/datum/skill/combat/bows, 3, TRUE)
-	H.mind.adjust_skillrank(/datum/skill/combat/knives, 3, TRUE)
-	ADD_TRAIT(H, TRAIT_HEAVYARMOR, TRAIT_GENERIC)
-	ADD_TRAIT(H, TRAIT_STEELHEARTED, TRAIT_GENERIC)	//Knights should be used to the horrors of war if they're tride-and-true.
-	ADD_TRAIT(H, TRAIT_NOBLE, TRAIT_GENERIC)		//Knights are /technically/ nobles? But they are of the lower-tiers; mainly that a non-blue-blood could become a knight
-	ADD_TRAIT(H, TRAIT_GUARDSMAN, TRAIT_GENERIC) //if they can't figure out how to win vs someone in leather armor with this i literally can not help them anymore
-	H.dna.species.soundpack_m = new /datum/voicepack/male/knight()		//For knightly voices; even though I despise them.
-	H.verbs |= /mob/proc/haltyell
-
-
-	H.change_stat("strength", 2) //HEY, YOU, BEFORE YOU CHANGE THIS BECAUSE SOMEONE TOOK A STAT PACK WITH -STR: this is specifically because people extremely oftenly broke the 15/16 str threshhold. don't do it.
-	H.change_stat("constitution", 2)
-	H.change_stat("endurance", 2)
-	H.change_stat("perception", 1)
-	H.change_stat("speed", -2)		//Lower speed for more strength and con vs other knight, and to off-set endurance. (They need the end-stam for 2 handed.)
-
-	H.adjust_blindness(-3)
-	var/weapons = list("Zweihander","Great Mace","Battle Axe", "Estoc")
-	var/weapon_choice = input("Choose your weapon.", "TAKE UP ARMS") as anything in weapons
-	H.set_blindness(0)
-	switch(weapon_choice)
-		if("Zweihander") 	// A two-handed sword, but not the strongest one
-			r_hand = /obj/item/rogueweapon/greatsword/zwei
-		if("Great Mace")	// Great-mace, 2-handed (worse than normal steel but better than iron)
-			r_hand = /obj/item/rogueweapon/mace/goden/steel
-		if("Battle Axe")	// Why did heavy knights get a mace+shield combo if they're supposed to be the two-hander guys? Gives them a greataxe instead.
-			r_hand = /obj/item/rogueweapon/stoneaxe/battle
-		if("Estoc")
-			r_hand = /obj/item/rogueweapon/estoc
+	if(H.mind)
+		//Normal shared skill section.
+		H.mind.adjust_skillrank(/datum/skill/combat/wrestling, 4, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/combat/unarmed, 4, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/misc/climbing, 2, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/misc/sneaking, 1, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/misc/reading, 2, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/misc/athletics, 3, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/combat/crossbows, 2, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/combat/bows, 3, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/combat/knives, 3, TRUE)
+		ADD_TRAIT(H, TRAIT_HEAVYARMOR, TRAIT_GENERIC)
+		ADD_TRAIT(H, TRAIT_STEELHEARTED, TRAIT_GENERIC)
+		ADD_TRAIT(H, TRAIT_NOBLE, TRAIT_GENERIC)
+		ADD_TRAIT(H, TRAIT_GUARDSMAN, TRAIT_GENERIC)
+		H.dna.species.soundpack_m = new /datum/voicepack/male/knight()
+		H.verbs |= /mob/proc/haltyell
 
 	neck = /obj/item/clothing/neck/roguetown/bevor
-	armor = /obj/item/clothing/suit/roguetown/armor/plate		//this is actually steel half-plate, full plate is plate/full. given because they are SLOW.
-
+	armor = /obj/item/clothing/suit/roguetown/armor/plate
 	backpack_contents = list(/obj/item/rogueweapon/huntingknife/idagger/steel/special = 1, /obj/item/rope/chain = 1)
+
+/datum/advclass/knight/heavy/equipme(mob/living/carbon/human/H)
+	if(!H)
+		return FALSE
+	
+	// First equip the base outfit
+	if(outfit)
+		var/datum/outfit/O = new outfit
+		O.equip(H)
+
+	if(H.mind)
+		H.mind.adjust_skillrank(/datum/skill/combat/polearms, 3, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/combat/swords, 4, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/combat/axes, 4, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/combat/whipsflails, 2, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/combat/maces, 4, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/combat/shields, 2, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/misc/riding, 1, TRUE)
+
+		H.change_stat("strength", 2)
+		H.change_stat("constitution", 2)
+		H.change_stat("endurance", 2)
+		H.change_stat("perception", 1)
+		H.change_stat("speed", -2)
+
+	// Wait for client to be ready (up to 5 seconds)
+	spawn(0)
+		var/tries = 0
+		while(!H?.client && tries < 10)
+			tries++
+			sleep(5)
+			
+		if(!H?.client)
+			var/classchoice = pick(list("Zweihander", "Great Mace", "Battle Axe", "Estoc"))
+			apply_class_equipment(H, classchoice)
+			return
+
+		to_chat(H, span_notice("\n\nChoose your Heavy Knight weapon..."))
+		var/list/choices = list("Zweihander", "Great Mace", "Battle Axe", "Estoc")
+		var/classchoice = input(H, "Choose your Heavy Knight weapon (30 seconds to choose)", "Weapon Selection") as anything in choices
+		
+		spawn(30 SECONDS)
+			if(!classchoice)
+				classchoice = pick(choices)
+				to_chat(H, span_warning("Time's up! Random weapon selected: [classchoice]"))
+				apply_class_equipment(H, classchoice)
+		
+		if(!classchoice)
+			classchoice = pick(choices)
+			to_chat(H, span_warning("No selection made. Random weapon selected: [classchoice]"))
+		
+		apply_class_equipment(H, classchoice)
+	
+	return TRUE
+
+/datum/advclass/knight/heavy/proc/apply_class_equipment(mob/living/carbon/human/H, classchoice)
+	H.adjust_blindness(-3)
+	switch(classchoice)
+		if("Zweihander")
+			H.set_blindness(0)
+			to_chat(H, span_warning("You are a master of the mighty zweihander."))
+			H.put_in_r_hand(new /obj/item/rogueweapon/greatsword/zwei(H))
+		if("Great Mace")
+			H.set_blindness(0)
+			to_chat(H, span_warning("You wield a devastating great mace."))
+			H.put_in_r_hand(new /obj/item/rogueweapon/mace/goden/steel(H))
+		if("Battle Axe")
+			H.set_blindness(0)
+			to_chat(H, span_warning("You are skilled with the fearsome battle axe."))
+			H.put_in_r_hand(new /obj/item/rogueweapon/stoneaxe/battle(H))
+		if("Estoc")
+			H.set_blindness(0)
+			to_chat(H, span_warning("You are trained in the precise art of the estoc."))
+			H.put_in_r_hand(new /obj/item/rogueweapon/estoc(H))
 
 /datum/advclass/knight/footknight
 	name = "Foot Knight"
 	tutorial = "You are accustomed to traditional foot-soldier training in swords, flails, and shields. You are not as used to riding a mount as other knights, but you are the finest of all with the versatile combination of a shield and weapon!"
 	outfit = /datum/outfit/job/roguetown/knight/footknight
-
 	category_tags = list(CTAG_ROYALGUARD)
 
 /datum/outfit/job/roguetown/knight/footknight/pre_equip(mob/living/carbon/human/H)
 	..()
-	H.mind.adjust_skillrank(/datum/skill/combat/polearms, 3, TRUE)
-	H.mind.adjust_skillrank(/datum/skill/combat/swords, 4, TRUE)
-	H.mind.adjust_skillrank(/datum/skill/combat/axes, 2, TRUE)		//axe proficiency was swapped with swords because swords have many one-handed options while axes are all ideally two-handed weapons
-	H.mind.adjust_skillrank(/datum/skill/combat/whipsflails, 4, TRUE)
-	H.mind.adjust_skillrank(/datum/skill/combat/maces, 3, TRUE)
-	H.mind.adjust_skillrank(/datum/skill/combat/shields, 4, TRUE)		//Mildly better shield skill due to less weapon options, kind of their specialty
-	H.mind.adjust_skillrank(/datum/skill/misc/riding, 2, TRUE)			//Foot-knight so not as good at riding.
-
-	//Normal shared skill section.
-	H.mind.adjust_skillrank(/datum/skill/combat/wrestling, 4, TRUE)
-	H.mind.adjust_skillrank(/datum/skill/combat/unarmed, 4, TRUE)
-	H.mind.adjust_skillrank(/datum/skill/misc/climbing, 2, TRUE)
-	H.mind.adjust_skillrank(/datum/skill/misc/sneaking, 1, TRUE)
-	H.mind.adjust_skillrank(/datum/skill/misc/reading, 2, TRUE)
-	H.mind.adjust_skillrank(/datum/skill/misc/athletics, 3, TRUE)
-	H.mind.adjust_skillrank(/datum/skill/combat/crossbows, 2, TRUE)
-	H.mind.adjust_skillrank(/datum/skill/combat/bows, 3, TRUE)
-	H.mind.adjust_skillrank(/datum/skill/combat/knives, 3, TRUE)
-	ADD_TRAIT(H, TRAIT_HEAVYARMOR, TRAIT_GENERIC)
-	ADD_TRAIT(H, TRAIT_STEELHEARTED, TRAIT_GENERIC)	//Knights should be used to the horrors of war if they're tride-and-true.
-	ADD_TRAIT(H, TRAIT_NOBLE, TRAIT_GENERIC)		//Knights are /technically/ nobles? But they are of the lower-tiers; mainly that a non-blue-blood could become a knight.
-	ADD_TRAIT(H, TRAIT_GUARDSMAN, TRAIT_GENERIC) //if they can't figure out how to win vs someone in leather armor with this i literally can not help them anymore
-	H.dna.species.soundpack_m = new /datum/voicepack/male/knight()		//For knightly voices; even though I despise them.
-	H.verbs |= /mob/proc/haltyell
-
-	H.change_stat("strength", 2)
-	H.change_stat("constitution", 1)
-	H.change_stat("endurance", 2)
-	H.change_stat("intelligence", 1)
-	H.change_stat("speed", -1)			//Bit faster than a heavy knight, not as fast as a mounted knight.
-
-	H.adjust_blindness(-3)
-	var/weapons = list("Bastard Sword","Flail")
-	var/weapon_choice = input("Choose your weapon.", "TAKE UP ARMS") as anything in weapons
-	H.set_blindness(0)
-	switch(weapon_choice)
-		if("Bastard Sword")
-			beltr = /obj/item/rogueweapon/sword/long	//very usable one-handed, has a force of 25
-			backl = /obj/item/rogueweapon/shield/tower/metal
-		if("Flail")
-			beltr = /obj/item/rogueweapon/flail/sflail		//these steel flails spawn in the armory anyways
-			backl = /obj/item/rogueweapon/shield/tower/metal
+	if(H.mind)
+		//Normal shared skill section.
+		H.mind.adjust_skillrank(/datum/skill/combat/wrestling, 4, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/combat/unarmed, 4, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/misc/climbing, 2, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/misc/sneaking, 1, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/misc/reading, 2, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/misc/athletics, 3, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/combat/crossbows, 2, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/combat/bows, 3, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/combat/knives, 3, TRUE)
+		ADD_TRAIT(H, TRAIT_HEAVYARMOR, TRAIT_GENERIC)
+		ADD_TRAIT(H, TRAIT_STEELHEARTED, TRAIT_GENERIC)
+		ADD_TRAIT(H, TRAIT_NOBLE, TRAIT_GENERIC)
+		ADD_TRAIT(H, TRAIT_GUARDSMAN, TRAIT_GENERIC)
+		H.dna.species.soundpack_m = new /datum/voicepack/male/knight()
+		H.verbs |= /mob/proc/haltyell
 
 	neck = /obj/item/clothing/neck/roguetown/chaincoif
-	armor = /obj/item/clothing/suit/roguetown/armor/brigandine/coatplates		//given because it's less durability than the steel cuirass but is actually heavy, making use of their heavy skill, unlike cuirass
-
+	armor = /obj/item/clothing/suit/roguetown/armor/brigandine/coatplates
 	backpack_contents = list(/obj/item/rogueweapon/huntingknife/idagger/steel/special = 1, /obj/item/rope/chain = 1)
+
+/datum/advclass/knight/footknight/equipme(mob/living/carbon/human/H)
+	if(!H)
+		return FALSE
+	
+	// First equip the base outfit
+	if(outfit)
+		var/datum/outfit/O = new outfit
+		O.equip(H)
+
+	if(H.mind)
+		H.mind.adjust_skillrank(/datum/skill/combat/polearms, 3, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/combat/swords, 4, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/combat/axes, 2, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/combat/whipsflails, 4, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/combat/maces, 3, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/combat/shields, 4, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/misc/riding, 2, TRUE)
+
+		H.change_stat("strength", 2)
+		H.change_stat("constitution", 1)
+		H.change_stat("endurance", 2)
+		H.change_stat("intelligence", 1)
+		H.change_stat("speed", -1)
+
+	// Wait for client to be ready (up to 5 seconds)
+	spawn(0)
+		var/tries = 0
+		while(!H?.client && tries < 10)
+			tries++
+			sleep(5)
+			
+		if(!H?.client)
+			var/classchoice = pick(list("Bastard Sword", "Flail"))
+			apply_class_equipment(H, classchoice)
+			return
+
+		to_chat(H, span_notice("\n\nChoose your Foot Knight weapon..."))
+		var/list/choices = list("Bastard Sword", "Flail")
+		var/classchoice = input(H, "Choose your Foot Knight weapon (30 seconds to choose)", "Weapon Selection") as anything in choices
+		
+		spawn(30 SECONDS)
+			if(!classchoice)
+				classchoice = pick(choices)
+				to_chat(H, span_warning("Time's up! Random weapon selected: [classchoice]"))
+				apply_class_equipment(H, classchoice)
+		
+		if(!classchoice)
+			classchoice = pick(choices)
+			to_chat(H, span_warning("No selection made. Random weapon selected: [classchoice]"))
+		
+		apply_class_equipment(H, classchoice)
+	
+	return TRUE
+
+/datum/advclass/knight/footknight/proc/apply_class_equipment(mob/living/carbon/human/H, classchoice)
+	H.adjust_blindness(-3)
+	switch(classchoice)
+		if("Bastard Sword")
+			H.set_blindness(0)
+			to_chat(H, span_warning("You are a skilled swordsman with shield."))
+			H.equip_to_slot_or_del(new /obj/item/rogueweapon/sword/long(H), SLOT_BELT_R)
+			H.equip_to_slot_or_del(new /obj/item/rogueweapon/shield/tower/metal(H), SLOT_BACK_L)
+		if("Flail")
+			H.set_blindness(0)
+			to_chat(H, span_warning("You are trained in the deadly art of flail and shield."))
+			H.equip_to_slot_or_del(new /obj/item/rogueweapon/flail/sflail(H), SLOT_BELT_R)
+			H.equip_to_slot_or_del(new /obj/item/rogueweapon/shield/tower/metal(H), SLOT_BACK_L)
 
 /datum/advclass/knight/mountedknight
 	name = "Mounted Knight"
 	tutorial = "You are the picture-perfect knight from a high tale, knowledgeable in riding steeds into battle. You specialize in weapons most useful on a saiga including spears, swords and maces, but know your way around a shield."
 	outfit = /datum/outfit/job/roguetown/knight/mountedknight
-
 	category_tags = list(CTAG_ROYALGUARD)
 
 /datum/outfit/job/roguetown/knight/mountedknight/pre_equip(mob/living/carbon/human/H)
 	..()
-	H.mind.adjust_skillrank(/datum/skill/combat/polearms, 4, TRUE)		// gave them polearm proficiency because mounted spear-knights were very common and a popular trope, traded with heavyknights to let them be greatsword guys
-	H.mind.adjust_skillrank(/datum/skill/combat/swords, 4, TRUE)
-	H.mind.adjust_skillrank(/datum/skill/combat/axes, 2, TRUE)		//debuffed because axes are ideally two-handed and not... really a mounty weapon?
-	H.mind.adjust_skillrank(/datum/skill/combat/whipsflails, 3, TRUE)
-	H.mind.adjust_skillrank(/datum/skill/combat/maces, 4, TRUE)		//gave mounted knights maces instead of flails because we only have the one-handed flails currently and maces were more commonly used on horseback
-	H.mind.adjust_skillrank(/datum/skill/combat/shields, 3, TRUE)		//Mildly better shield skill due to less weapon options.
-	H.mind.adjust_skillrank(/datum/skill/misc/riding, 4, TRUE)			//this is their THING
-	H.mind.adjust_skillrank(/datum/skill/combat/crossbows, 2, TRUE)
-	H.mind.adjust_skillrank(/datum/skill/combat/bows, 1, TRUE)
-
-	//Normal shared skill section.
-	H.mind.adjust_skillrank(/datum/skill/combat/wrestling, 4, TRUE)
-	H.mind.adjust_skillrank(/datum/skill/combat/unarmed, 4, TRUE)
-	H.mind.adjust_skillrank(/datum/skill/misc/climbing, 3, TRUE)
-	H.mind.adjust_skillrank(/datum/skill/misc/sneaking, 1, TRUE)
-	H.mind.adjust_skillrank(/datum/skill/misc/reading, 2, TRUE)
-	H.mind.adjust_skillrank(/datum/skill/misc/athletics, 3, TRUE)
-	H.mind.adjust_skillrank(/datum/skill/combat/crossbows, 2, TRUE)
-	H.mind.adjust_skillrank(/datum/skill/combat/bows, 3, TRUE)
-	H.mind.adjust_skillrank(/datum/skill/combat/knives, 3, TRUE)
-	ADD_TRAIT(H, TRAIT_HEAVYARMOR, TRAIT_GENERIC)
-	ADD_TRAIT(H, TRAIT_STEELHEARTED, TRAIT_GENERIC)	//Knights should be used to the horrors of war if they're tride-and-true.
-	ADD_TRAIT(H, TRAIT_NOBLE, TRAIT_GENERIC)		//Knights are /technically/ nobles? But they are of the lower-tiers; mainly that a non-blue-blood could become a knight.
-	ADD_TRAIT(H, TRAIT_GUARDSMAN, TRAIT_GENERIC) //if they can't figure out how to win vs someone in leather armor with this i literally can not help them anymore
-	H.dna.species.soundpack_m = new /datum/voicepack/male/knight()		//For knightly voices; even though I despise them.
-	H.verbs |= /mob/proc/haltyell
-
-	H.change_stat("strength", 1)			//Worse strength than others, but bonus intel and no speed penalty.
-	H.change_stat("intelligence", 2)
-	H.change_stat("constitution", 1)
-	H.change_stat("endurance", 1)
-	H.change_stat("perception", 2) //really? nobody gave the mounted class with bow/crossbow skill perception? ok, dude lmao
-
-	H.adjust_blindness(-3)
-	var/weapons = list("Bastard Sword","Spear")
-	var/weapon_choice = input("Choose your weapon.", "TAKE UP ARMS") as anything in weapons
-	H.set_blindness(0)
-	switch(weapon_choice)
-		if("Bastard Sword")
-			beltr = /obj/item/rogueweapon/sword/long
-			backl = /obj/item/rogueweapon/shield/tower/metal
-		if("Spear")
-			r_hand = /obj/item/rogueweapon/spear
-			backl = /obj/item/rogueweapon/shield/tower/metal
+	if(H.mind)
+		//Normal shared skill section.
+		H.mind.adjust_skillrank(/datum/skill/combat/wrestling, 4, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/combat/unarmed, 4, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/misc/climbing, 3, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/misc/sneaking, 1, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/misc/reading, 2, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/misc/athletics, 3, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/combat/crossbows, 2, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/combat/bows, 3, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/combat/knives, 3, TRUE)
+		ADD_TRAIT(H, TRAIT_HEAVYARMOR, TRAIT_GENERIC)
+		ADD_TRAIT(H, TRAIT_STEELHEARTED, TRAIT_GENERIC)
+		ADD_TRAIT(H, TRAIT_NOBLE, TRAIT_GENERIC)
+		ADD_TRAIT(H, TRAIT_GUARDSMAN, TRAIT_GENERIC)
+		H.dna.species.soundpack_m = new /datum/voicepack/male/knight()
+		H.verbs |= /mob/proc/haltyell
 
 	neck = /obj/item/clothing/neck/roguetown/chaincoif
-	armor = /obj/item/clothing/suit/roguetown/armor/brigandine/coatplates		//given because it's less durability than the steel cuirass but is actually heavy, making use of their heavy skill, unlike cuirass
-
+	armor = /obj/item/clothing/suit/roguetown/armor/brigandine/coatplates
 	backpack_contents = list(/obj/item/rogueweapon/huntingknife/idagger/steel/special = 1, /obj/item/rope/chain = 1)
+
+/datum/advclass/knight/mountedknight/equipme(mob/living/carbon/human/H)
+	if(!H)
+		return FALSE
+	
+	// First equip the base outfit
+	if(outfit)
+		var/datum/outfit/O = new outfit
+		O.equip(H)
+
+	if(H.mind)
+		H.mind.adjust_skillrank(/datum/skill/combat/polearms, 4, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/combat/swords, 4, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/combat/axes, 2, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/combat/whipsflails, 3, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/combat/maces, 4, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/combat/shields, 3, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/misc/riding, 4, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/combat/crossbows, 2, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/combat/bows, 1, TRUE)
+
+		H.change_stat("strength", 1)
+		H.change_stat("intelligence", 2)
+		H.change_stat("constitution", 1)
+		H.change_stat("endurance", 1)
+		H.change_stat("perception", 2)
+
+	// Wait for client to be ready (up to 5 seconds)
+	spawn(0)
+		var/tries = 0
+		while(!H?.client && tries < 10)
+			tries++
+			sleep(5)
+			
+		if(!H?.client)
+			var/classchoice = pick(list("Bastard Sword", "Spear"))
+			apply_class_equipment(H, classchoice)
+			return
+
+		to_chat(H, span_notice("\n\nChoose your Mounted Knight weapon..."))
+		var/list/choices = list("Bastard Sword", "Spear")
+		var/classchoice = input(H, "Choose your Mounted Knight weapon (30 seconds to choose)", "Weapon Selection") as anything in choices
+		
+		spawn(30 SECONDS)
+			if(!classchoice)
+				classchoice = pick(choices)
+				to_chat(H, span_warning("Time's up! Random weapon selected: [classchoice]"))
+				apply_class_equipment(H, classchoice)
+		
+		if(!classchoice)
+			classchoice = pick(choices)
+			to_chat(H, span_warning("No selection made. Random weapon selected: [classchoice]"))
+		
+		apply_class_equipment(H, classchoice)
+	
+	return TRUE
+
+/datum/advclass/knight/mountedknight/proc/apply_class_equipment(mob/living/carbon/human/H, classchoice)
+	H.adjust_blindness(-3)
+	switch(classchoice)
+		if("Bastard Sword")
+			H.set_blindness(0)
+			to_chat(H, span_warning("You are a mounted swordsman, deadly with blade and shield."))
+			H.equip_to_slot_or_del(new /obj/item/rogueweapon/sword/long(H), SLOT_BELT_R)
+			H.equip_to_slot_or_del(new /obj/item/rogueweapon/shield/tower/metal(H), SLOT_BACK_L)
+		if("Spear")
+			H.set_blindness(0)
+			to_chat(H, span_warning("You are a mounted lancer, master of the charge."))
+			H.put_in_r_hand(new /obj/item/rogueweapon/spear(H))
+			H.equip_to_slot_or_del(new /obj/item/rogueweapon/shield/tower/metal(H), SLOT_BACK_L)
 
 // used for blackguards event
 /datum/job/roguetown/blackguard_lieutenant

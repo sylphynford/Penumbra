@@ -1188,3 +1188,18 @@
 /mob/living/carbon/human/proc/is_virile()
 	var/obj/item/organ/testicles/testicles = getorganslot(ORGAN_SLOT_TESTICLES)
 	return testicles.virility
+
+/mob/living/carbon/human/after_creation()
+	..()
+	// Validate genitals after creation
+	var/has_genitals = FALSE
+	for(var/obj/item/organ/O in internal_organs)
+		if(istype(O, /obj/item/organ/vagina) || istype(O, /obj/item/organ/penis))
+			if(!(O.organ_flags & ORGAN_FAILING))
+				has_genitals = TRUE
+				break
+	
+	if(!has_genitals)
+		to_chat(src, span_warning("Invalid body configuration detected. Adding default genitals..."))
+		var/obj/item/organ/vagina/V = new()
+		V.Insert(src)

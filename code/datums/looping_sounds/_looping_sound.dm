@@ -56,8 +56,8 @@
 	stopped = FALSE
 	if(add_thing)
 		output_atoms |= add_thing
-//	if(timerid)
-//		return
+	if(timerid)
+		return
 	on_start()
 
 /datum/looping_sound/proc/stop(atom/remove_thing)
@@ -66,13 +66,11 @@
 		if(remove_thing)
 			output_atoms -= remove_thing
 		on_stop()
-//		if(!timerid)
-//			return
-//		deltimer(timerid)
-//		timerid = null
+		if(timerid)
+			deltimer(timerid)
+			timerid = null
 
 /datum/looping_sound/proc/sound_loop(starttime)
-//	START_PROCESSING(SSsoundloopers, src)
 	if(!cursound)
 		cursound = get_sound(starttime)
 	if(max_loops && world.time >= starttime + mid_length * max_loops)
@@ -83,8 +81,8 @@
 		return
 	if(!chance || prob(chance))
 		play(cursound)
-//	if(!timerid)
-//		timerid = addtimer(CALLBACK(src, PROC_REF(sound_loop), world.time), mid_length, TIMER_CLIENT_TIME | TIMER_STOPPABLE | TIMER_LOOP)
+	if(!timerid)
+		timerid = addtimer(CALLBACK(src, PROC_REF(sound_loop), world.time), mid_length, TIMER_CLIENT_TIME | TIMER_STOPPABLE | TIMER_LOOP)
 
 /datum/looping_sound/proc/play(soundfile)
 	var/list/atoms_cache = output_atoms
@@ -143,27 +141,16 @@
 	START_PROCESSING(SSsoundloopers, src)
 
 /datum/looping_sound/proc/on_stop()
-//	play(end_sound)
 	STOP_PROCESSING(SSsoundloopers, src)
 	for(var/mob/M in thingshearing)
 		if(M.client)
 			var/list/L = M.client.played_loops[src]
 			if(L)
-				testing("foundus")
 				var/sound/SD = L["SOUND"]
 				if(SD)
-					testing("foundus2")
 					M.stop_sound_channel(SD.channel)
 				M.client.played_loops -= src
 				thingshearing -= M
-/*
-/mob/proc/stop_all_loops()
-	if(client)
-		for(var/datum/looping_sound/X in client.played_loops)
-			var/list/L = client.played_loops[X]
-			var/sound/SD = L["SOUND"]
-			if(SD)
-				stop_sound_channel(SD.channel)
-			client.played_loops -= X
-			X.thingshearing -= src
-*/
+	if(timerid)
+		deltimer(timerid)
+		timerid = null

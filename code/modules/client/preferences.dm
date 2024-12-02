@@ -104,7 +104,10 @@ GLOBAL_LIST_EMPTY(chosen_names)
 	//Job preferences 2.0 - indexed by job title , no key or value implies never
 	var/list/job_preferences = list()
 
-		// Want randomjob if preferences already filled - Donkie
+	// Map of job title -> preferred advanced class
+	var/list/preferred_advclass = list()
+
+	// Want randomjob if preferences already filled - Donkie
 	var/joblessrole = RETURNTOLOBBY  //defaults to 1 for fewer assistants
 
 	// 0 = character settings, 1 = game preferences
@@ -165,6 +168,17 @@ GLOBAL_LIST_EMPTY(chosen_names)
 
 	var/ooc_notes
 
+	// Class preferences for each job
+	var/town_guard_class = null
+	var/sergeant_class = null
+	var/templar_class = null
+	var/knight_lieutenant_class = null
+	var/hand_class = null
+	var/squire_class = null
+	var/inquisitor_class = null
+	var/mercenary_class = null
+	var/heir_class = null
+
 /datum/preferences/New(client/C)
 	parent = C
 	migrant  = new /datum/migrant_pref(src)
@@ -217,6 +231,35 @@ GLOBAL_LIST_EMPTY(chosen_names)
 	reset_all_customizer_accessory_colors()
 	randomize_all_customizer_accessories()
 	reset_descriptors()
+	update_gender_customization()
+	
+	// Enforce genital rules
+	var/datum/customizer_entry/organ/penis/penis_entry
+	var/datum/customizer_entry/organ/vagina/vagina_entry
+	
+	for(var/datum/customizer_entry/entry as anything in customizer_entries)
+		if(istype(entry, /datum/customizer_entry/organ/penis))
+			penis_entry = entry
+		else if(istype(entry, /datum/customizer_entry/organ/vagina))
+			vagina_entry = entry
+	
+	// For males: Penis must always be enabled
+	if(gender == MALE && penis_entry)
+		penis_entry.disabled = FALSE
+	
+	// For females: Must have at least one genital enabled
+	else if(gender == FEMALE && penis_entry && vagina_entry)
+		// If both are disabled, enable vagina
+		if(penis_entry.disabled && vagina_entry.disabled)
+			vagina_entry.disabled = FALSE
+		// If penis is enabled, disable vagina
+		else if(!penis_entry.disabled)
+			vagina_entry.disabled = TRUE
+		// If vagina is enabled, disable penis
+		else if(!vagina_entry.disabled)
+			penis_entry.disabled = TRUE
+
+	update_preview_icon() // Update the preview mannequin when species changes
 
 #define APPEARANCE_CATEGORY_COLUMN "<td valign='top' width='14%'>"
 #define MAX_MUTANT_ROWS 4
@@ -227,6 +270,7 @@ GLOBAL_LIST_EMPTY(chosen_names)
 	if(slot_randomized)
 		load_character(default_slot) // Reloads the character slot. Prevents random features from overwriting the slot if saved.
 		slot_randomized = FALSE
+	update_preview_icon() // Ensure preview is shown when UI opens
 	var/list/dat = list("<center>")
 	if(tabchoice)
 		current_tab = tabchoice
@@ -928,6 +972,33 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 			HTML += "<font color=[prefLevelColor]>[prefLevelLabel]</font>"
 			HTML += "</a></td></tr>"
 
+			// Add advclass selection for jobs with advanced classes
+			if(job.advclass_cat_rolls?.len && job_preferences[job.title] != null && job.title != "Towner" && job.title != "Vagabond")
+				HTML += "<tr bgcolor='#000000'><td width='60%' align='right'>"
+				HTML += "Class:</td><td><a href='?_src_=prefs;preference=advclass;job=[rank]'>"
+				var/selected_class
+				switch(rank)
+					if("Town Guard")
+						selected_class = town_guard_class
+					if("Sergeant at Arms")
+						selected_class = sergeant_class
+					if("Templar")
+						selected_class = templar_class
+					if("Knight Lieutenant")
+						selected_class = knight_lieutenant_class
+					if("Hand")
+						selected_class = hand_class
+					if("Squire")
+						selected_class = squire_class
+					if("Inquisitor")
+						selected_class = inquisitor_class
+					if("Mercenary")
+						selected_class = mercenary_class
+					if("Heir")
+						selected_class = heir_class
+				HTML += "[selected_class ? selected_class : "Random"]"
+				HTML += "</a></td></tr>"
+
 		for(var/i = 1, i < (limit - index), i += 1) // Finish the column so it is even
 			HTML += "<tr bgcolor='000000'><td width='60%' align='right'>&nbsp</td><td>&nbsp</td></tr>"
 
@@ -988,6 +1059,8 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 			jpval = JP_MEDIUM
 		if(1)
 			jpval = JP_HIGH
+		else
+			jpval = null
 
 	if(job.required && !isnull(job.min_pq) && (get_playerquality(user.ckey) < job.min_pq))
 		if(job_preferences[job.title] == JP_LOW)
@@ -1129,7 +1202,7 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 				dat += "<label>[kb.full_name]</label> <a href ='?_src_=prefs;preference=keybinds;task=keybindings_capture;keybinding=[kb.name];old_key=[bound_key]'>[bound_key]</a>"
 				for(var/bound_key_index in 2 to length(user_binds[kb.name]))
 					bound_key = user_binds[kb.name][bound_key_index]
-					dat += " | <a href ='?_src_=prefs;preference=keybindings_capture;keybinding=[kb.name];old_key=[bound_key]'>[bound_key]</a>"
+					dat += " | <a href ='?_src_=prefs;preference=keybinds;task=keybindings_capture;keybinding=[kb.name];old_key=[bound_key]'>[bound_key]</a>"
 				if(length(user_binds[kb.name]) < MAX_KEYS_PER_KEYBIND)
 					dat += "| <a href ='?_src_=prefs;preference=keybindings_capture;keybinding=[kb.name]'>Add Secondary</a>"
 				dat += "<br>"
@@ -1408,20 +1481,19 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 					key_bindings[old_key] -= kb_name
 					if(!length(key_bindings[old_key]))
 						key_bindings -= old_key
-				key_bindings[full_key] += list(kb_name)
-				key_bindings[full_key] = sortList(key_bindings[full_key])
+					key_bindings[full_key] += list(kb_name)
+					key_bindings[full_key] = sortList(key_bindings[full_key])
 
-				user << browse(null, "window=capturekeypress")
-				user.client.update_movement_keys()
-				save_preferences()
-				SetKeybinds(user)
+					user << browse(null, "window=capturekeypress")
+					user.client.update_movement_keys()
+					save_preferences()
+					SetKeybinds(user)
 
 			if("keybindings_reset")
 				var/choice = tgalert(user, "Do you really want to reset your keybindings?", "Setup keybindings", "Do It", "Cancel")
 				if(choice == "Cancel")
 					ShowChoices(user,3)
 					return
-				hotkeys = (choice == "Do It")
 				key_bindings = (hotkeys) ? deepCopyList(GLOB.hotkey_keybinding_list_by_key) : deepCopyList(GLOB.classic_keybinding_list_by_key)
 				user.client.update_movement_keys()
 				SetKeybinds(user)
@@ -1964,7 +2036,6 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 					if(choice == "Cancel")
 						ShowChoices(user,3)
 						return
-					hotkeys = (choice == "Do It")
 					key_bindings = (hotkeys) ? deepCopyList(GLOB.hotkey_keybinding_list_by_key) : deepCopyList(GLOB.classic_keybinding_list_by_key)
 					user.client.update_movement_keys()
 					SetKeybinds(user)
@@ -2152,6 +2223,74 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 				if("tab")
 					if (href_list["tab"])
 						current_tab = text2num(href_list["tab"])
+
+				if("advclass")
+					var/job = href_list["job"]
+					var/list/available_classes = list("Random")
+					var/list/class_tutorials = list()  // Store tutorials for each class
+					
+					// Get the appropriate class type based on job
+					var/class_type
+					switch(job)
+						if("Town Guard")
+							class_type = /datum/advclass/watchman
+						if("Sergeant at Arms")
+							class_type = /datum/advclass/manorguard
+						if("Templar")
+							class_type = /datum/advclass/templar
+						if("Knight Lieutenant")
+							class_type = /datum/advclass/knight
+						if("Hand")
+							class_type = /datum/advclass/hand
+						if("Squire")
+							class_type = /datum/advclass/squire
+						if("Inquisitor")
+							class_type = /datum/advclass/inquisitor
+						if("Mercenary")
+							class_type = /datum/advclass/mercenary
+						if("Heir")
+							class_type = /datum/advclass/heir
+					
+					if(class_type)
+						for(var/type in subtypesof(class_type))
+							var/datum/advclass/AC = new type()
+							if(AC.name)
+								// Check if class is allowed for player's race
+								if(!AC.allowed_races?.len || (pref_species.type in AC.allowed_races))
+									available_classes += AC.name
+									class_tutorials[AC.name] = AC.tutorial
+							qdel(AC)
+					
+					var/choice = input(user, "Choose your preferred class for [job]:", "Class Selection") as null|anything in available_classes
+					if(choice)
+						switch(job)
+							if("Town Guard")
+								town_guard_class = (choice == "Random" ? null : choice)
+							if("Sergeant at Arms")
+								sergeant_class = (choice == "Random" ? null : choice)
+							if("Templar")
+								templar_class = (choice == "Random" ? null : choice)
+							if("Knight Lieutenant")
+								knight_lieutenant_class = (choice == "Random" ? null : choice)
+							if("Hand")
+								hand_class = (choice == "Random" ? null : choice)
+							if("Squire")
+								squire_class = (choice == "Random" ? null : choice)
+							if("Inquisitor")
+								inquisitor_class = (choice == "Random" ? null : choice)
+							if("Mercenary")
+								mercenary_class = (choice == "Random" ? null : choice)
+							if("Heir")
+								heir_class = (choice == "Random" ? null : choice)
+						
+						// Show tutorial text if a class was selected
+						if(choice != "Random")
+							to_chat(user, span_notice("<b>[choice]:</b> [class_tutorials[choice]]"))
+						
+						// Refresh the job preferences window
+						SetChoices(user)
+					else
+						ShowChoices(user)
 
 	ShowChoices(user)
 	return 1
@@ -2354,7 +2493,6 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 	for(var/datum/customizer_entry/entry as anything in customizer_entries)
 		if(!istype(entry, /datum/customizer_entry/organ/penis) && !istype(entry, /datum/customizer_entry/organ/vagina) && !istype(entry, /datum/customizer_entry/organ/breasts) && !istype(entry, /datum/customizer_entry/organ/testicles))
 			new_entries += entry
-			new_entries += entry
 	
 	var/datum/species/species = pref_species
 	var/list/customizers = species.customizers
@@ -2408,6 +2546,10 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
     // If no genitals are set, set defaults based on gender
     if(!has_penis && !has_vagina)
         if(gender == MALE)
+            pronouns = "he/him"
+            voice_type = "Masculine"
             update_gender_customization() // This will add default penis and testicles
         else if(gender == FEMALE)
+            pronouns = "she/her"
+            voice_type = "Feminine"
             update_gender_customization() // This will add default vagina

@@ -18,6 +18,8 @@
 		if(HAS_TRAIT(user, TRAIT_CHUNKYFINGERS))
 			to_chat(user, span_warning("...What?"))
 			return
+	if(ismob(target) && target == user && user.client?.tcompare)
+		return
 	if(tool_behaviour && target.tool_act(user, src, tool_behaviour))
 		return
 	if(pre_attack(target, user, params))
@@ -64,6 +66,7 @@
 
 /mob/living
 	var/tempatarget = null
+	var/pegleg = 0			//Handles check & slowdown for peglegs. Fuckin' bootleg, literally, but hey it at least works.
 
 /obj/item/proc/attack(mob/living/M, mob/living/user, params)
 	if(SEND_SIGNAL(src, COMSIG_ITEM_ATTACK, M, user) & COMPONENT_ITEM_NO_ATTACK)
