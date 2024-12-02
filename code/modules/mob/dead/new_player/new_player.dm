@@ -523,6 +523,11 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/rp_prompt.txt"))
 		alert(src, "Something went bad.")
 		return FALSE
 
+	// Final faith check to prevent faith-switching exploit
+	if(!(client?.prefs?.selected_patron?.type in ALL_DIVINE_PATRONS))
+		to_chat(src, span_warning("You may not latejoin as a heretic. Please set your faith to PSYDON."))
+		return FALSE
+
 	// Handle class selection for jobs with advanced classes
 	var/datum/job/latejoin_job = SSjob.GetJob(rank)
 	if(latejoin_job?.advclass_cat_rolls?.len)
