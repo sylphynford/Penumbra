@@ -184,10 +184,6 @@
 	var/damage_dividend = (total_dam / max_damage)
 	var/resistance = HAS_TRAIT(owner, TRAIT_CRITICAL_RESISTANCE)
 	
-	// Only allow non-cutting weapons to cause fractures/dislocations
-	if(!(bclass in list(BCLASS_BLUNT, BCLASS_SMASH, BCLASS_PUNCH, BCLASS_TWIST)))
-		return FALSE
-	
 	// Get complex damage like dismemberment does
 	var/nuforce = dam
 	if(user?.get_active_held_item())
@@ -210,27 +206,47 @@
 		damage_threshold = max_damage * 0.5 // Easier to break
 	
 	// GURPS style roll for fractures/dislocations
+	var/is_cutting = (bclass in list(BCLASS_CUT, BCLASS_CHOP, BCLASS_STAB, BCLASS_PICK))
 	if((bclass in GLOB.dislocation_bclasses) || (bclass in GLOB.fracture_bclasses))
+		if(is_cutting)
+			return FALSE
 		if(nuforce < 10)
 			return FALSE
 			
 		if(total_dam >= damage_threshold)
 			var/health_roll = 0
 			if(owner)
-				health_roll = owner.STACON || 10 // Default to 10 if no STACON stat
+				health_roll = owner.STACON || 10
 			
-			// Roll 3d6 and adjust based on difference from CON 10
+			// Calculate percentages for both total and single-hit damage
+			var/damage_percent = total_dam / max_damage
+			var/hit_percent = nuforce / max_damage
+
+			// Use whichever percentage is higher
+			var/effective_percent = max(damage_percent, hit_percent)
+			
+			// Only start applying modifiers after 50% damage
+			var/scaled_percent = 0
+			if(effective_percent > 0.5)
+				// Convert the percentage above 50% into a modifier
+				// At 50% damage: +0 to roll
+				// At 100% damage: +5 to roll
+				// At 150% damage: +10 to roll (capped)
+				scaled_percent = ((effective_percent - 0.5) / 1.0) * 10
+				scaled_percent = min(scaled_percent, 10) // Cap at +10
+			
+			// Add percentage-based modifier
 			var/roll = rand(1,6) + rand(1,6) + rand(1,6) + (10 - health_roll)
+			roll += scaled_percent
 			
-			// At CON 10:
-			// 3-8 (33%): No wound
-			// 9-14 (33%): Dislocation
-			// 15-18 (33%): Fracture
-			if(roll <= 8) // No wound
+			// Check for wounds with adjusted thresholds
+			if(roll <= 10)
 				return FALSE
-			else if(roll <= 14) // Dislocation
+			else if(roll <= 13)  // 11-13 for dislocations
 				attempted_wounds += /datum/wound/dislocation
-			else // Fracture
+			else if(roll <= 15)  // 14-15 nothing happens (gap)
+				return FALSE
+			else                 // 16+ for fractures
 				if(HAS_TRAIT(src, TRAIT_BRITTLE))
 					attempted_wounds += /datum/wound/fracture
 				else

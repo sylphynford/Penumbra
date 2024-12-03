@@ -1,7 +1,6 @@
-
 /obj/item/rogueweapon/sword
+	force = 10
 	slot_flags = ITEM_SLOT_HIP | ITEM_SLOT_BACK
-	force = 22
 	possible_item_intents = list(/datum/intent/sword/cut, /datum/intent/sword/thrust)
 	gripped_intents = list(/datum/intent/sword/cut, /datum/intent/sword/thrust)
 	name = "sword"
@@ -84,7 +83,7 @@
 /obj/item/rogueweapon/sword/short
 	name = "short sword"
 	desc = "An archaic steel sword made for stabbing."
-	force = 19
+	force = 8
 	possible_item_intents = list(/datum/intent/sword/cut/short, /datum/intent/sword/thrust/short)
 	icon_state = "swordshort"
 	gripped_intents = null
@@ -103,7 +102,7 @@
 	wdefense = 6
 
 /obj/item/rogueweapon/sword/long
-	force = 25
+	force = 12
 	possible_item_intents = list(/datum/intent/sword/cut, /datum/intent/sword/thrust, /datum/intent/sword/strike)
 	gripped_intents = list(/datum/intent/sword/cut, /datum/intent/sword/thrust, /datum/intent/sword/strike, /datum/intent/sword/chop)
 	icon_state = "longsword"

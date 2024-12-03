@@ -334,13 +334,13 @@
 		if(ALIEN_BODYPART,LARVA_BODYPART) //aliens take double burn //nothing can burn with so much snowflake code around
 			burn *= 2
 
-	//cap at maxdamage
-	if(brute_dam + brute > max_damage)
-		brute_dam = max_damage
+	//cap at max_damage * 2
+	if(brute_dam + brute > max_damage * 2)
+		brute_dam = max_damage * 2
 	else
 		brute_dam += brute
-	if(burn_dam + burn > max_damage)
-		burn_dam = max_damage
+	if(burn_dam + burn > max_damage * 2)
+		burn_dam = max_damage * 2
 	else
 		burn_dam += burn
 
