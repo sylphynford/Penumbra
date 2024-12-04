@@ -70,8 +70,6 @@
 
 	var/name_override //For temporary visible name changes
 
-	var/datum/physiology/physiology
-
 	var/list/datum/bioware = list()
 
 	var/static/list/can_ride_typecache = typecacheof(list(/mob/living/carbon/human, /mob/living/simple_animal/slime, /mob/living/simple_animal/parrot))

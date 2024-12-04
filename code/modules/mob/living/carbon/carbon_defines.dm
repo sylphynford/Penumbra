@@ -32,6 +32,7 @@
 	var/obj/item/tank/internal = null
 	var/obj/item/clothing/head = null
 
+	var/datum/physiology/physiology // Physiology for carbon mobs
 
 	///only used by humans
 	var/obj/item/clothing/gloves = null

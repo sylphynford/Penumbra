@@ -11,7 +11,6 @@
 		. += glasses.flash_protect
 	if(isclothing(wear_mask)) //Mask
 		. += wear_mask.flash_protect
-
 /mob/living/carbon/get_ear_protection()
 	. = ..()
 	var/obj/item/organ/ears/E = getorganslot(ORGAN_SLOT_EARS)
@@ -207,21 +206,18 @@
 		next_attack_msg.Cut()
 		
 		// Apply armor reduction first
-		var/armor_reduction = 1
-		if(iscarbon(src))
-			var/mob/living/carbon/carbon_target = src
-			armor_reduction = (1 - (carbon_target.checkcritarmor(useder, user.used_intent.blade_class) / 100))
+		var/armor_value = run_armor_check(useder, user.used_intent.blade_class)
+		var/armor_reduction = (1 - (armor_value / 100))
 		
 		// Calculate base damage after armor
 		var/base_damage = statforce * armor_reduction
 		
 		// Apply species and physiology modifiers for brute tracking
 		var/brute_damage = base_damage
-		if(iscarbon(src))
-			var/mob/living/carbon/carbon_target = src
-			if(carbon_target.dna?.species)
-				brute_damage *= carbon_target.dna.species.brutemod
-			brute_damage *= carbon_target.physiology.brute_mod
+		if(dna?.species)
+			brute_damage *= dna.species.brutemod
+		if(physiology)
+			brute_damage *= physiology.brute_mod
 		
 		// Apply damage to limb - constitution is handled inside bodypart_attacked_by
 		affecting.bodypart_attacked_by(user.used_intent.blade_class, base_damage, user, useder, crit_message = TRUE)
@@ -629,3 +625,4 @@
 	var/obj/item/organ/ears/ears = getorganslot(ORGAN_SLOT_EARS)
 	if(istype(ears) && !ears.deaf)
 		. = TRUE
+
