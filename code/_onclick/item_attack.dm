@@ -86,10 +86,10 @@ var/global/current_attack_crit = FALSE
 	if(force)
 		var/roll = rand(1,6) + rand(1,6) + rand(1,6)
 		//to_chat(user, "DEBUG: Roll is [roll]")
-		if(roll >= 17)
+		if(roll >= 18)
 			global.current_attack_crit = TRUE
 			//to_chat(user, "DEBUG: Critical success set to TRUE")
-		else if(roll <= 4)
+		else if(roll <= 3)
 			//to_chat(user, "DEBUG: Critical failure! Roll: [roll]")
 			var/fail_type = rand(1,3)
 			switch(fail_type)
