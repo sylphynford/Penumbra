@@ -75,6 +75,15 @@ GLOBAL_LIST_INIT(primordial_wounds, init_primordial_wounds())
 	/// Some wounds make no sense on a dismembered limb and need to go
 	var/qdel_on_droplimb = FALSE
 
+	/// The original unscaled bleed rate before constitution scaling
+	var/base_bleed_rate
+	/// The original unscaled sewn bleed rate
+	var/base_sewn_bleed_rate
+	/// The original unscaled clotting threshold
+	var/base_clotting_threshold
+	/// The original unscaled sewn clotting threshold 
+	var/base_sewn_clotting_threshold
+
 /datum/wound/Destroy(force)
 	. = ..()
 	if(zombie_infection_timer)
@@ -163,6 +172,15 @@ GLOBAL_LIST_INIT(primordial_wounds, init_primordial_wounds())
 	sortTim(affected.wounds, GLOBAL_PROC_REF(cmp_wound_severity_dsc))
 	bodypart_owner = affected
 	owner = bodypart_owner.owner
+	
+	// Store original values before scaling
+	if(!isnull(bleed_rate))
+		base_bleed_rate = bleed_rate
+		base_sewn_bleed_rate = sewn_bleed_rate
+		base_clotting_threshold = clotting_threshold
+		base_sewn_clotting_threshold = sewn_clotting_threshold
+		update_bleed_rate()
+
 	on_bodypart_gain(affected)
 	on_mob_gain(affected.owner)
 	if(crit_message)
@@ -174,6 +192,22 @@ GLOBAL_LIST_INIT(primordial_wounds, init_primordial_wounds())
 		if(sounding)
 			playsound(affected.owner, sounding, 100, vary = FALSE)
 	return TRUE
+
+/// Updates bleeding rates based on current constitution
+/datum/wound/proc/update_bleed_rate()
+	if(isnull(base_bleed_rate) || !owner?.STACON)
+		return
+	
+	var/con_scale = (20 - owner.STACON) / 10 // CON 20 = 0x, CON 15 = 0.5x, CON 10 = 1x, CON 5 = 1.5x
+	con_scale = max(0, con_scale) // Can't have negative bleeding
+	
+	bleed_rate = base_bleed_rate * con_scale
+	if(!isnull(base_sewn_bleed_rate))
+		sewn_bleed_rate = base_sewn_bleed_rate * con_scale
+	if(!isnull(base_clotting_threshold))
+		clotting_threshold = base_clotting_threshold * con_scale
+	if(!isnull(base_sewn_clotting_threshold))
+		sewn_clotting_threshold = base_sewn_clotting_threshold * con_scale
 
 /// Effects when a wound is gained on a bodypart
 /datum/wound/proc/on_bodypart_gain(obj/item/bodypart/affected)
@@ -263,10 +297,9 @@ GLOBAL_LIST_INIT(primordial_wounds, init_primordial_wounds())
 
 /// Called on handle_wounds(), on the life() proc
 /datum/wound/proc/on_life()
-	if(whp <= 0)
-		return FALSE
-	if(!isnull(clotting_threshold) && clotting_rate && (bleed_rate > clotting_threshold))
-		bleed_rate = max(clotting_threshold, bleed_rate - clotting_rate)
+	update_bleed_rate() // Update bleeding based on current constitution
+	if(!isnull(clotting_rate) && !isnull(clotting_threshold) && (bleed_rate > clotting_threshold))
+		bleed_rate = max(bleed_rate - clotting_rate, clotting_threshold)
 	if(passive_healing)
 		heal_wound(passive_healing)
 	return TRUE

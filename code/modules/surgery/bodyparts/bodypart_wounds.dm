@@ -210,8 +210,6 @@
 	if((bclass in GLOB.dislocation_bclasses) || (bclass in GLOB.fracture_bclasses))
 		if(is_cutting)
 			return FALSE
-		if(nuforce < 10)
-			return FALSE
 			
 		// Check if damage is enough to wound
 		// Either by reaching threshold (50% HP) OR by dealing massive damage in one hit
@@ -244,30 +242,15 @@
 				else
 					attempted_wounds += /datum/wound/fracture
 
-	// GURPS style roll for artery wounds
+	// Check for artery hits - 1d6, hit on 1 JUST LIKE LIFEWEB!
 	if(bclass in GLOB.artery_bclasses)
-		var/artery_threshold = max_damage * 0.5 // Always 50% max health for arteries
-		if(total_dam >= artery_threshold) // Must be at half health
-			var/health_roll = 0
-			if(owner)
-				health_roll = owner.STACON || 10 // Default to 10 if no STACON stat
-			
-			// Roll 3d6 and adjust based on difference from CON 10
-			var/roll = rand(1,6) + rand(1,6) + rand(1,6) + (10 - health_roll)
-			
-			// At CON 10:
-			// 3-9 (~33%): No wound
-			// 10-12 (~33%): Minor bleed
-			// 13+ (~33%): Artery hit
-			if(roll <= 9) // No wound
-				return FALSE
-			else if(roll <= 12) // Minor bleed - no artery wound
-				return FALSE
-			else // Artery hit
-				var/artery_type = /datum/wound/artery
-				if(zone_precise == BODY_ZONE_PRECISE_NECK)
-					artery_type = /datum/wound/artery/neck
-				attempted_wounds += artery_type
+		if(nuforce < 5)
+			return FALSE
+		if(rand(1,6) == 1) 
+			var/artery_type = /datum/wound/artery
+			if(zone_precise == BODY_ZONE_PRECISE_NECK)
+				artery_type = /datum/wound/artery/neck
+			attempted_wounds += artery_type
 
 	for(var/wound_type in shuffle(attempted_wounds))
 		var/datum/wound/applied = add_wound(wound_type, silent, crit_message)
