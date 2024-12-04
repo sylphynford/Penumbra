@@ -1633,7 +1633,8 @@ GLOBAL_LIST_EMPTY(roundstart_races)
 
 	//dismemberment
 	var/bloody = 0
-	if(affecting.brute_dam >= affecting.max_damage * 0.5 && affecting.dismember(I.damtype, user.used_intent?.blade_class, user, selzone))
+	var/dam_zone = affecting.body_zone
+	if(H.dismembering_strike(user, dam_zone) == null)  // Use dismembering_strike
 		bloody = 1
 		I.add_mob_blood(H)
 		user.update_inv_hands()

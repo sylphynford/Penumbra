@@ -121,8 +121,7 @@
 	var/do_crit = TRUE
 	if(ishuman(owner))
 		var/mob/living/carbon/human/human_owner = owner
-		if(human_owner.checkcritarmor(zone_precise, bclass))
-			return FALSE
+		dam = dam * (1 - (human_owner.checkcritarmor(zone_precise, bclass) / 100))
 	if(user)
 		if(user.goodluck(2))
 			dam += 10
@@ -189,6 +188,10 @@
 	if(user?.get_active_held_item())
 		var/obj/item/I = user.get_active_held_item()
 		nuforce = get_complex_damage(I, user)
+		// Apply armor reduction to nuforce as well
+		if(ishuman(owner))
+			var/mob/living/carbon/human/human_owner = owner
+			nuforce = nuforce * (1 - (human_owner.checkcritarmor(zone_precise, bclass) / 100))
 	
 	// Calculate damage threshold based on traits
 	var/hard_break = HAS_TRAIT(src, TRAIT_HARDDISMEMBER)
@@ -218,11 +221,7 @@
 			if(owner)
 				health_roll = owner.STACON || 10
 			
-			// HT scaling
-			// HT 10 = +0
-			// HT 15 = +8 (3x tougher)
-			// HT 20 = +16 (9x tougher)
-			var/ht_bonus = max(0, (health_roll - 10) * 1.6)
+			var/ht_bonus = max(0, (health_roll - 10) * 1.5)
 			
 			// Damage impact - each 2 points of damage adds +1 to roll
 			var/damage_mod = round(nuforce / 2)

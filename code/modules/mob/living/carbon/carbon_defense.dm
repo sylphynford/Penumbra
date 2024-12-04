@@ -234,8 +234,8 @@
 		send_item_attack_message(I, user, affecting.name)
 
 	if(statforce)
-		var/probability = I.get_dismemberment_chance(affecting, user)
-		if(prob(probability) && affecting.dismember(I.damtype, user.used_intent?.blade_class, user, user.zone_selected))
+		var/dam_zone = affecting?.body_zone
+		if(dismembering_strike(user, dam_zone))
 			I.add_mob_blood(src)
 			playsound(get_turf(src), I.get_dismember_sound(), 80, TRUE)
 		return TRUE //successful attack
@@ -337,10 +337,12 @@
 		return 1
 
 /mob/living/carbon/proc/dismembering_strike(mob/living/attacker, dam_zone)
-	if(!attacker.limb_destroyer)
+	var/obj/item/I = attacker.get_active_held_item()
+	if(!attacker.limb_destroyer && (!istype(I, /obj/item/rogueweapon)))
 		return dam_zone
-	if(attacker.a_intent.blade_class != BCLASS_CHOP && attacker.a_intent.blade_class != BCLASS_CUT)
+	if(!I.get_sharpness())
 		return dam_zone
+	
 	var/obj/item/bodypart/affecting
 	if(dam_zone && attacker.client)
 		affecting = get_bodypart(dam_zone)
@@ -351,13 +353,61 @@
 			if(bodypart.dismemberable)
 				affecting = bodypart
 				break
-	if(affecting)
-		dam_zone = affecting.body_zone
-		if(affecting.get_damage() >= affecting.max_damage)
-			affecting.dismember(BRUTE, attacker.a_intent.blade_class, attacker, attacker.zone_selected)
-			return null
+	
+	if(!affecting || !affecting.dismemberable)
+		return dam_zone
+		
+	// Get complex damage
+	var/nuforce = get_complex_damage(I, attacker)
+	
+	// Check blade integrity
+	if(I.max_blade_int && I.dismember_blade_int)
+		var/blade_int_modifier = (I.blade_int / I.dismember_blade_int)
+		if(blade_int_modifier <= 0.15)
+			return affecting.body_zone
+		nuforce *= blade_int_modifier
+	
+	// Check attack intent
+	if(istype(attacker.rmb_intent, /datum/rmb_intent/weak))
 		return affecting.body_zone
-	return dam_zone
+	else if(istype(attacker.rmb_intent, /datum/rmb_intent/strong))
+		nuforce *= 1.1
+	
+	// Calculate threshold based on traits
+	var/damage_threshold = affecting.max_damage * 0.5
+	var/hard_break = HAS_TRAIT(affecting, TRAIT_HARDDISMEMBER) || HAS_TRAIT(src, TRAIT_HARDDISMEMBER)
+	var/easy_break = affecting.rotted || affecting.skeletonized || HAS_TRAIT(affecting, TRAIT_EASYDISMEMBER) || HAS_TRAIT(src, TRAIT_EASYDISMEMBER)
+	
+	if(hard_break)
+		damage_threshold = affecting.max_damage * 1
+	else if(easy_break)
+		damage_threshold = affecting.max_damage * 0.1
+	
+	// Check total damage vs threshold
+	var/total_dam = affecting.get_damage()
+	if(total_dam >= damage_threshold || nuforce >= (affecting.max_damage * 0.5))
+		// Do constitution check
+		var/health_roll = src.STACON || 10
+		var/ht_bonus = max(0, (health_roll - 10) * 1.6)
+		var/damage_mod = round(nuforce / 2)
+		
+		// Roll for dismemberment
+		var/roll = rand(1,6) + rand(1,6) + rand(1,6) + damage_mod - ht_bonus
+		
+		if(roll <= 11)  // 50% chance for no wound at HT 10
+			return affecting.body_zone
+		else if(roll <= 14)  // 12-14 light dismemberment (~7.41% at HT 15)
+			var/dismember_chance = hard_break ? 50 : (easy_break ? 150 : 100)
+			if(prob(dismember_chance) && affecting.dismember(I.damtype, attacker.used_intent?.blade_class, attacker, dam_zone))
+				return null
+		else if(roll == 15)  // 15 nothing happens (~1.85% at HT 15)
+			return affecting.body_zone
+		else  // 16+ heavy dismemberment (~1.85% at HT 15)
+			var/dismember_chance = hard_break ? 100 : (easy_break ? 200 : 150)
+			if(prob(dismember_chance) && affecting.dismember(I.damtype, attacker.used_intent?.blade_class, attacker, dam_zone))
+				return null
+	
+	return affecting.body_zone
 
 
 /mob/living/carbon/blob_act(obj/structure/blob/B)
