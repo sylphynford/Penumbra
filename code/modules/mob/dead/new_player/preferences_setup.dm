@@ -96,8 +96,6 @@
 				selected_class = town_guard_class
 			if("Sergeant at Arms")
 				selected_class = sergeant_class
-			if("Templar")
-				selected_class = templar_class
 			if("Knight Lieutenant")
 				selected_class = knight_lieutenant_class
 			if("Hand")

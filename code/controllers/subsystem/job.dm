@@ -95,6 +95,33 @@ SUBSYSTEM_DEF(job)
 			return FALSE
 		if(job.required_playtime_remaining(player.client))
 			return FALSE
+
+		// Check for Templar-Inquisitor dependency during both roundstart and latejoin
+		if(rank == "Templar")
+			var/inquisitor_exists = FALSE
+			if(!latejoin)
+				// During roundstart, check if anyone has Inquisitor as their highest preference
+				for(var/mob/dead/new_player/P in GLOB.new_player_list)
+					if(P.client?.prefs?.job_preferences["Inquisitor"] == JP_HIGH)
+						inquisitor_exists = TRUE
+						break
+			else
+				// During latejoin, check if there is or was an Inquisitor
+				for(var/mob/living/carbon/human/H in GLOB.human_list)
+					if(H.mind?.assigned_role == "Inquisitor")
+						inquisitor_exists = TRUE
+						break
+				if(!inquisitor_exists)
+					for(var/datum/mind/M in SSticker.minds)
+						if(M.assigned_role == "Inquisitor")
+							inquisitor_exists = TRUE
+							break
+
+			if(!inquisitor_exists)
+				player.client.prefs.job_preferences[rank] = 0  // Set preference to 0 instead of removing
+				to_chat(player, "<span class='warning'>You have been removed from Templar selection as there is no Inquisitor.</span>")
+				return FALSE
+
 		var/position_limit = job.total_positions
 		if(!latejoin)
 			position_limit = job.spawn_positions

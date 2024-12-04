@@ -241,7 +241,6 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	//Class preferences
 	S["town_guard_class"] >> town_guard_class
 	S["sergeant_class"] >> sergeant_class
-	S["templar_class"] >> templar_class
 	S["knight_lieutenant_class"] >> knight_lieutenant_class
 	S["hand_class"] >> hand_class
 	S["squire_class"] >> squire_class
@@ -251,7 +250,6 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	//Sanitize
 	town_guard_class = sanitize_text(town_guard_class)
 	sergeant_class = sanitize_text(sergeant_class)
-	templar_class = sanitize_text(templar_class)
 	knight_lieutenant_class = sanitize_text(knight_lieutenant_class)
 	hand_class = sanitize_text(hand_class)
 	squire_class = sanitize_text(squire_class)
@@ -322,7 +320,6 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	//Class preferences
 	S["town_guard_class"] << town_guard_class
 	S["sergeant_class"] << sergeant_class
-	S["templar_class"] << templar_class
 	S["knight_lieutenant_class"] << knight_lieutenant_class
 	S["hand_class"] << hand_class
 	S["squire_class"] << squire_class

@@ -253,7 +253,6 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/rp_prompt.txt"))
 			
 			if(!ruler)
 				to_chat(src, "<span class='warning'>There must be a Baron/Baroness for you to join as Consort!</span>")
-				message_admins("DEBUG: Consort join failed - No ruler found")
 				return
 			
 			// Get player genital preferences from customizer entries
@@ -281,6 +280,24 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/rp_prompt.txt"))
 				to_chat(src, "<span class='warning'>You cannot join as Consort due to having the same genitals as the [ruler.mind.assigned_role]!</span>")
 				return
 
+		if(href_list["SelectedJob"] == "Templar")
+			var/inquisitor_exists = FALSE
+			// Check current living Inquisitors
+			for(var/mob/living/carbon/human/potential_inquisitor in GLOB.human_list)
+				if(potential_inquisitor?.mind?.assigned_role == "Inquisitor")
+					inquisitor_exists = TRUE
+					break
+			
+			// If no living Inquisitor found, check if there was ever one this round
+			if(!inquisitor_exists)
+				for(var/datum/mind/M in SSticker.minds)
+					if(M.assigned_role == "Inquisitor")
+						inquisitor_exists = TRUE
+						break
+			
+			if(!inquisitor_exists)
+				to_chat(src, "<span class='warning'>There must be or have been an Inquisitor for you to join as Templar!</span>")
+				return
 
 		if(!SSticker?.IsRoundInProgress())
 			to_chat(usr, span_danger("The round is either not ready, or has already finished..."))
@@ -495,17 +512,18 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/rp_prompt.txt"))
 		if(job.title == "Assistant")
 			if(isnum(client.player_age) && client.player_age <= 14) //Newbies can always be assistants
 				return JOB_AVAILABLE
+			var/can_be_assistant = FALSE
 			for(var/datum/job/J in SSjob.occupations)
 				if(J && J.current_positions < J.total_positions && J.title != job.title)
-					return JOB_UNAVAILABLE_SLOTFULL
+					can_be_assistant = TRUE
+					break
+			if(!can_be_assistant)
+				return JOB_UNAVAILABLE_SLOTFULL
 		else
 			return JOB_UNAVAILABLE_SLOTFULL
-//	if(job.title == "Adventurer" && latejoin)
-//		for(var/datum/job/J in SSjob.occupations)
-//			if(J && J.total_positions && J.current_positions < 1 && J.title != job.title && (IsJobUnavailable(J.title))
-//				return JOB_UNAVAILABLE_GENERIC //we can't play adventurer if there isn't 1 of every other job that we can play
 	if(latejoin && !job.special_check_latejoin(client))
 		return JOB_UNAVAILABLE_GENERIC
+
 	return JOB_AVAILABLE
 
 /mob/dead/new_player/proc/AttemptLateSpawn(rank)
@@ -531,72 +549,85 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/rp_prompt.txt"))
 	var/datum/job/latejoin_job = SSjob.GetJob(rank)
 	if(latejoin_job?.advclass_cat_rolls?.len)
 		var/client/C = src.client
-		var/list/available_classes = list()
-		var/class_type
-		switch(rank)
-			if("Town Guard")
-				class_type = /datum/advclass/watchman
-			if("Sergeant at Arms")
-				class_type = /datum/advclass/manorguard
-			if("Templar")
-				class_type = /datum/advclass/templar
-			if("Knight Lieutenant")
-				class_type = /datum/advclass/knight
-			if("Hand")
-				class_type = /datum/advclass/hand
-			if("Squire")
-				class_type = /datum/advclass/squire
-			if("Inquisitor")
-				class_type = /datum/advclass/inquisitor
-			if("Mercenary")
-				class_type = /datum/advclass/mercenary
-			if("Heir")
-				class_type = /datum/advclass/heir
+		// Skip class selection for Templars as their class is determined by Inquisitor
+		if(rank == "Templar")
+			var/inquisitor_class
+			for(var/mob/living/carbon/human/inq in GLOB.human_list)
+				if(inq.mind?.assigned_role == "Inquisitor")
+					inquisitor_class = inq.client?.prefs?.inquisitor_class
+					break
+			if(!inquisitor_class)
+				for(var/datum/mind/M in SSticker.minds)
+					if(M.assigned_role == "Inquisitor")
+						var/client/inq_client = GLOB.directory[M.key]
+						if(inq_client?.prefs?.inquisitor_class)
+							inquisitor_class = inq_client.prefs.inquisitor_class
+							break
+			
+			// The class will be determined during after_spawn based on Inquisitor's class
+		else
+			var/list/available_classes = list()
+			var/class_type
+			switch(rank)
+				if("Town Guard")
+					class_type = /datum/advclass/watchman
+				if("Sergeant at Arms")
+					class_type = /datum/advclass/manorguard
+				if("Knight Lieutenant")
+					class_type = /datum/advclass/knight
+				if("Hand")
+					class_type = /datum/advclass/hand
+				if("Squire")
+					class_type = /datum/advclass/squire
+				if("Inquisitor")
+					class_type = /datum/advclass/inquisitor
+				if("Mercenary")
+					class_type = /datum/advclass/mercenary
+				if("Heir")
+					class_type = /datum/advclass/heir
 
-		if(class_type)
-			for(var/type in subtypesof(class_type))
-				var/datum/advclass/AC = new type()
-				if(AC.name)
-					if(!AC.allowed_races?.len || (C?.prefs?.pref_species?.type in AC.allowed_races))
-						available_classes += AC.name
-				qdel(AC)
-
-			var/choice = input(src, "Choose your class:", "Class Selection") as null|anything in available_classes
-			if(choice)
-				// Get the tutorial text for the selected class
-				var/tutorial_text
+			if(class_type)
 				for(var/type in subtypesof(class_type))
 					var/datum/advclass/AC = new type()
-					if(AC.name == choice)
-						tutorial_text = AC.tutorial
-						qdel(AC)
-						break
-				
-				// Show confirmation window with tutorial text
-				var/confirm = alert(src, "[tutorial_text]\n\nDo you want to spawn as [choice]?", "Confirm Class Selection", "Yes", "No")
-				if(confirm == "Yes")
-					switch(rank)
-						if("Town Guard")
-							C.prefs.town_guard_class = choice
-						if("Sergeant at Arms")
-							C.prefs.sergeant_class = choice
-						if("Templar")
-							C.prefs.templar_class = choice
-						if("Knight Lieutenant")
-							C.prefs.knight_lieutenant_class = choice
-						if("Hand")
-							C.prefs.hand_class = choice
-						if("Squire")
-							C.prefs.squire_class = choice
-						if("Inquisitor")
-							C.prefs.inquisitor_class = choice
-						if("Mercenary")
-							C.prefs.mercenary_class = choice
-						if("Heir")
-							C.prefs.heir_class = choice
-					C.prefs.save_preferences()
+					if(AC.name)
+						if(!AC.allowed_races?.len || (C?.prefs?.pref_species?.type in AC.allowed_races))
+							available_classes += AC.name
+					qdel(AC)
+
+				var/choice = input(src, "Choose your class:", "Class Selection") as null|anything in available_classes
+				if(choice)
+					// Get the tutorial text for the selected class
+					var/tutorial_text
+					for(var/type in subtypesof(class_type))
+						var/datum/advclass/AC = new type()
+						if(AC.name == choice)
+							tutorial_text = AC.tutorial
+							qdel(AC)
+							break
+					
+					// Show confirmation window with tutorial text
+					var/confirm = alert(src, "[tutorial_text]\n\nDo you want to spawn as [choice]?", "Confirm Class Selection", "Yes", "No")
+					if(confirm == "Yes")
+						switch(rank)
+							if("Town Guard")
+								C.prefs.town_guard_class = choice
+							if("Sergeant at Arms")
+								C.prefs.sergeant_class = choice
+							if("Knight Lieutenant")
+								C.prefs.knight_lieutenant_class = choice
+							if("Hand")
+								C.prefs.hand_class = choice
+							if("Squire")
+								C.prefs.squire_class = choice
+							if("Inquisitor")
+								C.prefs.inquisitor_class = choice
+							if("Mercenary")
+								C.prefs.mercenary_class = choice
+							if("Heir")
+								C.prefs.heir_class = choice
+						C.prefs.save_preferences()
 				else
-					return FALSE // Cancel spawn if they didn't confirm
+					return FALSE // Cancel spawn if they didn't pick a class
 			else
 				return FALSE // Cancel spawn if they didn't pick a class
 

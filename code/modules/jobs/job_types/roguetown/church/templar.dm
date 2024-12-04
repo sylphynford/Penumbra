@@ -32,53 +32,42 @@
 	..()
 	if(L && M?.client)
 		var/mob/living/carbon/human/H = L
-		var/list/valid_classes = list()
-		var/preferred_class = M.client?.prefs?.templar_class
-
-		// Build list of valid classes for this character
-		for(var/type in subtypesof(/datum/advclass/templar))
-			var/datum/advclass/templar/AC = new type()
-			if(!AC.name)
-				qdel(AC)
-				continue
-			
-			// Check if class is allowed for this player
-			if(AC.allowed_sexes?.len && !(H.gender in AC.allowed_sexes))
-				qdel(AC)
-				continue
-			if(AC.allowed_races?.len && !(H.dna.species.type in AC.allowed_races))
-				qdel(AC)
-				continue
-			if(AC.min_pq != -100 && !(get_playerquality(M.client.ckey) >= AC.min_pq))
-				qdel(AC)
-				continue
-			
-			valid_classes[AC.name] = AC
-
-		// If no valid classes found, something is wrong
-		if(!length(valid_classes))
-			to_chat(M, span_warning("No valid classes found! Please report this to an admin."))
-			return
-
 		var/datum/advclass/templar/chosen_class
-		if(preferred_class && valid_classes[preferred_class])
-			// Use preferred class if it's valid
-			chosen_class = valid_classes[preferred_class]
-			to_chat(M, span_notice("Using your preferred class: [preferred_class]"))
-			// Clean up other classes
-			for(var/name in valid_classes)
-				if(name != preferred_class)
-					qdel(valid_classes[name])
+		
+		// Find the Inquisitor and their class
+		var/inquisitor_class
+		if(!latejoin)
+			// During roundstart, check Inquisitor preferences
+			for(var/mob/dead/new_player/P in GLOB.new_player_list)
+				if(P.client?.prefs?.job_preferences["Inquisitor"] == JP_HIGH)
+					inquisitor_class = P.client.prefs.inquisitor_class
+					break
 		else
-			// Choose random class from valid options
-			var/chosen_name = pick(valid_classes)
-			chosen_class = valid_classes[chosen_name]
-			to_chat(M, span_warning("No class preference set. You have been randomly assigned: [chosen_name]"))
-			// Clean up other classes
-			for(var/name in valid_classes)
-				if(name != chosen_name)
-					qdel(valid_classes[name])
-
+			// During latejoin, check actual Inquisitors
+			for(var/mob/living/carbon/human/inq in GLOB.human_list)
+				if(inq.mind?.assigned_role == "Inquisitor")
+					if(inq.client?.prefs?.inquisitor_class)
+						inquisitor_class = inq.client.prefs.inquisitor_class
+					break
+			if(!inquisitor_class)
+				for(var/datum/mind/mind in SSticker.minds)
+					if(mind.assigned_role == "Inquisitor")
+						var/client/inq_client = GLOB.directory[mind.key]
+						if(inq_client?.prefs?.inquisitor_class)
+							inquisitor_class = inq_client.prefs.inquisitor_class
+							break
+		
+		// Determine Templar class based on Inquisitor class
+		var/class_type
+		if(!inquisitor_class || inquisitor_class == "random") // Handle random/unset class preference
+			class_type = pick(/datum/advclass/templar/monk, /datum/advclass/templar/crusader)
+		else if(inquisitor_class == "Zealot")
+			class_type = /datum/advclass/templar/monk
+		else // Confessor or Puritan
+			class_type = /datum/advclass/templar/crusader
+		
+		chosen_class = new class_type()
+		
 		// Let the class handle everything through its own equipme()
 		if(chosen_class)
 			H.mind?.transfer_to(H) // Ensure mind is properly set up
