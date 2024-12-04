@@ -495,7 +495,12 @@ var/global/current_attack_crit = FALSE
 	I.funny_attack_effects(src, user)
 	if(I.force)
 		var/newforce = get_complex_damage(I, user, null, null, global.current_attack_crit)
-		apply_damage(newforce, I.damtype, def_zone = hitlim)
+		// Critical hits bypass armor
+		if(global.current_attack_crit)
+			apply_damage(newforce, I.damtype, def_zone = hitlim, armour_penetration = 100)
+		else
+			apply_damage(newforce, I.damtype, def_zone = hitlim)
+        
 		if(I.damtype == BRUTE)
 			next_attack_msg.Cut()
 			if(HAS_TRAIT(src, TRAIT_SIMPLE_WOUNDS))
