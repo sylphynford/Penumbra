@@ -36,7 +36,7 @@
 	wdefense = 3
 
 /obj/item/rogueweapon/mace/steel
-	force = 25
+	force = 10
 	name = "steel mace"
 	desc = "This steel mace is objectively superior to an iron one."
 	icon_state = "smace"

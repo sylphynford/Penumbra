@@ -50,43 +50,83 @@
 
 	var/total_dam = affecting.get_damage()
 	var/nuforce = get_complex_damage(src, user)
-	var/pristine_blade = TRUE
+	
+	// Blade integrity check (specific to dismemberment)
 	if(max_blade_int && dismember_blade_int)
 		var/blade_int_modifier = (blade_int / dismember_blade_int)
-		//blade is about as sharp as a brick it won't dismember shit
 		if(blade_int_modifier <= 0.15)
 			return 0
 		nuforce *= blade_int_modifier
-		pristine_blade = (blade_int >= (dismember_blade_int * 0.95))
 
 	if(user)
 		if(istype(user.rmb_intent, /datum/rmb_intent/weak))
-			nuforce = 0
+			return 0
 		else if(istype(user.rmb_intent, /datum/rmb_intent/strong))
 			nuforce *= 1.1
 
-		if(user.used_intent.blade_class == BCLASS_CHOP) //chopping attacks always attempt dismembering
-			nuforce *= 1.1
-		else if(user.used_intent.blade_class == BCLASS_CUT)
-			if(!pristine_blade && (total_dam < affecting.max_damage * 0.8))
-				return 0
-		else
+	// Calculate damage threshold based on traits
+	var/hard_break = HAS_TRAIT(affecting, TRAIT_HARDDISMEMBER)
+	var/easy_break = affecting.rotted || affecting.skeletonized || HAS_TRAIT(affecting, TRAIT_EASYDISMEMBER)
+	if(affecting.owner)
+		if(!hard_break)
+			hard_break = HAS_TRAIT(affecting.owner, TRAIT_HARDDISMEMBER)
+		if(!easy_break)
+			easy_break = HAS_TRAIT(affecting.owner, TRAIT_EASYDISMEMBER)
+
+	var/damage_threshold = affecting.max_damage * 0.5
+	if(hard_break)
+		damage_threshold = affecting.max_damage * 1 // Harder to break
+	else if(easy_break)
+		damage_threshold = affecting.max_damage * 0.1 // Easier to break
+	
+	// Check attack type (specific to dismemberment)
+	var/is_cutting = (user?.used_intent.blade_class in list(BCLASS_CUT, BCLASS_CHOP))
+	if(!is_cutting)
+		return 0
+	
+	if(user?.used_intent.blade_class == BCLASS_CHOP)
+		nuforce *= 1.1
+	else if(user?.used_intent.blade_class == BCLASS_CUT)
+		if((blade_int < dismember_blade_int * 0.5) || (total_dam < affecting.max_damage * 0.5))
 			return 0
 
 	if(nuforce < 10)
 		return 0
 
-	var/probability = (nuforce) * (total_dam / affecting.max_damage)
-	var/hard_dismember = HAS_TRAIT(affecting, TRAIT_HARDDISMEMBER)
-	var/easy_dismember = affecting.rotted || affecting.skeletonized || HAS_TRAIT(affecting, TRAIT_EASYDISMEMBER)
-	if(affecting.owner)
-		if(!hard_dismember)
-			hard_dismember = HAS_TRAIT(affecting.owner, TRAIT_HARDDISMEMBER)
-		if(!easy_dismember)
-			easy_dismember = HAS_TRAIT(affecting.owner, TRAIT_EASYDISMEMBER)
-	if(hard_dismember)
-		return min(probability, 5)
-	else if(easy_dismember)
-		return probability * 1.5
-	return probability
+	// Check if damage is enough to wound
+	// Either by reaching threshold (50% HP) OR by dealing massive damage in one hit
+	if(total_dam >= damage_threshold || nuforce >= (affecting.max_damage * 0.5))
+		var/health_roll = 0
+		if(affecting.owner)
+			health_roll = affecting.owner.STACON || 10
+		
+		// HT scaling
+		// HT 10 = +0
+		// HT 15 = +8 (3x tougher)
+		// HT 20 = +16 (9x tougher)
+		var/ht_bonus = max(0, (health_roll - 10) * 1.6)
+		
+		// Damage impact - each 2 points of damage adds +1 to roll
+		var/damage_mod = round(nuforce / 2)
+		
+		var/roll = rand(1,6) + rand(1,6) + rand(1,6) + damage_mod - ht_bonus
+		
+		// Thresholds for 3d6 + mods
+		if(roll <= 11)  // 50% chance for no wound at HT 10
+			return 0
+		else if(roll <= 14)  // 12-14 light dismemberment (~7.41% at HT 15)
+			if(hard_break)
+				return 0.5
+			else if(easy_break)
+				return 1.5
+			return 1
+		else if(roll == 15)  // 15 nothing happens (~1.85% at HT 15)
+			return 0
+		// 16+ heavy dismemberment (~1.85% at HT 15)
+		if(hard_break)
+			return 1
+		else if(easy_break)
+			return 2
+		return 1.5
+	return 0
 
