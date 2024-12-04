@@ -208,6 +208,11 @@
 	. = ..()
 	set_quantity(rand(4,19))
 
+/obj/item/roguecoin/gold/bigpile/Initialize()
+	. = ..()
+	set_quantity(rand(12,19))
+
+
 #undef CTYPE_GOLD
 #undef CTYPE_SILV
 #undef CTYPE_COPP
