@@ -199,11 +199,11 @@
 		if(!easy_break)
 			easy_break = HAS_TRAIT(owner, TRAIT_EASYDISMEMBER)
 	
-	var/damage_threshold = max_damage * 1 
+	var/damage_threshold = max_damage * 0.5 
 	if(hard_break)
-		damage_threshold = max_damage * 1.5 // Harder to break
+		damage_threshold = max_damage * 1 // Harder to break
 	else if(easy_break)
-		damage_threshold = max_damage * 0.5 // Easier to break
+		damage_threshold = max_damage * 0.1 // Easier to break
 	
 	// GURPS style roll for fractures/dislocations
 	var/is_cutting = (bclass in list(BCLASS_CUT, BCLASS_CHOP, BCLASS_STAB, BCLASS_PICK))
@@ -213,40 +213,32 @@
 		if(nuforce < 10)
 			return FALSE
 			
-		if(total_dam >= damage_threshold)
+		// Check if damage is enough to wound
+		// Either by reaching threshold (50% HP) OR by dealing massive damage in one hit
+		if(total_dam >= damage_threshold || nuforce >= (max_damage * 0.5))
 			var/health_roll = 0
 			if(owner)
 				health_roll = owner.STACON || 10
 			
-			// Calculate percentages for both total and single-hit damage
-			var/damage_percent = total_dam / max_damage
-			var/hit_percent = nuforce / max_damage
-
-			// Use whichever percentage is higher
-			var/effective_percent = max(damage_percent, hit_percent)
+			// HT scaling
+			// HT 10 = +0
+			// HT 15 = +8 (3x tougher)
+			// HT 20 = +16 (9x tougher)
+			var/ht_bonus = max(0, (health_roll - 10) * 1.6)
 			
-			// Only start applying modifiers after 50% damage
-			var/scaled_percent = 0
-			if(effective_percent > 0.5)
-				// Convert the percentage above 50% into a modifier
-				// At 50% damage: +0 to roll
-				// At 100% damage: +5 to roll
-				// At 150% damage: +10 to roll (capped)
-				scaled_percent = ((effective_percent - 0.5) / 1.0) * 10
-				scaled_percent = min(scaled_percent, 10) // Cap at +10
+			// Damage impact - each 2 points of damage adds +1 to roll
+			var/damage_mod = round(nuforce / 2)
 			
-			// Add percentage-based modifier
-			var/roll = rand(1,6) + rand(1,6) + rand(1,6) + (10 - health_roll)
-			roll += scaled_percent
+			var/roll = rand(1,6) + rand(1,6) + rand(1,6) + damage_mod - ht_bonus
 			
-			// Check for wounds with adjusted thresholds
-			if(roll <= 10)
+			// Thresholds for 3d6 + mods
+			if(roll <= 11)  // 50% chance for no wound at HT 10
 				return FALSE
-			else if(roll <= 13)  // 11-13 for dislocations
+			else if(roll <= 14)  // 12-14 for dislocations
 				attempted_wounds += /datum/wound/dislocation
-			else if(roll <= 15)  // 14-15 nothing happens (gap)
+			else if(roll <= 15)  // 15 nothing happens
 				return FALSE
-			else                 // 16+ for fractures
+			else  // 16+ for fractures 
 				if(HAS_TRAIT(src, TRAIT_BRITTLE))
 					attempted_wounds += /datum/wound/fracture
 				else
