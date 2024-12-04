@@ -65,7 +65,7 @@
 	chargetime = 0
 	hitsound = list('sound/combat/hits/bladed/genslash (1).ogg', 'sound/combat/hits/bladed/genslash (2).ogg', 'sound/combat/hits/bladed/genslash (3).ogg')
 	swingdelay = 0
-	damfactor = 1.1
+	damfactor = 1.0
 	item_d_type = "slash"
 
 /datum/intent/sword/thrust

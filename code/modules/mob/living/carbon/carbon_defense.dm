@@ -196,8 +196,8 @@
 		user.tempatarget = null
 	if(!lying_attack_check(user, I))
 		return
-	affecting = get_bodypart(check_zone(useder)) //precise attacks, on yourself or someone you are grabbing
-	if(!affecting) //missing limb
+	affecting = get_bodypart(check_zone(useder))
+	if(!affecting)
 		to_chat(user, span_warning("Unfortunately, there's nothing there."))
 		return FALSE
 	SEND_SIGNAL(I, COMSIG_ITEM_ATTACK_ZONE, src, user, affecting)
@@ -205,15 +205,38 @@
 	var/statforce = get_complex_damage(I, user)
 	if(statforce)
 		next_attack_msg.Cut()
-		affecting.bodypart_attacked_by(user.used_intent.blade_class, statforce, crit_message = TRUE)
-		apply_damage(statforce, I.damtype, affecting)
+		
+		// Apply armor reduction first
+		var/armor_reduction = 1
+		if(iscarbon(src))
+			var/mob/living/carbon/carbon_target = src
+			armor_reduction = (1 - (carbon_target.checkcritarmor(useder, user.used_intent.blade_class) / 100))
+		
+		// Calculate base damage after armor
+		var/base_damage = statforce * armor_reduction
+		
+		// Apply species and physiology modifiers for brute tracking
+		var/brute_damage = base_damage
+		if(iscarbon(src))
+			var/mob/living/carbon/carbon_target = src
+			if(carbon_target.dna?.species)
+				brute_damage *= carbon_target.dna.species.brutemod
+			brute_damage *= carbon_target.physiology.brute_mod
+		
+		// Apply damage to limb - constitution is handled inside bodypart_attacked_by
+		affecting.bodypart_attacked_by(user.used_intent.blade_class, base_damage, user, useder, crit_message = TRUE)
+		
+		// Apply brute damage tracking separately - this is not affected by constitution
+		apply_damage(brute_damage, I.damtype, affecting)
+		
+		// Handle blood effects
 		if(I.damtype == BRUTE && affecting.status == BODYPART_ORGANIC)
 			if(prob(statforce))
 				I.add_mob_blood(src)
 				user.update_inv_hands()
 				var/turf/location = get_turf(src)
 				add_splatter_floor(location)
-				if(get_dist(user, src) <= 1)	//people with TK won't get smeared with blood
+				if(get_dist(user, src) <= 1)
 					user.add_mob_blood(src)
 				var/splatter_dir = get_dir(user, src)
 				new /obj/effect/temp_visual/dir_setting/bloodsplatter(loc, splatter_dir)
@@ -388,7 +411,7 @@
 	if(total_dam >= damage_threshold || nuforce >= (affecting.max_damage * 0.5))
 		// Do constitution check
 		var/health_roll = src.STACON || 10
-		var/ht_bonus = max(0, (health_roll - 10) * 1.6)
+		var/ht_bonus = max(0, (health_roll - 10) * 1.5)
 		var/damage_mod = round(nuforce / 2)
 		
 		// Roll for dismemberment
