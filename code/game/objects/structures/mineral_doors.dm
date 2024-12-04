@@ -371,7 +371,7 @@
 				door_rattle()
 				return
 			trykeylock(item, user)
-		return ..()
+		return
 
 	// Check belt slots for keys if hands are empty
 	if(ishuman(user))
@@ -874,30 +874,10 @@
 	repair_cost_second = /obj/item/ingot/iron
 	repair_skill = /datum/skill/craft/carpentry
 
-/obj/structure/mineral_door/wood/donjon/stone
-	desc = "stone door"
-	icon_state = "stone"
-	base_state = "stone"
-	keylock = TRUE
-	max_integrity = 1500
-	over_state = "stoneopen"
-	attacked_sound = list('sound/combat/hits/onwood/woodimpact (1).ogg','sound/combat/hits/onwood/woodimpact (2).ogg')
-	repair_cost_first = /obj/item/natural/stone
-	repair_cost_second = /obj/item/natural/stone
-	repair_skill = /datum/skill/craft/masonry
-
-/obj/structure/mineral_door/wood/donjon/stone/attack_right(mob/user)
-	if(user.get_active_held_item())
-		..()
-
-/obj/structure/mineral_door/wood/donjon/stone/view_toggle(mob/user)
-	return
-
 /obj/structure/mineral_door/wood/donjon/Initialize()
 	viewportdir = dir
 	icon_state = base_state
 	..()
-
 
 /obj/structure/mineral_door/wood/donjon/MiddleClick(mob/user)
 	if(door_opened || isSwitchingStates)
@@ -914,9 +894,6 @@
 		to_chat(user, span_warning("The viewport doesn't toggle from this side."))
 		return
 
-/obj/structure/mineral_door/wood/donjon/attack_right(mob/user)
-	return ..()
-
 /obj/structure/mineral_door/wood/donjon/proc/view_toggle(mob/user)
 	if(door_opened)
 		return
@@ -929,6 +906,23 @@
 		opacity = TRUE
 		playsound(src, 'sound/foley/doors/windowup.ogg', 100, FALSE)
 
+/obj/structure/mineral_door/wood/donjon/stone
+	desc = "stone door"
+	icon_state = "stone"
+	base_state = "stone"
+	keylock = TRUE
+	max_integrity = 1500
+	over_state = "stoneopen"
+	attacked_sound = list('sound/combat/hits/onwood/woodimpact (1).ogg','sound/combat/hits/onwood/woodimpact (2).ogg')
+	repair_cost_first = /obj/item/natural/stone
+	repair_cost_second = /obj/item/natural/stone
+	repair_skill = /datum/skill/craft/masonry
+
+/obj/structure/mineral_door/wood/donjon/stone/view_toggle(mob/user)
+	return
+
+/obj/structure/mineral_door/wood/donjon/stone/attack_right(mob/user)
+	return ..()
 
 /obj/structure/mineral_door/bars
 	name = "iron door"
@@ -984,4 +978,5 @@
 	closeSound = 'modular/Neu_Food/sound/blindsclose.ogg'
 	dir = NORTH
 	locked = TRUE
+
 
