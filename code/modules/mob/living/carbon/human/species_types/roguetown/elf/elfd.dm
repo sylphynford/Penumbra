@@ -93,6 +93,9 @@
 	stress_examine = TRUE
 	stress_desc = span_red("A loathesome dark elf.")
 
+/datum/species/elf/dark/check_roundstart_eligible()
+	return TRUE
+
 /datum/species/elf/dark/get_span_language(datum/language/message_language)
 	if(!message_language)
 		return

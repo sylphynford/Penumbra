@@ -88,6 +88,10 @@
 		"Kaze-Lotus" = SKIN_COLOR_KAZE_LOTUS
 	)
 
+/datum/species/human/halfelf/check_roundstart_eligible()
+	return TRUE
+
+
 /datum/species/human/halfelf/get_hairc_list()
 	return sortList(list(
 	"black - oil" = "181a1d",
@@ -111,6 +115,8 @@
 	"blond - strawberry" = "977033"
 
 	))
+
+
 
 /datum/species/human/halfelf/random_name(gender,unique,lastname)
 	var/randname
