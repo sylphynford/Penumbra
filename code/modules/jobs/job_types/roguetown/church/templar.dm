@@ -121,7 +121,7 @@
 
 /datum/advclass/templar/crusader
 	name = "Golden Retainer"
-	tutorial = "You are a Golden Retainer, having dedicated your life and service to the Confessor. You subscribe to the ideal of such a savior, chosing to display the golden rays of light upon your armor. It's pretty convincing, too!"
+	tutorial = "You are a Golden Retainer, having dedicated your life and service to the Confessor. You subscribe to the ideal of such a savior, choosing to display the golden rays of light upon your armor. It's pretty convincing, too!"
 	outfit = /datum/outfit/job/roguetown/templar/crusader
 	category_tags = list(CTAG_TEMPLAR)
 

@@ -96,8 +96,8 @@ SUBSYSTEM_DEF(job)
 		if(job.required_playtime_remaining(player.client))
 			return FALSE
 
-		// Check for Templar-Inquisitor dependency during both roundstart and latejoin
-		if(rank == "Templar")
+		// Check for Occultist-Inquisitor dependency during both roundstart and latejoin
+		if(rank == "Occultist")
 			var/inquisitor_exists = FALSE
 			if(!latejoin)
 				// During roundstart, check if anyone has Inquisitor as their highest preference
@@ -119,7 +119,7 @@ SUBSYSTEM_DEF(job)
 
 			if(!inquisitor_exists)
 				player.client.prefs.job_preferences[rank] = 0  // Set preference to 0 instead of removing
-				to_chat(player, "<span class='warning'>You have been removed from Templar selection as there is no Inquisitor.</span>")
+				to_chat(player, "<span class='warning'>You have been removed from Occultist selection as there is no Inquisitor.</span>")
 				return FALSE
 
 		var/position_limit = job.total_positions
