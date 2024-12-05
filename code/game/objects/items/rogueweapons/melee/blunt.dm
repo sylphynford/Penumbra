@@ -1,5 +1,5 @@
 /obj/item/rogueweapon/mace
-	force = 20
+	force = MACE_NORMAL
 	possible_item_intents = list(/datum/intent/mace/strike)
 	gripped_intents = list(/datum/intent/mace/strike, /datum/intent/mace/smash)
 	name = "mace"
@@ -26,7 +26,7 @@
 	blade_dulling = DULLING_BASHCHOP
 
 /obj/item/rogueweapon/mace/church
-	force = 25
+	force = MACE_BAD
 	name = "bell ringer"
 	desc = "This heavy hammer is used to ring the church's bell."
 	icon_state = "churchmace"
@@ -36,7 +36,7 @@
 	wdefense = 3
 
 /obj/item/rogueweapon/mace/steel
-	force = 10
+	force = MACE_HEAVY
 	name = "steel mace"
 	desc = "This steel mace is objectively superior to an iron one."
 	icon_state = "smace"
@@ -50,7 +50,7 @@
 	name = "silver war hammer"
 	desc = "A light war hammer forged of silver."
 	icon_state = "silverhammer"
-	force = 24
+	force = MACE_NORMAL
 	gripped_intents = null
 	possible_item_intents = list(/datum/intent/mace/strike, /datum/intent/mace/smash)
 	wdefense = 4
@@ -148,7 +148,7 @@
 	item_d_type = "stab"
 
 /obj/item/rogueweapon/mace/woodclub
-	force = 15
+	force = MACE_BAD
 	name = "wooden club"
 	desc = "A primitive cudgel carved of a stout piece of treefall."
 	icon_state = "club1"
@@ -177,7 +177,7 @@
 /obj/item/rogueweapon/mace/cudgel
 	name = "cudgel"
 	desc = "A stubby little club for brigands."
-	force = 25
+	force = MACE_BAD
 	icon_state = "cudgel"
 	gripped_intents = list(/datum/intent/mace/strike,/datum/intent/mace/smash)
 	smeltresult = /obj/item/ash
@@ -191,7 +191,7 @@
 /obj/item/rogueweapon/mace/cudgel/justice
 	name = "'Justice'"
 	desc = "The icon of the right of office of the Magistrate. While mostly ceremonial in design, it serves it's purpose in dishing out some much needed justice."
-	force = 30
+	force = MACE_BAD
 	icon_state = "justice"
 	gripped_intents = list(/datum/intent/mace/strike,/datum/intent/mace/smash)
 	smeltresult = /obj/item/ingot/steel
@@ -213,7 +213,7 @@
 /obj/item/rogueweapon/mace/wsword
 	name = "wooden sword"
 	desc = "This wooden sword is great for training."
-	force = 5
+	force = TRAINING_WEAPON
 	icon_state = "wsword"
 	//dropshrink = 0.75
 	possible_item_intents = list(/datum/intent/mace/strike/wood)
@@ -279,7 +279,7 @@
 
 
 /obj/item/rogueweapon/mace/goden
-	force = 15
+	force = MACE_HEAVY
 	possible_item_intents = list(/datum/intent/mace/strike)
 	gripped_intents = list(/datum/intent/mace/strike, /datum/intent/mace/smash, /datum/intent/mace/rangedthrust)
 	name = "Goedendag"
@@ -319,7 +319,7 @@
 	name = "grand mace"
 	desc = "Good morning, sire."
 	icon_state = "polemace"
-	force = 15
+	force = MACE_HEAVY
 	smeltresult = /obj/item/ingot/steel
 	smelt_bar_num = 2
 

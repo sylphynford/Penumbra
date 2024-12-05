@@ -1,5 +1,5 @@
 /obj/item/rogueweapon/lordscepter
-	force = 20
+	force = MACE_HEAVY
 	possible_item_intents = list(/datum/intent/lordbash, /datum/intent/lord_electrocute, /datum/intent/lord_silence)
 	gripped_intents = list(/datum/intent/lordbash)
 	name = "master's rod"
@@ -103,7 +103,7 @@
 			update_icon()
 		..() // Call parent behavior
 
-	force = 15
+	force = MACE_NORMAL
 	name = "holy stunmace"
 	icon_state = "stunmace0"
 	desc = "Pain is our currency here."
@@ -229,7 +229,7 @@
 
 /obj/item/rogueweapon/katar
 	slot_flags = ITEM_SLOT_HIP
-	force = 16
+	force = SWORD_SHORT
 	possible_item_intents = list(/datum/intent/katar/cut, /datum/intent/katar/thrust)
 	name = "katar"
 	desc = "A blade that sits above the users fist. Commonly used by those proficient at unarmed fighting"

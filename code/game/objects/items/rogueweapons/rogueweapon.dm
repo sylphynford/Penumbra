@@ -1,3 +1,18 @@
+#define SWORD_SHORT 6
+#define SWORD_SABRE 7
+#define SWORD_NORMAL 8
+#define SWORD_LONG 10
+
+#define MACE_BAD 6
+#define MACE_NORMAL 8
+#define MACE_HEAVY 10
+
+#define AXE_BAD 6
+#define AXE_NORMAL 8
+#define AXE_HEAVY 10
+
+#define TRAINING_WEAPON 4
+
 /obj/item/rogueweapon
 	name = ""
 	desc = ""
@@ -37,7 +52,7 @@
 
 /obj/item/rogueweapon/Initialize()
 	. = ..()
-	force_wielded = force + (force * 0.4) // This is equivilant to 1 point of strength
+	force_wielded = force + 2 
 	if(!destroy_message)
 		var/yea = pick("[src] is broken!", "[src] is useless!", "[src] is destroyed!")
 		destroy_message = span_warning("[yea]")

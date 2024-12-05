@@ -1,6 +1,6 @@
 /obj/item/rogueweapon/stoneaxe
 	slot_flags = ITEM_SLOT_HIP | ITEM_SLOT_BACK
-	force = 18
+	force = AXE_BAD
 	possible_item_intents = list(/datum/intent/axe/chop/stone)
 	name = "stone axe"
 	desc = "A rough stone axe. Badly balanced."
@@ -107,7 +107,7 @@
 	penfactor = 25
 
 /obj/item/rogueweapon/stoneaxe/battle
-	force = 25
+	force = AXE_HEAVY
 	possible_item_intents = list(/datum/intent/axe/cut/battle, /datum/intent/axe/chop/battle)
 	name = "battle axe"
 	desc = "A steel battleaxe of war. Has a wicked edge."
@@ -131,7 +131,7 @@
 	return ..()
 
 /obj/item/rogueweapon/stoneaxe/oath
-	force = 30
+	force = AXE_HEAVY
 	possible_item_intents = list(/datum/intent/axe/cut/battle, /datum/intent/axe/chop/battle)
 	name = "oath"
 	desc = "A hefty, steel-forged axe marred by the touch of countless Wardens. Despite it's weathered etchings and worn grip, the blade has been honed to a razor's edge and you can see your reflection in the finely polished metal."
@@ -164,7 +164,7 @@
 
 /obj/item/rogueweapon/stoneaxe/woodcut
 	name = "axe"
-	force = 20
+	force = AXE_BAD
 	possible_item_intents = list(/datum/intent/axe/cut,/datum/intent/axe/chop)
 	desc = "A regular iron woodcutting axe."
 	icon_state = "axe"
@@ -188,7 +188,7 @@
 	name = "Wardens' axe"
 	desc = "A multi-use axe smithed by the Wardens since time immemorial for both it's use as a tool and a weapon."
 	icon_state = "wardenpax"
-	force = 22
+	force = AXE_NORMAL
 	possible_item_intents = list(/datum/intent/axe/cut,/datum/intent/axe/chop, /datum/intent/pick)
 	gripped_intents = list(/datum/intent/axe/cut,/datum/intent/axe/chop, /datum/intent/pick)
 	smeltresult = /obj/item/ingot/steel
@@ -196,7 +196,7 @@
 	toolspeed = 2
 
 /obj/item/rogueweapon/stoneaxe/handaxe
-	force = 19
+	force = AXE_BAD
 	possible_item_intents = list(/datum/intent/axe/cut,/datum/intent/axe/chop)
 	name = "hatchet"
 	desc = "An iron hand axe."
@@ -210,9 +210,8 @@
 
 /obj/item/rogueweapon/stoneaxe/woodcut/steel
 	icon_state = "saxe"
-	force = 22
+	force = AXE_BAD
 	desc = "A steel woodcutting axe. Performs much better than its iron counterpart."
-	force = 26
 	max_blade_int = 500
 	smeltresult = /obj/item/ingot/steel
 	wdefense = 3
@@ -230,7 +229,7 @@
 
 /obj/item/rogueweapon/stoneaxe/boneaxe
 	slot_flags = ITEM_SLOT_HIP | ITEM_SLOT_BACK
-	force = 18
+	force = AXE_BAD
 	possible_item_intents = list(/datum/intent/axe/cut,/datum/intent/axe/chop)
 	name = "bone axe"
 	desc = "A rough axe made of bones"
@@ -265,7 +264,7 @@
 	name = "silver war axe"
 	desc = "A one-handed war axe forged of silver."
 	icon_state = "silveraxe"
-	force = 24
+	force = AXE_NORMAL
 	possible_item_intents = list(/datum/intent/axe/cut,/datum/intent/axe/chop)
 	minstr = 6
 	max_blade_int = 400
