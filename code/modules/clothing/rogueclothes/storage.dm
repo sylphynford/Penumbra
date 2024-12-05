@@ -257,7 +257,7 @@
 		STR.not_while_equipped = TRUE
 		STR.allow_dump_out = TRUE
 
-obj/item/storage/belt/rogue/leather/exoticsilkbelt
+/obj/item/storage/belt/rogue/leather/exoticsilkbelt
 	name = "Exotic Silk Belt"
 	desc = "A gold adorned belt with the softest of silks barely concealing one's bits."
 	icon_state = "exoticsilkbelt"
