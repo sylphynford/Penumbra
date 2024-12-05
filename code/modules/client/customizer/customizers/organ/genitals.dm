@@ -9,11 +9,12 @@
 		allows_disabling = FALSE
 		default_disabled = FALSE
 		return TRUE
+	// For females, check if vagina is enabled
 	for(var/datum/customizer_entry/entry as anything in prefs.customizer_entries)
-		if(istype(entry,/datum/customizer_entry/organ/vagina))
-			return entry.disabled
+		if(istype(entry, /datum/customizer_entry/organ/vagina) && !entry.disabled)
+			return FALSE  // Can't enable penis if vagina is enabled
 	allows_disabling = TRUE
-	default_disabled = TRUE
+	default_disabled = FALSE  // Don't force disable for females
 	return TRUE
 
 /datum/customizer/organ/penis/validate_entry(datum/preferences/prefs, datum/customizer_entry/entry)
@@ -24,8 +25,8 @@
 			if(istype(other_entry, /datum/customizer_entry/organ/vagina))
 				other_entry.disabled = TRUE
 				break
-	// If we're disabling penis
-	else
+	// If we're disabling penis and we're female, enable vagina
+	else if(prefs.gender == FEMALE)
 		for(var/datum/customizer_entry/other_entry as anything in prefs.customizer_entries)
 			if(istype(other_entry, /datum/customizer_entry/organ/vagina))
 				other_entry.disabled = FALSE

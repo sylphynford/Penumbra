@@ -243,21 +243,15 @@ GLOBAL_LIST_EMPTY(chosen_names)
 		else if(istype(entry, /datum/customizer_entry/organ/vagina))
 			vagina_entry = entry
 	
-	// For males: Penis must always be enabled
+	// For males: Penis must always be enabled if it exists
 	if(gender == MALE && penis_entry)
 		penis_entry.disabled = FALSE
 	
-	// For females: Must have at least one genital enabled
+	// For females: Only prevent having both enabled at once
 	else if(gender == FEMALE && penis_entry && vagina_entry)
-		// If both are disabled, enable vagina
-		if(penis_entry.disabled && vagina_entry.disabled)
-			vagina_entry.disabled = FALSE
-		// If penis is enabled, disable vagina
-		else if(!penis_entry.disabled)
+		// If both are somehow enabled, disable vagina
+		if(!penis_entry.disabled && !vagina_entry.disabled)
 			vagina_entry.disabled = TRUE
-		// If vagina is enabled, disable penis
-		else if(!vagina_entry.disabled)
-			penis_entry.disabled = TRUE
 
 	update_preview_icon() // Update the preview mannequin when species changes
 
@@ -2489,9 +2483,16 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 
 /datum/preferences/proc/update_gender_customization()
 	var/list/new_entries = list()
-	// Keep non-genital entries
+	var/old_penis_disabled = TRUE
+	var/old_vagina_disabled = TRUE
+	
+	// Keep track of old genital states and non-genital entries
 	for(var/datum/customizer_entry/entry as anything in customizer_entries)
-		if(!istype(entry, /datum/customizer_entry/organ/penis) && !istype(entry, /datum/customizer_entry/organ/vagina) && !istype(entry, /datum/customizer_entry/organ/breasts) && !istype(entry, /datum/customizer_entry/organ/testicles))
+		if(istype(entry, /datum/customizer_entry/organ/penis))
+			old_penis_disabled = entry.disabled
+		else if(istype(entry, /datum/customizer_entry/organ/vagina))
+			old_vagina_disabled = entry.disabled
+		else if(!istype(entry, /datum/customizer_entry/organ/breasts) && !istype(entry, /datum/customizer_entry/organ/testicles))
 			new_entries += entry
 	
 	var/datum/species/species = pref_species
@@ -2503,7 +2504,11 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 		if(!customizer.is_allowed(src))
 			continue
 		
-		if(istype(customizer, /datum/customizer/organ/vagina) || istype(customizer, /datum/customizer/organ/breasts))
+		if(istype(customizer, /datum/customizer/organ/vagina))
+			var/datum/customizer_entry/entry = customizer.make_default_customizer_entry(src, FALSE)  // Don't force disable for females
+			entry.disabled = old_vagina_disabled
+			new_entries += entry
+		else if(istype(customizer, /datum/customizer/organ/breasts))
 			var/datum/customizer_entry/entry = customizer.make_default_customizer_entry(src, gender != FEMALE)
 			new_entries += entry
 	
@@ -2516,7 +2521,12 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 			continue
 		
 		if(istype(customizer, /datum/customizer/organ/penis))
-			penis_entry = customizer.make_default_customizer_entry(src, gender != MALE)
+			penis_entry = customizer.make_default_customizer_entry(src, FALSE)  // Don't force disable for females
+			// Only force enable for males, otherwise keep previous state
+			if(gender == MALE)
+				penis_entry.disabled = FALSE
+			else
+				penis_entry.disabled = old_penis_disabled
 			new_entries += penis_entry
 			penis_enabled = !penis_entry.disabled
 		else if(istype(customizer, /datum/customizer/organ/testicles) && penis_enabled)
