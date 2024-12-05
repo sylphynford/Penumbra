@@ -235,7 +235,7 @@
 /obj/item/clothing/suit/roguetown/armor/plate/scale/fakegold
 	name = "gold scalemail"
 	desc = "Gold scales interwoven intricately to form flexible protection! Wait, this is actually steel."
-	color = COLOR_ASSEMBLY_YELLOW
+	color = COLOR_ASSEMBLY_FAKEGOLD
 
 /obj/item/clothing/suit/roguetown/armor/heartfelt/lord
 	slot_flags = ITEM_SLOT_ARMOR

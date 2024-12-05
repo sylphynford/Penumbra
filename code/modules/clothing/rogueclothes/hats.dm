@@ -690,7 +690,7 @@
 /obj/item/clothing/head/roguetown/helmet/heavy/bucket/fakegold
 	name = "golden bucket helmet"
 	desc = "A helmet which covers the whole of the head. It is made of steel, stained yellow."
-	color = COLOR_ASSEMBLY_YELLOW
+	color = COLOR_ASSEMBLY_FAKEGOLD
 
 /obj/item/clothing/head/roguetown/helmet/heavy/bucket/attackby(obj/item/W, mob/living/user, params)
 	..()

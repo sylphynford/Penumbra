@@ -60,10 +60,10 @@
 	anvilrepair = /datum/skill/craft/armorsmithing
 	smeltresult = /obj/item/ingot/steel
 
-/obj/item/clothing/neck/roguetown/chaincoif/fakegold
+/obj/item/clothing/neck/roguetown/chaincoif
 	name = "golden chain coif"
 	desc = "A normal steel coif painted yellow in an attempt to mimic gold."
-	color = COLOR_ASSEMBLY_YELLOW
+	color = COLOR_ASSEMBLY_FAKEGOLD
 
 /obj/item/clothing/neck/roguetown/chaincoif/AdjustClothes(mob/user)
 	if(loc == user)
