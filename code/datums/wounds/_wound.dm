@@ -385,3 +385,7 @@ GLOBAL_LIST_INIT(primordial_wounds, init_primordial_wounds())
 	if(weapon && !can_embed(weapon))
 		return FALSE
 	return prob(wound_or_boolean.embed_chance)
+
+/// Base proc called when a wound is first applied, can be overridden by child types
+/datum/wound/proc/wound_injury(datum/wound/old_wound = null)
+	return TRUE

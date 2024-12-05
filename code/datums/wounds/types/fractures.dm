@@ -34,12 +34,20 @@
 		return FALSE
 	return TRUE
 
-/datum/wound/fracture/on_mob_gain(mob/living/affected)
+/datum/wound/fracture/on_bodypart_gain(obj/item/bodypart/affected)
 	. = ..()
+	if(affected.owner && iscarbon(affected.owner))
+		var/mob/living/carbon/C = affected.owner
+		var/obj/item/right_item = C.get_item_for_held_index(RIGHT_HANDS)
+		var/obj/item/left_item = C.get_item_for_held_index(LEFT_HANDS)
+		if(right_item?.wielded)
+			right_item.ungrip(C)
+		if(left_item?.wielded)
+			left_item.ungrip(C)
 	if(gain_emote)
-		affected.emote(gain_emote, TRUE)
-	affected.Slowdown(20)
-	shake_camera(affected, 2, 2)
+		affected.owner.emote(gain_emote, TRUE)
+	affected.owner.Slowdown(20)
+	shake_camera(affected.owner, 2, 2)
 
 /datum/wound/fracture/proc/set_bone()
 	if(!can_set)
@@ -256,3 +264,7 @@
 	if(iscarbon(affected))
 		var/mob/living/carbon/carbon_affected = affected
 		carbon_affected.update_disabled_bodyparts()
+
+/datum/wound/fracture/wound_injury(datum/wound/old_wound = null)
+	. = ..()
+	return TRUE

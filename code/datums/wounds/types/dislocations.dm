@@ -31,6 +31,14 @@
 
 /datum/wound/dislocation/on_bodypart_gain(obj/item/bodypart/affected)
 	. = ..()
+	if(affected.owner && iscarbon(affected.owner))
+		var/mob/living/carbon/C = affected.owner
+		var/obj/item/right_item = C.get_item_for_held_index(RIGHT_HANDS)
+		var/obj/item/left_item = C.get_item_for_held_index(LEFT_HANDS)
+		if(right_item?.wielded)
+			right_item.ungrip(C)
+		if(left_item?.wielded)
+			left_item.ungrip(C)
 	affected.temporary_crit_paralysis(20 SECONDS)
 	ADD_TRAIT(affected, TRAIT_FINGERLESS, "[type]")
 	switch(affected.body_zone)
@@ -181,4 +189,8 @@
 	if(iscarbon(affected))
 		var/mob/living/carbon/carbon_affected = affected
 		carbon_affected.update_disabled_bodyparts()
+
+/datum/wound/dislocation/wound_injury(datum/wound/old_wound = null)
+	. = ..()
+	return TRUE
 
