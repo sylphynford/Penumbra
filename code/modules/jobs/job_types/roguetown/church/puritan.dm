@@ -195,7 +195,7 @@
 		H.mind.adjust_skillrank(/datum/skill/misc/sewing, 2, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/misc/medicine, 3, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/misc/tracking, 2, TRUE)
-		H.change_stat("strength", 2)
+		H.change_stat("strength", 3)
 		H.change_stat("endurance", 1)
 		H.change_stat("constitution", 2)
 		H.change_stat("speed", 1)
@@ -218,7 +218,7 @@
 	neck = /obj/item/clothing/neck/roguetown/chaincoif/full
 	wrists = /obj/item/clothing/neck/roguetown/psicross/silver
 	shoes = /obj/item/clothing/shoes/roguetown/boots/armor
-	pants = /obj/item/clothing/under/roguetown/trou/leather
+	pants = /obj/item/clothing/under/roguetown/trou/otavan
 	cloak = /obj/item/clothing/cloak/cape/puritan
 	backr = /obj/item/storage/backpack/rogue/satchel/black
 	backl = /obj/item/gun/ballistic/revolver/grenadelauncher/crossbow
@@ -260,6 +260,7 @@
 		H.change_stat("intelligence", 1)
 
 	ADD_TRAIT(H, TRAIT_HEAVYARMOR, TRAIT_GENERIC)
+	ADD_TRAIT(H, TRAIT_STEELHEARTED, TRAIT_GENERIC)
 
 	return TRUE
 

@@ -687,6 +687,11 @@
 	smeltresult = /obj/item/ingot/steel
 	smelt_bar_num = 2
 
+/obj/item/clothing/head/roguetown/helmet/heavy/bucket/fakegold
+	name = "golden bucket helmet"
+	desc = "A helmet which covers the whole of the head. It is made of steel, stained yellow."
+	color = COLOR_ASSEMBLY_FAKEGOLD
+
 /obj/item/clothing/head/roguetown/helmet/heavy/bucket/attackby(obj/item/W, mob/living/user, params)
 	..()
 	if(istype(W, /obj/item/natural/cloth) && !detail_tag)
@@ -700,7 +705,7 @@
 		"Madroot Red"="#AD4545",
 		"Marigold Orange"="#E2A844",
 		"Politely, Yuck"="#685542",
-		"Astrata's Yellow"="#FFFD8D",
+		"Lightening Yellow"="#FFFD8D",
 		"Bog Green"="#375B48",
 		"Seafoam Green"="#49938B",
 		"Woad Blue"="#395480",

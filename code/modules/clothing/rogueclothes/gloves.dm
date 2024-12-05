@@ -91,6 +91,11 @@
 	anvilrepair = /datum/skill/craft/armorsmithing
 	smeltresult = /obj/item/ingot/steel
 
+/obj/item/clothing/gloves/roguetown/chain/fakegold
+	name = "golden chain gauntlets"
+	desc = "Normal steel chain gauntlets painted yellow to mimic gold."
+	color = COLOR_ASSEMBLY_FAKEGOLD
+
 /obj/item/clothing/gloves/roguetown/chain/iron
 	icon_state = "icgloves"
 	anvilrepair = /datum/skill/craft/armorsmithing
