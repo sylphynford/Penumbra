@@ -363,7 +363,11 @@ SUBSYSTEM_DEF(job)
 	if(!SSticker.HasRoundStarted())
 		if(!SelectRuler())
 			return FALSE
-	
+		
+		// Select Inquisitor second
+		if(!SelectInquisitor())
+			message_admins("WARNING: No Inquisitor selected, continuing without one")
+
 	//Jobs will have fewer access permissions if the number of players exceeds the threshold defined in game_options.txt
 	var/mat = CONFIG_GET(number/minimal_access_threshold)
 	if(mat)
@@ -457,6 +461,28 @@ SUBSYSTEM_DEF(job)
 	
 	message_admins("WARNING: No qualified ruler found, continuing without ruler")
 	return TRUE // Allow game to continue without ruler
+
+/datum/controller/subsystem/job/proc/SelectInquisitor()
+	var/datum/job/inquisitor_job = GetJob("Inquisitor")
+	if(!inquisitor_job)
+		message_admins("WARNING: No inquisitor job found, continuing without inquisitor")
+		return TRUE // Allow game to continue
+	
+	// Try each preference level in order
+	for(var/pref_level in level_order)
+		for(var/mob/dead/new_player/player in unassigned)
+			if(player.client?.prefs?.job_preferences["Inquisitor"] == pref_level)
+				if(!inquisitor_job.player_old_enough(player.client))
+					continue
+				
+				if(inquisitor_job.required_playtime_remaining(player.client))
+					continue
+				
+				if((inquisitor_job.current_positions < 1))
+					if(AssignRole(player, "Inquisitor"))
+						return TRUE
+	
+	return TRUE // Allow game to continue without inquisitor
 
 /datum/controller/subsystem/job/proc/do_required_jobs()
 	var/amt_picked = 0
@@ -865,10 +891,11 @@ SUBSYSTEM_DEF(job)
 		destination.JoinPlayerHere(M, FALSE)
 		if(istype(M, /mob/living/carbon/human))
 			addtimer(CALLBACK(GLOBAL_PROC, GLOBAL_PROC_REF(announce_active_events), M), 3*10)
-	else
-		var/msg = "Unable to send mob [M] to late join!"
-		message_admins(msg)
-		CRASH(msg)
+		return
+
+	var/msg = "Unable to send mob [M] to late join!"
+	message_admins(msg)
+	CRASH(msg)
 
 
 ///////////////////////////////////
