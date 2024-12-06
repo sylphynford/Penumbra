@@ -9,9 +9,9 @@
 	throwforce = 0
 	slot_flags = ITEM_SLOT_HIP
 	throw_speed = 0.5
-	var/fuze = 50
+	var/fuze = 10
 	var/lit = FALSE
-	var/prob2fail = 23
+	var/prob2fail = 10
 
 
 /obj/item/bomb/spark_act()
@@ -56,7 +56,7 @@
 			if(!skipprob && prob(prob2fail))
 				snuff()
 			else
-				explosion(T, light_impact_range = 1, flame_range = 2, smoke = TRUE, soundin = pick('sound/misc/explode/bottlebomb (1).ogg','sound/misc/explode/bottlebomb (2).ogg'))
+				explosion(T, light_impact_range = 2, flame_range = 2, smoke = TRUE, soundin = pick('sound/misc/explode/bottlebomb (1).ogg','sound/misc/explode/bottlebomb (2).ogg'))
 		else
 			if(prob(prob2fail))
 				snuff()
