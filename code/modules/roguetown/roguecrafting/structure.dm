@@ -501,7 +501,6 @@
 	reqs = list(/obj/item/grown/log/tree/small = 1,
 					/obj/item/roguegear = 1)
 	verbage = "construct"
-	verbage_tp = "constructs"
 	craftsound = 'sound/foley/Building-01.ogg'
 	skillcraft = /datum/skill/craft/engineering
 
@@ -512,7 +511,6 @@
 					/obj/item/ingot/iron = 2,
 					/obj/item/roguegear = 1)
 	verbage = "construct"
-	verbage_tp = "constructs"
 	craftsound = 'sound/foley/Building-01.ogg'
 	skillcraft = /datum/skill/craft/engineering
 
@@ -523,7 +521,6 @@
 					/obj/item/ingot/iron = 1,
 					/obj/item/roguegear = 2)
 	verbage = "construct"
-	verbage_tp = "constructs"
 	craftsound = 'sound/foley/Building-01.ogg'
 	skillcraft = /datum/skill/craft/engineering
 
