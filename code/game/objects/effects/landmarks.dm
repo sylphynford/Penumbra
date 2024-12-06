@@ -246,6 +246,10 @@ INITIALIZE_IMMEDIATE(/obj/effect/landmark)
 	name = "Occultist"
 	icon_state = "arrow"
 
+/obj/effect/landmark/start/churchguard
+	name = "Templar"
+	icon_state = "arrow"
+
 /obj/effect/landmark/start/puritan
 	name = "Inquisitor"
 	icon_state = "arrow"

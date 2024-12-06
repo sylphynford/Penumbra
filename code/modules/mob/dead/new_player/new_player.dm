@@ -280,7 +280,7 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/rp_prompt.txt"))
 				to_chat(src, "<span class='warning'>You cannot join as Consort due to having the same genitals as the [ruler.mind.assigned_role]!</span>")
 				return
 
-		if(href_list["SelectedJob"] == "Templar")
+		if(href_list["SelectedJob"] == "Occultist")
 			var/inquisitor_exists = FALSE
 			// Check current living Inquisitors
 			for(var/mob/living/carbon/human/potential_inquisitor in GLOB.human_list)
@@ -296,7 +296,7 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/rp_prompt.txt"))
 						break
 			
 			if(!inquisitor_exists)
-				to_chat(src, "<span class='warning'>There must be or have been an Inquisitor for you to join as Templar!</span>")
+				to_chat(src, "<span class='warning'>There must be or have been an Inquisitor for you to join as Occultist!</span>")
 				return
 
 		if(!SSticker?.IsRoundInProgress())

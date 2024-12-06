@@ -967,7 +967,7 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 			HTML += "</a></td></tr>"
 
 			// Add advclass selection for jobs with advanced classes
-			if(job.advclass_cat_rolls?.len && job_preferences[job.title] != null && job.title != "Towner" && job.title != "Vagabond" && job.title != "Templar")
+			if(job.advclass_cat_rolls?.len && job_preferences[job.title] != null && job.title != "Towner" && job.title != "Vagabond" && job.title != "Occultist")
 				HTML += "<tr bgcolor='#000000'><td width='60%' align='right'>"
 				HTML += "Class:</td><td><a href='?_src_=prefs;preference=advclass;job=[rank]'>"
 				var/selected_class
@@ -976,8 +976,6 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 						selected_class = town_guard_class
 					if("Sergeant at Arms")
 						selected_class = sergeant_class
-					if("Templar")
-						selected_class = knight_lieutenant_class
 					if("Knight Lieutenant")
 						selected_class = knight_lieutenant_class
 					if("Hand")
@@ -2230,8 +2228,6 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 							class_type = /datum/advclass/watchman
 						if("Sergeant at Arms")
 							class_type = /datum/advclass/manorguard
-						if("Templar")
-							class_type = /datum/advclass/templar
 						if("Knight Lieutenant")
 							class_type = /datum/advclass/knight
 						if("Hand")
@@ -2262,8 +2258,6 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 								town_guard_class = (choice == "Random" ? null : choice)
 							if("Sergeant at Arms")
 								sergeant_class = (choice == "Random" ? null : choice)
-							if("Templar")
-								knight_lieutenant_class = (choice == "Random" ? null : choice)
 							if("Knight Lieutenant")
 								knight_lieutenant_class = (choice == "Random" ? null : choice)
 							if("Hand")
