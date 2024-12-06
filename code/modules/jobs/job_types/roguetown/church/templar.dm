@@ -35,10 +35,10 @@
 		// Find the Inquisitor and their class
 		var/inquisitor_class
 		if(!latejoin)
-			// During roundstart, check Inquisitor preferences
+			// During roundstart, check for the actual selected Inquisitor
 			for(var/mob/dead/new_player/P in GLOB.new_player_list)
-				if(P.client?.prefs?.job_preferences["Inquisitor"] == JP_HIGH)
-					inquisitor_class = P.client.prefs.inquisitor_class
+				if(P.ready == PLAYER_READY_TO_PLAY && P.mind?.assigned_role == "Inquisitor")
+					inquisitor_class = P.client?.prefs?.inquisitor_class
 					break
 		else
 			// During latejoin, check actual Inquisitors

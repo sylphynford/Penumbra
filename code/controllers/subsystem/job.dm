@@ -102,7 +102,7 @@ SUBSYSTEM_DEF(job)
 			if(!latejoin)
 				// During roundstart, check if anyone has Inquisitor as their highest preference
 				for(var/mob/dead/new_player/P in GLOB.new_player_list)
-					if(P.client?.prefs?.job_preferences["Inquisitor"] == JP_HIGH)
+					if(P.client?.prefs?.job_preferences["Inquisitor"] == JP_HIGH && P.ready == PLAYER_READY_TO_PLAY)
 						inquisitor_exists = TRUE
 						break
 			else
