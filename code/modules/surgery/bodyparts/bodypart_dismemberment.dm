@@ -35,6 +35,12 @@
 	if(HAS_TRAIT(C, TRAIT_NODISMEMBER))
 		return FALSE
 
+	var/obj/item/held_item = C.get_active_held_item()
+	if(held_item && (body_zone in list(BODY_ZONE_L_ARM, BODY_ZONE_R_ARM)))
+		if((body_zone == BODY_ZONE_L_ARM && C.active_hand_index == 2) || (body_zone == BODY_ZONE_R_ARM && C.active_hand_index == 1))
+			if(held_item.wielded || held_item.altgripped)
+				held_item.ungrip(C)
+
 	var/obj/item/bodypart/affecting = C.get_bodypart(BODY_ZONE_CHEST)
 	if(affecting && dismember_wound)
 		affecting.add_wound(dismember_wound)
