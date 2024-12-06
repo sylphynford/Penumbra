@@ -248,9 +248,9 @@ var/global/current_attack_crit = FALSE
 	if(istype(user.rmb_intent, /datum/rmb_intent/weak))
 		used_str--
 	used_str = CLAMP(used_str, 1, 20)
-	if(used_str >= 11)
+	if(used_str > 10)
 		newforce = newforce + (newforce * ((used_str - 10) * 0.4))  // Each point above 10 adds 40% damage
-	else if(used_str <= 9)
+	else if(used_str < 10)
 		newforce = newforce - (newforce * ((10 - used_str) * 0.4))  // Each point below 10 reduces damage by 40%
 
 	if(I.minstr)

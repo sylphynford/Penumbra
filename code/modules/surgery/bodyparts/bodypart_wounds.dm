@@ -221,10 +221,10 @@
 			if(owner)
 				health_roll = owner.STACON || 10
 			
-			var/ht_bonus = max(0, (health_roll - 10) * 1.5)
+			var/ht_bonus = max(0, (health_roll - 10) * 2.5)
 			
 			// Damage impact - each 2 points of damage adds +1 to roll
-			var/damage_mod = round(nuforce / 2)
+			var/damage_mod = nuforce / 2
 			
 			var/roll = rand(1,6) + rand(1,6) + rand(1,6) + damage_mod - ht_bonus
 			

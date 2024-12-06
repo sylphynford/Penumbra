@@ -382,9 +382,8 @@
 	// Check blade integrity
 	if(I.max_blade_int && I.dismember_blade_int)
 		var/blade_int_modifier = (I.blade_int / I.dismember_blade_int)
-		if(blade_int_modifier <= 0.15)
+		if(blade_int_modifier <= 0.5)
 			return affecting.body_zone
-		nuforce *= blade_int_modifier
 	
 	// Check attack intent
 	if(istype(attacker.rmb_intent, /datum/rmb_intent/weak))
@@ -404,26 +403,27 @@
 	
 	// Check total damage vs threshold
 	var/total_dam = affecting.get_damage()
-	if(total_dam >= damage_threshold || nuforce >= (affecting.max_damage * 0.5))
+	if(total_dam >= affecting.max_damage)
+		if(affecting.dismember(I.damtype, attacker.used_intent?.blade_class, attacker, dam_zone))
+			return null
+	else if(total_dam >= damage_threshold || nuforce >= (affecting.max_damage * 0.5))
 		// Do constitution check
 		var/health_roll = src.STACON || 10
-		var/ht_bonus = max(0, (health_roll - 10) * 1.5)
-		var/damage_mod = round(nuforce / 2)
+		var/ht_bonus = max(0, (health_roll - 10) * 2.5)
+		var/damage_mod = nuforce / 2
 		
 		// Roll for dismemberment
 		var/roll = rand(1,6) + rand(1,6) + rand(1,6) + damage_mod - ht_bonus
 		
 		if(roll <= 11)  // 50% chance for no wound at HT 10
 			return affecting.body_zone
-		else if(roll <= 14)  // 12-14 light dismemberment (~7.41% at HT 15)
-			var/dismember_chance = hard_break ? 50 : (easy_break ? 150 : 100)
-			if(prob(dismember_chance) && affecting.dismember(I.damtype, attacker.used_intent?.blade_class, attacker, dam_zone))
+		else if(roll <= 14)  // 12-14 light dismemberment
+			if(affecting.dismember(I.damtype, attacker.used_intent?.blade_class, attacker, dam_zone))
 				return null
-		else if(roll == 15)  // 15 nothing happens (~1.85% at HT 15)
+		else if(roll == 15)  // 15 nothing happens
 			return affecting.body_zone
-		else  // 16+ heavy dismemberment (~1.85% at HT 15)
-			var/dismember_chance = hard_break ? 100 : (easy_break ? 200 : 150)
-			if(prob(dismember_chance) && affecting.dismember(I.damtype, attacker.used_intent?.blade_class, attacker, dam_zone))
+		else  // 16+ heavy dismemberment
+			if(affecting.dismember(I.damtype, attacker.used_intent?.blade_class, attacker, dam_zone))
 				return null
 	
 	return affecting.body_zone

@@ -116,7 +116,7 @@
 	attack_verb = list("strikes", "hits")
 	hitsound = list('sound/combat/hits/blunt/metalblunt (1).ogg', 'sound/combat/hits/blunt/metalblunt (2).ogg', 'sound/combat/hits/blunt/metalblunt (3).ogg')
 	chargetime = 0
-	penfactor = 15
+	penfactor = 0
 	swingdelay = 0
 	icon_state = "instrike"
 	item_d_type = "blunt"

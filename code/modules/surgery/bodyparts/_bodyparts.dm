@@ -294,13 +294,17 @@
 /obj/item/bodypart/proc/update_max_damage(new_max)
 	if(new_max == last_max_damage_update)
 		return FALSE
-	var/health_percent = (max_damage - (brute_dam + burn_dam)) / max_damage
+	
+	// Scale damage proportionally based on new max_damage
+	var/damage_ratio = (brute_dam + burn_dam) / max_damage
 	max_damage = new_max
 	last_max_damage_update = new_max
-	// Scale current damage to maintain the same percentage of health
-	var/current_damage = (1 - health_percent) * max_damage
-	brute_dam = round(current_damage / 2)
-	burn_dam = round(current_damage / 2)
+	
+	// Apply scaled damage
+	var/total_scaled_damage = damage_ratio * max_damage
+	brute_dam = total_scaled_damage / 2
+	burn_dam = total_scaled_damage / 2
+	
 	if(owner)
 		owner.updatehealth()
 	return TRUE
@@ -334,13 +338,13 @@
 		if(ALIEN_BODYPART,LARVA_BODYPART) //aliens take double burn //nothing can burn with so much snowflake code around
 			burn *= 2
 
-	//cap at max_damage * 2
-	if(brute_dam + brute > max_damage * 2)
-		brute_dam = max_damage * 2
+	//cap at max_damage
+	if(brute_dam + brute > max_damage)
+		brute_dam = max_damage
 	else
 		brute_dam += brute
-	if(burn_dam + burn > max_damage * 2)
-		burn_dam = max_damage * 2
+	if(burn_dam + burn > max_damage)
+		burn_dam = max_damage
 	else
 		burn_dam += burn
 

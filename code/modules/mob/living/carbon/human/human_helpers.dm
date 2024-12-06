@@ -192,7 +192,7 @@
 		return TRUE
 
 /mob/living/carbon/human/get_punch_dmg()
-	var/damage = 12
+	var/damage = 5
 
 	var/used_str = STASTR
 
@@ -200,13 +200,13 @@
 		used_str = get_str_arms(used_hand)
 
 	if(used_str >= 11)
-		damage = damage + (damage * ((used_str - 10) * 0.4))  // Each point above 10 adds 20% damage
+		damage = damage + (damage * ((used_str - 10) * 0.4))  
 	else if(used_str <= 9)
-		damage = damage - (damage * ((10 - used_str) * 0.4))  // Each point below 10 reduces damage by 10%
+		damage = damage - (damage * ((10 - used_str) * 0.4))  
 
-	if(mind)
+	/*if(mind)
 		if(mind.has_antag_datum(/datum/antagonist/werewolf))
-			return 30
+			return 30*/
 
 	return damage
 /mob/living/carbon/human/proc/is_noble()
