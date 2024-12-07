@@ -1,8 +1,6 @@
-(Welcome to Fablekeep)
-<br> Mighty PSYDON has failed. I ensure what he finished comes to plan. I will be their greatest devil, their greatest enemy to be their greatest friend.
-It is the Age of Rediscovery.
-<br> <br> It is the year 1500 Post Psydonia. The world has emerged from technological repression and abuse after the fall of New Psydonia and the ancient Dwarven Federation.
-It is not known why the Dwarven Federation failed; some say it was because of inhumane cultists, some say it was Ten, but there is one thing that is certain...
-... The people of Earth must be tried; they must be tested.
-<br> <br> The typical round of Fablefield is one shaped by the freeform nature of the server. Do and explore what you want, be who you want to be, and discover new techniques.
-Will you realize an old dream? Or will you bring about the end of Fablefield?
+(Welcome to Penumbra)
+<br> For generations, PSYDON, the benevolent deity who shaped the world and watched over its people, has been absent. No one knows why Psydon withdrew, or if he even remembers the world he created.
+<br> <br> In his silence, the world has withered. The skies have darkened, crops fail, monsters rampage openly, and the land itself seems to cry out in agony. With the world dying, desperation has set in – cities crumble under starvation, the powerful hoard what little remains, and the poor sell their loyalty to anyone who promises a fleeting glimpse of salvation.
+<br> <br> The clergy of Psydon insist he is still present, though his guidance is beyond mortal understanding. Some cling to this fragile hope, believing that Psydon will one day breathe life back into the dying world. They endure the hardship, the hunger, the madness, all with the belief that their God is simply testing them after the unforgivable sin of meddling with death and the natural order.
+<br> <br> Others have turned to necromancy, believing that only through forbidden magic shunned by the church can the world be saved. To them, the world's suffering is not a trial, but a sign that the natural order must be upended. Only by mastering death itself can they force a change. The Church of Psydon calls them heretics, blasphemers, and the faithful fear that these dark magics will only hasten the world's destruction.
+<br> <br> We aim for a grueling experience fraught with hardship, where survival is a constant battle. Hope persists, but it's fractured. Penumbra is a place where real, unscripted conflict drives the story, and every choice matters as players carve out their own path, for better or worse. We believe that true storytelling can only exist when there is the real possibility of losing. Triumphs are earned through struggle and can only be made meaningful by the real possibility of being thwarted. Failure isn't something to be feared, as it forges growth.
