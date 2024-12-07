@@ -363,7 +363,6 @@
 
 /obj/structure/mineral_door/attack_right(mob/user)
 	if(user.get_active_held_item())
-		// Handle existing behavior for held items
 		var/obj/item = user.get_active_held_item()
 		if(istype(item, /obj/item/roguekey) || istype(item, /obj/item/storage/keyring))
 			if(locked)
@@ -373,37 +372,49 @@
 			trykeylock(item, user)
 		return
 
-	// Check belt slots for keys if hands are empty
 	if(ishuman(user))
 		var/mob/living/carbon/human/H = user
 		var/obj/item/belt_l = H.get_item_by_slot(SLOT_BELT_L)
 		var/obj/item/belt_r = H.get_item_by_slot(SLOT_BELT_R)
+		var/obj/item/belt = H.get_item_by_slot(SLOT_BELT)
 
-		// Check left belt
-		if(istype(belt_l, /obj/item/storage/keyring))
+		// Check hip-mounted keys/keyrings first
+		if(istype(belt_l, /obj/item/roguekey))
+			var/obj/item/roguekey/key = belt_l
+			if(key.lockhash == lockhash)
+				lock_toggle(user)
+				return
+		else if(istype(belt_l, /obj/item/storage/keyring))
 			var/obj/item/storage/keyring/ring = belt_l
 			for(var/obj/item/roguekey/K in ring.contents)
 				if(K.lockhash == lockhash)
 					lock_toggle(user)
 					return
-		else if(istype(belt_l, /obj/item/roguekey))
-			var/obj/item/roguekey/key = belt_l
+
+		if(istype(belt_r, /obj/item/roguekey))
+			var/obj/item/roguekey/key = belt_r
 			if(key.lockhash == lockhash)
 				lock_toggle(user)
 				return
-
-		// Check right belt
-		if(istype(belt_r, /obj/item/storage/keyring))
+		else if(istype(belt_r, /obj/item/storage/keyring))
 			var/obj/item/storage/keyring/ring = belt_r
 			for(var/obj/item/roguekey/K in ring.contents)
 				if(K.lockhash == lockhash)
 					lock_toggle(user)
 					return
-		else if(istype(belt_r, /obj/item/roguekey))
-			var/obj/item/roguekey/key = belt_r
-			if(key.lockhash == lockhash)
-				lock_toggle(user)
-				return
+
+		// Check for keys inside the primary belt slot
+		if(istype(belt, /obj/item/storage/belt/rogue))
+			var/obj/item/storage/belt/rogue/rogue_belt = belt
+			for(var/obj/item/roguekey/K in rogue_belt.contents)
+				if(K.lockhash == lockhash)
+					lock_toggle(user)
+					return
+			for(var/obj/item/storage/keyring/ring in rogue_belt.contents)
+				for(var/obj/item/roguekey/K in ring.contents)
+					if(K.lockhash == lockhash)
+						lock_toggle(user)
+						return
 
 	return ..()
 
@@ -978,5 +989,7 @@
 	closeSound = 'modular/Neu_Food/sound/blindsclose.ogg'
 	dir = NORTH
 	locked = TRUE
+
+
 
 
