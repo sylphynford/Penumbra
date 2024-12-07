@@ -8,7 +8,7 @@
 	allowed_sexes = list(MALE, FEMALE)
 	allowed_ages = list(AGE_ADULT, AGE_MIDDLEAGED)
 	allowed_patrons = ALL_DIVINE_PATRONS
-	tutorial = "Placeholder. "
+	tutorial = "Templars are warriors who have forsaken wealth and title in lieu of service to the church, due to either zealotry or a past shame. They guard the church and its priest while keeping a watchful eye against heresy and nite-creechers. Within troubled dreams, they wonder if the blood they shed makes them holy or stained."
 	display_order = JDO_CHURCHGUARD
 	whitelist_req = TRUE
 	outfit = /datum/outfit/job/roguetown/churchguard
