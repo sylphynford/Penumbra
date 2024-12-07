@@ -677,22 +677,18 @@
 	var/total_tox = getToxLoss()
 	var/total_oxy = getOxyLoss()
 	var/used_damage = 0
-	var/static/list/lethal_zones = list(
-		BODY_ZONE_HEAD,
-		BODY_ZONE_CHEST,
-	)
+	var/static/list/lethal_zones = list()
+	
 	for(var/obj/item/bodypart/bodypart as anything in bodyparts)
 		if(!(bodypart.body_zone in lethal_zones))
 			continue
-		total_burn += bodypart.burn_dam
-		total_brute += bodypart.brute_dam
+			total_burn += bodypart.burn_dam
+			total_brute += bodypart.brute_dam
 	used_damage = total_burn + total_brute + total_tox + total_oxy
 	health = round(maxHealth - used_damage, DAMAGE_PRECISION)
 	staminaloss = round(total_stamina, DAMAGE_PRECISION)
 	update_stat()
 	update_mobility()
-//	if(((maxHealth - total_burn) < HEALTH_THRESHOLD_DEAD) && stat == DEAD )
-//		become_husk("burn")
 
 	med_hud_set_health()
 	if(stat == SOFT_CRIT)
