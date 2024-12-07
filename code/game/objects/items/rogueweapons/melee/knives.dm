@@ -122,7 +122,7 @@
 	w_class = WEIGHT_CLASS_SMALL
 	smeltresult = /obj/item/ingot/steel
 
-/obj/item/rogueweapon/huntingknife/cleaver/combat
+/obj/item/rogueweapon/huntingknife/combat
 	force = 16
 	name = "seax"
 	desc = "A fighting knife used amongst the Grenzels and Northerners for centuries, serving dual purpose as a \
