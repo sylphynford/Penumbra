@@ -48,7 +48,7 @@
 						inquisitor_class = inq_client.prefs.inquisitor_class
 						break
 		
-		// Determine Templar class based on Inquisitor class
+		// Determine Occultist class based on Inquisitor class
 		var/class_type
 		if(!inquisitor_class || inquisitor_class == "random") // Handle random/unset class preference
 			class_type = pick(/datum/advclass/templar/monk, /datum/advclass/templar/crusader, /datum/advclass/templar/hunter)

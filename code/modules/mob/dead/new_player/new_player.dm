@@ -607,25 +607,27 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/rp_prompt.txt"))
 					
 					// Show confirmation window with tutorial text
 					var/confirm = alert(src, "[tutorial_text]\n\nDo you want to spawn as [choice]?", "Confirm Class Selection", "Yes", "No")
-					if(confirm == "Yes")
-						switch(rank)
-							if("Town Guard")
-								C.prefs.town_guard_class = choice
-							if("Sergeant at Arms")
-								C.prefs.sergeant_class = choice
-							if("Knight Lieutenant")
-								C.prefs.knight_lieutenant_class = choice
-							if("Hand")
-								C.prefs.hand_class = choice
-							if("Squire")
-								C.prefs.squire_class = choice
-							if("Inquisitor")
-								C.prefs.inquisitor_class = choice
-							if("Mercenary")
-								C.prefs.mercenary_class = choice
-							if("Heir")
-								C.prefs.heir_class = choice
-						C.prefs.save_preferences()
+					if(confirm != "Yes")
+						return FALSE // Cancel spawn if they didn't confirm
+
+					switch(rank)
+						if("Town Guard")
+							C.prefs.town_guard_class = choice
+						if("Sergeant at Arms")
+							C.prefs.sergeant_class = choice
+						if("Knight Lieutenant")
+							C.prefs.knight_lieutenant_class = choice
+						if("Hand")
+							C.prefs.hand_class = choice
+						if("Squire")
+							C.prefs.squire_class = choice
+						if("Inquisitor")
+							C.prefs.inquisitor_class = choice
+						if("Mercenary")
+							C.prefs.mercenary_class = choice
+						if("Heir")
+							C.prefs.heir_class = choice
+					C.prefs.save_preferences()
 				else
 					return FALSE // Cancel spawn if they didn't pick a class
 			else

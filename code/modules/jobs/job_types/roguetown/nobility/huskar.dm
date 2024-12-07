@@ -19,7 +19,7 @@
 	max_pq = null
 	round_contrib_points = 2
 
-	cmode_music = 'sound/music/combat_routier.ogg'
+	cmode_music = 'sound/music/combat_knight.ogg'
 
 /datum/outfit/job/roguetown/huskar/pre_equip(mob/living/carbon/human/H)
 	. = ..()
