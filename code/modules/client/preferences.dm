@@ -1652,9 +1652,10 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 
 				if("patron")
 					var/list/patron_choices = list()
-					for(var/type in subtypesof(/datum/patron))
+					var/datum/faith/selected_faith = GLOB.faithlist[selected_patron?.associated_faith]
+					for(var/type in GLOB.patrons_by_faith[selected_faith.type])
 						var/datum/patron/P = GLOB.patronlist[type]
-						if(!P)
+						if(!P || !P.preference_accessible || P.hidden_from_prefs)
 							continue
 						patron_choices[P.name] = P
 

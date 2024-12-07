@@ -18,6 +18,8 @@ GLOBAL_LIST_EMPTY(preference_patrons)
 	var/datum/faith/associated_faith = /datum/faith
 	/// Whether or not we are accessible in preferences
 	var/preference_accessible = TRUE
+	/// Whether this patron should be hidden from preference selection
+	var/hidden_from_prefs = FALSE
 	/// Whether or not this patron hates undead - Mostly so we know whether miracles should actually harm
 	var/undead_hater = TRUE
 	/// Some gods have related confessions, if they're evil and such
@@ -32,7 +34,7 @@ GLOBAL_LIST_EMPTY(preference_patrons)
 	var/t2
 	/// Tier 3 spell
 	var/t3
-	/// Final tier spell
+	/// Tier 4 spell
 	var/t4
 
 /datum/patron/proc/on_gain(mob/living/pious)

@@ -50,7 +50,7 @@
 		GLOB.patronlist[path] = patron
 		LAZYINITLIST(GLOB.patrons_by_faith[patron.associated_faith])
 		GLOB.patrons_by_faith[patron.associated_faith][path] = patron
-		if(patron.preference_accessible)
+		if(patron.preference_accessible && !patron.hidden_from_prefs)
 			GLOB.preference_patrons[path] = patron
 
 	// Ported from Lethalstone
