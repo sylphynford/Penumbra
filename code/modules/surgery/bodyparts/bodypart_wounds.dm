@@ -176,11 +176,11 @@
 
 /// Behemoth of a proc used to apply a wound after a bodypart is damaged in an attack
 /obj/item/bodypart/proc/try_crit(bclass = BCLASS_BLUNT, dam, mob/living/user, zone_precise = src.body_zone, silent = FALSE, crit_message = FALSE)
-	if(!bclass || !dam || (owner.status_flags & GODMODE))
+	if(!bclass || !dam || !owner || (owner.status_flags & GODMODE))
 		return FALSE
 	var/list/attempted_wounds = list()
 	var/total_dam = get_damage()
-	var/damage_dividend = (total_dam / max_damage)
+	var/damage_threshold = max_damage * 0.5 
 	var/resistance = HAS_TRAIT(owner, TRAIT_CRITICAL_RESISTANCE)
 	
 	// Get complex damage like dismemberment does
@@ -202,20 +202,72 @@
 		if(!easy_break)
 			easy_break = HAS_TRAIT(owner, TRAIT_EASYDISMEMBER)
 	
-	var/damage_threshold = max_damage * 0.5 
 	if(hard_break)
 		damage_threshold = max_damage * 1 // Harder to break
 	else if(easy_break)
 		damage_threshold = max_damage * 0.1 // Easier to break
-	
-	// GURPS style roll for fractures/dislocations
-	var/is_cutting = (bclass in list(BCLASS_CUT, BCLASS_CHOP, BCLASS_STAB, BCLASS_PICK))
+
+	// Check for dismemberment first
+	if(bclass in list(BCLASS_CUT, BCLASS_CHOP, BCLASS_STAB, BCLASS_PICK))
+		if(total_dam >= damage_threshold || nuforce >= (max_damage * 0.5))
+			if(dismember(BRUTE, bclass, user, zone_precise))
+				return TRUE
+
+	/*// Knockout effect for head hits
+	var/static/list/knockout_zones = list(BODY_ZONE_HEAD, BODY_ZONE_PRECISE_SKULL)
+	if(!owner.stat && !resistance && (zone_precise in knockout_zones) && (bclass != BCLASS_CHOP) && prob(dam))
+		var/from_behind = FALSE
+		if(user && (owner.dir == turn(get_dir(owner,user), 180)))
+			from_behind = TRUE
+		owner.next_attack_msg += " <span class='crit'><b>Critical hit!</b> [owner] is knocked out[from_behind ? " FROM BEHIND" : ""]!</span>"
+		owner.flash_fullscreen("whiteflash3")
+		owner.Unconscious(5 SECONDS + (from_behind * 10 SECONDS))
+		if(owner.client)
+			winset(owner.client, "outputwindow.output", "max-lines=1")
+			winset(owner.client, "outputwindow.output", "max-lines=100")*/
+
+	// Then check for fractures/dislocations
 	if((bclass in GLOB.dislocation_bclasses) || (bclass in GLOB.fracture_bclasses))
-		if(is_cutting)
-			return FALSE
-			
-		// Check if damage is enough to wound
-		// Either by reaching threshold (50% HP) OR by dealing massive damage in one hit
+		if(!(bclass in list(BCLASS_CUT, BCLASS_CHOP, BCLASS_STAB, BCLASS_PICK))) // Only do fractures/dislocations if it's NOT a cutting weapon
+			// Check if damage is enough to wound
+			// Either by reaching threshold (50% HP) OR by dealing massive damage in one hit
+			if(total_dam >= damage_threshold || nuforce >= (max_damage * 0.5))
+				var/health_roll = 0
+				if(owner)
+					health_roll = owner.STACON || 10
+				
+				var/ht_bonus = max(0, (health_roll - 10) * 2.5)
+				
+				// Damage impact - each 2 points of damage adds +1 to roll
+				var/damage_mod = nuforce / 2
+				
+				var/roll = rand(1,6) + rand(1,6) + rand(1,6) + damage_mod - ht_bonus
+				
+				// Thresholds for 3d6 + mods
+				if(roll <= 11)  // 50% chance for no wound at HT 10
+					return FALSE
+				else if(roll <= 14)  // 12-14 for dislocations
+					var/wound_to_apply
+					if(body_zone == BODY_ZONE_HEAD)
+						wound_to_apply = get_fracture_type(zone_precise)
+					else if(body_zone == BODY_ZONE_CHEST)
+						wound_to_apply = /datum/wound/fracture/chest
+					else
+						wound_to_apply = (zone_precise == BODY_ZONE_PRECISE_NECK) ? /datum/wound/dislocation/neck : /datum/wound/dislocation
+					attempted_wounds += wound_to_apply
+				else if(roll <= 15)  // 15 nothing happens
+					return FALSE
+				else  // 16+ for fractures
+					attempted_wounds += get_fracture_type(zone_precise)
+
+	// GURPS style roll for stab wounds
+	var/static/list/eyestab_zones = list(BODY_ZONE_PRECISE_R_EYE, BODY_ZONE_PRECISE_L_EYE)
+	var/static/list/tonguestab_zones = list(BODY_ZONE_PRECISE_MOUTH)
+	var/static/list/nosestab_zones = list(BODY_ZONE_PRECISE_NOSE)
+	var/static/list/earstab_zones = list(BODY_ZONE_PRECISE_EARS)
+	var/static/list/knockout_zones = list(BODY_ZONE_PRECISE_SKULL)
+
+	if((bclass in GLOB.stab_bclasses) && !resistance)
 		if(total_dam >= damage_threshold || nuforce >= (max_damage * 0.5))
 			var/health_roll = 0
 			if(owner)
@@ -231,153 +283,7 @@
 			// Thresholds for 3d6 + mods
 			if(roll <= 11)  // 50% chance for no wound at HT 10
 				return FALSE
-			else if(roll <= 14)  // 12-14 for dislocations
-				attempted_wounds += /datum/wound/dislocation
-			else if(roll <= 15)  // 15 nothing happens
-				return FALSE
-			else  // 16+ for fractures 
-				if(HAS_TRAIT(src, TRAIT_BRITTLE))
-					attempted_wounds += /datum/wound/fracture
-				else
-					attempted_wounds += /datum/wound/fracture
-
-	// Check for artery hits - 1d6, hit on 1 JUST LIKE LIFEWEB!
-	if(bclass in GLOB.artery_bclasses)
-		if(nuforce < 5)
-			return FALSE
-		if(rand(1,6) == 1) 
-			var/artery_type = /datum/wound/artery
-			if(zone_precise == BODY_ZONE_PRECISE_NECK)
-				artery_type = /datum/wound/artery/neck
-			attempted_wounds += artery_type
-
-	for(var/wound_type in shuffle(attempted_wounds))
-		var/datum/wound/applied = add_wound(wound_type, silent, crit_message)
-		if(applied)
-			return applied
-	return FALSE
-
-/obj/item/bodypart/chest/try_crit(bclass, dam, mob/living/user, zone_precise, silent = FALSE, crit_message = FALSE)
-	if(!bclass || !dam || (owner.status_flags & GODMODE))
-		return FALSE
-	var/list/attempted_wounds = list()
-	var/used
-	var/total_dam = get_damage()
-	var/damage_dividend = (total_dam / max_damage)
-	var/resistance = HAS_TRAIT(owner, TRAIT_CRITICAL_RESISTANCE)
-	if(user && dam)
-		if(user.goodluck(2))
-			dam += 10
-	if((bclass in GLOB.cbt_classes) && (zone_precise == BODY_ZONE_PRECISE_GROIN))
-		var/cbt_multiplier = 1
-		if(user && HAS_TRAIT(user, TRAIT_NUTCRACKER))
-			cbt_multiplier = 2
-		if(!resistance && prob(round(dam/5) * cbt_multiplier))
-			attempted_wounds += /datum/wound/cbt
-		if(prob(dam * cbt_multiplier))
-			owner.emote("groin", TRUE)
-			owner.Stun(10)
-	if((bclass in GLOB.fracture_bclasses) && (zone_precise != BODY_ZONE_PRECISE_STOMACH))
-		used = round(damage_dividend * 20 + (dam / 3) - 10 * resistance, 1)
-		if(user && istype(user.rmb_intent, /datum/rmb_intent/strong))
-			used += 10
-		if(HAS_TRAIT(src, TRAIT_BRITTLE))
-			used += 10
-		var/fracture_type = /datum/wound/fracture/chest
-		if(zone_precise == BODY_ZONE_PRECISE_GROIN)
-			fracture_type = /datum/wound/fracture/groin
-		if(prob(used))
-			attempted_wounds += fracture_type
-	if(bclass in GLOB.artery_bclasses)
-		used = round(damage_dividend * 20 + (dam / 4) - 10 * resistance, 1)
-		if(user)
-			if((bclass in GLOB.artery_strong_bclasses) && istype(user.rmb_intent, /datum/rmb_intent/strong))
-				used += 10
-			else if(istype(user.rmb_intent, /datum/rmb_intent/aimed))
-				used += 10
-		if(prob(used))
-			if((zone_precise == BODY_ZONE_PRECISE_STOMACH) && !resistance)
-				attempted_wounds += /datum/wound/slash/disembowel
-			attempted_wounds += /datum/wound/artery
-
-	for(var/wound_type in shuffle(attempted_wounds))
-		var/datum/wound/applied = add_wound(wound_type, silent, crit_message)
-		if(applied)
-			return applied
-	return FALSE
-
-/obj/item/bodypart/head/try_crit(bclass, dam, mob/living/user, zone_precise, silent = FALSE, crit_message = FALSE)
-	var/static/list/eyestab_zones = list(BODY_ZONE_PRECISE_R_EYE, BODY_ZONE_PRECISE_L_EYE)
-	var/static/list/tonguestab_zones = list(BODY_ZONE_PRECISE_MOUTH)
-	var/static/list/nosestab_zones = list(BODY_ZONE_PRECISE_NOSE)
-	var/static/list/earstab_zones = list(BODY_ZONE_PRECISE_EARS)
-	var/static/list/knockout_zones = list(BODY_ZONE_HEAD, BODY_ZONE_PRECISE_SKULL)
-	var/list/attempted_wounds = list()
-	var/used
-	var/total_dam = get_damage()
-	var/damage_dividend = (total_dam / max_damage)
-	var/resistance = HAS_TRAIT(owner, TRAIT_CRITICAL_RESISTANCE)
-	var/from_behind = FALSE
-	if(user && (owner.dir == turn(get_dir(owner,user), 180)))
-		from_behind = TRUE
-	if(user && dam)
-		if(user.goodluck(2))
-			dam += 10
-	if((bclass in GLOB.dislocation_bclasses) && (total_dam >= max_damage))
-		used = round(damage_dividend * 20 + (dam / 3) - 10 * resistance, 1)
-		if(prob(used))
-			if(HAS_TRAIT(src, TRAIT_BRITTLE))
-				attempted_wounds += /datum/wound/fracture/neck
-			else if (!resistance)
-				attempted_wounds += /datum/wound/dislocation/neck
-	if(bclass in GLOB.fracture_bclasses)
-		used = round(damage_dividend * 20 + (dam / 3) - 10 * resistance, 1)
-		if(HAS_TRAIT(src, TRAIT_BRITTLE))
-			used += 20
-		if(user)
-			if(istype(user.rmb_intent, /datum/rmb_intent/strong))
-				used += 10
-		if(!owner.stat && !resistance && (zone_precise in knockout_zones) && (bclass != BCLASS_CHOP) && prob(used))
-			owner.next_attack_msg += " <span class='crit'><b>Critical hit!</b> [owner] is knocked out[from_behind ? " FROM BEHIND" : ""]!</span>"
-			owner.flash_fullscreen("whiteflash3")
-			owner.Unconscious(5 SECONDS + (from_behind * 10 SECONDS))
-			if(owner.client)
-				winset(owner.client, "outputwindow.output", "max-lines=1")
-				winset(owner.client, "outputwindow.output", "max-lines=100")
-		var/dislocation_type
-		var/fracture_type = /datum/wound/fracture/head
-		var/necessary_damage = 0.8
-		if(resistance)
-			fracture_type = /datum/wound/fracture
-		else if(zone_precise == BODY_ZONE_PRECISE_SKULL)
-			necessary_damage = 0.7
-			used += 5
-		else if(zone_precise == BODY_ZONE_PRECISE_MOUTH)
-			fracture_type = /datum/wound/fracture/mouth
-			necessary_damage = 0.6
-		else if(zone_precise == BODY_ZONE_PRECISE_NECK)
-			fracture_type = /datum/wound/fracture/neck
-			dislocation_type = /datum/wound/dislocation/neck
-			necessary_damage = 0.8
-		if(prob(used) && (damage_dividend >= necessary_damage))
-			if(dislocation_type)
-				attempted_wounds += dislocation_type
-			attempted_wounds += fracture_type
-	if(bclass in GLOB.artery_bclasses)
-		used = round(damage_dividend * 20 + (dam / 3) - 10 * resistance, 1)
-		if(user)
-			if(bclass == BCLASS_CHOP)
-				if(istype(user.rmb_intent, /datum/rmb_intent/strong))
-					used += 10
-			else
-				if(istype(user.rmb_intent, /datum/rmb_intent/aimed))
-					used += 10
-		var/artery_type = /datum/wound/artery
-		if(zone_precise == BODY_ZONE_PRECISE_NECK)
-			artery_type = /datum/wound/artery/neck
-		if(prob(used))
-			attempted_wounds += artery_type
-			if((bclass in GLOB.stab_bclasses) && !resistance)
+			else if(roll > 11)  // Any roll above 11 causes stab wounds
 				if(zone_precise in earstab_zones)
 					var/obj/item/organ/ears/my_ears = owner.getorganslot(ORGAN_SLOT_EARS)
 					if(!my_ears || has_wound(/datum/wound/facial/ears))
@@ -407,11 +313,64 @@
 				else if(zone_precise in knockout_zones)
 					attempted_wounds += /datum/wound/fracture/head/brain
 
+	// Check for artery hits - 1d6, hit on 1 JUST LIKE LIFEWEB!
+	if(bclass in GLOB.artery_bclasses)
+		if(nuforce < 5)
+			return FALSE
+		if(rand(1,6) == 1) 
+			var/artery_type = /datum/wound/artery
+			if(zone_precise == BODY_ZONE_PRECISE_NECK)
+				artery_type = /datum/wound/artery/neck
+			else if(zone_precise == BODY_ZONE_PRECISE_STOMACH && !resistance)
+				artery_type = /datum/wound/slash/disembowel
+			attempted_wounds += artery_type
+
 	for(var/wound_type in shuffle(attempted_wounds))
 		var/datum/wound/applied = add_wound(wound_type, silent, crit_message)
 		if(applied)
 			return applied
 	return FALSE
+
+/*/obj/item/bodypart/chest/try_crit(bclass, dam, mob/living/user, zone_precise, silent = FALSE, crit_message = FALSE)
+	. = ..()
+	if(.)
+		return
+	var/list/attempted_wounds = list()
+	var/resistance = HAS_TRAIT(owner, TRAIT_CRITICAL_RESISTANCE)
+	if(user && dam)
+		if(user.goodluck(2))
+			dam += 10
+	if((bclass in GLOB.cbt_classes) && (zone_precise == BODY_ZONE_PRECISE_GROIN))
+		var/cbt_multiplier = 1
+		if(user && HAS_TRAIT(user, TRAIT_NUTCRACKER))
+			cbt_multiplier = 2
+		if(!resistance && prob(round(dam/5) * cbt_multiplier))
+			attempted_wounds += /datum/wound/cbt
+		if(prob(dam * cbt_multiplier))
+			owner.emote("groin", TRUE)
+			owner.Stun(10)
+
+	for(var/wound_type in shuffle(attempted_wounds))
+		var/datum/wound/applied = add_wound(wound_type, silent, crit_message)
+		if(applied)
+			return applied
+	return FALSE
+
+/obj/item/bodypart/head/try_crit(bclass, dam, mob/living/user, zone_precise, silent = FALSE, crit_message = FALSE)
+	. = ..()
+	if(.)
+		return
+	var/list/attempted_wounds = list()
+	var/resistance = HAS_TRAIT(owner, TRAIT_CRITICAL_RESISTANCE)
+	if(user && dam)
+		if(user.goodluck(2))
+			dam += 10
+
+	for(var/wound_type in shuffle(attempted_wounds))
+		var/datum/wound/applied = add_wound(wound_type, silent, crit_message)
+		if(applied)
+			return applied
+	return FALSE*/
 
 /// Embeds an object in this bodypart
 /obj/item/bodypart/proc/add_embedded_object(obj/item/embedder, silent = FALSE, crit_message = FALSE)
@@ -563,3 +522,20 @@
 	if(skeletonized)
 		returned_flags |= SURGERY_INCISED | SURGERY_RETRACTED | SURGERY_DRILLED //ehh... we have access to whatever organ is there
 	return returned_flags
+
+/obj/item/bodypart/proc/get_fracture_type(zone_precise)
+	switch(zone_precise)
+		if(BODY_ZONE_PRECISE_NECK)
+			return /datum/wound/fracture/neck
+		if(BODY_ZONE_PRECISE_SKULL)
+			return /datum/wound/fracture/head
+		if(BODY_ZONE_PRECISE_MOUTH)
+			return /datum/wound/fracture/mouth
+		if(BODY_ZONE_HEAD)
+			return /datum/wound/fracture/head
+		if(BODY_ZONE_CHEST)
+			return /datum/wound/fracture/chest
+		if(BODY_ZONE_PRECISE_GROIN)
+			return /datum/wound/fracture/groin
+		else
+			return /datum/wound/fracture
