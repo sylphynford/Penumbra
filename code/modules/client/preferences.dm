@@ -1643,22 +1643,30 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 					var/faith_input = input(user, "Choose your character's faith", "Faith") as null|anything in faiths_named
 					if(faith_input)
 						var/datum/faith/faith = faiths_named[faith_input]
+						ResetJobs()
 						to_chat(user, "<font color='yellow'>Faith: [faith.name]</font>")
 						to_chat(user, "Background: [faith.desc]")
 						to_chat(user, "<font color='red'>Likely Worshippers: [faith.worshippers]</font>")
+						to_chat(user, "<font color='red'><b>Your classes have been reset.</b></font>")
 						selected_patron = GLOB.patronlist[faith.godhead] || GLOB.patronlist[pick(GLOB.patrons_by_faith[faith_input])]
 
 				if("patron")
-					var/list/patrons_named = list()
-					for(var/path as anything in GLOB.patrons_by_faith[selected_patron?.associated_faith || initial(default_patron.associated_faith)])
-						var/datum/patron/patron = GLOB.patronlist[path]
-						if(!patron.name)
+					var/list/patron_choices = list()
+					for(var/type in subtypesof(/datum/patron))
+						var/datum/patron/P = GLOB.patronlist[type]
+						if(!P)
 							continue
-						patrons_named[patron.name] = patron
-					var/datum/faith/current_faith = GLOB.faithlist[selected_patron?.associated_faith] || GLOB.faithlist[initial(default_patron.associated_faith)]
-					var/god_input = input(user, "Choose your character's patron", "[current_faith.name]") as null|anything in patrons_named
-					if(god_input)
-						selected_patron = patrons_named[god_input]
+						patron_choices[P.name] = P
+
+					var/choice = input(user, "Choose your patron:", "Patron Selection") as null|anything in patron_choices
+					if(choice)
+						selected_patron = patron_choices[choice]
+						// Unready the player when changing religion
+						if(istype(user, /mob/dead/new_player))
+							var/mob/dead/new_player/N = user
+							if(N.ready != PLAYER_NOT_READY)
+								N.ready = PLAYER_NOT_READY
+								to_chat(user, span_warning("You have been unreadied due to changing your religion."))
 						to_chat(user, "<font color='yellow'>Patron: [selected_patron]</font>")
 						to_chat(user, "<font color='#FFA500'>Domain: [selected_patron.domain]</font>")
 						to_chat(user, "Background: [selected_patron.desc]")
