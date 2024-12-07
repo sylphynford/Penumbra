@@ -55,7 +55,6 @@
 		H.change_stat("speed", -1)
 
 /datum/outfit/job/roguetown/huskar
-	wrists = /obj/item/clothing/wrists/roguetown/bracers
 	belt = /obj/item/storage/belt/rogue/leather
 	beltl = /obj/item/storage/keyring/guardcastle
 	beltr = /obj/item/rogueweapon/sword/falchion
