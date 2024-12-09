@@ -6,19 +6,20 @@
 	id = "dwarfm"
 	clothes_id = "dwarf"
 	desc = "<b>Dwarf</b><br>\
-	A proud and robust race of short mountain folk, \
-	the dwarves are known for their pride in martial strength \
-	and their tenacity towards their ancient traditions.\
-	A Dwarf, much like the rock that they carve their fortress out of \
-	is stubborn and ancient, with their race being the longest lived of all \
-	of the weeping gods creation. They, like stone: also rarely change \
-	and tend to shun the modernization of the world around them. \
-	Instead, a Dwarf looks to his ancestorial heritage for guidance on \
-	the various challenges they face. Even if, in some irony: this behaviour \
-	leads the race towards technological advacement as they continue \
-	to improve their craft through powerful mechanization and forging \
-	Dwarves are hearty, but are not known for their speed or eyesight... \
-	Each dwarf hails from a ancient fortress named after the most plentiful mineral. \
+	Dwarves are a peoples defined by their relentless dedication. \
+	From a young age, many are drawn to a single skill, an art, or a craft, \
+	and once that passion takes root, it becomes their world. \
+	This obsession often shapes their identity, and their days are measured not by time \
+	but by the progress they make in perfecting their craft. \
+	It is this unwavering tenacity, this single-mindedness, that marks them as a race \
+	of tireless builders, creators, and warriors, forever bound to the pursuits they choose \
+	with unshakable resolve.<br><br>\
+	When the tide of necromantic magic swept across the world, the dwarves struggled to adapt, \
+	they were too rooted in tradition, their minds too locked into the repetition of their chosen paths, \
+	to pivot quickly or effectively. They sought to confront the new threat with the same tools \
+	and tactics that had worked for centuries, unable to break from their rigid approaches. \
+	In the aftermath, many dwarves, unable to reclaim their lost homes or rebuild what was shattered, \
+	sought refuge among the humans.<br><br>\
 	+1 Constitution."
 
 	skin_tone_wording = "Dwarf Fortress"

@@ -5,13 +5,15 @@
 	name = "Dark Elf"
 	id = "elfd"
 	desc = "<b>Dark Elf</b><br>\
-	Elves, are a generic term for tall, pointy-eared humanoids\
-    Of whom trace their original heritage to the ancient mysterious Snow Elves. \
-	These ones are of a dark complexion and originate mostly from the underdark. \
-    Their culture and entire lives normally involve serving the evil gods of the inhumen pantheon. \
-    Previously rare but in recent times, more and more dark elfs can be seen on the surface. \
-    The ones who aren't overtly cruel and bloodthirsty, tend to flee to the surface lest they get culled by their own society, \
-    while some more sinister ones abandon their cities in search of new and greater power. \
+	The dark elves are a mysterious and enigmatic offshoot of the elven race, who, \
+	for centuries, have chosen to seclude themselves deep beneath the earth. \
+	While their surface-dwelling cousins have suffered greatly from the rise of necromantic forces, \
+	the dark elves have remained untouched, largely ignored by the undead scourge that ravages \
+	the world above.<br><br>\
+	Many believe they are somehow aligned with the forces of darkness, or that they possess \
+	forbidden knowledge that allows them to escape the ravages of the necromantic plague. \
+	Because of the relative safety of the underdark, they are a rare sight in human towns \
+	and cities.<br><br>\
 	+1 Perception"
 
 /*

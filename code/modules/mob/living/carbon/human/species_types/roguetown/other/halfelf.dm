@@ -5,15 +5,14 @@
 	name = "Half-Elf"
 	id = "helf"
 	desc = "<b>Half Elf</b><br>\
-	The child of an Elf and Humen, Half-Elves are generally frowned \
-	upon by more conservative peoples, although as racial tensions lower, \
-	more and more half-elves are being born. To the point that some scholars \
-	worry that someday, it may be impossible to distinguish the two species. \
-	Half-Elves are extremely diverse, as they bring in human and elvish culture\
-	and it is widely considered that Half-Elf culture is simply a melting pot of \
-	various other cultures condensing into one vibrant entity. \
-	Due to their heritage, Half-Elves tend to gain racial traits depending on how strong their fathers, or mothers, genes were. \
-	Half-Elves also typically try to find identity in one of two regions they have similarities towards. \
+	While humans and elves find one another attractive, the vast difference in lifespans \
+	creates an almost insurmountable barrier for love. While brief romances are not uncommon, \
+	few are willing to commit to the heartache of a life shared in mismatched years. \
+	Humans fear being left behind while Elves wish to avoid the pain of losing a partner \
+	far too soon.<br><br>\
+	Shunned by both humans and elves, half-elves grow into lives defined by fierce self-reliance \
+	though they often strive for acceptance, whether among humans or elves, and will go to great \
+	lengths to bridge the gap between the worlds that reject them.<br><br>\
 	+1 Perception." 
 
 	skin_tone_wording = "Identity"

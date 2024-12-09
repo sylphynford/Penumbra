@@ -4,7 +4,15 @@
 /datum/species/demihuman
 	name = "Half-Kin"
 	id = "demihuman"
-	desc = "The inevitable union between wildkin and some form of humanity or another, and while they also experience animalistic tendencies akin to their full-blooded ancestors, their intermingling with others has stemmed the intensity. (Half-kin are not a template race to play your own custom race, if you play a half-kin, you are expected to roleplay to the setting and the race's lore.)"
+	desc = "<b>Half-Kin</b><br>\
+	Half-kin were an ill-fated experiment by scholars and alchemists who sought to merge \
+	the resilience of humans with the primal ferocity of animals. Their goal was to create \
+	a superior warrior, one capable of withstanding great injury and thriving in the harshest \
+	environments.<br><br>\
+	While largely human, it's very common for them to be psychologically influenced by the animal \
+	they take after. For instance predatory half-kin often have a tendency toward assertiveness \
+	and aggression.<br><br>\
+	+1 Perception."
 	skin_tone_wording = "Ancestry"
 	default_color = "FFFFFF"
 	species_traits = list(EYECOLOR,HAIR,FACEHAIR,LIPS,STUBBLE,OLDGREY,MUTCOLORS_PARTSONLY)

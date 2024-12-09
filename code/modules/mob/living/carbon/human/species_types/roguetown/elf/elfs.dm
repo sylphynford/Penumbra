@@ -5,17 +5,20 @@
 	name = "Elf"
 	id = "elfw"
 	desc = "<b>Elf</b><br>\
-	Elves, or Wood-Elf by the Elder races, are a generic term for tall, pointy-eared \
-	humanoids that trace their original heritage to the ancient mysterious Snow Elves. \
-	Considering their diverse history, it is extremely difficult for other mortals \
-	to even concept the various intricacies found in elven society, and the hundreds \
-	if not thousands of tribes that exist within their culture! \
-	Elves tend to be looked poorly upon by humans, as historically the two races have \
-	been rivals in various conflicts and territorial disputes. This however does not stop \
-	many humans and elves from forming relationships, which are capable of producing child.\
-	Elves are known for their intelligence and sharp eyes, but their graceful nature does \
-	not lend itself to the concepts of strength or durability... \
-	There are elves from a small smattering of tribes in these parts.\
+	The elves are a race that boast long lives that allow them a deep understanding \
+	of the world few other races can achieve. They saw themselves as stewards of the world, \
+	above the struggles of the more transient, mortal races. Over centuries, they withdrew \
+	from the rest of the world, focused on their own society and their internal affairs, \
+	watching the rise and fall of empires from the safety of their secluded sanctuaries. \
+	They believed their superiority set them apart, and so they chose to remain apart, \
+	believing that the troubles of the world would never truly affect them.<br><br>\
+	They had isolated themselves so thoroughly that they had failed to see the growing darkness \
+	that was slowly consuming the world. They ignored the signs, dismissed the warnings from those \
+	outside their borders, and continued to focus on their own pursuits. By the time they realized \
+	the severity of the threat, it was too late. The necromantic forces were already upon them, \
+	and the elves, unprepared and isolated, were unable to mount a coordinated defense. \
+	Where once they were seen as the pinnacle of civilization, they are now regarded with \
+	a mixture of pity, resentment, and distrust.<br><br>\
 	+1 Speed, -1 Constitution."
 
 	skin_tone_wording = "Tribal Identity"
