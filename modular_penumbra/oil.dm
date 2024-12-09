@@ -1,5 +1,5 @@
 /obj/item/frost_oil
-	name = "frost oil"
+	name = "frost weapon oil"
 	desc = "A magical oil that can be applied to weapons to imbue them with freezing properties."
 	icon = 'modular_penumbra/icons/oil.dmi'
 	icon_state = "frostoil"
@@ -37,10 +37,10 @@
 		qdel(src)
 
 /obj/item/fire_oil
-	name = "fire oil"
+	name = "fire weapon oil"
 	desc = "A magical oil that can be applied to weapons to imbue them with burning properties."
 	icon = 'modular_penumbra/icons/oil.dmi'
-	icon_state = "frostoil"  // Using same icon for now
+	icon_state = "fireoil" 
 	w_class = WEIGHT_CLASS_SMALL
 	var/uses = 1
 
