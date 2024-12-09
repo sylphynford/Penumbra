@@ -60,6 +60,8 @@
 
 	sellprice = 1
 
+	var/broken_armor = FALSE  // Add this var to track armor state
+
 /obj/item
 	var/blocking_behavior
 	var/wetness = 0
@@ -319,24 +321,52 @@
 
 /obj/item/clothing/obj_break(damage_flag)
 	if(!damaged_clothes)
-		update_clothes_damaged_state(TRUE)
-	original_armor = armor
-	var/brokemessage = FALSE
-	var/list/armorlist = armor.getList()
-	for(var/x in armorlist)
-		if(armorlist[x] > 0)
-			brokemessage = TRUE
-			armorlist[x] = 0
-	if(ismob(loc) && brokemessage)
+		update_clothes_damaged_state(TRUE)  // Update visual damage state
+	if(!broken_armor)  // Only store original armor once
+		original_armor = getArmor(
+			blunt = armor.blunt,
+			slash = armor.slash,
+			stab = armor.stab,
+			bullet = armor.bullet,
+			laser = armor.laser,
+			energy = armor.energy,
+			bomb = armor.bomb,
+			bio = armor.bio,
+			rad = armor.rad,
+			fire = armor.fire,
+			acid = armor.acid,
+			magic = armor.magic
+		)
+		broken_armor = TRUE
+		damaged_clothes = 1  // Mark clothes as damaged
+	
+	armor = armor.setRating(
+		blunt = 0,
+		slash = 0,
+		stab = 0, 
+		bullet = 0,
+		laser = 0,
+		energy = 0,
+		bomb = 0,
+		bio = 0,
+		rad = 0,
+		fire = 0,
+		acid = 0,
+		magic = 0
+	)
+
+	if(ismob(loc))
 		var/mob/M = loc
-		to_chat(M, "ARMOR BROKEN...!")
+		to_chat(M, span_warning("ARMOR BROKEN...!"))
 	..()
 
 /obj/item/clothing/proc/obj_fix(damage_flag)
-	obj_broken = FALSE
 	if(damaged_clothes)
 		update_clothes_damaged_state(FALSE)
-	armor = original_armor
+	if(broken_armor && original_armor)
+		armor = original_armor
+		broken_armor = FALSE
+
 /obj/item/clothing/proc/update_clothes_damaged_state(damaging = TRUE)
 	var/index = "[REF(initial(icon))]-[initial(icon_state)]"
 	var/static/list/damaged_clothes_icons = list()
