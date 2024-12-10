@@ -16,8 +16,8 @@
 	
 	var/obj/item/rogueweapon/weapon = target
 	
-	if(weapon.frost_hits)
-		to_chat(user, span_warning("[target] is already coated in frost oil!"))
+	if(weapon.frost_hits || weapon.fire_hits || weapon.acid_hits)
+		to_chat(user, span_warning("[target] is already coated in oil!"))
 		return
 	
 	user.visible_message(span_notice("[user] begins carefully applying frost oil to [target]..."), \
@@ -54,8 +54,8 @@
 	
 	var/obj/item/rogueweapon/weapon = target
 	
-	if(weapon.fire_hits)
-		to_chat(user, span_warning("[target] is already coated in fire oil!"))
+	if(weapon.frost_hits || weapon.fire_hits || weapon.acid_hits)
+		to_chat(user, span_warning("[target] is already coated in oil!"))
 		return
 	
 	user.visible_message(span_notice("[user] begins carefully applying fire oil to [target]..."), \
@@ -92,8 +92,8 @@
 	
 	var/obj/item/rogueweapon/weapon = target
 	
-	if(weapon.acid_hits)
-		to_chat(user, span_warning("[target] is already coated in acid oil!"))
+	if(weapon.frost_hits || weapon.fire_hits || weapon.acid_hits)
+		to_chat(user, span_warning("[target] is already coated in oil!"))
 		return
 	
 	user.visible_message(span_notice("[user] begins carefully applying acid oil to [target]..."), \
