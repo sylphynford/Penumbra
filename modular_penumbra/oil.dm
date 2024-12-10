@@ -74,11 +74,54 @@
 	if(uses <= 0)
 		qdel(src)
 
+/obj/item/acid_oil
+	name = "acid weapon oil"
+	desc = "A corrosive oil that can be applied to weapons to temporarily enhance their armor penetration."
+	icon = 'modular_penumbra/icons/oil.dmi'
+	icon_state = "acidoil"
+	w_class = WEIGHT_CLASS_SMALL
+	var/uses = 1
+
+/obj/item/acid_oil/afterattack(atom/target, mob/user, proximity)
+	. = ..()
+	if(!proximity)
+		return
+	
+	if(!istype(target, /obj/item/rogueweapon))
+		return
+	
+	var/obj/item/rogueweapon/weapon = target
+	
+	if(weapon.acid_hits)
+		to_chat(user, span_warning("[target] is already coated in acid oil!"))
+		return
+	
+	user.visible_message(span_notice("[user] begins carefully applying acid oil to [target]..."), \
+						span_notice("I begin carefully applying acid oil to [target]..."))
+	
+	if(!do_after(user, 3 SECONDS, target = target))
+		return
+	
+	weapon.original_armor_pen = weapon.armor_penetration
+	weapon.armor_penetration = 100
+	weapon.acid_hits = 5
+	weapon.on_acid_hit = TRUE
+	
+	user.visible_message(span_notice("[user] applies acid oil to [target]."), \
+						span_notice("I apply acid oil to [target]. It will last for 5 hits."))
+	
+	uses--
+	if(uses <= 0)
+		qdel(src)
+
 /obj/item/rogueweapon
 	var/frost_hits = 0
 	var/fire_hits = 0
+	var/acid_hits = 0
 	var/on_frost_hit = FALSE
 	var/on_fire_hit = FALSE
+	var/on_acid_hit = FALSE
+	var/original_armor_pen = 0
 
 /obj/item/rogueweapon/funny_attack_effects(mob/living/target, mob/living/user)
 	. = ..()
@@ -98,3 +141,10 @@
 		if(fire_hits <= 0)
 			on_fire_hit = FALSE
 			to_chat(user, span_warning("The fire oil on [src] burns away!"))
+
+	if(acid_hits > 0 && on_acid_hit)
+		acid_hits--
+		if(acid_hits <= 0)
+			on_acid_hit = FALSE
+			armor_penetration = original_armor_pen
+			to_chat(user, span_warning("The acid oil on [src] dissolves away!"))

@@ -206,7 +206,7 @@
 "blZ" = (/obj/structure/rack/rogue/shelf,/turf/open/floor/carpet/inn,/area/rogue/indoors/town/manor)
 "bmi" = (/turf/open/floor/rogue/twig,/area/rogue/indoors/town)
 "bmI" = (/turf/open/floor/rogue/rooftop{icon_state = "roofg"; dir = 1},/area/rogue/outdoors/town/roofs)
-"bnE" = (/obj/item/natural/feather,/obj/machinery/light/rogue/wallfire/candle/r,/obj/structure/table/wood{icon_state = "largetable"; dir = 10},/obj/item/fire_oil,/obj/item/frost_oil,/turf/open/floor/rogue/ruinedwood{icon_state = "weird1"},/area/rogue/indoors/town/magician)
+"bnE" = (/obj/item/natural/feather,/obj/machinery/light/rogue/wallfire/candle/r,/obj/structure/table/wood{icon_state = "largetable"; dir = 10},/obj/item/fire_oil,/obj/item/frost_oil,/obj/item/acid_oil,/turf/open/floor/rogue/ruinedwood{icon_state = "weird1"},/area/rogue/indoors/town/magician)
 "boc" = (/obj/structure/fermenting_barrel,/turf/open/floor/rogue/dirt/road,/area/rogue/under/town/basement)
 "boe" = (/obj/structure/closet/crate/roguecloset,/turf/open/floor/rogue/blocks/stonered,/area/rogue/indoors/town/bath)
 "bou" = (/obj/structure/flora/ausbushes/lavendergrass,/turf/open/floor/rogue/dirt/road,/area/rogue/outdoors/town)
