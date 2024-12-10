@@ -14,6 +14,8 @@
 		return "old"
 	else if (H.age == AGE_MIDDLEAGED)
 		return "middle-aged"
+	else if (H.age == AGE_YOUNG)
+		return "young"
 	else
 		return "adult"
 
@@ -41,7 +43,7 @@
 	var/obj/item/organ/penis/penis = H.getorganslot(ORGAN_SLOT_PENIS)
 	var/adjective
 	var/arousal_modifier
-	
+
 	switch(penis.penis_size)
 		if(0 to 1.9)
 			adjective = "tiny"
@@ -61,7 +63,7 @@
 			adjective = "massive"
 		if(16 to INFINITY)
 			adjective = "monstrous"
-			
+
 	switch(H.sexcon.arousal)
 		if(80 to INFINITY)
 			arousal_modifier = ", throbbing violently"
@@ -71,7 +73,7 @@
 			arousal_modifier = ", stiffened and twitching"
 		else
 			arousal_modifier = ", soft and flaccid"
-			
+
 	var/used_name
 	if(penis.erect_state != ERECT_STATE_HARD && penis.sheath_type != SHEATH_TYPE_NONE)
 		switch(penis.sheath_type)
@@ -84,7 +86,7 @@
 				used_name = "a genital slit"
 	else
 		used_name = "a <font color='#e9a8d1'>[adjective] [round(penis.penis_size, 0.1)] inch penis</font>[arousal_modifier]"
-	
+
 	return "[used_name]"
 
 /datum/mob_descriptor/testicles
@@ -191,7 +193,7 @@
 	var/mob/living/carbon/human/H = described
 	var/obj/item/organ/breasts/breasts = H.getorganslot(ORGAN_SLOT_BREASTS)
 	var/adjective
-	
+
 	switch(breasts.breast_size)
 		if(0)
 			adjective = "perky"  // A-cup
@@ -203,6 +205,6 @@
 			adjective = "heavy"  // D-cup
 		if(5)
 			adjective = "massive" // E-cup
-			
+
 	var/cup_size = find_key_by_value(GLOB.named_breast_sizes, breasts.breast_size)
 	return "<font color='#e9a8d1'>[adjective] [cup_size] breasts</font>"

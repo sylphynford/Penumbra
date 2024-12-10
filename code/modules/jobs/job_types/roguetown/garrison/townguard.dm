@@ -8,7 +8,7 @@
 	selection_color = JCOLOR_SOLDIER
 	allowed_sexes = list(MALE, FEMALE)
 	allowed_races = RACES_ALL_KINDS
-	allowed_ages = list(AGE_ADULT, AGE_MIDDLEAGED)
+	allowed_ages = list(AGE_YOUNG, AGE_ADULT, AGE_MIDDLEAGED)
 	tutorial = "Responsible for the safety of the town and the enforcement of the Baron's law, you are the vanguard of the city faced with punishing those who defy His Lordship. You take orders from Sergeants, Knights, and your Liege."
 	display_order = JDO_TOWNGUARD
 	whitelist_req = TRUE
@@ -36,7 +36,7 @@
 			if(!AC.name)
 				qdel(AC)
 				continue
-			
+
 			// Check if class is allowed for this player
 			if(AC.allowed_sexes?.len && !(H.gender in AC.allowed_sexes))
 				qdel(AC)
@@ -47,7 +47,7 @@
 			if(AC.min_pq != -100 && !(get_playerquality(M.client.ckey) >= AC.min_pq))
 				qdel(AC)
 				continue
-			
+
 			valid_classes[AC.name] = AC
 
 		// If no valid classes found, something is wrong

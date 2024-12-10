@@ -9,6 +9,7 @@
 
 	allowed_races = RACES_ALL_KINDS
 	//allowed_ages = list(AGE_MIDDLEAGED, AGE_OLD)
+	allowed_ages = list(AGE_ADULT, AGE_MIDDLEAGED, AGE_OLD)
 
 	tutorial = "Servitude unto death; That is your motto. Having nurtured royalty for years, you are nothing short of the Baron's majordomo, commanding over the rest of the house staff."
 
