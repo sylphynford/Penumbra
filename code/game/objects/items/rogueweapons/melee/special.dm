@@ -32,6 +32,7 @@
 	icon_state = "inuse"
 	tranged = TRUE
 	noaa = TRUE
+	var/cooldown_time = 0 // Track when the ability can be used again
 
 /datum/intent/lord_silence
 	name = "silence"
@@ -82,9 +83,14 @@
 				return
 
 			if(istype(user.used_intent, /datum/intent/lord_electrocute))
+				var/datum/intent/lord_electrocute/electrocute_intent = user.used_intent
+				if(world.time < electrocute_intent.cooldown_time)
+					to_chat(user, span_warning("The rod's electrocution power is still recharging! ([round((electrocute_intent.cooldown_time - world.time)/10)] seconds remaining)"))
+					return
 				HU.visible_message(span_warning("[HU] electrocutes [H] with the [src]."))
 				H.electrocute_act(5, src)
 				to_chat(H, span_danger("I'm electrocuted by the scepter!"))
+				electrocute_intent.cooldown_time = world.time + (10 SECONDS)
 				return
 
 			if(istype(user.used_intent, /datum/intent/lord_silence))
