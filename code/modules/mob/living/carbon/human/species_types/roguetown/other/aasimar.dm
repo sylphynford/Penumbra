@@ -5,14 +5,19 @@
 	name = "Aasimar"
 	id = "aasimar"
 	desc = "<b>Aasimar</b><br>\
-	Aasimar are born of a rare union between Humans and Angels. \
-	They bear the mark of their celestial touch through many varying physical features. \
-	Their looks resemble the traditional characteristics of whichever of the Gods the Angel parent was associated with. \
-	Most commonly, Aasimar are similar to Humans, albeit taller, and possess uncanny beauty. \
-	They have strangely colored skin and are more physically frail than the average Human. \
-	Because of their upbringing, they make for natural conduits for godly powers. \
-	Fablefields's populace holds them with a mixture of uneasy fear or, and respect. \
-	It is also widely believed that an Aasimars death is a bad omen... \
+	A long time ago, powerful flesh mages created the ultimate servants for themselves: Angels. \
+	They designed them to be beautiful, to have wings and the power of flight for speedy transportation, \
+	and most importantly to be incredibly supernaturally empathic. These beings would feel the wants, \
+	needs, pains and dislikes of those around them more keenly than their own. If you wanted a message \
+	delivered, they wanted to deliver it. They were the perfect servants, however eventually the secret \
+	to creating them was lost and over time they died out.<br><br>\
+	Their descendants today are referred to as aasimir, none today still have wings or any remnants \
+	of them, but many like heights and dream of flying. They are also more attractive than most people \
+	and tend to live a little longer. Most importantly they still have some degree of the Angelic empathy, \
+	while not nearly as strong, they still naturally want the same things as those around them. \
+	It works like a sort of unspoken peer pressure, and draws them naturally to jobs and lifestyles \
+	that are more selfless or service oriented. It's common to find them working in charities or as \
+	aid workers, or even as masseuse or prostitutes.<br><br>\
 	+1 Fortune, -1 Perception."
 
 	skin_tone_wording = "Craft"

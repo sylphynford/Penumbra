@@ -5,17 +5,23 @@
 	name = "Tiefling"
 	id = "tiefling"
 	desc = "<b>Tiefling</b><br>\
-	Tieflings, also known as Infernal-Spawn by the Dwarves, are a relatively new species in Grimmoria\
-	Having shown up sometime within the past two centuries, very little is known about their culture \
-	as many seem to simply intergrate within whatever society they find themselves in. \
-	Tieflings usually cause strong disturbances with their presence, as their fiendish looks \
-	Many have claimed that they are the spawn of a succubus (Or incubus) laying with a mortal. \
-	In this, their species has suffered vast tragedy throughout their short history, \
-	Facing scrutiny, judgement and even genocide in the past. Wounding many tiefling psyche \
-	and leading to most seeking a solitary life outside the watchful eyes of others. \
-	Tiefling cannot reproduce with mortals, and so no half-breed exists. \
-	Tiefling tend to be extremely perceptive and paranoid, as luck is rarely on their side \
-	and their unique biology makes them extremely susceptible to injury. \
+	Demons were weapons of war, built by ancient wizards to wage total, unending conflict. \
+	Over time, however, these beings evolved far beyond their creators' expectations. \
+	Some came possess necromancy themselves, a power that enabled them to alter, improve, \
+	and create life itself—an ability that made them comparable to a self-improving machines. \
+	Demons became exponentially more powerful, surpassing even the wizards who had designed them. \
+	In a swift and devastating uprising, they eliminated their creators and seized control over Hell, \
+	transforming it into a domain of their own making.<br><br>\
+	From Hell, the upper echelons of demons stretch their influence to the rest of their world, \
+	reaching across to manipulate and corrupt. They sow chaos, seeking to make life in the world \
+	as fraught and difficult as possible. Yet, for those willing to serve, they often grant dark favors. \
+	Tieflings are the hybrid offspring of humans and demons. Though some are indeed the rare result \
+	of human and demon unions, most arise from demonic interference with unborn humans. \
+	Touched by these dark forces while still in the womb, these children are born with a trace \
+	of demon blood.<br><br>\
+	These dark influences mark tieflings with an instinctual affinity toward wickedness; \
+	many feel a natural pull toward selfishness, cruelty, or deception. Though many choose \
+	to resist their inherited inclinations.<br><br>\
 	+1 Intelligence."
 
 	skin_tone_wording = "Progenitor"
