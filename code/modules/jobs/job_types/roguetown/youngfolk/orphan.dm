@@ -7,7 +7,7 @@
 	spawn_positions = 12
 
 	allowed_races = RACES_ALLPLUSKOBOLD
-	allowed_ages = list(AGE_ADULT)
+	allowed_ages = list(AGE_YOUNG, AGE_ADULT)
 
 	tutorial = "Dozens of people end up down on their luck in the kingdom of Psydonia every day. They sometimes make something of themselves but much more often die in the streets."
 
@@ -19,6 +19,7 @@
 	round_contrib_points = 2
 
 	cmode_music = 'sound/music/combat_bum.ogg'
+	family_blacklisted = TRUE
 
 /datum/job/roguetown/orphan/New()
 	. = ..()

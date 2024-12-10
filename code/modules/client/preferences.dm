@@ -232,21 +232,21 @@ GLOBAL_LIST_EMPTY(chosen_names)
 	randomize_all_customizer_accessories()
 	reset_descriptors()
 	update_gender_customization()
-	
+
 	// Enforce genital rules
 	var/datum/customizer_entry/organ/penis/penis_entry
 	var/datum/customizer_entry/organ/vagina/vagina_entry
-	
+
 	for(var/datum/customizer_entry/entry as anything in customizer_entries)
 		if(istype(entry, /datum/customizer_entry/organ/penis))
 			penis_entry = entry
 		else if(istype(entry, /datum/customizer_entry/organ/vagina))
 			vagina_entry = entry
-	
+
 	// For males: Penis must always be enabled if it exists
 	if(gender == MALE && penis_entry)
 		penis_entry.disabled = FALSE
-	
+
 	// For females: Only prevent having both enabled at once
 	else if(gender == FEMALE && penis_entry && vagina_entry)
 		// If both are somehow enabled, disable vagina
@@ -1580,7 +1580,7 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 //						age = max(min( round(text2num(new_age)), AGE_MAX),AGE_MIN)
 
 				if("age")
-					var/new_age = input(user, "Choose your character's age (18-[pref_species.max_age])", "Yils Dead") as null|anything in pref_species.possible_ages
+					var/new_age = input(user, "Choose your character's age:", "Yils Dead") as null|anything in pref_species.possible_ages
 					if(new_age)
 						age = new_age
 						var/list/hairs
@@ -1592,12 +1592,15 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 						facial_hair_color = hair_color
 						// LETHALSTONE EDIT: let players know what this shit does stats-wise
 						switch (age)
+							if (AGE_YOUNG)
+								to_chat(user, "You've finally amassed enough years to your name to be taken more seriously than a child. Though you may now see eye to eye with your peers, they're still unlikely to treat you as such. (+1 SPD, -1 STR)")
 							if (AGE_ADULT)
 								to_chat(user, "You preside in your 'prime', whatever this may be, and gain no bonus nor endure any penalty for your time spent alive.")
 							if (AGE_MIDDLEAGED)
 								to_chat(user, "Muscles ache and joints begin to slow as Aeon's grasp begins to settle upon your shoulders. (-1 SPD, +1 END)")
 							if (AGE_OLD)
 								to_chat(user, "In a place as lethal as Engima, the elderly are all but marvels... or beneficiaries of the habitually privileged. (-1 STR, -2 SPE, -1 PER, -2 CON, +2 INT)")
+
 						// LETHALSTONE EDIT END
 						ResetJobs()
 						to_chat(user, "<font color='red'>Classes reset.</font>")
@@ -1936,7 +1939,7 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 							if("male")
 								pronouns = HE_HIM
 								voice_type = VOICE_TYPE_MASC
-							if("female") 
+							if("female")
 								pronouns = SHE_HER
 								voice_type = VOICE_TYPE_FEM
 						genderize_customizer_entries()
@@ -2229,7 +2232,7 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 					var/job = href_list["job"]
 					var/list/available_classes = list("Random")
 					var/list/class_tutorials = list()  // Store tutorials for each class
-					
+
 					// Get the appropriate class type based on job
 					var/class_type
 					switch(job)
@@ -2249,7 +2252,7 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 							class_type = /datum/advclass/mercenary
 						if("Heir")
 							class_type = /datum/advclass/heir
-					
+
 					if(class_type)
 						for(var/type in subtypesof(class_type))
 							var/datum/advclass/AC = new type()
@@ -2259,7 +2262,7 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 									available_classes += AC.name
 									class_tutorials[AC.name] = AC.tutorial
 							qdel(AC)
-					
+
 					var/choice = input(user, "Choose your preferred class for [job]:", "Class Selection") as null|anything in available_classes
 					if(choice)
 						switch(job)
@@ -2279,11 +2282,11 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 								mercenary_class = (choice == "Random" ? null : choice)
 							if("Heir")
 								heir_class = (choice == "Random" ? null : choice)
-						
+
 						// Show tutorial text if a class was selected
 						if(choice != "Random")
 							to_chat(user, span_notice("<b>[choice]:</b> [class_tutorials[choice]]"))
-						
+
 						// Refresh the job preferences window
 						SetChoices(user)
 					else
@@ -2488,7 +2491,7 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 	var/list/new_entries = list()
 	var/old_penis_disabled = TRUE
 	var/old_vagina_disabled = TRUE
-	
+
 	// Keep track of old genital states and non-genital entries
 	for(var/datum/customizer_entry/entry as anything in customizer_entries)
 		if(istype(entry, /datum/customizer_entry/organ/penis))
@@ -2497,16 +2500,16 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 			old_vagina_disabled = entry.disabled
 		else if(!istype(entry, /datum/customizer_entry/organ/breasts) && !istype(entry, /datum/customizer_entry/organ/testicles))
 			new_entries += entry
-	
+
 	var/datum/species/species = pref_species
 	var/list/customizers = species.customizers
-	
+
 	// First pass: Add vagina and breasts
 	for(var/customizer_type in customizers)
 		var/datum/customizer/customizer = CUSTOMIZER(customizer_type)
 		if(!customizer.is_allowed(src))
 			continue
-		
+
 		if(istype(customizer, /datum/customizer/organ/vagina))
 			var/datum/customizer_entry/entry = customizer.make_default_customizer_entry(src, FALSE)  // Don't force disable for females
 			entry.disabled = old_vagina_disabled
@@ -2514,7 +2517,7 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 		else if(istype(customizer, /datum/customizer/organ/breasts))
 			var/datum/customizer_entry/entry = customizer.make_default_customizer_entry(src, gender != FEMALE)
 			new_entries += entry
-	
+
 	// Second pass: Add penis and testicles together
 	var/penis_enabled = FALSE
 	var/datum/customizer_entry/penis_entry
@@ -2522,7 +2525,7 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 		var/datum/customizer/customizer = CUSTOMIZER(customizer_type)
 		if(!customizer.is_allowed(src))
 			continue
-		
+
 		if(istype(customizer, /datum/customizer/organ/penis))
 			penis_entry = customizer.make_default_customizer_entry(src, FALSE)  // Don't force disable for females
 			// Only force enable for males, otherwise keep previous state
@@ -2535,7 +2538,7 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 		else if(istype(customizer, /datum/customizer/organ/testicles) && penis_enabled)
 			var/datum/customizer_entry/entry = customizer.make_default_customizer_entry(src, FALSE)
 			new_entries += entry
-	
+
 	customizer_entries = new_entries
 	validate_customizer_entries()
 
@@ -2548,14 +2551,14 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 /datum/preferences/proc/ensure_genital_defaults()
     var/has_penis = FALSE
     var/has_vagina = FALSE
-    
+
     // Check if we have any genitals set
     for(var/datum/customizer_entry/entry as anything in customizer_entries)
         if(istype(entry, /datum/customizer_entry/organ/penis) && !entry.disabled)
             has_penis = TRUE
         if(istype(entry, /datum/customizer_entry/organ/vagina) && !entry.disabled)
             has_vagina = TRUE
-    
+
     // If no genitals are set, set defaults based on gender
     if(!has_penis && !has_vagina)
         if(gender == MALE)
@@ -2585,6 +2588,6 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 /datum/preferences/proc/close_latejoin_menu(mob/user)
 	if(!user?.client)
 		return
-	
+
 	// Close latejoin menu
 	user << browse(null, "window=latechoices")

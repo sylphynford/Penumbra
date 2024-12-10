@@ -7,6 +7,7 @@
 	spawn_positions = 1
 	allowed_sexes = list(MALE, FEMALE)
 	allowed_races = RACES_ALL_KINDS
+	allowed_ages = list(AGE_ADULT, AGE_MIDDLEAGED, AGE_OLD)
 	allowed_patrons = ALL_DIVINE_PATRONS
 	tutorial = "You worship and pay credence to PSYDON. Both the crown and church have emboldened your radical ideals. Your fervor allows you to root out cultists, the cursed night beasts, and other agents of the abyss, as you are entrusted with the ability of extracting involuntary 'sin confessions.'"
 	whitelist_req = TRUE
@@ -40,7 +41,7 @@
 			if(!AC.name)
 				qdel(AC)
 				continue
-			
+
 			// Check if class is allowed for this player
 			if(AC.allowed_sexes?.len && !(H.gender in AC.allowed_sexes))
 				qdel(AC)
@@ -51,7 +52,7 @@
 			if(AC.min_pq != -100 && !(get_playerquality(M.client.ckey) >= AC.min_pq))
 				qdel(AC)
 				continue
-			
+
 			valid_classes[AC.name] = AC
 
 		// If no valid classes found, something is wrong
@@ -121,7 +122,7 @@
 /datum/advclass/inquisitor/confessor/equipme(mob/living/carbon/human/H)
 	if(!H)
 		return FALSE
-	
+
 	// First equip the base outfit
 	if(outfit)
 		var/datum/outfit/O = new outfit
@@ -175,7 +176,7 @@
 /datum/advclass/inquisitor/zealot/equipme(mob/living/carbon/human/H)
 	if(!H)
 		return FALSE
-	
+
 	// First equip the base outfit
 	if(outfit)
 		var/datum/outfit/O = new outfit
@@ -232,7 +233,7 @@
 /datum/advclass/inquisitor/puritanclass/equipme(mob/living/carbon/human/H)
 	if(!H)
 		return FALSE
-	
+
 	// First equip the base outfit
 	if(outfit)
 		var/datum/outfit/O = new outfit

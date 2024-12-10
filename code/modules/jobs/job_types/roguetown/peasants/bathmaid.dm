@@ -9,7 +9,7 @@
 
 	allowed_sexes = list(MALE, FEMALE)
 	allowed_races = RACES_ALLPLUSKOBOLD
-	allowed_ages = list(AGE_ADULT, AGE_MIDDLEAGED)
+	allowed_ages = list(AGE_YOUNG, AGE_ADULT, AGE_MIDDLEAGED)
 
 	tutorial = "Most would decry the humble bath attendant as a desperate fool tempting others into bedsheets for money--only sometimes, you say! You work under your Bathmaster in the communal bathhouse, keeping it and the guests in turn as tidy as they please. Wash laundry, tend mild wounds, and deftly wash your patrons with soap and a skilled 'caress', for this is your craft."
 

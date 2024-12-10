@@ -8,7 +8,7 @@
 	spawn_positions = 2
 	allowed_races = NOBLE_RACES_TYPES //Maybe a system to force-pick lineage based on king and queen should be implemented.
 	allowed_sexes = list(MALE, FEMALE)
-	allowed_ages = list(AGE_ADULT)
+	allowed_ages = list(AGE_YOUNG, AGE_ADULT)
 	advclass_cat_rolls = list(CTAG_HEIR = 20)
 	tutorial = "You've never felt the gnawing of the winter, never known the bite of hunger and certainly have never known a honest day's work. You are as free as any bird in the sky, and you may revel in your debauchery for as long as your parents remain upon the throne: But someday you'll have to grow up, and that will be the day your carelessness will cost you more than a few mammons."
 	display_order = JDO_PRINCE
@@ -19,6 +19,8 @@
 	round_contrib_points = 3
 	cmode_music = 'sound/music/combat_fancy.ogg'
 	family_blacklisted = TRUE
+	lord_family = TRUE
+	lord_rel_type = REL_TYPE_OFFSPRING
 	outfit = null // Handled by classes
 
 /datum/job/roguetown/prince/after_spawn(mob/living/L, mob/M, latejoin = TRUE)
@@ -34,7 +36,7 @@
 			if(!AC.name)
 				qdel(AC)
 				continue
-			
+
 			// Check if class is allowed for this player
 			if(AC.allowed_sexes?.len && !(H.gender in AC.allowed_sexes))
 				qdel(AC)
@@ -45,7 +47,7 @@
 			if(AC.min_pq != -100 && !(get_playerquality(M.client.ckey) >= AC.min_pq))
 				qdel(AC)
 				continue
-			
+
 			valid_classes[AC.name] = AC
 
 		// If no valid classes found, something is wrong
@@ -98,7 +100,7 @@
 /datum/advclass/heir/daring/equipme(mob/living/carbon/human/H)
 	if(!H)
 		return FALSE
-	
+
 	// First equip the base outfit
 	if(outfit)
 		var/datum/outfit/O = new outfit
@@ -158,7 +160,7 @@
 /datum/advclass/heir/aristocrat/equipme(mob/living/carbon/human/H)
 	if(!H)
 		return FALSE
-	
+
 	// First equip the base outfit
 	if(outfit)
 		var/datum/outfit/O = new outfit
@@ -221,7 +223,7 @@
 /datum/advclass/heir/inbred/equipme(mob/living/carbon/human/H)
 	if(!H)
 		return FALSE
-	
+
 	// First equip the base outfit
 	if(outfit)
 		var/datum/outfit/O = new outfit

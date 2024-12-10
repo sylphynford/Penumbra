@@ -8,6 +8,7 @@
 
 	allowed_races = NOBLE_RACES_TYPES
 	allowed_sexes = list(MALE, FEMALE)
+	allowed_ages = list(AGE_ADULT, AGE_MIDDLEAGED, AGE_OLD)
 	outfit = /datum/outfit/job/roguetown/hand
 	advclass_cat_rolls = list(CTAG_HAND = 20)
 	display_order = JDO_HAND
@@ -49,7 +50,7 @@
 			if(!AC.name)
 				qdel(AC)
 				continue
-			
+
 			// Check if class is allowed for this player
 			if(AC.allowed_sexes?.len && !(H.gender in AC.allowed_sexes))
 				qdel(AC)
@@ -60,7 +61,7 @@
 			if(AC.min_pq != -100 && !(get_playerquality(M.client.ckey) >= AC.min_pq))
 				qdel(AC)
 				continue
-			
+
 			valid_classes[AC.name] = AC
 
 		// If no valid classes found, something is wrong
@@ -110,7 +111,7 @@
 /datum/advclass/hand/hand/equipme(mob/living/carbon/human/H)
 	if(!H)
 		return FALSE
-	
+
 	// First equip the base outfit
 	if(outfit)
 		var/datum/outfit/O = new outfit
@@ -173,10 +174,10 @@
 	..()
 	if(!H)
 		return
-	
+
 	// Apply race-specific equipment
 	var/list/equipment = (H.dna.species.type in NON_DWARVEN_RACE_TYPES) ? non_dwarf_equipment : dwarf_equipment
-	
+
 	if(equipment["shirt"])
 		shirt = equipment["shirt"]
 	if(equipment["cloak"])
@@ -193,7 +194,7 @@
 /datum/advclass/hand/spymaster/equipme(mob/living/carbon/human/H)
 	if(!H)
 		return FALSE
-	
+
 	// First equip the base outfit
 	if(outfit)
 		var/datum/outfit/O = new outfit
@@ -243,7 +244,7 @@
 /datum/advclass/hand/advisor/equipme(mob/living/carbon/human/H)
 	if(!H)
 		return FALSE
-	
+
 	// First equip the base outfit
 	if(outfit)
 		var/datum/outfit/O = new outfit
