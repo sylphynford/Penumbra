@@ -529,11 +529,27 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 	var/datum/antagonist/traitor_guard/traitor_datum = new()
 	chosen_guard.mind.add_antag_datum(traitor_datum)
 	
-	var/datum/objective/steal/steal_objective = new
-	steal_objective.owner = chosen_guard.mind
-	steal_objective.steal_target = /obj/item/roguegem/jewel
-	steal_objective.explanation_text = "Steal the Baron's Crown Jewel from the treasury."
-	traitor_datum.objectives += steal_objective
+	// Check if there's a consort
+	var/mob/living/carbon/human/consort
+	for(var/mob/living/carbon/human/H in GLOB.alive_mob_list)
+		if(H.mind?.assigned_role == "Consort")
+			consort = H
+			break
+	
+	if(consort)
+		// Create assassination objective
+		var/datum/objective/assassinate/kill_objective = new
+		kill_objective.owner = chosen_guard.mind
+		kill_objective.target = consort.mind
+		kill_objective.explanation_text = "Assassinate [consort.real_name], the Consort, to prove your loyalty to the rival noble family."
+		traitor_datum.objectives += kill_objective
+	else
+		// Create steal objective as fallback
+		var/datum/objective/steal/steal_objective = new
+		steal_objective.owner = chosen_guard.mind
+		steal_objective.steal_target = /obj/item/roguegem/jewel
+		steal_objective.explanation_text = "Steal the Baron's Crown Jewel from the treasury."
+		traitor_datum.objectives += steal_objective
 	
 	// Notify the guard of their objective
 	to_chat(chosen_guard, "<B>Objective:</B> [traitor_datum.objectives[1].explanation_text]")
