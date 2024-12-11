@@ -18,8 +18,8 @@ GLOBAL_VAR_INIT(threatspawner_cd_max, 17 MINUTES)
 // Makes it much more common that only a couple enemies spawn
 // while making it unlikely but possible that a bunch of enemies spawn as a !!FUN SURPRISE!!
 GLOBAL_LIST_INIT(threatspawner_quantities, list(
-	list(1,2) = 20,
-	list(2,3) = 10,
+	list(1,2) = 40,
+	list(2,3) = 15,
 	list(3,4) = 3,
 	list(4,6) = 1,
 ))
@@ -80,7 +80,7 @@ GLOBAL_LIST_INIT(threatspawner_quantities, list(
 		start_cooldown()
 		return
 	spawn_threats()
-	
+
 /obj/effect/landmark/threatspawner/proc/spawn_threats()
 	var/list/possible_targets = list()
 	for(var/obj/structure/flora/F in view(src, spawn_range))
@@ -114,9 +114,10 @@ GLOBAL_LIST_INIT(threatspawner_quantities, list(
 	for(var/mob/living/M in able_mobs)
 		if(!is_our_baby_okay(M))
 			able_mobs.Remove(M)
-	can_spawn = able_mobs.len <= 1
+	// can_spawn = able_mobs.len <= 1 // commented out to reel back mob induced lag a bit
+	can_spawn = able_mobs.len <= 0
 	start_check_cooldown()
-		
+
 
 /obj/effect/landmark/threatspawner/proc/is_our_baby_okay(mob/living/M)
 	if(!M)

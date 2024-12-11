@@ -5,7 +5,16 @@
 	name = "Kobold"
 	id = "kobold"
 	desc = "<b>Kobold</b><br>\
-	Short in stature and typically scrawny, this little lizards make up for it in their natural agility. People typically stereotype them as thieves, though..."
+	Kobolds were once a mystery to the fellowship races. Fiercely territorial and clever \
+	beyond their stature, they were the natives on the island that the expedition took place on. \
+	Their ambushes were relentless, their traps ingeniously cruel, and their knowledge of the land \
+	unmatched. Years have passed since the expedition carved its foothold into the island, \
+	and the kobolds have been largely subdued.<br><br>\
+	Some, however, remain free, hiding deep within the wilderness, organizing raids and striking \
+	at supply lines. These rebel factions keep the settlers on edge. Within the towns, kobolds \
+	are viewed with suspicion and fear. Those who have integrated—or who were forced to—are \
+	treated as outsiders at best and spies at worst.<br><br>\
+	+1 Speed, -1 Constitution."
 	species_traits = list(EYECOLOR,LIPS,STUBBLE,MUTCOLORS)
 	possible_ages = ALL_AGES_LIST
 	changesource_flags = MIRROR_BADMIN | WABBAJACK | MIRROR_MAGIC | MIRROR_PRIDE | ERT_SPAWN | RACE_SWAP | SLIME_EXTRACT
