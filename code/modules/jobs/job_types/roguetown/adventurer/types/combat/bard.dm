@@ -2,7 +2,7 @@
 /datum/advclass/bard
 	name = "Bard"
 	tutorial = "Bards make up one of the largest populations of \
-	registered adventurers in Enigma, mostly because they are \
+	registered adventurers in Umbra Veil, mostly because they are \
 	the last ones in a party to die. Their wish is to experience \
 	the greatest adventures of the age and write amazing songs about them. \
 	The class has the option between the jack of all trades Bard, the martial-focused Skald, magic-equip arcanist, and the gospel Hymnist." //Somberwicke updated for Hymnist
