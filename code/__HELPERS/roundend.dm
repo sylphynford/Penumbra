@@ -324,14 +324,14 @@ GLOBAL_VAR(roundstart_event_name)
 						"Thus the week's events have taken place. Eventful or mundane, life continues.",
 						"Pawns of gods, preachers of nite, all come together to recite this tale.",
 						"Whether with loss or life, the barony survives... for now.",
-						"The people of Fablefield prepare to look forward; their actions locked in the impermeable past.")
+						"The people of Somberwicke prepare to look forward; their actions locked in the impermeable past.")
 //		if(C.not_enough_players)
 //			end_reason = "The town was abandoned."
 
 		if(C.vampire_werewolf() == "vampire")
 			end_reason = "When the Vampires finished sucking the town dry, they moved on to the next one."
 		if(C.vampire_werewolf() == "werewolf")
-			end_reason = "The Werevolves formed an unholy clan, marauding Fablefield until the end of its daes."
+			end_reason = "The Werevolves formed an unholy clan, marauding Somberwicke until the end of its daes."
 
 		if(C.headrebdecree)
 			end_reason = "The peasant rebels took control of the throne, hail the new community!"

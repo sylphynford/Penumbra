@@ -689,7 +689,7 @@
 "emP" = (/turf/open/floor/rogue/twig,/area/rogue/indoors/town/dwarfin)
 "ent" = (/turf/open/floor/rogue/dirt/road,/area/rogue/outdoors/mountains)
 "env" = (/obj/structure/roguetent,/turf/open/floor/rogue/cobblerock,/area/rogue/indoors/town)
-"enF" = (/obj/structure/fluff/signage{name = "AZURE PEAK - NORTH"},/turf/open/floor/rogue/dirt/road,/area/rogue/outdoors/rtfield)
+"enF" = (/obj/structure/fluff/signage{name = "SOMBERWICKE - NORTH"},/turf/open/floor/rogue/dirt/road,/area/rogue/outdoors/rtfield)
 "eon" = (/obj/structure/chair/wood/rogue/fancy{icon_state = "chair1"; dir = 1},/turf/open/floor/carpet/royalblack,/area/rogue/indoors/town/manor)
 "eor" = (/obj/structure/closet/crate/chest/crate,/turf/open/floor/rogue/ruinedwood/spiral,/area/rogue/outdoors/beach)
 "eou" = (/obj/structure/stairs{icon_state = "stairs"; dir = 4},/turf/open/floor/rogue/cobble,/area/rogue/indoors/town)

@@ -6,7 +6,7 @@
 	total_positions = 0
 	spawn_positions = 0
 	allowed_races = RACES_ALLPLUSKOBOLD
-	tutorial = "Fleeing misfortune you head your way towards Fablefield, you're not a soldier or an explorer, but a humble migrant trying to look for a better life, if you get to survive the trip that is."
+	tutorial = "Fleeing misfortune you head your way towards Somberwicke, you're not a soldier or an explorer, but a humble migrant trying to look for a better life, if you get to survive the trip that is."
 
 	outfit = null
 	outfit_female = null

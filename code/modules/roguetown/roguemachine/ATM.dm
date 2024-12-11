@@ -1,6 +1,6 @@
 /obj/structure/roguemachine/atm
 	name = "MEISTER"
-	desc = "Stores and withdraws currency for accounts managed by the Barony of Fablefield"
+	desc = "Stores and withdraws currency for accounts managed by the Barony of Somberwicke"
 	icon = 'icons/roguetown/misc/machines.dmi'
 	icon_state = "atm"
 	density = FALSE

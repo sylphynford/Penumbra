@@ -187,7 +187,7 @@
 
 	if(signedname)
 		info += "SIGNED,<br/>"
-		info += "<font face=\"[FOUNTAIN_PEN_FONT]\" color=#27293f>[signedname] the [signedjob] of Fablefield</font>"
+		info += "<font face=\"[FOUNTAIN_PEN_FONT]\" color=#27293f>[signedname] the [signedjob] of Somberwicke</font>"
 
 /obj/item/paper/confession
 	name = "confession"

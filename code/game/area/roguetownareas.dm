@@ -144,7 +144,7 @@ GLOBAL_LIST_INIT(roguetown_areas_typecache, typecacheof(/area/rogue/indoors/town
 	ambush_mobs = list(
 				/mob/living/simple_animal/hostile/retaliate/rogue/wolf = 30,
 				/mob/living/carbon/human/species/skeleton/npc/ambush = 50)
-	first_time_text = "AZURE BASIN"
+	first_time_text = "UMBRA BASIN"
 	droning_sound = 'sound/music/area/field.ogg'
 	droning_sound_dusk = 'sound/music/area/septimus.ogg'
 	droning_sound_night = 'sound/music/area/sleeping.ogg'
@@ -175,7 +175,7 @@ GLOBAL_LIST_INIT(roguetown_areas_typecache, typecacheof(/area/rogue/indoors/town
 				/mob/living/simple_animal/hostile/retaliate/rogue/wolf = 40,
 				/mob/living/carbon/human/species/skeleton/npc/ambush = 10,
 				/mob/living/carbon/human/species/goblin/npc/ambush = 30)
-	first_time_text = "THE AZURE GROVE"
+	first_time_text = "THE UMBRA VEIL"
 	converted_type = /area/rogue/indoors/shelter/woods
 /area/rogue/indoors/shelter/woods
 	icon_state = "woods"
@@ -621,7 +621,7 @@ GLOBAL_LIST_INIT(roguetown_areas_typecache, typecacheof(/area/rogue/indoors/town
 	droning_sound_dusk = 'sound/music/area/septimus.ogg'
 	droning_sound_night = 'sound/music/area/sleeping.ogg'
 	converted_type = /area/rogue/indoors/shelter/town
-	first_time_text = "THE CITY OF FABLEFIELD"
+	first_time_text = "THE TOWN OF SOMBERWICKE"
 	town_area = TRUE
 
 /area/rogue/indoors/shelter/town

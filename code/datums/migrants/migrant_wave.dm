@@ -49,7 +49,7 @@
 	roles = list(
 		/datum/migrant_role/pilgrim = 4,
 	)
-	greet_text = "Fleeing from misfortune and hardship, you and a handful of survivors get closer to Fablefield, looking for refuge and work, finally almost being there, almost..."
+	greet_text = "Fleeing from misfortune and hardship, you and a handful of survivors get closer to Somberwicke, looking for refuge and work, finally almost being there, almost..."
 
 /datum/migrant_wave/pilgrim_down_one
 	name = "Wanderers"
@@ -58,7 +58,7 @@
 	roles = list(
 		/datum/migrant_role/pilgrim = 3,
 	)
-	greet_text = "Fleeing from misfortune and hardship, you and a handful of survivors get closer to Fablefield, looking for refuge and work, finally almost being there, almost..."
+	greet_text = "Fleeing from misfortune and hardship, you and a handful of survivors get closer to Somberwicke, looking for refuge and work, finally almost being there, almost..."
 
 /datum/migrant_wave/pilgrim_down_two
 	name = "Wanderers"
@@ -67,7 +67,7 @@
 	roles = list(
 		/datum/migrant_role/pilgrim = 2,
 	)
-	greet_text = "Fleeing from misfortune and hardship, you and a handful of survivors get closer to Fablefield, looking for refuge and work, finally almost being there, almost..."
+	greet_text = "Fleeing from misfortune and hardship, you and a handful of survivors get closer to Somberwicke, looking for refuge and work, finally almost being there, almost..."
 
 /datum/migrant_wave/pilgrim_down_three
 	name = "Wanderers"
@@ -75,5 +75,5 @@
 	roles = list(
 		/datum/migrant_role/pilgrim = 1,
 	)
-	greet_text = "Fleeing from misfortune and hardship, you and a handful of survivors get closer to Fablefield, looking for refuge and work, finally almost being there, almost..."
+	greet_text = "Fleeing from misfortune and hardship, you and a handful of survivors get closer to Somberwicke, looking for refuge and work, finally almost being there, almost..."
 

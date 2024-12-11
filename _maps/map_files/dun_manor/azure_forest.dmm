@@ -962,7 +962,7 @@
 /area/rogue/outdoors/mountains)
 "hx" = (
 /obj/structure/fluff/signage{
-	name = "AZURE PEAK - EAST"
+	name = "SOMBERWICKE - EAST"
 	},
 /turf/open/floor/rogue/dirt,
 /area/rogue/outdoors/woods)
@@ -4329,7 +4329,7 @@
 /area/rogue/under/cavewet/bogcaves)
 "Jk" = (
 /obj/structure/fluff/signage{
-	name = "AZURE PEAK - NORTH"
+	name = "SOMBERWICKE - NORTH"
 	},
 /turf/open/floor/rogue/dirt,
 /area/rogue/outdoors/woods)
@@ -4974,7 +4974,7 @@
 /area/rogue/under/cave/dungeon1/gethsmane/inner)
 "OX" = (
 /obj/structure/fluff/signage{
-	name = "AZURE PEAK - EAST"
+	name = "SOMBERWICKE - EAST"
 	},
 /turf/open/floor/rogue/dirt/road,
 /area/rogue/outdoors/mountains)
@@ -6279,7 +6279,7 @@
 /area/rogue/indoors)
 "ZL" = (
 /obj/structure/fluff/signage{
-	name = "AZURE PEAK - EAST"
+	name = "SOMBERWICKE - EAST"
 	},
 /turf/open/floor/rogue/grass,
 /area/rogue/outdoors/mountains)

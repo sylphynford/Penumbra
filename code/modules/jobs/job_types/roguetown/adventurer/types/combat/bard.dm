@@ -5,7 +5,7 @@
 	registered adventurers in Enigma, mostly because they are \
 	the last ones in a party to die. Their wish is to experience \
 	the greatest adventures of the age and write amazing songs about them. \
-	The class has the option between the jack of all trades Bard, the martial-focused Skald, magic-equip arcanist, and the gospel Hymnist." //Fablefield updated for Hymnist
+	The class has the option between the jack of all trades Bard, the martial-focused Skald, magic-equip arcanist, and the gospel Hymnist." //Somberwicke updated for Hymnist
 	allowed_sexes = list(MALE, FEMALE)
 	allowed_races = RACES_ALL_KINDS
 	outfit = /datum/outfit/job/roguetown/adventurer/bard

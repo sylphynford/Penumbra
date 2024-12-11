@@ -193,7 +193,7 @@
 	..()
 
 /obj/structure/fluff/walldeco/customflag
-	name = "Azure Peak flag"
+	name = "Somberwicke flag"
 	desc = ""
 	icon_state = "wallflag"
 
