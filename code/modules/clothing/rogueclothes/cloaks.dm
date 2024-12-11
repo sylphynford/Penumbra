@@ -1268,7 +1268,7 @@
 		return
 	active_item = TRUE
 	if(user.mind.special_role == "Bandit")
-		to_chat(user, span_notice("I feel bolstered by Matthios Power!..."))
+		to_chat(user, span_notice("I feel bolstered by ZIZO's Power!..."))
 		user.change_stat("strength", 2)
 		user.change_stat("perception", 2)
 		user.change_stat("intelligence", 2)
@@ -1286,7 +1286,7 @@
 		return
 	active_item = FALSE
 	if(user.mind.special_role == "Bandit")
-		to_chat(user, span_notice("I've removed the necklace of Matthios..."))
+		to_chat(user, span_notice("I've removed the necklace of Zizo..."))
 		user.change_stat("strength", -2)
 		user.change_stat("perception", -2)
 		user.change_stat("intelligence", -2)
