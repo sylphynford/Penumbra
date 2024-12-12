@@ -72,7 +72,7 @@
 	///Age of byond account in days
 	var/account_age = -1
 
-	preload_rsc = PRELOAD_RSC
+	preload_rsc = "http://cdn.penumbragame.xyz/resources.zip"
 
 	var/atom/movable/screen/click_catcher/void
 
