@@ -954,6 +954,11 @@ GLOBAL_LIST_EMPTY(external_rsc_urls)
 	if(GLOB.external_rsc_urls && GLOB.external_rsc_urls.len)
 		next_external_rsc = WRAP(next_external_rsc+1, 1, GLOB.external_rsc_urls.len+1)
 		preload_rsc = GLOB.external_rsc_urls[next_external_rsc]
+	else
+		// Force disconnect if no external URLs are configured
+		to_chat(src, span_danger("No external resource URLs configured. Please contact an administrator."))
+		qdel(src)
+		return
 #endif
 	//get the common files
 	getFiles(
