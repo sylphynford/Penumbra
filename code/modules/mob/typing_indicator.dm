@@ -45,28 +45,35 @@
 	return ..()
 
 /mob/proc/handle_typing_indicator()
-	if(isnull(client.mob))
-		return
-	if(!client || stat)
+	if(!client || !istype(client))
 		set_typing_indicator(FALSE)
 		return
 
-
-
-
-	var/temp = winget(client, "input", "text")
-
-	var/command = winget(client,"input","command")
-	if(command == "" || command + temp == "say \"")
-		set_typing_indicator(0)
+	if(isnull(client.mob))
+		set_typing_indicator(FALSE)
 		return
 
-	last_typed_time = world.time
-
-	if (world.time > last_typed_time + TYPING_INDICATOR_LIFETIME)
-		set_typing_indicator(0)
+	if(stat)
+		set_typing_indicator(FALSE)
 		return
-	else if(length(temp) > 0)
-		set_typing_indicator(TRUE,"hTy")
+
+	try
+		var/temp = winget(client, "input", "text")
+		var/command = winget(client,"input","command")
+
+		if(command == "" || command + temp == "say \"")
+			set_typing_indicator(0)
+			return
+
+		last_typed_time = world.time
+
+		if (world.time > last_typed_time + TYPING_INDICATOR_LIFETIME)
+			set_typing_indicator(0)
+			return
+		else if(length(temp) > 0)
+			set_typing_indicator(TRUE,"hTy")
+	catch
+		set_typing_indicator(FALSE)
+		return
 
 

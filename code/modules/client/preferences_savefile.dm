@@ -400,8 +400,16 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	S["feature_mcolor2"]	>> features["mcolor2"]
 	S["feature_mcolor3"]	>> features["mcolor3"]
 	S["feature_ethcolor"]	>> features["ethcolor"]
-	S["pronouns"]			>> pronouns
 	S["voice_type"]			>> voice_type
+
+	// Always set pronouns based on gender
+	switch(gender)
+		if(MALE)
+			pronouns = HE_HIM
+		if(FEMALE)
+			pronouns = SHE_HER 
+		else
+			pronouns = THEY_THEM
 
 /datum/preferences/proc/load_character(slot)
 	if(!path)
@@ -446,6 +454,16 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 
 	//Character
 	_load_appearence(S)
+
+	// Set default pronouns based on gender if none are saved
+	if(!pronouns)
+		switch(gender)
+			if(MALE)
+				pronouns = HE_HIM
+			if(FEMALE) 
+				pronouns = SHE_HER
+			else
+				pronouns = THEY_THEM
 
 	var/patron_typepath
 	S["selected_patron"]	>> patron_typepath
