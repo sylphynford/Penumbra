@@ -2,6 +2,9 @@
 
 GLOBAL_VAR(restart_counter)
 
+/datum/config_entry/string/external_rsc_url
+	protection = CONFIG_ENTRY_LOCKED
+
 //This runs before most anything else, for more info see:
 //https://github.com/Cyberboss/tgstation/blob/1afa69d66adfc810ab68c45a4fa5985c780ba6ff/code/game/world.dm#L10
 //But note that not all of this necessarily applies to us(particularly proccalls)
@@ -124,13 +127,9 @@ GLOBAL_VAR(restart_counter)
 
 /world/proc/SetupExternalRSC()
 #if (PRELOAD_RSC == 0)
-	GLOB.external_rsc_urls = world.file2list("[global.config.directory]/external_rsc_urls.txt","\n")
-	var/i=1
-	while(i<=GLOB.external_rsc_urls.len)
-		if(GLOB.external_rsc_urls[i])
-			i++
-		else
-			GLOB.external_rsc_urls.Cut(i,i+1)
+	var/rsc_url = CONFIG_GET(string/external_rsc_url)
+	if(rsc_url)
+		GLOB.external_rsc_urls = list(rsc_url)
 #endif
 
 /world/proc/SetupLogs()
