@@ -402,7 +402,7 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	S["feature_ethcolor"]	>> features["ethcolor"]
 	S["voice_type"]			>> voice_type
 
-	// Always set pronouns based on gender
+	// Always set pronouns based on gender, ignoring any saved value
 	switch(gender)
 		if(MALE)
 			pronouns = HE_HIM
@@ -455,16 +455,6 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	//Character
 	_load_appearence(S)
 
-	// Set default pronouns based on gender if none are saved
-	if(!pronouns)
-		switch(gender)
-			if(MALE)
-				pronouns = HE_HIM
-			if(FEMALE) 
-				pronouns = SHE_HER
-			else
-				pronouns = THEY_THEM
-
 	var/patron_typepath
 	S["selected_patron"]	>> patron_typepath
 	if(patron_typepath)
@@ -510,7 +500,6 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	if (!char_accent)
 		char_accent = "No accent"
 
-	S["pronouns"] >> pronouns
 	S["voice_type"] >> voice_type
 
 	S["family"] >> family
@@ -560,7 +549,6 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	backpack			= sanitize_inlist(backpack, GLOB.backpacklist, initial(backpack))
 	jumpsuit_style	= sanitize_inlist(jumpsuit_style, GLOB.jumpsuitlist, initial(jumpsuit_style))
 	uplink_spawn_loc = sanitize_inlist(uplink_spawn_loc, GLOB.uplink_spawn_loc_list, initial(uplink_spawn_loc))
-	pronouns = sanitize_text(pronouns, THEY_THEM)
 	voice_type = sanitize_text(voice_type, VOICE_TYPE_MASC)
 	features["mcolor"]	= sanitize_hexcolor(features["mcolor"], 6, 0)
 	features["mcolor2"]	= sanitize_hexcolor(features["mcolor2"], 6, 0)
@@ -694,7 +682,6 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	WRITE_FILE(S["ooc_notes"] , ooc_notes)
 	WRITE_FILE(S["char_accent"] , char_accent)
 	WRITE_FILE(S["voice_type"] , voice_type)
-	WRITE_FILE(S["pronouns"] , pronouns)
 	WRITE_FILE(S["statpack"] , statpack.type)
 	if(loadout)
 		WRITE_FILE(S["loadout"] , loadout.type)
