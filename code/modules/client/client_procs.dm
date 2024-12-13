@@ -950,10 +950,9 @@ GLOBAL_LIST_EMPTY(external_rsc_urls)
 //send resources to the client. It's here in its own proc so we can move it around easiliy if need be
 /client/proc/send_resources()
 #if (PRELOAD_RSC == 0)
-	var/static/next_external_rsc = 0
-	if(GLOB.external_rsc_urls && GLOB.external_rsc_urls.len)
-		next_external_rsc = WRAP(next_external_rsc+1, 1, GLOB.external_rsc_urls.len+1)
-		preload_rsc = GLOB.external_rsc_urls[next_external_rsc]
+	var/rsc_url = CONFIG_GET(string/external_rsc_url)
+	if(rsc_url)
+		preload_rsc = rsc_url
 #endif
 	//get the common files
 	getFiles(
