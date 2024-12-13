@@ -147,8 +147,10 @@ SUBSYSTEM_DEF(maturity_guard)
 	)
 
 	if(!add_age_to_db.warn_execute())
+		qdel(add_age_to_db)
 		return FALSE
 
+	qdel(add_age_to_db)
 	return TRUE
 
 // Logic inspired by S.P.L.U.R.T age_gate
