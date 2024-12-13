@@ -261,12 +261,6 @@ SUBSYSTEM_DEF(family)
 			if(max(member_value,target_value) - min(member_value,target_value) > 1) //Too high an age difference.
 				return FALSE
 
-			if(HAS_TRAIT(target, TRAIT_NOBLE) && !HAS_TRAIT(member, TRAIT_NOBLE))
-				return
-
-			if(HAS_TRAIT(member, TRAIT_NOBLE) && !HAS_TRAIT(target, TRAIT_NOBLE))
-				return
-
 			return TRUE //suitable.
 
 		if(REL_TYPE_SIBLING)
