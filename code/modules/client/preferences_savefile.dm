@@ -400,16 +400,18 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	S["feature_mcolor2"]	>> features["mcolor2"]
 	S["feature_mcolor3"]	>> features["mcolor3"]
 	S["feature_ethcolor"]	>> features["ethcolor"]
-	S["voice_type"]			>> voice_type
 
-	// Always set pronouns based on gender, ignoring any saved value
+	// Always set pronouns and voice_type based on gender, ignoring any saved values
 	switch(gender)
 		if(MALE)
 			pronouns = HE_HIM
+			voice_type = VOICE_TYPE_MASC
 		if(FEMALE)
-			pronouns = SHE_HER 
+			pronouns = SHE_HER
+			voice_type = VOICE_TYPE_FEM
 		else
 			pronouns = THEY_THEM
+			voice_type = VOICE_TYPE_ANDR
 
 /datum/preferences/proc/load_character(slot)
 	if(!path)
@@ -500,8 +502,6 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	if (!char_accent)
 		char_accent = "No accent"
 
-	S["voice_type"] >> voice_type
-
 	S["family"] >> family
 	S["family_species"] >> family_species
 	S["family_gender"] >> family_gender
@@ -549,7 +549,6 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	backpack			= sanitize_inlist(backpack, GLOB.backpacklist, initial(backpack))
 	jumpsuit_style	= sanitize_inlist(jumpsuit_style, GLOB.jumpsuitlist, initial(jumpsuit_style))
 	uplink_spawn_loc = sanitize_inlist(uplink_spawn_loc, GLOB.uplink_spawn_loc_list, initial(uplink_spawn_loc))
-	voice_type = sanitize_text(voice_type, VOICE_TYPE_MASC)
 	features["mcolor"]	= sanitize_hexcolor(features["mcolor"], 6, 0)
 	features["mcolor2"]	= sanitize_hexcolor(features["mcolor2"], 6, 0)
 	features["mcolor3"]	= sanitize_hexcolor(features["mcolor3"], 6, 0)
@@ -681,7 +680,9 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	WRITE_FILE(S["flavortext"] , flavortext)
 	WRITE_FILE(S["ooc_notes"] , ooc_notes)
 	WRITE_FILE(S["char_accent"] , char_accent)
-	WRITE_FILE(S["voice_type"] , voice_type)
+	WRITE_FILE(S["family"] , family)
+	WRITE_FILE(S["family_species"] , family_species)
+	WRITE_FILE(S["family_gender"] , family_gender)
 	WRITE_FILE(S["statpack"] , statpack.type)
 	if(loadout)
 		WRITE_FILE(S["loadout"] , loadout.type)
