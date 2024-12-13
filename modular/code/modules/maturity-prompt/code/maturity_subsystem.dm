@@ -122,8 +122,9 @@ SUBSYSTEM_DEF(maturity_guard)
 	// There should be only one, we're querying by the primary key; if it returns more than one row something is very wrong
 	var/result = query_age_from_db.NextRow()
 	if(result)
-		return query_age_from_db.item
-	return FALSE
+		. = query_age_from_db.item
+	qdel(query_age_from_db)
+	return .
 
 
 /datum/controller/subsystem/maturity_guard/proc/add_age_to_db(mob/user, year, month)
