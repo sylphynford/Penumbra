@@ -956,22 +956,27 @@ GLOBAL_LIST_EMPTY(external_rsc_urls)
 		preload_rsc = GLOB.external_rsc_urls[next_external_rsc]
 #endif
 	//get the common files
-	getFiles(
+	var/list/required_files = list(
 		'html/search.js',
 		'html/panels.css',
 		'html/browser/common.css',
 		'html/browser/scannernew.css',
-		'html/browser/playeroptions.css',
-		)
-	spawn (10) //removing this spawn causes all clients to not get verbs.
-		//Precache the client with all other assets slowly, so as to not block other browse() calls
-		getFilesSlow(src, SSassets.preload, register_asset = FALSE)
-//		#if (PRELOAD_RSC == 0)
-//		for (var/name in GLOB.vox_sounds)
-//			var/file = GLOB.vox_sounds[name]
-//			Export("##action=load_rsc", file)
-//			stoplag()
-//		#endif
+		'html/browser/playeroptions.css'
+	)
+
+	// Send required files with verification
+	for(var/file in required_files)
+		if(!send_asset(src, file, TRUE))  // TRUE forces verification
+			qdel(src) // Drop connection if file transfer fails
+			return FALSE
+
+	// Precache remaining assets
+	spawn (10)
+		if(!getFilesSlow(src, SSassets.preload, register_asset = FALSE))
+			qdel(src)
+			return FALSE
+
+	return TRUE
 
 //Hook, override it to run code when dir changes
 //Like for /atoms, but clients are their own snowflake FUCK
@@ -1081,6 +1086,8 @@ GLOBAL_LIST_EMPTY(external_rsc_urls)
 
 /client/New()
 	..()
+	if(!send_resources())  // Only continue if resource sending succeeds
+		return FALSE
 	fullscreen()
 
 /client/proc/give_award(achievement_type, mob/user)
