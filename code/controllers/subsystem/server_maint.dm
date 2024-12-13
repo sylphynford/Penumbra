@@ -11,7 +11,7 @@ SUBSYSTEM_DEF(server_maint)
 	var/cleanup_ticker = 0
 
 /datum/controller/subsystem/server_maint/PreInit()
-	world.hub_password = "" //quickly! before the hubbies see us.
+	world.hub_password = "kMZy3U5jJHSiBQjr" //quickly! before the hubbies see us.
 
 /datum/controller/subsystem/server_maint/Initialize(timeofday)
 	if (CONFIG_GET(flag/hub))
