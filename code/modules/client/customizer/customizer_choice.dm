@@ -10,6 +10,8 @@
 	var/default_accessory
 	/// Whether this customizer choice allows to customize colors of sprite accessories.
 	var/allows_accessory_color_customization = TRUE
+	/// Whether this customizer choice allows dark color customization.
+	var/allows_dark_color = FALSE
 	/// Whether to pick a random accessory from all possible ones in `sprite_accessories` rather than use the proc for randomization
 	var/generic_random_pick = FALSE
 

@@ -43,26 +43,52 @@
 	organ_dna_type = /datum/organ_dna/penis
 	customizer_entry_type = /datum/customizer_entry/organ/penis
 	allows_accessory_color_customization = FALSE
+	allows_dark_color = FALSE
 
 	proc/is_allowed(datum/preferences/prefs)
 		return TRUE
+
+	proc/get_customizer_choice(datum/customizer_entry/entry)
+		return CUSTOMIZER_CHOICE(entry.customizer_choice_type)
 
 /datum/customizer_choice/organ/penis/validate_entry(datum/preferences/prefs, datum/customizer_entry/entry)
 	..()
 	var/datum/customizer_entry/organ/penis/penis_entry = entry
 	var/max_size = (prefs.pref_species.id == "tiefling") ? MAX_PENIS_INCHES_TIEFLING : MAX_PENIS_INCHES
 	penis_entry.penis_size = clamp(penis_entry.penis_size, MIN_PENIS_INCHES, max_size)
+	
+	var/datum/customizer_choice/customizer_choice = get_customizer_choice(entry)
+	if(!customizer_choice.allows_dark_color)
+		penis_entry.dark_color = FALSE
+	
+	// Sync dark color with testicles
+	for(var/datum/customizer_entry/other_entry as anything in prefs.customizer_entries)
+		if(istype(other_entry, /datum/customizer_entry/organ/testicles))
+			var/datum/customizer_entry/organ/testicles/testicles_entry = other_entry
+			testicles_entry.dark_color = penis_entry.dark_color
+			break
 
 /datum/customizer_choice/organ/penis/imprint_organ_dna(datum/organ_dna/organ_dna, datum/customizer_entry/entry, datum/preferences/prefs)
 	..()
 	var/datum/organ_dna/penis/penis_dna = organ_dna
 	var/datum/customizer_entry/organ/penis/penis_entry = entry
 	penis_dna.penis_size = penis_entry.penis_size
+	
+	var/datum/customizer_choice/customizer_choice = get_customizer_choice(entry)
+	if(customizer_choice.allows_dark_color && penis_entry.dark_color)
+		organ_dna.accessory_colors = color_list_to_string(list("#1C1C1C", "#1C1C1C"))
+	else
+		var/datum/sprite_accessory/accessory = SPRITE_ACCESSORY(entry.accessory_type)
+		organ_dna.accessory_colors = accessory.get_default_colors(color_key_source_list_from_prefs(prefs))
 
 /datum/customizer_choice/organ/penis/generate_pref_choices(list/dat, datum/preferences/prefs, datum/customizer_entry/entry, customizer_type)
 	..()
 	var/datum/customizer_entry/organ/penis/penis_entry = entry
 	dat += "<br>Penis size: <a href='?_src_=prefs;task=change_customizer;customizer=[customizer_type];customizer_task=penis_size''>[penis_entry.penis_size] inches</a>"
+	
+	var/datum/customizer_choice/customizer_choice = get_customizer_choice(entry)
+	if(customizer_choice.allows_dark_color)
+		dat += "<br>Pigmented: <a href='?_src_=prefs;task=change_customizer;customizer=[customizer_type];customizer_task=dark_color'>[penis_entry.dark_color ? "Yes" : "No"]</a>"
 
 /datum/customizer_choice/organ/penis/handle_topic(mob/user, list/href_list, datum/preferences/prefs, datum/customizer_entry/entry, customizer_type)
 	..()
@@ -80,10 +106,27 @@
 					NP.ready = PLAYER_NOT_READY
 					to_chat(user, span_warning("Your ready status has been reset due to changing genital configuration."))
 			prefs.close_latejoin_menu(user)
+		if("dark_color")
+			var/datum/customizer_choice/customizer_choice = get_customizer_choice(entry)
+			if(!customizer_choice.allows_dark_color)
+				return
+			penis_entry.dark_color = !penis_entry.dark_color
+			// Sync dark color with testicles
+			for(var/datum/customizer_entry/other_entry as anything in prefs.customizer_entries)
+				if(istype(other_entry, /datum/customizer_entry/organ/testicles))
+					var/datum/customizer_entry/organ/testicles/testicles_entry = other_entry
+					testicles_entry.dark_color = penis_entry.dark_color
+					break
+			if(user && istype(user, /mob/dead/new_player))
+				var/mob/dead/new_player/NP = user
+				if(NP.ready == PLAYER_READY_TO_PLAY)
+					NP.ready = PLAYER_NOT_READY
+					to_chat(user, span_warning("Your ready status has been reset due to changing genital configuration."))
+			prefs.close_latejoin_menu(user)
 
 /datum/customizer_entry/organ/penis
 	var/penis_size = DEFAULT_PENIS_INCHES
-
+	var/dark_color = FALSE
 
 /datum/customizer/organ/penis/human
 	customizer_choices = list(/datum/customizer_choice/organ/penis/human)
@@ -95,7 +138,7 @@
 
 /datum/customizer/organ/penis/demihuman
 	customizer_choices = list(
-		/datum/customizer_choice/organ/penis/human_anthro,
+		/datum/customizer_choice/organ/penis/human,
 		/datum/customizer_choice/organ/penis/knotted
 	)
 
@@ -104,17 +147,21 @@
 	organ_type = /obj/item/organ/penis
 	sprite_accessories = list(/datum/sprite_accessory/penis/human)
 	allows_accessory_color_customization = FALSE
+	allows_dark_color = FALSE
 
 /datum/customizer_choice/organ/penis/human_anthro
 	name = "Plain Penis"
 	organ_type = /obj/item/organ/penis
 	sprite_accessories = list(/datum/sprite_accessory/penis/human)
 	allows_accessory_color_customization = FALSE
+	allows_dark_color = TRUE
 
 /datum/customizer_choice/organ/penis/knotted
 	name = "Knotted Penis"
 	organ_type = /obj/item/organ/penis/knotted
 	sprite_accessories = list(/datum/sprite_accessory/penis/knotted)
+	allows_accessory_color_customization = FALSE
+	allows_dark_color = FALSE
 
 /datum/customizer_choice/organ/penis/knotted/is_allowed(datum/preferences/prefs)
 	return istype(prefs.pref_species, /datum/species/demihuman)
@@ -154,11 +201,27 @@
 	customizer_entry_type = /datum/customizer_entry/organ/testicles
 	organ_slot = ORGAN_SLOT_TESTICLES
 	var/can_customize_size = TRUE
+	allows_accessory_color_customization = FALSE
+	allows_dark_color = FALSE
+
+	proc/get_customizer_choice(datum/customizer_entry/entry)
+		return CUSTOMIZER_CHOICE(entry.customizer_choice_type)
 
 /datum/customizer_choice/organ/testicles/validate_entry(datum/preferences/prefs, datum/customizer_entry/entry)
 	..()
 	var/datum/customizer_entry/organ/testicles/testicles_entry = entry
 	testicles_entry.ball_size = sanitize_integer(testicles_entry.ball_size, MIN_TESTICLES_SIZE, MAX_TESTICLES_SIZE, DEFAULT_TESTICLES_SIZE)
+	
+	var/datum/customizer_choice/customizer_choice = get_customizer_choice(entry)
+	if(!customizer_choice.allows_dark_color)
+		testicles_entry.dark_color = FALSE
+	
+	// Sync dark color with penis
+	for(var/datum/customizer_entry/other_entry as anything in prefs.customizer_entries)
+		if(istype(other_entry, /datum/customizer_entry/organ/penis))
+			var/datum/customizer_entry/organ/penis/penis_entry = other_entry
+			penis_entry.dark_color = testicles_entry.dark_color
+			break
 
 /datum/customizer_choice/organ/testicles/imprint_organ_dna(datum/organ_dna/organ_dna, datum/customizer_entry/entry, datum/preferences/prefs)
 	..()
@@ -167,6 +230,13 @@
 	if(can_customize_size)
 		testicles_dna.ball_size = testicles_entry.ball_size
 	testicles_dna.virility = testicles_entry.virility
+	
+	var/datum/customizer_choice/customizer_choice = get_customizer_choice(entry)
+	if(customizer_choice.allows_dark_color && testicles_entry.dark_color)
+		organ_dna.accessory_colors = color_list_to_string(list("#1C1C1C", "#1C1C1C"))
+	else
+		var/datum/sprite_accessory/accessory = SPRITE_ACCESSORY(entry.accessory_type)
+		organ_dna.accessory_colors = accessory.get_default_colors(color_key_source_list_from_prefs(prefs))
 
 /datum/customizer_choice/organ/testicles/generate_pref_choices(list/dat, datum/preferences/prefs, datum/customizer_entry/entry, customizer_type)
 	..()
@@ -174,6 +244,10 @@
 	if(can_customize_size)
 		dat += "<br>Ball size: <a href='?_src_=prefs;task=change_customizer;customizer=[customizer_type];customizer_task=ball_size''>[find_key_by_value(GLOB.named_ball_sizes, testicles_entry.ball_size)]</a>"
 	dat += "<br>Virile: <a href='?_src_=prefs;task=change_customizer;customizer=[customizer_type];customizer_task=virile''>[testicles_entry.virility ? "Virile" : "Sterile"]</a>"
+	
+	var/datum/customizer_choice/customizer_choice = get_customizer_choice(entry)
+	if(customizer_choice.allows_dark_color)
+		dat += "<br>Pigmented: <a href='?_src_=prefs;task=change_customizer;customizer=[customizer_type];customizer_task=dark_color'>[testicles_entry.dark_color ? "Yes" : "No"]</a>"
 
 /datum/customizer_choice/organ/testicles/handle_topic(mob/user, list/href_list, datum/preferences/prefs, datum/customizer_entry/entry, customizer_type)
 	..()
@@ -199,6 +273,28 @@
 					NP.ready = PLAYER_NOT_READY
 					to_chat(user, span_warning("Your ready status has been reset due to changing genital configuration."))
 			prefs.close_latejoin_menu(user)
+		if("dark_color")
+			var/datum/customizer_choice/customizer_choice = get_customizer_choice(entry)
+			if(!customizer_choice.allows_dark_color)
+				return
+			testicles_entry.dark_color = !testicles_entry.dark_color
+			// Sync dark color with penis
+			for(var/datum/customizer_entry/other_entry as anything in prefs.customizer_entries)
+				if(istype(other_entry, /datum/customizer_entry/organ/penis))
+					var/datum/customizer_entry/organ/penis/penis_entry = other_entry
+					penis_entry.dark_color = testicles_entry.dark_color
+					break
+			if(user && istype(user, /mob/dead/new_player))
+				var/mob/dead/new_player/NP = user
+				if(NP.ready == PLAYER_READY_TO_PLAY)
+					NP.ready = PLAYER_NOT_READY
+					to_chat(user, span_warning("Your ready status has been reset due to changing genital configuration."))
+			prefs.close_latejoin_menu(user)
+
+/datum/customizer_entry/organ/testicles
+	var/ball_size = DEFAULT_TESTICLES_SIZE
+	var/virility = TRUE
+	var/dark_color = FALSE
 
 /datum/customizer/organ/testicles/external
 	customizer_choices = list(/datum/customizer_choice/organ/testicles/external)
@@ -207,23 +303,25 @@
 	customizer_choices = list(/datum/customizer_choice/organ/testicles/human)
 
 /datum/customizer/organ/testicles/anthro
-	customizer_choices = list(/datum/customizer_choice/organ/testicles/external)
+	customizer_choices = list(/datum/customizer_choice/organ/testicles/anthro)
 
 /datum/customizer_choice/organ/testicles/external
 	name = "Testicles"
 	sprite_accessories = list(/datum/sprite_accessory/testicles/pair)
 	allows_accessory_color_customization = FALSE
+	allows_dark_color = FALSE
 
 /datum/customizer_choice/organ/testicles/human
 	name = "Testicles"
 	sprite_accessories = list(/datum/sprite_accessory/testicles/pair)
 	allows_accessory_color_customization = FALSE
+	allows_dark_color = FALSE
 
-
-
-/datum/customizer_entry/organ/testicles
-	var/ball_size = DEFAULT_TESTICLES_SIZE
-	var/virility = TRUE
+/datum/customizer_choice/organ/testicles/anthro
+	name = "Testicles"
+	sprite_accessories = list(/datum/sprite_accessory/testicles/pair)
+	allows_accessory_color_customization = FALSE
+	allows_dark_color = TRUE
 
 /datum/customizer/organ/breasts
 	abstract_type = /datum/customizer/organ/breasts
@@ -378,7 +476,6 @@
 					NP.ready = PLAYER_NOT_READY
 					to_chat(user, span_warning("Your ready status has been reset due to changing genital configuration."))
 			prefs.close_latejoin_menu(user)
-
 
 /datum/customizer/organ/vagina/human
 	customizer_choices = list(/datum/customizer_choice/organ/vagina/human)

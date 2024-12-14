@@ -72,8 +72,8 @@
 		/datum/customizer/organ/snout/lizard,
 		/datum/customizer/organ/frills/lizard,
 		/datum/customizer/organ/horns/humanoid/sissean,
-		/datum/customizer/organ/testicles/anthro,
-		/datum/customizer/organ/penis/anthro,
+		/datum/customizer/organ/testicles/human,
+		/datum/customizer/organ/penis/human,
 		/datum/customizer/organ/breasts/animal,
 		/datum/customizer/organ/vagina/animal,
 		)
