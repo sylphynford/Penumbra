@@ -616,6 +616,8 @@
 
 
 /datum/sex_controller/proc/cuckold_check()
+	if(!target || target == user)
+		return
 	//First, check if the target has a family.
 	var/datum/family/F = target.getFamily(TRUE)
 	if(!F)
