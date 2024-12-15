@@ -1,5 +1,3 @@
-
-
 /obj/item/clothing/ring
 	name = "ring"
 	desc = ""
@@ -187,3 +185,16 @@
 		active_item = FALSE
 		return
 
+/obj/item/clothing/ring/soul
+	name = "soulring"
+	desc = "A beautiful golden ring bearing the honorific of Psydonian marriages."
+	icon_state = "soulring"
+	sellprice = 50
+	var/spouse_name
+
+/obj/item/clothing/ring/soul/Initialize(mapload, new_spouse)
+	. = ..()
+	if(new_spouse)
+		spouse_name = new_spouse
+		name = "soulring of [spouse_name]"
+		desc = "A beautiful golden ring bearing the honorific of Psydonian marriages. Inscribed inside is the name '[spouse_name]'."
