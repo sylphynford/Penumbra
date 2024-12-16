@@ -76,7 +76,11 @@
 	
 	var/datum/customizer_choice/customizer_choice = get_customizer_choice(entry)
 	if(customizer_choice.allows_dark_color && penis_entry.dark_color)
-		organ_dna.accessory_colors = color_list_to_string(list("#333333", "#333333"))
+		var/list/color_sources = color_key_source_list_from_prefs(prefs)
+		var/skin_color = color_sources[KEY_SKIN_COLOR]
+		// Darken the skin color
+		var/darkened_color = BlendRGB(skin_color, "#000000", 0.5)
+		organ_dna.accessory_colors = color_list_to_string(list(darkened_color, darkened_color))
 	else
 		var/datum/sprite_accessory/accessory = SPRITE_ACCESSORY(entry.accessory_type)
 		organ_dna.accessory_colors = accessory.get_default_colors(color_key_source_list_from_prefs(prefs))
@@ -233,7 +237,11 @@
 	
 	var/datum/customizer_choice/customizer_choice = get_customizer_choice(entry)
 	if(customizer_choice.allows_dark_color && testicles_entry.dark_color)
-		organ_dna.accessory_colors = color_list_to_string(list("#333333", "#333333"))
+		var/list/color_sources = color_key_source_list_from_prefs(prefs)
+		var/skin_color = color_sources[KEY_SKIN_COLOR]
+		// Darken the skin color
+		var/darkened_color = BlendRGB(skin_color, "#000000", 0.5)
+		organ_dna.accessory_colors = color_list_to_string(list(darkened_color, darkened_color))
 	else
 		var/datum/sprite_accessory/accessory = SPRITE_ACCESSORY(entry.accessory_type)
 		organ_dna.accessory_colors = accessory.get_default_colors(color_key_source_list_from_prefs(prefs))
