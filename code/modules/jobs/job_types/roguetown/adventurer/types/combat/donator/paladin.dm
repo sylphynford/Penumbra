@@ -18,8 +18,8 @@
 	cloak = /obj/item/clothing/cloak/tabard/crusader
 	switch(H.patron?.type)
 		if(/datum/patron/divine/astrata)
-			neck = /obj/item/clothing/neck/roguetown/psicross/astrata
-			cloak = /obj/item/clothing/cloak/tabard/crusader/astrata
+			neck = /obj/item/clothing/neck/roguetown/psicross/
+			cloak = /obj/item/clothing/cloak/tabard/crusader/psydon
 		if(/datum/patron/divine/dendor)
 			neck = /obj/item/clothing/neck/roguetown/psicross/dendor
 			cloak = /obj/item/clothing/cloak/tabard/crusader/dendor

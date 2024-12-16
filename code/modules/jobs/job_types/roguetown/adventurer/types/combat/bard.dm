@@ -171,7 +171,7 @@
 			beltr = /obj/item/rogueweapon/huntingknife/idagger
 			switch(H.patron?.type)
 				if(/datum/patron/divine/astrata)
-					neck = /obj/item/clothing/neck/roguetown/psicross/astrata
+					neck = /obj/item/clothing/neck/roguetown/psicross/
 				if(/datum/patron/divine/noc)
 					neck = /obj/item/clothing/neck/roguetown/psicross/noc
 				if(/datum/patron/divine/dendor)
