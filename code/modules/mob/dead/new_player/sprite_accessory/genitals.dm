@@ -22,7 +22,7 @@
 				else
 					return "slit_2"
 	if(pp.erect_state == ERECT_STATE_HARD)
-		return "[icon_state]_[min(3, pp.sprite_size+1)]"
+		return "[icon_state]_[min(6, pp.sprite_size+1)]"
 	else
 		return "[icon_state]_[pp.sprite_size]"
 
