@@ -1454,7 +1454,6 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 				var/CtrlMod = text2num(href_list["ctrl"]) ? "Ctrl" : ""
 				var/ShiftMod = text2num(href_list["shift"]) ? "Shift" : ""
 				var/numpad = text2num(href_list["numpad"]) ? "Numpad" : ""
-				// var/key_code = text2num(href_list["key_code"])
 
 				if(GLOB._kbMap[new_key])
 					new_key = GLOB._kbMap[new_key]
@@ -1469,17 +1468,24 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 						full_key = "[AltMod][CtrlMod][new_key]"
 					else
 						full_key = "[AltMod][CtrlMod][ShiftMod][numpad][new_key]"
-				if(key_bindings[old_key])
+
+				// Add this check to handle unbound keys
+				if(old_key == "Unbound")
+					key_bindings[full_key] = list(kb_name)
+				else if(key_bindings[old_key])
 					key_bindings[old_key] -= kb_name
 					if(!length(key_bindings[old_key]))
 						key_bindings -= old_key
 					key_bindings[full_key] += list(kb_name)
-					key_bindings[full_key] = sortList(key_bindings[full_key])
+				else
+					key_bindings[full_key] = list(kb_name)
 
-					user << browse(null, "window=capturekeypress")
-					user.client.update_movement_keys()
-					save_preferences()
-					SetKeybinds(user)
+				key_bindings[full_key] = sortList(key_bindings[full_key])
+
+				user << browse(null, "window=capturekeypress")
+				user.client.update_movement_keys()
+				save_preferences()
+				SetKeybinds(user)
 
 			if("keybindings_reset")
 				var/choice = tgalert(user, "Do you really want to reset your keybindings?", "Setup keybindings", "Do It", "Cancel")
@@ -2009,7 +2015,6 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 					var/CtrlMod = text2num(href_list["ctrl"]) ? "Ctrl" : ""
 					var/ShiftMod = text2num(href_list["shift"]) ? "Shift" : ""
 					var/numpad = text2num(href_list["numpad"]) ? "Numpad" : ""
-					// var/key_code = text2num(href_list["key_code"])
 
 					if(GLOB._kbMap[new_key])
 						new_key = GLOB._kbMap[new_key]
@@ -2024,11 +2029,18 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 							full_key = "[AltMod][CtrlMod][new_key]"
 						else
 							full_key = "[AltMod][CtrlMod][ShiftMod][numpad][new_key]"
-					if(key_bindings[old_key])
+
+					// Add this check to handle unbound keys
+					if(old_key == "Unbound")
+						key_bindings[full_key] = list(kb_name)
+					else if(key_bindings[old_key])
 						key_bindings[old_key] -= kb_name
 						if(!length(key_bindings[old_key]))
 							key_bindings -= old_key
-					key_bindings[full_key] += list(kb_name)
+						key_bindings[full_key] += list(kb_name)
+					else
+						key_bindings[full_key] = list(kb_name)
+
 					key_bindings[full_key] = sortList(key_bindings[full_key])
 
 					user << browse(null, "window=capturekeypress")
