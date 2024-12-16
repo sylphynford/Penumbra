@@ -158,15 +158,53 @@
 	ADD_TRAIT(H, TRAIT_SQUIRE_REPAIR, TRAIT_GENERIC)
 	ADD_TRAIT(H, TRAIT_MEDIUMARMOR, TRAIT_GENERIC)
 
-	H.adjust_blindness(-3)
-	var/weapons = list("Iron Sword","Cudgel",)
-	var/weapon_choice = input("Choose your weapon.", "TAKE UP ARMS") as anything in weapons
-	H.set_blindness(0)
-	switch(weapon_choice)
+/datum/advclass/squire/footman/equipme(mob/living/carbon/human/H)
+	if(!H)
+		return FALSE
+	
+	// First equip the base outfit
+	if(outfit)
+		var/datum/outfit/O = new outfit
+		O.equip(H)
+
+	// Wait for client to be ready (up to 5 seconds)
+	spawn(0)
+		var/tries = 0
+		while(!H?.client && tries < 10)
+			tries++
+			sleep(5)
+			
+		if(!H?.client)
+			var/classchoice = pick(list("Iron Sword", "Cudgel"))
+			apply_class_equipment(H, classchoice)
+			return
+
+		to_chat(H, span_notice("\n\nChoose your Footman Squire weapon..."))
+		var/list/choices = list("Iron Sword", "Cudgel")
+		var/classchoice = input(H, "Choose your Footman Squire weapon (30 seconds to choose)", "Weapon Selection") as anything in choices
+		
+		spawn(30 SECONDS)
+			if(!classchoice)
+				classchoice = pick(choices)
+				to_chat(H, span_warning("Time's up! Random weapon selected: [classchoice]"))
+				apply_class_equipment(H, classchoice)
+		
+		if(!classchoice)
+			classchoice = pick(choices)
+			to_chat(H, span_warning("No selection made. Random weapon selected: [classchoice]"))
+		
+		apply_class_equipment(H, classchoice)
+	
+	return TRUE
+
+/datum/advclass/squire/footman/proc/apply_class_equipment(mob/living/carbon/human/H, classchoice)
+	switch(classchoice)
 		if("Iron Sword")
-			beltr = /obj/item/rogueweapon/sword/iron
+			to_chat(H, span_warning("You are a squire trained in the art of the sword."))
+			H.equip_to_slot_or_del(new /obj/item/rogueweapon/sword/iron(H), SLOT_BELT_R)
 		if("Cudgel")
-			beltr = /obj/item/rogueweapon/mace/cudgel
+			to_chat(H, span_warning("You are a squire trained in the use of the cudgel."))
+			H.equip_to_slot_or_del(new /obj/item/rogueweapon/mace/cudgel(H), SLOT_BELT_R)
 
 /datum/advclass/squire/skirmisher
 	name = "Irregular Squire"
