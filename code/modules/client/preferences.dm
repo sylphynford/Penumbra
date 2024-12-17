@@ -210,8 +210,6 @@ GLOBAL_LIST_EMPTY(chosen_names)
 		family_species += S.id
 
 	family_gender = list(MALE,FEMALE)
-	family_gender += MALE
-	family_gender += FEMALE
 
 	if(!charflaw)
 		charflaw = pick(GLOB.character_flaws)
