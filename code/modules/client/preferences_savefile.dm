@@ -559,6 +559,8 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	validate_body_markings()
 	if(!family_species)
 		family_species = list()
+	if(isnull(family))
+		family = FAMILY_NONE
 
 	S["descriptor_entries"] >> descriptor_entries
 	descriptor_entries = SANITIZE_LIST(descriptor_entries)
@@ -587,13 +589,13 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	// Additional validation for genital rules
 	var/datum/customizer_entry/organ/penis/penis_entry
 	var/datum/customizer_entry/organ/vagina/vagina_entry
-	
+
 	for(var/datum/customizer_entry/entry as anything in customizer_entries)
 		if(istype(entry, /datum/customizer_entry/organ/penis))
 			penis_entry = entry
 		else if(istype(entry, /datum/customizer_entry/organ/vagina))
 			vagina_entry = entry
-	
+
 	// If we have both entries available
 	if(penis_entry && vagina_entry)
 		// If both are disabled, enable vagina by default
