@@ -207,11 +207,11 @@ GLOBAL_LIST_EMPTY(chosen_names)
 	var/list/available_species = get_selectable_species()
 	for(var/species_name in available_species)
 		var/datum/species/S = GLOB.species_list[species_name]
-		family_species[S.id] = TRUE
+		family_species += S.id
 	
 	family_gender = list()
-	family_gender[MALE] = TRUE 
-	family_gender[FEMALE] = TRUE
+	family_gender += MALE
+	family_gender += FEMALE
 
 	if(!charflaw)
 		charflaw = pick(GLOB.character_flaws)
@@ -1405,7 +1405,7 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 				while(choice != "(DONE)")
 					var/list/choices = list("[(MALE in family_gender) ? "(+)" : ""]Masculine" = MALE,"[(FEMALE in family_gender) ? "(+)" : ""]Feminine" = FEMALE)
 					choices += "(DONE)"
-					choice = input(usr,"I've always found my eyes wander towards those that appear... (+) = ON","GENDER") as anything in choices
+					choice = input(usr,"I've always found my eyes wander towards those that appear...","GENDER") as anything in choices
 					if(choice != "(DONE)")
 						if(choices[choice] in family_gender)
 							family_gender -= choices[choice]
@@ -1421,7 +1421,7 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 						var/index = "[(S.id in family_species) ? "(+)" : ""][S.name]"
 						choices[index] = S.id
 					choices += "(DONE)"
-					choice = input(usr,"Out of all the many races, none catch my fancy quite like... (+) = ON","RACE") as anything in choices
+					choice = input(usr,"Out of all the many races, none catch my fancy quite like...","RACE") as anything in choices
 					if(choice != "(CANCEL)")
 						if(choices[choice] in family_species)
 							family_species -= choices[choice]
