@@ -20,6 +20,7 @@
 	round_contrib_points = 2
 
 	cmode_music = 'sound/music/combat_knight.ogg'
+	family_blacklisted = TRUE
 
 /datum/outfit/job/roguetown/huskar/pre_equip(mob/living/carbon/human/H)
 	. = ..()
