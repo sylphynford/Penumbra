@@ -238,6 +238,8 @@ SUBSYSTEM_DEF(family)
 		spawn(1)
 			to_chat(holder,"<span class='notice'>My [R.name]. [target.real_name] ([target.age]) is here alongside me.</span>")
 
+		R.onConnect(holder,target) //Bit of hack to have this here. But it stops church marriages from being given rings.
+
 /datum/family/proc/tryConnect(var/mob/living/carbon/human/target, var/mob/living/carbon/human/member) //Gets the rel_type for the targets. For now, it only returns spouse.
 	return REL_TYPE_SPOUSE
 
@@ -363,7 +365,6 @@ proc/getMatchingRel(var/rel_type)
 	holder = WEAKREF(H)
 	target = WEAKREF(T)
 	name = getName() //Done once to prevent any organ changes from changing the name.
-	onConnect(H,T)
 
 /datum/relation/spouse
 	name = "Spouse"
