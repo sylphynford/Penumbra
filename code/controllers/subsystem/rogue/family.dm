@@ -41,6 +41,21 @@ SUBSYSTEM_DEF(family)
 				rel_images += I
 
 
+/datum/controller/subsystem/family/proc/makeFamily(var/mob/living/carbon/human/head,var/name)
+	var/i = 0
+	while(!name || used_names.Find(name))
+		i++
+		name = pick(strings("family.json","prefix")) + "-" + pick(strings("family.json","title"))
+		if(i == 100)
+			name += " the [pick("ill","unfortunate")] lucked" //fallback on the impossible chance it CANNOT make a unique name.
+
+	var/datum/family/F = new()
+	F.name = name
+	used_names += name
+	F.addMember(head)
+
+	return F
+
 /datum/controller/subsystem/family/proc/SetupFamilies()
 	if(!length(family_candidates))
 		return
@@ -60,16 +75,7 @@ SUBSYSTEM_DEF(family)
 		var/mob/living/carbon/head = pick(head_candidates)
 
 		if(head)
-			var/datum/family/F = new()
-			var/family_name
-			var/i = 0
-			while(!family_name || used_names.Find(family_name))
-				family_name = pick(strings("family.json","prefix")) + "-" + pick(strings("family.json","title"))
-				if(i == 100)
-					family_name += " the [pick("ill","unfortunate")] lucked" //fallback on the impossible chance it CANNOT make a unique name.
-			F.name = family_name
-			used_names += family_name
-			F.addMember(head)
+			var/datum/family/F = makeFamily(head)
 			current_families += F
 			family_candidates -= head
 			head_candidates -= head
@@ -115,9 +121,7 @@ SUBSYSTEM_DEF(family)
 		if(istype(J,/datum/job/roguetown/lord))
 			if(!lord)
 				lord = H
-				lord_family = new()
-				lord_family.name = GLOB.lordsurname
-				lord_family.addMember(H)
+				lord_family = makeFamily(lord, GLOB.lordsurname)
 		else if(istype(J,/datum/job/roguetown/lady))
 			lady = H
 		else
