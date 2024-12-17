@@ -118,7 +118,7 @@
 
 		if(!gibbed && yeae)
 			for(var/mob/living/carbon/human/HU in viewers(7, src))
-				if(!HAS_TRAIT(HU, TRAIT_BLIND))
+				if(HAS_TRAIT(HU, TRAIT_BLIND))
 					continue
 				if(HAS_TRAIT(HU, TRAIT_STEELHEARTED))
 					continue
