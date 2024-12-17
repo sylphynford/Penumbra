@@ -1075,7 +1075,7 @@
 "gSM" = (/obj/structure/fluff/railing/border{dir = 1},/obj/machinery/light/rogue/wallfire/candle/l,/turf/open/floor/rogue/rooftop{icon_state = "roofg"; dir = 4},/area/rogue/outdoors/town/roofs)
 "gTl" = (/obj/structure/roguemachine/scomm/l,/turf/open/floor/rogue/ruinedwood{icon_state = "weird1"},/area/rogue/indoors/town/manor)
 "gTL" = (/obj/structure/chair/stool/rogue,/obj/structure/fluff/railing/border{dir = 5},/turf/open/floor/rogue/ruinedwood/spiral,/area/rogue/indoors/shelter/woods)
-"gTY" = (/obj/structure/table/wood{icon_state = "largetable"; dir = 10},/obj/item/reagent_containers/glass/bucket/wooden{pixel_y = 36},/obj/machinery/light/rogue/wallfire/candle/r,/turf/open/floor/rogue/ruinedwood/spiral,/area/rogue/indoors/town/physician)
+"gTY" = (/obj/structure/table/wood{icon_state = "largetable"; dir = 10},/obj/item/reagent_containers/glass/bucket/wooden{pixel_y = 36},/obj/machinery/light/rogue/wallfire/candle/r,/obj/item/medical/splint,/obj/item/medical/splint,/obj/item/medical/splint,/turf/open/floor/rogue/ruinedwood/spiral,/area/rogue/indoors/town/physician)
 "gUU" = (/obj/structure/table/wood{icon_state = "largetable"; dir = 5},/obj/item/reagent_containers/glass/cup/silver,/obj/item/reagent_containers/glass/cup/wooden{pixel_x = -9; pixel_y = -5},/turf/open/floor/carpet/inn,/area/rogue/indoors/town/manor)
 "gVe" = (/obj/structure/bars,/turf/open/water/sewer,/area/rogue/under/town/sewer)
 "gVi" = (/obj/structure/fluff/walldeco/artificerflag,/turf/closed/wall/mineral/rogue/decowood,/area/rogue/indoors)

@@ -14,6 +14,11 @@
 				)
 
 
+/datum/supply_pack/rogue/tools/splint
+	name = "Splint"
+	cost = 100
+	contains = list(/obj/item/medical/splint)
+
 /datum/supply_pack/rogue/tools/scomst
 	name = "Scomstone"
 	cost = 120
