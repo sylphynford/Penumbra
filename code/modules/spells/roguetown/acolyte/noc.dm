@@ -32,7 +32,6 @@
 	releasedrain = 30
 	chargedrain = 0
 	chargetime = 0
-	req_items = list(/obj/item/clothing/neck/roguetown/psicross)
 	charge_max = 30 SECONDS
 	range = 3
 	warnie = "sydwarning"
@@ -41,8 +40,6 @@
 	sound = 'sound/misc/area.ogg' //This sound doesnt play for some reason. Fix me.
 	associated_skill = /datum/skill/magic/holy
 	antimagic_allowed = TRUE
-	miracle = TRUE
-	devotion_cost = 25
 
 /obj/effect/proc_holder/spell/invoked/invisibility/cast(list/targets, mob/living/user)
 	if(isliving(targets[1]))
