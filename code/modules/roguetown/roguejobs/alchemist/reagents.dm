@@ -67,7 +67,9 @@
 		M.blood_volume = min(M.blood_volume+10, BLOOD_VOLUME_MAXIMUM)
 	if(wCount.len > 0)
 		//some peeps dislike the church, this allows an alternative thats not a doctor or sleep.
-		M.heal_wounds(3) //at a motabalism of .5 U a tick this translates to 120WHP healing with 20 U Most wounds are unsewn 15-100. This is powerful on single wounds but rapidly weakens at multi wounds.
+		for(var/datum/wound/W in wCount)
+			if(!istype(W, /datum/wound/fracture)) // Skip fractures
+				W.heal_wound(3) // Heal non-fracture wounds
 		M.update_damage_overlays()
 	M.adjustBruteLoss(-1.4*REM, 0)
 	M.adjustFireLoss(-1.4*REM, 0)
