@@ -406,12 +406,12 @@
 /datum/customizer/organ/breasts/animal
 	customizer_choices = list(/datum/customizer_choice/organ/breasts/animal)
 
+
 /datum/customizer_choice/organ/breasts/animal
 	sprite_accessories = list(
 		/datum/sprite_accessory/breasts/pair,
-		/datum/sprite_accessory/breasts/quad,
-		/datum/sprite_accessory/breasts/sextuple,
 		)
+	allows_accessory_color_customization = FALSE
 
 /datum/customizer/organ/vagina
 	abstract_type = /datum/customizer/organ/vagina
@@ -511,11 +511,9 @@
 /datum/customizer_choice/organ/vagina/animal
 	sprite_accessories = list(
 		/datum/sprite_accessory/vagina/human,
-		/datum/sprite_accessory/vagina/gaping,
 		/datum/sprite_accessory/vagina/hairy,
-		/datum/sprite_accessory/vagina/spade,
-		/datum/sprite_accessory/vagina/furred,
 		)
+	allows_accessory_color_customization = FALSE
 
 /datum/customizer/organ/vagina/anthro
 	customizer_choices = list(/datum/customizer_choice/organ/vagina/anthro)
