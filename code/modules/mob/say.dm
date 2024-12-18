@@ -55,16 +55,19 @@
 	return
 #endif
 	// If they don't type anything just drop the message.
-	set_typing_indicator(FALSE)
 	if(!length(message))
+		set_typing_indicator(FALSE)
 		return
 	if(GLOB.say_disabled)	//This is here to try to identify lag problems
 		to_chat(usr, span_danger("Speech is currently admin-disabled."))
+		set_typing_indicator(FALSE)
 		return
 	message = trim(copytext_char(sanitize(message), 1, MAX_MESSAGE_LEN))
 	if(check_subtler(message, FALSE))
+		set_typing_indicator(FALSE)
 		return
 	usr.emote("me",1,message,TRUE, custom_me = TRUE)
+	set_typing_indicator(FALSE)
 
 ///The me emote verb
 /mob/verb/me_big_verb(message as message)
@@ -75,16 +78,19 @@
 	return
 #endif
 	// If they don't type anything just drop the message.
-	set_typing_indicator(FALSE)
 	if(!length(message))
+		set_typing_indicator(FALSE)
 		return
 	if(GLOB.say_disabled)	//This is here to try to identify lag problems
 		to_chat(usr, span_danger("Speech is currently admin-disabled."))
+		set_typing_indicator(FALSE)
 		return
 	message = trim(copytext_char(message, 1, MAX_MESSAGE_LEN))
 	if(check_subtler(message, FALSE))
+		set_typing_indicator(FALSE)
 		return
 	usr.emote("me",1,message,TRUE, custom_me = TRUE)
+	set_typing_indicator(FALSE)
 
 ///Speak as a dead person (ghost etc)
 /mob/proc/say_dead(message)

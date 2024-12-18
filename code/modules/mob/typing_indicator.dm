@@ -59,21 +59,28 @@
 
 	try
 		var/temp = winget(client, "input", "text")
-		var/command = winget(client,"input","command")
-
-		if(command == "" || command + temp == "say \"")
-			set_typing_indicator(0)
+		
+		// For me verbs, keep the indicator up while hud_typing is true
+		if(hud_typing)
+			set_typing_indicator(TRUE)
 			return
 
-		last_typed_time = world.time
+		// For regular chat
+		if(temp != last_typed)  // Only update if the text has changed
+			last_typed = temp
+			last_typed_time = world.time
+			if(temp != "")  // If there's text, show the indicator
+				set_typing_indicator(TRUE)
+		else if(world.time > last_typed_time + TYPING_INDICATOR_LIFETIME)  // Clear if we haven't typed recently
+			set_typing_indicator(FALSE)
 
-		if (world.time > last_typed_time + TYPING_INDICATOR_LIFETIME)
-			set_typing_indicator(0)
-			return
-		else if(length(temp) > 0)
-			set_typing_indicator(TRUE,"hTy")
 	catch
 		set_typing_indicator(FALSE)
 		return
+
+/mob/Move(NewLoc, direct)
+	. = ..()
+	if(.)  // If the move succeeded
+		set_typing_indicator(FALSE)  // Clear typing indicator when moving
 
 
