@@ -76,7 +76,6 @@
 		/datum/customizer/bodypart_feature/hair/facial/humanoid,
 		/datum/customizer/bodypart_feature/accessory,
 		/datum/customizer/bodypart_feature/face_detail,
-		/datum/customizer/bodypart_feature/underwear,
 		/datum/customizer/organ/horns/anthro,
 		/datum/customizer/organ/tail/tiefling,
 		/datum/customizer/organ/testicles/anthro,

@@ -53,7 +53,6 @@
 		/datum/customizer/bodypart_feature/hair/facial/humanoid,
 		/datum/customizer/bodypart_feature/accessory,
 		/datum/customizer/bodypart_feature/face_detail,
-		/datum/customizer/bodypart_feature/underwear,
 		/datum/customizer/organ/ears/demihuman,
 		/datum/customizer/organ/tail/demihuman,
 		/datum/customizer/organ/testicles/anthro,
