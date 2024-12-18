@@ -1401,7 +1401,24 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 			if("gender")
 				var/choice
 				while(choice != "(DONE)")
-					var/list/choices = list("[(MALE in family_gender) ? "(+)" : ""]Masculine" = MALE,"[(FEMALE in family_gender) ? "(+)" : ""]Feminine" = FEMALE)
+					var/list/choices = list()
+					// Check for penis
+					var/has_penis = FALSE
+					var/has_vagina = FALSE
+					for(var/datum/customizer_entry/entry as anything in customizer_entries)
+						if(istype(entry, /datum/customizer_entry/organ/penis) && !entry.disabled)
+							has_penis = TRUE
+						if(istype(entry, /datum/customizer_entry/organ/vagina) && !entry.disabled)
+							has_vagina = TRUE
+
+					// Set display text based on genitals
+					if(has_penis)
+						choices = list("[(MALE in family_gender) ? "(+)" : ""]Male" = MALE,"[(FEMALE in family_gender) ? "(+)" : ""]Female" = FEMALE)
+					else if(has_vagina)
+						choices = list("[(MALE in family_gender) ? "(+)" : ""]Male" = MALE,"[(FEMALE in family_gender) ? "(+)" : ""]Shemale" = FEMALE)
+					else
+						choices = list("[(MALE in family_gender) ? "(+)" : ""]Male" = MALE,"[(FEMALE in family_gender) ? "(+)" : ""]Female" = FEMALE)
+					
 					choices += "(DONE)"
 					choice = input(usr,"I've always found my eyes wander towards those that appear... (+) = ON","GENDER") as anything in choices
 					if(choice != "(DONE)")
