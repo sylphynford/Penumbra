@@ -96,6 +96,7 @@
 	sprite_accessories = list(
 		/datum/sprite_accessory/tail/cat,
 		/datum/sprite_accessory/tail/monkey,
+		/datum/sprite_accessory/tail/batl,
 		/datum/sprite_accessory/tail/catbig,
 		/datum/sprite_accessory/tail/twocat,
 		/datum/sprite_accessory/tail/cow,
