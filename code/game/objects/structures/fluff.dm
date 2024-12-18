@@ -1115,88 +1115,49 @@
 					return FALSE
 				var/marriage
 				var/obj/item/reagent_containers/food/snacks/grown/apple/A = W
-				//The MARRIAGE TEST BEGINS
+				
 				if(A.bitten_names.len)
 					if(A.bitten_names.len == 2)
-						//Groom provides the surname that the bride will take
 						var/mob/living/carbon/human/thegroom
 						var/mob/living/carbon/human/thebride
-						//Did anyone get cold feet on the wedding?
+						
 						for(var/mob/M in viewers(src, 7))
-							testing("check [M]")
 							if(thegroom && thebride)
 								break
 							if(!ishuman(M))
 								continue
 							var/mob/living/carbon/human/C = M
-							/*
-							* This is for making the first biters name
-							* always be applied to the groom.
-							* second. This seems to be the best way
-							* to use the least amount of variables.
-							*/
-							var/name_placement = 1
-							for(var/X in A.bitten_names)
-								//I think that guy is dead.
-								if(C.stat == DEAD)
-									continue
-								//That person is not a player or afk.
-								if(!C.client)
-									continue
-								//Gotta get a divorce first
-								if(C.marriedto)
-									continue
-								if(C.real_name == X)
-									//I know this is very sloppy but its alot less code.
-									switch(name_placement)
-										if(1)
-											if(thegroom)
-												continue
-											thegroom = C
-										if(2)
-											if(thebride)
-												continue
-											thebride = C
-									testing("foundbiter [C.real_name]")
-									name_placement++
+							if(C.stat == DEAD)
+								continue
+							if(!C.client)
+								continue
+							if(C.family)
+								continue
 
-						//WE FOUND THEM LETS GET THIS SHOW ON THE ROAD!
+							if(C.real_name in A.bitten_names)
+								if(!thegroom)
+									thegroom = C
+								else if(!thebride)
+									thebride = C
+
 						if(!thegroom || !thebride)
-							testing("fail22")
 							return
-						//Alright now for the boring surname formatting.
-						var/surname2use
-						var/index = findtext(thegroom.real_name, " ")
-						var/bridefirst
-						thegroom.original_name = thegroom.real_name
-						thebride.original_name = thebride.real_name
-						if(!index)
-							surname2use = thegroom.dna.species.random_surname()
-						else
-							/*
-							* This code prevents inheriting the last name of
-							* " of wolves" or " the wolf"
-							* remove this if you want "Skibbins of wolves" to
-							* have his bride become "Sarah of wolves".
-							*/
-							if(findtext(thegroom.real_name, " of ") || findtext(thegroom.real_name, " the "))
-								surname2use = thegroom.dna.species.random_surname()
-								thegroom.change_name(copytext(thegroom.real_name, 1,index))
-							else
-								surname2use = copytext(thegroom.real_name, index)
-								thegroom.change_name(copytext(thegroom.real_name, 1,index))
-						index = findtext(thebride.real_name, " ")
-						if(index)
-							thebride.change_name(copytext(thebride.real_name, 1,index))
-						bridefirst = thebride.real_name
-						thegroom.change_name(thegroom.real_name + surname2use)
-						thebride.change_name(thebride.real_name + surname2use)
-						thegroom.marriedto = thebride.real_name
-						thebride.marriedto = thegroom.real_name
+
+						for(var/G in list(ORGAN_SLOT_VAGINA,ORGAN_SLOT_PENIS)) //Ensure that groom & bride don't share the same sex.
+							if(thegroom.getorganslot(G) && thebride.getorganslot(G))
+								return FALSE
+						
+						var/datum/family/F = SSfamily.makeFamily(thegroom)
+						if(!F)
+							return
+
+						F.addMember(thebride)
+						F.addRel(thegroom,thebride,REL_TYPE_SPOUSE)
+						F.addRel(thebride,thegroom,REL_TYPE_SPOUSE)
+
 						thegroom.adjust_triumphs(1)
 						thebride.adjust_triumphs(1)
-						//Bite the apple first if you want to be the groom.
-						priority_announce("[thegroom.real_name] has married [bridefirst]!", title = "Holy Union!", sound = 'sound/misc/bell.ogg')
+						priority_announce("[thegroom.real_name] has married [thebride.real_name]!", title = "Holy Union!", sound = 'sound/misc/bell.ogg')
 						marriage = TRUE
 						qdel(A)
 
