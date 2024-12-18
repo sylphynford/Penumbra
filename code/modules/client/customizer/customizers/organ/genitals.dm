@@ -54,8 +54,9 @@
 /datum/customizer_choice/organ/penis/validate_entry(datum/preferences/prefs, datum/customizer_entry/entry)
 	..()
 	var/datum/customizer_entry/organ/penis/penis_entry = entry
-	var/max_size = (prefs.pref_species.id == "tiefling") ? MAX_PENIS_INCHES_TIEFLING : MAX_PENIS_INCHES
-	penis_entry.penis_size = clamp(penis_entry.penis_size, MIN_PENIS_INCHES, max_size)
+	// Only clamp the preferred size to the chooseable range (12 or 16)
+	var/chooseable_max = (prefs.pref_species.id == "tiefling") ? 16.0 : 12.0
+	penis_entry.preferred_size = clamp(penis_entry.preferred_size, MIN_PENIS_INCHES, chooseable_max)
 	
 	var/datum/customizer_choice/customizer_choice = get_customizer_choice(entry)
 	if(!customizer_choice.allows_dark_color)
@@ -72,7 +73,15 @@
 	..()
 	var/datum/organ_dna/penis/penis_dna = organ_dna
 	var/datum/customizer_entry/organ/penis/penis_entry = entry
-	penis_dna.penis_size = penis_entry.penis_size
+	
+	// Check if we're in the preview window
+	var/is_preview = winget(prefs.parent, "preferencess_window", "is-visible") == "true"
+	
+	// Use exact size for previews, roll for actual characters
+	if(is_preview)
+		penis_dna.penis_size = penis_entry.preferred_size
+	else
+		penis_dna.penis_size = roll_penis_size(prefs, penis_entry.preferred_size)
 	
 	var/datum/customizer_choice/customizer_choice = get_customizer_choice(entry)
 	if(customizer_choice.allows_dark_color && penis_entry.dark_color)
@@ -88,7 +97,7 @@
 /datum/customizer_choice/organ/penis/generate_pref_choices(list/dat, datum/preferences/prefs, datum/customizer_entry/entry, customizer_type)
 	..()
 	var/datum/customizer_entry/organ/penis/penis_entry = entry
-	dat += "<br>Penis size: <a href='?_src_=prefs;task=change_customizer;customizer=[customizer_type];customizer_task=penis_size''>[penis_entry.penis_size] inches</a>"
+	dat += "<br>Preferred size: <a href='?_src_=prefs;task=change_customizer;customizer=[customizer_type];customizer_task=preferred_size''>[penis_entry.preferred_size] inches</a>"
 	
 	var/datum/customizer_choice/customizer_choice = get_customizer_choice(entry)
 	if(customizer_choice.allows_dark_color)
@@ -98,12 +107,12 @@
 	..()
 	var/datum/customizer_entry/organ/penis/penis_entry = entry
 	switch(href_list["customizer_task"])
-		if("penis_size")
-			var/max_size = (prefs.pref_species.id == "tiefling") ? MAX_PENIS_INCHES_TIEFLING : MAX_PENIS_INCHES
-			var/new_size = input(user, "Choose your penis size (1.0-[max_size] inches):", "Character Preference", "[penis_entry.penis_size]") as num|null
+		if("preferred_size")
+			var/chooseable_max = (prefs.pref_species.id == "tiefling") ? 16.0 : 12.0
+			var/new_size = input(user, "Choose your preferred penis size (1.0-[chooseable_max] inches):", "Character Preference", "[penis_entry.preferred_size]") as num|null
 			if(isnull(new_size))
 				return
-			penis_entry.penis_size = clamp(new_size, MIN_PENIS_INCHES, max_size)
+			penis_entry.preferred_size = clamp(new_size, MIN_PENIS_INCHES, chooseable_max)
 			if(user && istype(user, /mob/dead/new_player))
 				var/mob/dead/new_player/NP = user
 				if(NP.ready == PLAYER_READY_TO_PLAY)
@@ -129,8 +138,8 @@
 			prefs.close_latejoin_menu(user)
 
 /datum/customizer_entry/organ/penis
-	var/penis_size = DEFAULT_PENIS_INCHES
 	var/dark_color = FALSE
+	var/preferred_size = DEFAULT_PENIS_INCHES
 
 /datum/customizer/organ/penis/human
 	customizer_choices = list(/datum/customizer_choice/organ/penis/human)
@@ -527,3 +536,13 @@
 		/datum/sprite_accessory/vagina/furred,
 		/datum/sprite_accessory/vagina/cloaca,
 		)
+
+/datum/customizer_choice/organ/penis/proc/roll_penis_size(datum/preferences/prefs, preferred = DEFAULT_PENIS_INCHES)
+	// Get species-appropriate max size for the final roll
+	var/max_size = (prefs.pref_species.id == "tiefling") ? MAX_PENIS_INCHES_TIEFLING : MAX_PENIS_INCHES
+	
+	// Roll for variance between -1.5 and +1.5 inches
+	var/variance = (rand(-15, 15) * 0.1) // Generates -1.5 to +1.5 in 0.1 increments
+	
+	// Apply variance to preferred size and clamp to the maximum possible size
+	return CLAMP(preferred + variance, MIN_PENIS_INCHES, max_size)
