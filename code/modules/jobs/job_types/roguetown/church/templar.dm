@@ -6,7 +6,7 @@
 	faction = "Station"
 	tutorial = "You are a fanatical servant of an obscure order, willingly beholden with obeisance to the Inquisitor. In other words, you are a tool of violence wielded against a corrupting evil."
 	allowed_sexes = list(MALE, FEMALE)
-	allowed_races = RACES_ALL_KINDS
+	allowed_races = RACES_CHURCH
 	allowed_patrons = ALL_DIVINE_PATRONS
 	outfit = /datum/outfit/job/roguetown/templar
 	min_pq = 0 

@@ -6,7 +6,7 @@
 	total_positions = 1
 	spawn_positions = 1
 	allowed_sexes = list(MALE, FEMALE)
-	allowed_races = RACES_ALL_KINDS
+	allowed_races = RACES_CHURCH
 	allowed_ages = list(AGE_ADULT, AGE_MIDDLEAGED, AGE_OLD)
 	allowed_patrons = ALL_DIVINE_PATRONS
 	tutorial = "You worship and pay credence to PSYDON. Both the crown and church have emboldened your radical ideals. Your fervor allows you to root out cultists, the cursed night beasts, and other agents of the abyss, as you are entrusted with the ability of extracting involuntary 'sin confessions.'"
