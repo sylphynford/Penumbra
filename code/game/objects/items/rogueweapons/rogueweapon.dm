@@ -28,7 +28,7 @@
 	experimental_onhip = TRUE
 	experimental_onback = TRUE
 	embedding = list(
-		"embed_chance" = 0,
+		"embed_chance" = 20,
 		"embedded_pain_multiplier" = 1,
 		"embedded_fall_chance" = 0,
 	)
