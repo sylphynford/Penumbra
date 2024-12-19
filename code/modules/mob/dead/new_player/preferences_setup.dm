@@ -57,9 +57,10 @@
 
 /datum/preferences/proc/update_preview_icon()
 	set waitfor = 0
+	// Basic parent check first
 	if(!parent)
 		return
-//	last_preview_update = world.time
+
 	// Determine what job is marked as 'High' priority, and dress them up as such.
 	var/datum/job/previewJob
 	var/highest_pref = 0
@@ -128,7 +129,8 @@
 
 	mannequin.rebuild_obscured_flags()
 	COMPILE_OVERLAYS(mannequin)
-	parent.show_character_previews(new /mutable_appearance(mannequin))
+	if(parent)
+		parent.show_character_previews(new /mutable_appearance(mannequin))
 	unset_busy_human_dummy(DUMMY_HUMAN_SLOT_PREFERENCES)
 
 /datum/preferences/proc/spec_check(mob/user)
