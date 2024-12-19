@@ -550,7 +550,7 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/rp_prompt.txt"))
 	if(latejoin_job?.advclass_cat_rolls?.len)
 		var/client/C = src.client
 		// Skip class selection for Templars as their class is determined by Inquisitor
-		if(rank == "Occultist" || rank == "Towner")
+		if(rank == "Occultist" || rank == "Towner" || rank == "Vagabond")
 			var/inquisitor_class
 			for(var/mob/living/carbon/human/inq in GLOB.human_list)
 				if(inq.mind?.assigned_role == "Inquisitor")
