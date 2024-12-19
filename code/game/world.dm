@@ -334,7 +334,7 @@ GLOBAL_VAR(restart_counter)
 	new_status += " ("
 	new_status += "<a href=\"[CONFIG_GET(string/discordurl)]\">"
 	new_status += "Discord"
-	new_status += ")</a>"
+	new_status += "</a>)"
 	new_status += "<br>[CONFIG_GET(string/servertagline)]"
 
 	var/players = GLOB.clients.len
