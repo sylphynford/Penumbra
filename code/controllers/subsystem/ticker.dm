@@ -430,7 +430,7 @@ SUBSYSTEM_DEF(ticker)
 			if(H.client)
 				if(SSjob.GetJob(H.job).family_blacklisted)
 					continue
-				if(H.client.prefs.family)
+				if(H.client.prefs.family == FAMILY_FULL)
 					SSfamily.family_candidates += H
 
 
