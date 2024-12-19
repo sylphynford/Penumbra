@@ -162,15 +162,14 @@
 #define NITEMASTER	(1<<9)
 #define WENCH		(1<<10)
 #define BEGGAR		(1<<11)
-#define PARTY_LEADER (1<<12)
-#define ADVENTURER	(1<<13)
-#define PILGRIM		(1<<14)
-#define VILLAGER	(1<<15)
-#define PRISONERR	(1<<16)
-#define PRISONERB	(1<<17)
-#define LUNATIC		(1<<18)
-#define MIGRANT		(1<<19)
-#define BANDIT		(1<<20)
+#define ADVENTURER	(1<<12)
+#define PILGRIM		(1<<13)
+#define VILLAGER	(1<<14)
+#define PRISONERR	(1<<15)
+#define PRISONERB	(1<<16)
+#define LUNATIC		(1<<17)
+#define MIGRANT		(1<<18)
+#define BANDIT		(1<<19)
 
 #define YOUNGFOLK	(1<<6)
 
@@ -283,7 +282,6 @@
 #define JDO_SOILSON 28
 
 #define JDO_VILLAGER 30
-#define JDO_PARTY_LEADER 30.1
 #define JDO_ADVENTURER 30.2
 #define JDO_PILGRIM 30.3
 #define JDO_MIGRANT 32.3
