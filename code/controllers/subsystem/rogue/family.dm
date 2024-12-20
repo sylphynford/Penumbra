@@ -240,7 +240,7 @@ SUBSYSTEM_DEF(family)
 
 	if(announce)
 		spawn(1)
-			to_chat(holder,"<span class='notice'>My [R.name]. [target.real_name] ([target.age]) is here alongside me.</span>")
+			to_chat(holder,"<span class='notice'>My [R.name]. [target.real_name] ([target.dna.species.name], [target.job], [target.age]) is here alongside me.</span>")
 
 		R.onConnect(holder,target) //Bit of hack to have this here. But it stops church marriages from being given rings.
 
