@@ -90,7 +90,7 @@
 				HU.visible_message(span_warning("[HU] electrocutes [H] with the [src]."))
 				H.electrocute_act(5, src)
 				to_chat(H, span_danger("I'm electrocuted by the scepter!"))
-				electrocute_intent.cooldown_time = world.time + (10 SECONDS)
+				electrocute_intent.cooldown_time = world.time + (60 SECONDS)
 				return
 
 			if(istype(user.used_intent, /datum/intent/lord_silence))
