@@ -83,8 +83,8 @@
 	color = CLOTHING_BLACK
 
 /obj/item/clothing/head/roguetown/roguehood/astrata
-	name = "sun hood"
-	desc = "A hood worn by those who favor Astrata. Praise the firstborn sun!"
+	name = "holy hood"
+	desc = ""
 	color = null
 	icon_state = "astratahood"
 	item_state = "astratahood"

@@ -115,7 +115,7 @@
 /datum/stressevent/virginchurch
 	timer = 999 MINUTES
 	stressadd = 10
-	desc = span_boldred("I have broken my oath of chastity to The Gods!")
+	desc = span_boldred("I have broken my oath of chastity!")
 
 /datum/stressevent/badmeal
 	timer = 3 MINUTES

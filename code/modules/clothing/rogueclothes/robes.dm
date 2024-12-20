@@ -15,7 +15,7 @@
 
 /obj/item/clothing/suit/roguetown/shirt/robe/astrata
 	slot_flags = ITEM_SLOT_ARMOR|ITEM_SLOT_SHIRT|ITEM_SLOT_CLOAK
-	name = "sun robe"
+	name = "holy robe"
 	desc = ""
 	body_parts_covered = CHEST|GROIN|ARMS|LEGS|VITALS
 	icon_state = "astratarobe"
@@ -90,7 +90,7 @@
 	color = CLOTHING_WHITE
 
 /obj/item/clothing/suit/roguetown/shirt/robe/priest
-	name = "solar vestments"
+	name = "holy vestments"
 	desc = "Holy vestments sanctified by divine hands. Caution is advised if not a faithful."
 	icon_state = "priestrobe"
 	color = null

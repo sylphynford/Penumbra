@@ -1,7 +1,7 @@
 /datum/stressevent/psyprayer
 	timer = 30 MINUTES
 	stressadd = -2
-	desc = span_green("The Gods smiles upon me.")
+	desc = span_green("Psydon smiles upon me.")
 
 /datum/stressevent/viewsinpunish
 	timer = 5 MINUTES
