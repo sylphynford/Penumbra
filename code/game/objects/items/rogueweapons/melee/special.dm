@@ -82,6 +82,11 @@
 				to_chat(user, span_warning("The rod's power seems ineffective against the blackguard!"))
 				return
 
+			// Check if target is NOT a garrison role(+jester)
+			if(!(H.job in list("Dungeoneer", "Town Guard", "Sergeant at Arms", "Knight Banneret", "Knight Lieutenant", "Jester", "Warden", "Gatemaster")))
+				to_chat(user, span_warning("This isn't one of my pawns!"))
+				return
+
 			if(istype(user.used_intent, /datum/intent/lord_electrocute))
 				var/datum/intent/lord_electrocute/electrocute_intent = user.used_intent
 				if(world.time < electrocute_intent.cooldown_time)
