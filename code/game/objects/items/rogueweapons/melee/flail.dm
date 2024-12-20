@@ -16,7 +16,7 @@
 	parrysound = list('sound/combat/parry/parrygen.ogg')
 	swingsound = BLUNTWOOSH_MED
 	throwforce = 5
-	wdefense = 0
+	wdefense = -6
 	minstr = 4
 
 /datum/intent/flail/strike
@@ -107,7 +107,7 @@
 /datum/intent/whip/crack
 	name = "crack"
 	blade_class = BCLASS_CUT
-	attack_verb = list("cracks", "strikes") //something something dwarf fotresss
+	attack_verb = list("cracks", "strikes") 
 	hitsound = list('sound/combat/hits/blunt/flailhit.ogg')
 	chargetime = 0
 	recovery = 10
@@ -145,7 +145,7 @@
 	parrysound = list('sound/combat/parry/parrygen.ogg')
 	swingsound = WHIPWOOSH
 	throwforce = 5
-	wdefense = 0
+	wdefense = -8
 	minstr = 6
 
 /obj/item/rogueweapon/whip/getonmobprop(tag)
