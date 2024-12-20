@@ -162,7 +162,7 @@
 	sellprice = 15
 /obj/item/ingot/bronze
 	name = "bronze bar"
-	desc = "A hard and durable alloy favored by engineers and followers of Ravox alike."
+	desc = "A hard and durable alloy favored by engineers."
 	icon_state = "ingotbronze"
 	smeltresult = /obj/item/ingot/bronze
 	sellprice = 30
