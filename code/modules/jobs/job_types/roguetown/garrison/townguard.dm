@@ -3,8 +3,8 @@
 	flag = GUARDSMAN
 	department_flag = GARRISON
 	faction = "Station"
-	total_positions = 6
-	spawn_positions = 6
+	total_positions = 4
+	spawn_positions = 4
 	selection_color = JCOLOR_SOLDIER
 	allowed_sexes = list(MALE, FEMALE)
 	allowed_races = RACES_ALL_KINDS
@@ -207,9 +207,7 @@
 		H.change_stat("perception", 2)
 		H.change_stat("intelligence", 1)
 		H.change_stat("constitution", 1)
-		H.change_stat("speed", 2)
 
-	ADD_TRAIT(H, TRAIT_DODGEEXPERT, TRAIT_GENERIC)
 
 	H.equip_to_slot_or_del(new /obj/item/clothing/head/roguetown/roguehood/red(H), SLOT_HEAD)
 	H.equip_to_slot_or_del(new /obj/item/clothing/suit/roguetown/armor/leather(H), SLOT_ARMOR)
