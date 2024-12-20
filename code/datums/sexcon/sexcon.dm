@@ -401,11 +401,11 @@
 			adjust_force(-1)
 		if("toggle_finished")
 			do_until_finished = !do_until_finished
-		if("set_arousal")
+	/*	if("set_arousal")
 			var/amount = input(user, "Value above 120 will immediately cause orgasm!", "Set Arousal", arousal) as num|null
 			set_arousal(amount)
 		if("freeze_arousal")
-			arousal_frozen = !arousal_frozen
+			arousal_frozen = !arousal_frozen*/
 	show_ui()
 
 /datum/sex_controller/proc/try_stop_current_action()
