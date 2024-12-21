@@ -1,6 +1,6 @@
 /obj/item/clothing/head/roguetown/helmet/heavy/astratan
-	name = "astratan helmet"
-	desc = "Gilded gold and silvered metal, the bright, vibrant colors of an Asratan crusader radiate from this blessed helmet."
+	name = "crusaderhelmet"
+	desc = "Gilded gold and silvered metal, the bright, vibrant colors of a crusader radiate from this blessed helmet."
 	icon_state = "astratanhelm"
 	item_state = "astratahnelm"
 	emote_environment = 3
@@ -10,7 +10,7 @@
 	smelt_bar_num = 2
 
 /obj/item/clothing/head/roguetown/helmet/heavy/malum
-	name = "helm of malum"
+	name = "bladed helmet"
 	desc = "Forged in a coal-black, this helmet carries a sigiled blade upon it's visor, ever reminding it's wearer of Malum's powerful gaze."
 	icon_state = "malumhelm"
 	item_state = "malumhelm"
@@ -21,8 +21,8 @@
 	smelt_bar_num = 2
 
 /obj/item/clothing/head/roguetown/helmet/heavy/necran
-	name = "necran helmet"
-	desc = "The darkest of blacks, this hooded helm is reminiscent of an executioner's head, striking fear into those who look upon it that they too may soon face the undermaiden."
+	name = "death helmet"
+	desc = "The darkest of blacks, this hooded helm is reminiscent of an executioner's head, striking fear into those who look upon it that they too may soon face death."
 	icon_state = "necranhelm"
 	item_state = "necranhelm"
 	emote_environment = 3

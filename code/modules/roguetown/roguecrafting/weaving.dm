@@ -40,7 +40,7 @@
 	sellprice = 30
 
 /datum/crafting_recipe/roguetown/weaving/astratarobe
-	name = "astrata robes"
+	name = "holy robes"
 	result = list(/obj/item/clothing/suit/roguetown/shirt/robe/astrata)
 	reqs = list(/obj/item/natural/cloth = 3,
 				/obj/item/natural/silk = 1)
@@ -48,7 +48,7 @@
 	sellprice = 25
 
 /datum/crafting_recipe/roguetown/weaving/astratahood
-	name = "solar hood"
+	name = "holy hood"
 	result = list(/obj/item/clothing/head/roguetown/roguehood/astrata)
 	reqs = list(/obj/item/natural/cloth = 2,
 				/obj/item/natural/silk = 1)
@@ -56,7 +56,7 @@
 	sellprice = 25
 
 /datum/crafting_recipe/roguetown/weaving/nocrobe
-	name = "noc robes"
+	name = "moon robes"
 	result = list(/obj/item/clothing/suit/roguetown/shirt/robe/noc)
 	reqs = list(/obj/item/natural/cloth = 3,
 				/obj/item/natural/silk = 1)
@@ -72,7 +72,7 @@
 	sellprice = 25
 
 /datum/crafting_recipe/roguetown/weaving/dendorrobe
-	name = "dendor robes"
+	name = "briar robes"
 	result = list(/obj/item/clothing/suit/roguetown/shirt/robe/dendor)
 	reqs = list(/obj/item/natural/cloth = 3,
 				/obj/item/natural/silk = 1)
@@ -80,7 +80,7 @@
 	sellprice = 25
 
 /datum/crafting_recipe/roguetown/weaving/necrarobe
-	name = "necra robes"
+	name = "mourning robes"
 	result = list(/obj/item/clothing/suit/roguetown/shirt/robe/necra)
 	reqs = list(/obj/item/natural/cloth = 3,
 				/obj/item/natural/silk = 1)
@@ -88,7 +88,7 @@
 	sellprice = 25
 
 /datum/crafting_recipe/roguetown/weaving/necrahood
-	name = "necra hood"
+	name = "mourning hood"
 	result = list(/obj/item/clothing/head/roguetown/necrahood)
 	reqs = list(/obj/item/natural/cloth = 2,
 				/obj/item/natural/silk = 1)
@@ -122,7 +122,7 @@
 
 //Eora content from Stonekeep
 /datum/crafting_recipe/roguetown/weaving/eoramask
-	name = "eora mask"
+	name = "rabbit mask"
 	result = list(/obj/item/clothing/head/roguetown/eoramask)
 	reqs = list(/obj/item/ingot/silver,
 				/obj/item/natural/silk = 4)
@@ -130,7 +130,7 @@
 	sellprice = 20
 
 /datum/crafting_recipe/roguetown/weaving/eorarobes
-	name = "eora robes"
+	name = "lustful robes"
 	result = list(/obj/item/clothing/suit/roguetown/shirt/robe/eora)
 	reqs = list(/obj/item/natural/cloth = 2,
 				/obj/item/natural/silk = 1)
