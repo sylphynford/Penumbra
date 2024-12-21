@@ -111,7 +111,7 @@
 	pants = /obj/item/clothing/under/roguetown/chainlegs
 	cloak = /obj/item/clothing/cloak/stabard/guard
 	shirt = /obj/item/clothing/suit/roguetown/armor/gambeson
-	neck = /obj/item/clothing/neck/roguetown/chaincoif
+	neck = /obj/item/clothing/neck/roguetown/coif
 	shoes = /obj/item/clothing/shoes/roguetown/boots
 	wrists = /obj/item/clothing/wrists/roguetown/bracers
 	backr = /obj/item/storage/backpack/rogue/satchel/black
@@ -132,9 +132,9 @@
 		O.equip(H)
 
 	if(H.mind)
-		H.mind.adjust_skillrank(/datum/skill/combat/maces, 4, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/combat/wrestling, 4, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/combat/unarmed, 4, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/combat/maces, 3, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/combat/wrestling, 3, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/combat/unarmed, 3, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/combat/axes, 2, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/combat/swords, 2, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/combat/shields, 2, TRUE)
@@ -156,7 +156,7 @@
 
 	ADD_TRAIT(H, TRAIT_MEDIUMARMOR, TRAIT_GENERIC)
 
-	H.equip_to_slot_or_del(new /obj/item/clothing/head/roguetown/helmet(H), SLOT_HEAD)
+	H.equip_to_slot_or_del(new /obj/item/clothing/head/roguetown/helmet/kettle(H), SLOT_HEAD)
 	H.equip_to_slot_or_del(new /obj/item/clothing/suit/roguetown/armor/chainmail(H), SLOT_ARMOR)
 	H.equip_to_slot_or_del(new /obj/item/rogueweapon/mace/cudgel(H), SLOT_BELT_R)
 	H.equip_to_slot_or_del(new /obj/item/rogueweapon/shield/wood(H), SLOT_BACK_R)
@@ -186,7 +186,7 @@
 		O.equip(H)
 
 	if(H.mind)
-		H.mind.adjust_skillrank(/datum/skill/combat/bows, 4, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/combat/bows, 3, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/combat/crossbows, 3, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/combat/wrestling, 3, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/combat/unarmed, 3, TRUE)
@@ -209,7 +209,7 @@
 		H.change_stat("constitution", 1)
 
 
-	H.equip_to_slot_or_del(new /obj/item/clothing/head/roguetown/roguehood/red(H), SLOT_HEAD)
+	H.equip_to_slot_or_del(new /obj/item/clothing/head/roguetown/helmet(H), SLOT_HEAD)
 	H.equip_to_slot_or_del(new /obj/item/clothing/suit/roguetown/armor/leather(H), SLOT_ARMOR)
 	H.equip_to_slot_or_del(new /obj/item/quiver/bolts(H), SLOT_BELT_R)
 	H.equip_to_slot_or_del(new /obj/item/gun/ballistic/revolver/grenadelauncher/crossbow(H), SLOT_BACK_L)
@@ -226,9 +226,9 @@
 /datum/outfit/job/roguetown/guardsman/archer
 	// Only define the base items that aren't handled in equipme()
 	pants = /obj/item/clothing/under/roguetown/chainlegs
-	cloak = /obj/item/clothing/cloak/stabard/guard
+	cloak = /obj/item/clothing/cloak/stabard/guardhood
 	shirt = /obj/item/clothing/suit/roguetown/armor/gambeson
-	neck = /obj/item/clothing/neck/roguetown/chaincoif
+	neck = /obj/item/clothing/neck/roguetown/coif
 	shoes = /obj/item/clothing/shoes/roguetown/boots
 	wrists = /obj/item/clothing/wrists/roguetown/bracers
 	backr = /obj/item/storage/backpack/rogue/satchel/black
