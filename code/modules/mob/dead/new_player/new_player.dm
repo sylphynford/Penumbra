@@ -64,6 +64,10 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/rp_prompt.txt"))
 	return
 
 /mob/dead/new_player/proc/new_player_panel()
+	if(!SSassets.initialized)
+		sleep(0.5 SECONDS)
+		new_player_panel()
+		return
 /*
 	var/output = "<center>"
 	if(SSticker.current_state <= GAME_STATE_PREGAME)
