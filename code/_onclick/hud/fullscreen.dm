@@ -137,7 +137,7 @@
 /atom/movable/screen/fullscreen/crit/zeth
 	icon = 'icons/mob/z.dmi'
 	icon_state = "zeth"
-	name = "NECRA"
+	name = "DEATH"
 	layer = CRIT_LAYER
 	plane = FULLSCREEN_PLANE
 	mouse_opacity = 1
