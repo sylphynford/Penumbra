@@ -136,6 +136,34 @@
 
 /datum/sleep_adv/proc/show_ui(mob/living/user)
 	var/list/dat = list()
+	SSassets.transport.send_assets(user.client, list("try4_border.png", "try4.png", "slop_menustyle2.css"))
+	dat += {"
+		<!DOCTYPE html>
+		<html lang='en'>
+		<head>
+			<meta charset='UTF-8'>
+			<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'/>
+			<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'/>
+			<style>
+				@import url('https://fonts.googleapis.com/css2?family=Tangerine:wght@400;700&display=swap');
+				@import url('https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&display=swap');
+				@import url('https://fonts.googleapis.com/css2?family=Charm:wght@700&display=swap');
+				body {
+					background-color: rgb(31, 20, 24);
+					background:
+						url('[SSassets.transport.get_asset_url("try4_border.png")]'),
+						url('[SSassets.transport.get_asset_url("try4.png")]');
+					background-repeat: no-repeat;
+					background-attachment: fixed;
+					background-size: 100% 100%;
+				}
+			</style>
+			<link rel='stylesheet' type='text/css' href='[SSassets.transport.get_asset_url("slop_menustyle2.css")]'>
+		</head>
+		"}
+	dat += "<body>"
+	dat += "<div id='top_handwriting'><center>Cycle \Roman[sleep_adv_cycle]</center></div>"
+	dat += "<div id='class_select_box_div'>"
 	dat += "<center>Cycle \Roman[sleep_adv_cycle]</center>"
 	dat += "<br><center>Dream, for those who dream may reach higher heights</center><br>"
 	dat += "<center>\Roman[sleep_adv_points]</center>"

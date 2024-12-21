@@ -212,6 +212,7 @@
 /datum/class_select_handler/proc/browser_slop()
 	if(!linked_client)
 		return
+	SSassets.transport.send_assets(linked_client, list("try4_border.png", "try4.png", "slop_menustyle2.css"))
 	//Opening tags and empty head
 	var/data = {"
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
@@ -265,7 +266,7 @@
 	linked_client << browse(data, "window=class_handler_main;size=330x430;can_close=0;can_minimize=0;can_maximize=0;can_resize=1;titlebar=1")
 
 /datum/class_select_handler/proc/class_select_slop()
-
+	SSassets.transport.send_assets(linked_client, list("try4_border.png", "try4.png", "slop_menustyle2.css"))
 	var/data = {"
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
