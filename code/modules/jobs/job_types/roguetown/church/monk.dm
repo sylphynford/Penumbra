@@ -35,6 +35,7 @@
 	shoes = /obj/item/clothing/shoes/roguetown/sandals
 	shirt = /obj/item/clothing/suit/roguetown/shirt/shortshirt
 	pants = /obj/item/clothing/under/roguetown/tights
+	neck = /obj/item/clothing/neck/roguetown/psicross/wood
 
 	if(H.mind)
 		H.mind.adjust_skillrank(/datum/skill/combat/wrestling, 3, TRUE)
