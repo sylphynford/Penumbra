@@ -19,6 +19,11 @@
 	cost = 100
 	contains = list(/obj/item/medical/splint)
 
+/datum/supply_pack/rogue/tools/stabsyringe
+	name = "Stabilizing Syringe"
+	cost = 100
+	contains = list(/obj/item/reagent_containers/hypospray/medipen/stabilizing)
+
 /datum/supply_pack/rogue/tools/scomst
 	name = "Scomstone"
 	cost = 120

@@ -46,10 +46,9 @@
 	r_hand = /obj/item/rogueweapon/woodstaff
 	backl = /obj/item/storage/backpack/rogue/satchel/black
 	backpack_contents = list(
-		/obj/item/reagent_containers/glass/bottle/rogue/healthpot = 2,
-		/obj/item/natural/worms/leech/cheele = 1, //little buddy
+		/obj/item/reagent_containers/hypospray/medipen/stabilizing = 1,
+		/obj/item/medical/splint,
 		/obj/item/reagent_containers/glass/bottle/waterskin = 1,
-		/obj/item/storage/belt/rogue/pouch/coins/poor = 1
 	)
 	ADD_TRAIT(H, TRAIT_EMPATH, "[type]")
 	ADD_TRAIT(H, TRAIT_NOSTINK, "[type]")
