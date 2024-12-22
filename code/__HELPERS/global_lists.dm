@@ -53,11 +53,6 @@
 		if(patron.preference_accessible && !patron.hidden_from_prefs)
 			GLOB.preference_patrons[path] = patron
 
-	// Ported from Lethalstone
-	for (var/path in subtypesof(/datum/statpack))
-		var/datum/statpack/statpack = new path()
-		GLOB.statpacks[path] = statpack
-	sortList(GLOB.statpacks, GLOBAL_PROC_REF(cmp_text_dsc))
 
 	// Loadout items
 	for (var/path in subtypesof(/datum/loadout_item))
