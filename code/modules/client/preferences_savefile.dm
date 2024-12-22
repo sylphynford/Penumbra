@@ -358,15 +358,6 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 		charflaw = GLOB.character_flaws[charflaw]
 		charflaw = new charflaw()
 
-/datum/preferences/proc/_load_statpack(S)
-	var/statpack_type
-	S["statpack"] >> statpack_type
-	if (statpack_type)
-		statpack = new statpack_type()
-	else
-		statpack = pick(GLOB.statpacks)
-		statpack = GLOB.statpacks[statpack]
-		//statpack = new statpack
 
 /datum/preferences/proc/_load_loadout(S)
 	var/loadout_type
@@ -438,9 +429,6 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	_load_species(S)
 
 	_load_flaw(S)
-
-	// LETHALSTONE edit: jank-ass load our statpack choice
-	_load_statpack(S)
 
 	_load_loadout(S)
 
@@ -685,7 +673,6 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	WRITE_FILE(S["family"] , family)
 	WRITE_FILE(S["family_species"] , family_species)
 	WRITE_FILE(S["family_gender"] , family_gender)
-	WRITE_FILE(S["statpack"] , statpack.type)
 	if(loadout)
 		WRITE_FILE(S["loadout"] , loadout.type)
 	else
