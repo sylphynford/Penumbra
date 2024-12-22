@@ -66,8 +66,12 @@
 		return
 	
 	for(var/datum/wound/fracture/bone in wounds)
-		qdel(bone) // Completely heal the fracture
+		if(owner)
+			REMOVE_TRAIT(owner, TRAIT_PARALYSIS, "[bone.type]")  // Remove any paralysis traits
+		qdel(bone)  // Remove the wound
+	
 	owner.visible_message(span_notice("The splint on [owner]'s [name] comes loose as the bone heals."), span_notice("The splint on your [name] comes loose as the bone heals."))
+	owner.update_health_hud()
 	remove_bandage()
 
 /obj/item/bodypart/receive_damage(brute = 0, burn = 0, stamina = 0, blocked = 0, updating_health = TRUE, required_status = null)
