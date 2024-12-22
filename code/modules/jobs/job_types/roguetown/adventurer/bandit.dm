@@ -28,6 +28,8 @@
 	same_job_respawn_delay = 30 MINUTES
 	cmode_music = 'sound/music/combat_bandit2.ogg'
 
+	family_blacklisted = TRUE
+
 /datum/job/roguetown/bandit/after_spawn(mob/living/L, mob/M, latejoin = TRUE)
 	..()
 	if(L)

@@ -18,6 +18,7 @@ SUBSYSTEM_DEF(family)
 
 	var/family_candidates = list()
 
+	var/list/special_role_blacklist = list(ROLE_LICH) //Special roles that're prevented from having families.
 
 /datum/controller/subsystem/family/fire() //update family icons.
 	var/list/old_images = rel_images.Copy()
