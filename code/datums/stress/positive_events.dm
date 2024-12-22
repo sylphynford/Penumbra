@@ -1,7 +1,7 @@
 /datum/stressevent/psyprayer
 	timer = 30 MINUTES
 	stressadd = -2
-	desc = span_green("The Gods smiles upon me.")
+	desc = span_green("Divinity smiles upon me.")
 
 /datum/stressevent/viewsinpunish
 	timer = 5 MINUTES
@@ -140,7 +140,7 @@
 
 /datum/stressevent/puzzle_impossible
 	stressadd = -4
-	desc = span_boldgreen("I solved an extremely difficult puzzle. Xylix is smiling at me, and surely even Noc must find it impressive.")
+	desc = span_boldgreen("I solved an extremely difficult puzzle.")
 	timer = 15 MINUTES
 
 /datum/stressevent/noble_lavish_food

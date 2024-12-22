@@ -706,6 +706,9 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 	
 	// Give the color choice to the consort instead
 	addtimer(CALLBACK(consort, TYPE_PROC_REF(/mob, lord_color_choice)), 50)
+	
+	// Update SSticker to recognize the consort as ruler
+	SSticker.rulermob = consort
 
 /datum/round_event_control/roundstart/matriarchy
 	name = "Regnant"

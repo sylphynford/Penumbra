@@ -34,7 +34,4 @@
 		H.change_stat("constitution", -1)
 		H.change_stat("endurance", -1)
 
-		var/datum/devotion/C = new /datum/devotion(H, H.patron)
-		C.grant_spells(H)
-		H.verbs += list(/mob/living/carbon/human/proc/devotionreport, /mob/living/carbon/human/proc/clericpray)
 		GLOB.excommunicated_players += H.real_name // john roguetown, you are EXCOMMUNICADO.

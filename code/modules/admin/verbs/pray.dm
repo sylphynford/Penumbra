@@ -62,7 +62,7 @@
 			var/client/J = M.client
 			to_chat(J, msg)
 
-	to_chat(usr, span_info("I pray to the gods: \"[msg_tmp]\""))
+	to_chat(usr, span_info("I pray to god: \"[msg_tmp]\""))
 
 	SSblackbox.record_feedback("tally", "admin_verb", 1, "Prayer") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 	//log_admin("HELP: [key_name(src)]: [msg]")

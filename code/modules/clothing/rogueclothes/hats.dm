@@ -83,8 +83,8 @@
 	color = CLOTHING_BLACK
 
 /obj/item/clothing/head/roguetown/roguehood/astrata
-	name = "sun hood"
-	desc = "A hood worn by those who favor Astrata. Praise the firstborn sun!"
+	name = "holy hood"
+	desc = ""
 	color = null
 	icon_state = "astratahood"
 	item_state = "astratahood"
@@ -732,8 +732,8 @@
 		add_overlay(pic)
 
 /obj/item/clothing/head/roguetown/helmet/heavy/astratahelm
-	name = "astrata helmet"
-	desc = "Headwear commonly worn by Templars in service to Astrata. The firstborn child's light will forever shine on within its crest."
+	name = "sun helmet"
+	desc = "Headwear commonly worn by Templars with an affinity for the sun. The light of the sun will forever shine on within its crest."
 	icon_state = "astratahelm"
 	item_state = "astratahelm"
 	emote_environment = 3
@@ -743,8 +743,8 @@
 	smelt_bar_num = 2
 
 /obj/item/clothing/head/roguetown/helmet/heavy/nochelm
-	name = "noc helmet"
-	desc = "Headwear commonly worn by Templars in service to Noc. Without the night there can be no day, without Noc there can be no light in the dark hours."
+	name = "night helmet"
+	desc = "Headwear commonly worn by Templars with an affinity for the night. Without the night there can be no day."
 	icon_state = "nochelm"
 	item_state = "nochelm"
 	emote_environment = 3
@@ -755,8 +755,8 @@
 	smelt_bar_num = 2
 
 /obj/item/clothing/head/roguetown/helmet/heavy/necrahelm
-	name = "necra helmet"
-	desc = "Headwear commonly worn by Templars in service to Necra. Let its skeletal features remind you of the only thing which is guaranteed in life. You will die."
+	name = "mourning helmet"
+	desc = "Headwear commonly worn by Templars with a mourning heart. Let its skeletal features remind you of the only thing which is guaranteed in life. You will die."
 	icon_state = "necrahelm"
 	item_state = "necrahelm"
 	emote_environment = 3
@@ -766,8 +766,8 @@
 	smelt_bar_num = 2
 
 /obj/item/clothing/head/roguetown/helmet/heavy/dendorhelm
-	name = "dendor helmet"
-	desc = "Headwear commonly worn by Templars in service to Dendor. Its protrusions almost resemble branches. Take root in the earth, and you will never be moved."
+	name = "nature helmet"
+	desc = "Headwear commonly worn by Templars with an affinity for nature. Its protrusions almost resemble branches. Take root in the earth, and you will never be moved."
 	icon_state = "dendorhelm"
 	item_state = "dendorhelm"
 	emote_environment = 3
@@ -1171,8 +1171,8 @@
 //Eora content from Stonekeep
 
 /obj/item/clothing/head/roguetown/eoramask
-	name = "eoran mask"
-	desc = "A silver rabbit mask worn by the faithful of Eora, usually during their rituals."
+	name = "rabbit mask"
+	desc = "A silver rabbit mask."
 	color = null
 	icon_state = "eoramask"
 	item_state = "eoramask"

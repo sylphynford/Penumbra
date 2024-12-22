@@ -73,30 +73,32 @@ GLOBAL_LIST_INIT(laws_of_the_land, initialize_laws_of_the_land())
 			say("The crown is summoned!")
 			playsound(src, 'sound/misc/machinetalk.ogg', 100, FALSE, -1)
 			playsound(src, 'sound/misc/hiss.ogg', 100, FALSE, -1)
-		if(SSroguemachine.crown)
-			var/obj/item/clothing/head/roguetown/crown/serpcrown/I = SSroguemachine.crown
-			if(!I)
-				I = new /obj/item/clothing/head/roguetown/crown/serpcrown(src.loc)
-			if(I && !ismob(I.loc))//You MUST MUST MUST keep the Crown on a person to prevent it from being summoned (magical interference)
-				I.anti_stall()
-				I = new /obj/item/clothing/head/roguetown/crown/serpcrown(src.loc)
-				say("The crown is summoned!")
-				playsound(src, 'sound/misc/machinetalk.ogg', 100, FALSE, -1)
-				playsound(src, 'sound/misc/hiss.ogg', 100, FALSE, -1)
-				return
-			if(ishuman(I.loc))
-				var/mob/living/carbon/human/HC = I.loc
-				if(HC.stat != DEAD)
-					if(I in HC.held_items)
-						say("[HC.real_name] holds the crown!")
-						playsound(src, 'sound/misc/machinetalk.ogg', 100, FALSE, -1)
-						return
-					if(H.head == I)
-						say("[HC.real_name] wears the crown!")
-						playsound(src, 'sound/misc/machinetalk.ogg', 100, FALSE, -1)
-						return
-				else
-					HC.dropItemToGround(I, TRUE) //If you're dead, forcedrop it, then move it.
+			return
+		
+		var/obj/item/clothing/head/roguetown/crown/serpcrown/I = SSroguemachine.crown
+		if(!I) // If crown reference is invalid but exists in SS
+			SSroguemachine.crown = null
+			new /obj/item/clothing/head/roguetown/crown/serpcrown(src.loc)
+			say("The crown is summoned!")
+			playsound(src, 'sound/misc/machinetalk.ogg', 100, FALSE, -1)
+			playsound(src, 'sound/misc/hiss.ogg', 100, FALSE, -1)
+			return
+			
+		if(ishuman(I.loc))
+			var/mob/living/carbon/human/HC = I.loc
+			if(HC.stat != DEAD)
+				if(I in HC.held_items)
+					say("[HC.real_name] holds the crown!")
+					playsound(src, 'sound/misc/machinetalk.ogg', 100, FALSE, -1)
+					return
+				if(HC.head == I)
+					say("[HC.real_name] wears the crown!")
+					playsound(src, 'sound/misc/machinetalk.ogg', 100, FALSE, -1)
+					return
+			else
+				HC.dropItemToGround(I, TRUE) //If you're dead, forcedrop it
+		
+		if(!ismob(I.loc)) // Only move the crown if it's not on a person
 			I.forceMove(src.loc)
 			say("The crown is summoned!")
 			playsound(src, 'sound/misc/machinetalk.ogg', 100, FALSE, -1)

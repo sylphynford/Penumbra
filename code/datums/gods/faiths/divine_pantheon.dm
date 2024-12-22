@@ -1,5 +1,5 @@
 /datum/faith/divine
 	name = "True Faith"
-	desc = "The only accepted religion in the Umbra Veil. PSYDON is the one true god."
+	desc = "True faith worshippers are followers of Psydon. Once, Psydon lived among the fellowship races sharing his wisdom and magic and the world flourished in a near-utopic harmony. As time passed, Psydon withdrew, growing more distant, and his guidance slowly faded into silence. With the rise of necromancy and the corruption it brought Psydon has not been seen for centuries. The Church of Psydon teaches that he waits patiently, ready to forgive the world for it's transgressions, but only once mortals prove themselves worthy of his grace through humility, sincerity, and an earnest return to his teachings. Until then, he still watches over the world, guiding from the heavens, and one day, through devotion and sacrifice, they will earn his forgiveness and he will once more walk amongst them. The faithful stubbornly hold on to this belief that Psydon will breathe life back into the world and restore balance and beauty once again."
 	worshippers = "Citizens of the town and and onwards."
 	godhead = /datum/patron/divine/astrata // to do, fix spelling errors

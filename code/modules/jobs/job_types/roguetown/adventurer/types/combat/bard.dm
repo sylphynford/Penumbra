@@ -141,7 +141,7 @@
 			H.change_stat("speed", 2)
 			H.mind.AddSpell(new /obj/effect/proc_holder/spell/invoked/mockery)
 		if("Hymnist") //Azure Peak Update, Miracles and some utility skills, less combat prowess
-			to_chat(H, span_warning("The tales of the gods are mighty indeed, though your skill in their retelling through song has granted you a touch of their favor as thanks."))
+			to_chat(H, span_warning("The tales of god are mighty indeed, though your skill in their retelling through song has granted you a touch of their favor as thanks."))
 			H.mind.adjust_skillrank(/datum/skill/combat/wrestling, 2, TRUE)
 			H.mind.adjust_skillrank(/datum/skill/combat/unarmed, 1, TRUE)
 			H.mind.adjust_skillrank(/datum/skill/misc/athletics, 2, TRUE)

@@ -599,7 +599,7 @@
 /obj/item/rogueweapon/sword/rapier/dec
 	icon_state = "decrapier"
 	desc = "A fine duelist's instrument with a tapered thrusting blade. Its hilt is gilt in gold and inlaid, \
-	and its blade bears twin inscriptions on either side. One reads, 'CAST IN THE NAME OF GODS' while the \
+	and its blade bears twin inscriptions on either side. One reads, 'CAST IN THE NAME OF GOD' while the \
 	obverse reads, 'YE NOT GUILTY'."
 	sellprice = 140
 

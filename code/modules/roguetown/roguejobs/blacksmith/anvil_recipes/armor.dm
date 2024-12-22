@@ -338,14 +338,14 @@
 	craftdiff = 2
 
 /datum/anvil_recipe/armor/steel/astratahelm
-	name = "Astrata Helmet (+1 Steel)"
+	name = "Sun Helmet (+1 Steel)"
 	req_bar = /obj/item/ingot/steel
 	additional_items = list(/obj/item/ingot/steel)
 	created_item = /obj/item/clothing/head/roguetown/helmet/heavy/astratahelm
 	craftdiff = 3
 
 /datum/anvil_recipe/armor/steel/necrahelm
-	name = "Necra Helmet (+1 Steel)"
+	name = "Mourning Helmet (+1 Steel)"
 	req_bar = /obj/item/ingot/steel
 	additional_items = list(/obj/item/ingot/steel)
 	created_item = /obj/item/clothing/head/roguetown/helmet/heavy/necrahelm
@@ -359,7 +359,7 @@
 	craftdiff = 3
 
 /datum/anvil_recipe/armor/steel/dendorhelm
-	name = "Dendor Helmet (+1 Steel)"
+	name = "Nature Helmet (+1 Steel)"
 	req_bar = /obj/item/ingot/steel
 	additional_items = list(/obj/item/ingot/steel)
 	created_item = /obj/item/clothing/head/roguetown/helmet/heavy/dendorhelm

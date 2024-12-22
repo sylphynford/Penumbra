@@ -263,7 +263,7 @@
 
 /obj/item/book/rogue/secret/thefireisgone
 	name = "THE FIRE IS GONE"
-	desc = "{<font color='red'><blink>AN ANCIENT TOME WRITTEN BY THE GODS' GREATEST FOOL</blink></font>}"
+	desc = "{<font color='red'><blink>AN ANCIENT TOME WRITTEN BY GODS GREATEST FOOL</blink></font>}"
 	icon_state ="book6_0"
 	base_icon_state = "book6"
 	bookfile = "thefireisgone.json"

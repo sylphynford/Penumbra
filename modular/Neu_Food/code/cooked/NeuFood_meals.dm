@@ -244,7 +244,7 @@
 	list_reagents = list(/datum/reagent/consumable/nutriment = MEAL_MEAGRE)
 	tastes = list("frybird" = 1, "tato" = 1)
 	name = "frybird with a tato"
-	desc = "Hearty, comforting and rich - Alleged favorite dish of Ravox."
+	desc = "Hearty, comforting and rich"
 	faretype = FARE_FINE
 	portable = FALSE
 	icon_state = "frybirdtato"

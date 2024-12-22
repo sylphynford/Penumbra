@@ -15,7 +15,7 @@
 
 /obj/item/clothing/suit/roguetown/shirt/robe/astrata
 	slot_flags = ITEM_SLOT_ARMOR|ITEM_SLOT_SHIRT|ITEM_SLOT_CLOAK
-	name = "sun robe"
+	name = "holy robe"
 	desc = ""
 	body_parts_covered = CHEST|GROIN|ARMS|LEGS|VITALS
 	icon_state = "astratarobe"
@@ -90,7 +90,7 @@
 	color = CLOTHING_WHITE
 
 /obj/item/clothing/suit/roguetown/shirt/robe/priest
-	name = "solar vestments"
+	name = "holy vestments"
 	desc = "Holy vestments sanctified by divine hands. Caution is advised if not a faithful."
 	icon_state = "priestrobe"
 	color = null
@@ -172,7 +172,7 @@
 
 /obj/item/clothing/suit/roguetown/shirt/robe/eora
 	slot_flags = ITEM_SLOT_ARMOR|ITEM_SLOT_SHIRT|ITEM_SLOT_CLOAK
-	name = "eoran robe"
+	name = "lustful robe"
 	desc = "Holy robes, intended for use by followers of Eora"
 	body_parts_covered = CHEST|GROIN|ARMS|LEGS|VITALS
 	icon_state = "eorarobes"
@@ -187,8 +187,8 @@
 	var/fanatic_wear = FALSE
 
 /obj/item/clothing/suit/roguetown/shirt/robe/eora/alt
-	name = "open eoran robe"
-	desc = "Used by more radical followers of the Eoran Church"
+	name = "open lustful robe"
+	desc = ""
 	body_parts_covered = null
 	icon_state = "eorastraps"
 	flags_inv = HIDEBOOB
@@ -197,16 +197,16 @@
 /obj/item/clothing/suit/roguetown/shirt/robe/eora/attack_right(mob/user)
 	switch(fanatic_wear)
 		if(FALSE)
-			name = "open eoran robe"
-			desc = "Used by more radical followers of the Eoran Church"
+			name = "open lustful robe"
+			desc = ""
 			body_parts_covered = null
 			icon_state = "eorastraps"
 			fanatic_wear = TRUE
 			flags_inv = HIDEBOOB
 			to_chat(usr, span_warning("Now wearing radically!"))
 		if(TRUE)
-			name = "eoran robe"
-			desc = "Holy robes, intended for use by followers of Eora"
+			name = "lustful robe"
+			desc = ""
 			body_parts_covered = CHEST|GROIN|ARMS|LEGS|VITALS
 			icon_state = "eorarobes"
 			fanatic_wear = FALSE

@@ -155,7 +155,7 @@
 
 /datum/advclass/inquisitor/zealot
 	name = "Zealot"
-	tutorial = "Once master warrior-monk turned Zealot. Your journey of self-perfection has ended in great success, leaving you with the skill and strength of legend. Yet, you feel as though your journey has just begun. It seems to you that the power to eradicate the abyssal corruption with such finesse must surely be put to use in tribute to the Gods whom led you down this path so long ago."
+	tutorial = "Once master warrior-monk turned Zealot. Your journey of self-perfection has ended in great success, leaving you with the skill and strength of legend. Yet, you feel as though your journey has just begun. It seems to you that the power to eradicate the abyssal corruption with such finesse must surely be put to use in tribute to the God whom led you down this path so long ago."
 	outfit = /datum/outfit/job/roguetown/inquisitor/zealot
 	category_tags = list(CTAG_INQUISITOR)
 

@@ -1156,8 +1156,8 @@
 	flags_inv = HIDECROTCH|HIDEBOOB
 
 /obj/item/clothing/cloak/templar/eora
-	name = "eora tabard"
-	desc = "An outer garment commonly worn by soldiers. This one has the symbol of Eora on it."
+	name = "heart tabard"
+	desc = "An outer garment commonly worn by soldiers. This one has a heart symbol on it."
 	icon_state = "tabard_eora"
 	alternate_worn_layer = TABARD_LAYER
 	body_parts_covered = CHEST|GROIN

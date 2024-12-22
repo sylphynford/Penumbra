@@ -2,7 +2,7 @@
 
 /datum/advclass/paladin
 	name = "Paladin"
-	tutorial = "Paladins are holy warriors who have taken sacred vows to uphold justice and righteousness. Often, they were promised redemption for past sins if they crusaded in the name of the gods."
+	tutorial = "Paladins are holy warriors who have taken sacred vows to uphold justice and righteousness. Often, they were promised redemption for past sins if they crusaded in the name of PSYDON."
 	allowed_sexes = list(MALE, FEMALE)
 	allowed_races = RACES_ALL_KINDS
 	outfit = /datum/outfit/job/roguetown/adventurer/paladin
@@ -52,7 +52,7 @@
 	switch(classchoice)
 
 		if("Paladin")
-			to_chat(src, span_warning("Paladins are holy warriors who have taken sacred vows to uphold justice and righteousness. Often, they were promised redemption for past sins if they crusaded in the name of the gods."))
+			to_chat(src, span_warning("Paladins are holy warriors who have taken sacred vows to uphold justice and righteousness. Often, they were promised redemption for past sins if they crusaded in the name of PSYDON."))
 			H.set_blindness(0) // No introduction text due to there being no real difference in Paladin archetypes for now.
 			to_chat(H, span_warning("You are a paladin."))
 			H.mind.adjust_skillrank(/datum/skill/combat/crossbows, 1, TRUE)

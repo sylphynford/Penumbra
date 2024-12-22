@@ -1,5 +1,5 @@
 /obj/structure/roguemachine/lottery_roguetown
-	name = "XYLIX'S FORTUNE"
+	name = "FORTUNE"
 	desc = "An infinite, yawning hole that makes or breaks men. Come and play!"
 	icon = 'icons/roguetown/misc/machines.dmi'
 	icon_state = "lottery"
@@ -66,7 +66,7 @@
 
 	else
 		src.diceroll = rand(1,100)
-		src.say(pick("Around and around I go, where I stop, only I know.", "Xylix smiles upon your idiocy, child.", "The wheel of fate spins, and spins.", "Oh, you poor fool.", "This is going to hurt for one of us.", "I laugh, you cry; I weep, you cheer..", "I will be your fool; I'll perform for you...", "Let's go gambling!", "Around and around, folly abounds.", "Dance with ruin and wealth."))
+		src.say(pick("Around and around I go, where I stop, only I know.", "FORTUNE smiles upon your idiocy, child.", "The wheel of fate spins, and spins.", "Oh, you poor fool.", "This is going to hurt for one of us.", "I laugh, you cry; I weep, you cheer..", "I will be your fool; I'll perform for you...", "Around and around, folly abounds.", "Dance with ruin and wealth."))
 		playsound(src, 'sound/misc/machinetalk.ogg', 100, FALSE, -1)
 		playsound(src, 'sound/misc/letsgogambling.ogg', 100, FALSE, -1)
 		src.gamblingprob += (user.STALUC - src.probpenalty)
@@ -99,7 +99,7 @@
 			return
 
 		else
-			src.say(pick("TEN, WHEEL OF FORTUNE - inversed.", "The Castle. O, Omen!", "A harvest of locusts...!", "Look into my eyes and whisper your woes.", "Aw, dangit.", "Fool. Poor fool.", "Your eyes leak out of your skull, drool falling from your lips.", "Divine idiocy.", "You stand just as I did; loser and a freek."))
+			src.say(pick("TEN, WHEEL OF FORTUNE - inversed.", "The Castle. O, Omen!", "A harvest of locusts...!", "Look into my eyes and whisper your woes.", "Fool. Poor fool.", "Your eyes leak out of your skull, drool falling from your lips.", "Divine idiocy.", "You stand just as I did; loser and a freek."))
 			playsound(src, 'sound/misc/bug.ogg', 100, FALSE, -1)
 			sleep(20) //really make them THINK about their life choices up to this point
 			src.say(pick("King of fools, your land is barren. Play again?", "Divine comedy. Play again?", "Next time, surely. Play again?", "Haha-...ah-ha-ha! Again! Play again, jester!", "Poor beggar! Spin me again?"))
@@ -181,7 +181,7 @@
 			src.say("The wind in my fur...or was it hair? Either way...")
 			playsound(src, 'sound/misc/machinequestion.ogg', 100, FALSE, -1)
 		if(2)
-			src.say("The worship of gods is pernicious.")
+			src.say("The worship of god is pernicious.")
 			playsound(src, 'sound/misc/machinetalk.ogg', 100, FALSE, -1)
 			sleep(20)
 			src.say("But this punishment is not as bad as others'! Ha-ha-ha!")
