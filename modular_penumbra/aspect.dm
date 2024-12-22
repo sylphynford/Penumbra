@@ -1119,13 +1119,13 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 /datum/round_event/roundstart/throne_execution/proc/announce_titan_instructions()
 	for(var/obj/structure/roguemachine/titan/T in world)
 		T.say("Say EXECUTE followed by the criminal's name while sitting on the throne to destroy them.")
-		playsound(T.loc, 'sound/misc/machinetalk.ogg', 50, FALSE)
+		playsound(T.loc, 'sound/misc/machinetalk.ogg', 100, FALSE)
 
 /datum/round_event_control/roundstart/throne_execution
 	name = "Throne Execution Power"
 	typepath = /datum/round_event/roundstart/throne_execution
 	weight = 5
-	event_announcement = "The throne crackles with newfound power..."
+	event_announcement = "The throne crackles with newfound power.. The Baron could execute anyone with it.."
 	runnable = TRUE
 
 // Eternal Day event
