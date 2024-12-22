@@ -109,7 +109,7 @@
 
 /obj/item/rogueweapon/stoneaxe/battle
 	force = 25
-	force_wielded = 30
+	force_wielded = 35
 	possible_item_intents = list(/datum/intent/axe/cut/battle, /datum/intent/axe/chop/battle)
 	name = "battle axe"
 	desc = "A steel battleaxe of war. Has a wicked edge."
