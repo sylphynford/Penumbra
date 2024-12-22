@@ -187,8 +187,8 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/rp_prompt.txt"))
 			to_chat(usr, span_boldwarning("You are in the migrant queue."))
 			return
 
-		if(!(client?.prefs?.selected_patron?.type in ALL_DIVINE_PATRONS))
-			to_chat(usr, span_warning("You may not latejoin as a heretic. Please set your faith to PSYDON."))
+		if(istype(client?.prefs?.selected_patron, /datum/patron/inhumen/zizo))
+			to_chat(usr, span_warning("You may not latejoin as a Zizo worshipper. Please set your faith to PSYDON or choose Faithless heresy."))
 			return
 
 		if(href_list["late_join"] == "override")
@@ -429,8 +429,8 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/rp_prompt.txt"))
 
 //used for latejoining
 /mob/dead/new_player/proc/IsJobUnavailable(rank, latejoin = FALSE)
-	// Block ALL late joins for heretics
-	if(latejoin && !(client?.prefs?.selected_patron?.type in ALL_DIVINE_PATRONS))
+	// Replace blanket heretic check with specific Zizo check
+	if(latejoin && istype(client?.prefs?.selected_patron, /datum/patron/inhumen/zizo))
 		return JOB_UNAVAILABLE_FAITH
 	
 	if(QDELETED(src))
@@ -540,9 +540,9 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/rp_prompt.txt"))
 	if(!client.prefs.validate_genitals_with_message())
 		return FALSE
 
-	// Final faith check to prevent faith-switching exploit
-	if(!(client?.prefs?.selected_patron?.type in ALL_DIVINE_PATRONS))
-		to_chat(src, span_warning("You may not latejoin as a heretic. Please set your faith to PSYDON."))
+	// This check only allows Faithless heretics
+	if(istype(client?.prefs?.selected_patron, /datum/patron/inhumen/zizo))
+		to_chat(src, span_warning("You may not latejoin as a Zizo worshipper. Please set your faith to PSYDON or choose Faithless heresy."))
 		return FALSE
 
 	// Handle class selection for jobs with advanced classes
