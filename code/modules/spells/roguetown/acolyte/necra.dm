@@ -44,7 +44,7 @@
 	invocation = "Psydon HATES you!"
 	invocation_type = "shout" //can be none, whisper, emote and shout
 	miracle = TRUE
-	devotion_cost = 20
+	devotion_cost = 10
 
 /obj/effect/proc_holder/spell/targeted/churn/cast(list/targets,mob/living/user = usr)
 	var/prob2explode = 100
@@ -77,7 +77,7 @@
 			if(prob(vamp_prob))
 				explosion(get_turf(L), light_impact_range = 1, flame_range = 1, smoke = FALSE)
 				L.Stun(50)
-//				L.throw_at(get_ranged_target_turf(L, get_dir(user,L), 7), 7, 1, L, spin = FALSE)
+				L.throw_at(get_ranged_target_turf(L, get_dir(user,L), 7), 7, 1, L, spin = FALSE)
 			else
 				L.visible_message(span_warning("[L] resists being churned!"), span_userdanger("I resist being churned!"))
 	..()
