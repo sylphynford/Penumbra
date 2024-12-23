@@ -116,7 +116,7 @@
 	cloak = /obj/item/clothing/cloak/stabard/surcoat/guard
 	wrists = /obj/item/clothing/wrists/roguetown/bracers
 	gloves = /obj/item/clothing/gloves/roguetown/leather
-	neck = /obj/item/clothing/neck/roguetown/chaincoif
+	neck = /obj/item/clothing/neck/roguetown/chaincoif/iron
 	shoes = /obj/item/clothing/shoes/roguetown/boots/leather
 	beltl = /obj/item/storage/keyring/guardcastle
 	belt = /obj/item/storage/belt/rogue/leather/black
