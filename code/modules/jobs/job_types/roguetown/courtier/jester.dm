@@ -5,7 +5,7 @@
 	faction = "Station"
 	total_positions = 1
 	spawn_positions = 1
-
+	zizo_roll = 25
 	allowed_races = RACES_ALLPLUSKOBOLD
 
 	tutorial = "The Grenzelhofts were known for their Jesters, wisemen with a tongue just as sharp as their wit. \

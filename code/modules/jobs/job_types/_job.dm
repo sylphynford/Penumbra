@@ -146,6 +146,8 @@
 	var/lord_family = FALSE
 	var/lord_rel_type = REL_TYPE_RELATIVE
 
+	/// Chance (0-100) to convert Zizo patron to PSYDON patron
+	var/zizo_roll = 0
 
 /datum/job/proc/special_job_check(mob/dead/new_player/player)
 	return TRUE
@@ -173,6 +175,12 @@
 
 	if(!ishuman(H))
 		return
+
+	if(zizo_roll && H.client?.prefs?.selected_patron && istype(H.client.prefs.selected_patron, /datum/patron/inhumen/zizo))
+		if(prob(zizo_roll))
+			to_chat(H, span_warning("Heresy roll failed. You are NOT a cultist."))
+			H.client.prefs.selected_patron = new /datum/patron/divine/astrata
+			H.set_patron(H.client.prefs.selected_patron)
 
 	if(spells && H.mind)
 		for(var/S in spells)
@@ -288,6 +296,12 @@
 		var/datum/bank_account/bank_account = new(H.real_name, src)
 		bank_account.payday(STARTING_PAYCHECKS, TRUE)
 		H.account_id = bank_account.account_id
+
+	// Add Zizo roll 
+	if(zizo_roll && preference_source?.prefs?.selected_patron && istype(preference_source.prefs.selected_patron, /datum/patron/inhumen/zizo))
+		if(prob(zizo_roll))
+			addtimer(CALLBACK(GLOBAL_PROC, GLOBAL_PROC_REF(to_chat), H, "<span class='warning'><font size='5'>Heresy roll failed. You are NOT a cultist.</font></span>"), 2 SECONDS)
+			H.set_patron(new /datum/patron/divine/astrata())
 
 	//Equip the rest of the gear
 	H.dna.species.before_equip_job(src, H, visualsOnly)

@@ -12,6 +12,7 @@
 	tutorial = "Responsible for the safety of the town and the enforcement of the Baron's law, you are the vanguard of the city faced with punishing those who defy His Lordship. You take orders from Sergeants, Knights, and your Liege."
 	display_order = JDO_TOWNGUARD
 	whitelist_req = TRUE
+	zizo_roll = 50
 
 	outfit = /datum/outfit/job/roguetown/guardsman
 	advclass_cat_rolls = list(CTAG_WATCH = 20)
