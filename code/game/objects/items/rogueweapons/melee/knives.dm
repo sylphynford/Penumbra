@@ -221,9 +221,10 @@
 	name = "'De Tace'"
 	desc = "The right hand of the right hand, this narrow length of steel serves as a quick solution to petty greviences."
 	icon_state = "stiletto"
-	force = 25
+	force = 20
 	max_integrity = 200
 	smeltresult = /obj/item/ingot/steel
+	wbalance = 2
 
 /obj/item/rogueweapon/huntingknife/idagger/steel/parrying
 	name = "steel parrying dagger"
@@ -231,7 +232,7 @@
 	throwforce = 12
 	desc = "This is a parrying dagger made of solid steel, used to catch opponent's weapons in the handguard. It's a bit more dull, however."
 	icon_state = "spdagger"
-	wdefense = 6
+	wdefense = 7
 
 /obj/item/rogueweapon/huntingknife/idagger/steel/special
 	icon_state = "sdaggeralt"
@@ -313,7 +314,7 @@
 	possible_item_intents = list(/datum/intent/dagger/thrust,/datum/intent/dagger/cut,  /datum/intent/dagger/thrust/pick)
 	name = "elvish dagger"
 	desc = "This beautiful dagger is of intricate, elvish design. Sharper, too."
-	force = 22
+	force = 20
 	icon_state = "elfdagger"
 	item_state = "elfdag"
 	last_used = 0
@@ -322,7 +323,7 @@
 /obj/item/rogueweapon/huntingknife/idagger/silver/elvish/drow
 	name = "dark elvish dagger"
 	desc = "A vicious wave-bladed dagger from the Underdark."
-	force = 25
+	force = 21
 	last_used = 0
 	is_silver = TRUE
 

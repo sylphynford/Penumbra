@@ -1,7 +1,7 @@
 
 /obj/item/rogueweapon/sword
 	slot_flags = ITEM_SLOT_HIP | ITEM_SLOT_BACK
-	force = 22
+	force = 20
 	force_wielded = 25
 	possible_item_intents = list(/datum/intent/sword/cut, /datum/intent/sword/thrust)
 	gripped_intents = list(/datum/intent/sword/cut, /datum/intent/sword/thrust)
@@ -85,7 +85,7 @@
 /obj/item/rogueweapon/sword/short
 	name = "short sword"
 	desc = "An archaic steel sword made for stabbing."
-	force = 19
+	force = 20
 	possible_item_intents = list(/datum/intent/sword/cut/short, /datum/intent/sword/thrust/short)
 	icon_state = "swordshort"
 	gripped_intents = null
@@ -127,6 +127,7 @@
 	inhand_y_dimension = 64
 	associated_skill = /datum/skill/combat/swords
 	throwforce = 15
+	wbalance = -1
 	thrown_bclass = BCLASS_CUT
 	dropshrink = 0.75
 	smeltresult = /obj/item/ingot/steel
@@ -145,8 +146,6 @@
 
 
 /obj/item/rogueweapon/sword/long/heirloom
-	force = 20
-	force_wielded = 32
 	possible_item_intents = list(/datum/intent/sword/cut, /datum/intent/sword/thrust, /datum/intent/sword/strike)
 	gripped_intents = list(/datum/intent/sword/cut, /datum/intent/sword/thrust, /datum/intent/sword/strike, /datum/intent/sword/chop)
 	icon_state = "heirloom"
@@ -183,8 +182,8 @@
 
 
 /obj/item/rogueweapon/sword/long/judgement
-	force = 40
-	force_wielded = 55
+	force = 30
+	force_wielded = 40
 	possible_item_intents = list(/datum/intent/sword/cut, /datum/intent/sword/thrust, /datum/intent/sword/strike)
 	gripped_intents = list(/datum/intent/sword/cut, /datum/intent/sword/thrust, /datum/intent/sword/strike, /datum/intent/sword/chop)
 	icon_state = "judgement"
@@ -254,8 +253,8 @@
 
 
 /obj/item/rogueweapon/sword/long/vlord
-	force = 40
-	force_wielded = 55
+	force = 30
+	force_wielded = 40
 	possible_item_intents = list(/datum/intent/sword/cut, /datum/intent/sword/thrust, /datum/intent/sword/strike)
 	gripped_intents = list(/datum/intent/sword/cut, /datum/intent/sword/thrust, /datum/intent/sword/strike, /datum/intent/sword/chop)
 	icon_state = "vlord"
@@ -294,8 +293,8 @@
 			if("onbelt") return list("shrink" = 0.3,"sx" = -2,"sy" = -5,"nx" = 4,"ny" = -5,"wx" = 0,"wy" = -5,"ex" = 2,"ey" = -5,"nturn" = 0,"sturn" = 0,"wturn" = 0,"eturn" = 0,"nflip" = 0,"sflip" = 0,"wflip" = 0,"eflip" = 0,"northabove" = 0,"southabove" = 1,"eastabove" = 1,"westabove" = 0)
 
 /obj/item/rogueweapon/sword/long/rider
-	force = 26
-	force_wielded = 31
+	force = 25
+	force_wielded = 30
 	possible_item_intents = list(/datum/intent/sword/cut, /datum/intent/sword/strike)
 	gripped_intents = list(/datum/intent/sword/cut, /datum/intent/sword/strike, /datum/intent/sword/chop)
 	icon_state = "tabi"
@@ -333,8 +332,8 @@
 				return list("shrink" = 0.5,"sx" = -4,"sy" = -6,"nx" = 5,"ny" = -6,"wx" = 0,"wy" = -6,"ex" = -1,"ey" = -6,"nturn" = 100,"sturn" = 156,"wturn" = 90,"eturn" = 180,"nflip" = 0,"sflip" = 0,"wflip" = 0,"eflip" = 0,"northabove" = 0,"southabove" = 1,"eastabove" = 1,"westabove" = 0)
 
 /obj/item/rogueweapon/sword/long/marlin
-	force = 26
-	force_wielded = 31
+	force = 25
+	force_wielded = 30
 	possible_item_intents = list(/datum/intent/sword/cut, /datum/intent/sword/strike)
 	gripped_intents = list(/datum/intent/sword/cut, /datum/intent/sword/strike, /datum/intent/sword/chop)
 	icon_state = "marlin"
@@ -621,6 +620,7 @@
 	possible_item_intents = list(/datum/intent/sword/cut, /datum/intent/sword/thrust)
 	gripped_intents = null
 	wdefense = 6
+	wbalance = 1
 
 /obj/item/rogueweapon/sword/gladius
 	force = 22
@@ -633,10 +633,10 @@
 	max_blade_int = 100
 	max_integrity = 200
 	dropshrink = 0.80
-	wdefense = 2
+	wdefense = 1
 
 /obj/item/rogueweapon/sword/sabre/elf
-	force = 25
+	force = 22
 	name = "elvish saber"
 	desc = "This finely crafted saber is of elven design."
 	icon_state = "esaber"
@@ -649,7 +649,7 @@
 	smelt_bar_num = 2
 
 /obj/item/rogueweapon/sword/silver
-	force = 24
+	force = 22
 	name = "silver sword"
 	desc = "A sword forged of pure silver. The guard is fashioned into a cross."
 	icon_state = "silversword"

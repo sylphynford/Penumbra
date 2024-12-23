@@ -50,7 +50,7 @@
 	pixel_x = -16
 	inhand_x_dimension = 64
 	inhand_y_dimension = 64
-	wdefense = 10
+	wdefense = 4
 	bigboy = TRUE
 	gripsprite = TRUE
 	associated_skill = /datum/skill/combat/polearms
@@ -74,8 +74,8 @@
 /obj/item/rogueweapon/woodstaff/aries
 	name = "staff of the shepherd"
 	desc = "This staff makes you look important to any peasante."
-	force = 25
-	force_wielded = 28
+	force = 15
+	force_wielded = 20
 	icon_state = "aries"
 	icon = 'icons/roguetown/weapons/32.dmi'
 	pixel_y = 0
@@ -98,7 +98,7 @@
 
 /obj/item/rogueweapon/spear
 	force = 18
-	force_wielded = 30
+	force_wielded = 28
 	possible_item_intents = list(SPEAR_THRUST, SPEAR_BASH) //bash is for nonlethal takedowns, only targets limbs
 	gripped_intents = list(SPEAR_THRUST, SPEAR_CUT, SPEAR_BASH)
 	name = "spear"
@@ -166,6 +166,8 @@
 	max_blade_int = 200
 	minstr = 8
 	wdefense = 6
+	force = 20
+	force_wielded = 30
 	throwforce = 15
 
 /obj/item/rogueweapon/spear/improvisedbillhook
@@ -345,6 +347,7 @@
 	associated_skill = /datum/skill/combat/swords
 	max_blade_int = 300
 	wdefense = 5
+	wbalance = -1
 	smelt_bar_num = 3
 
 /obj/item/rogueweapon/greatsword/getonmobprop(tag)

@@ -177,7 +177,7 @@
 	greet_text = span_notice("I ride! None of the laws shall stop me for that is Psydon's divine will!")
 	req_text = "Worship Psydon"
 	allowed_patrons = list(/datum/patron/divine/astrata)
-	weight = 100
+	weight = 25
 
 /datum/special_trait/psydons_rider/on_apply(mob/living/carbon/human/character, silent)
 	character.drunkenness = 50
@@ -316,12 +316,6 @@
 	character.transform = character.transform.Translate(0, (0.25 * 16))
 	character.update_transform()
 
-/datum/special_trait/atheism
-	name = "Godless"
-	greet_text = span_notice("Gods may exist, but know what? I care not.")
-	req_text = "Non-Church Role"
-	restricted_jobs = list(CHURCH_ROLES)
-	weight = 100
 
 /datum/special_trait/atheism/on_apply(mob/living/carbon/human/character, silent)
 	character.set_patron(/datum/patron/godless)
