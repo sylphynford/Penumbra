@@ -252,7 +252,7 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 	var/list/available_turfs = list()   // Current pool of available turfs
 	var/static/list/valid_jobs = list(
 		"Servant", "Squire", "Town Guard", "Dungeoneer", "Priest", 
-		"Inquisitor", "Occultist", "Acolyte", "Churchling", "Merchant",
+		"Inquisitor", "Occultist", "Monk", "Churchling", "Merchant",
 		"Shophand", "Town Elder", "Blacksmith", "Smithy Apprentice",
 		"Artificer", "Soilson", "Tailor", "Innkeeper", "Cook",
 		"Bathmaster", "Taven Knave", "Bath Swain", "Bath Wench", "Tavern Wench", "Towner", "Maid", "Vagabond", "Templar"
