@@ -3588,7 +3588,6 @@
 #include "modular_azurepeak\code\modules\jobs\job_types\roguetown\vagabond\courier.dm"
 #include "modular_azurepeak\code\modules\jobs\job_types\roguetown\vagabond\destitute_scholar.dm"
 #include "modular_azurepeak\code\modules\jobs\job_types\roguetown\vagabond\excommunicado.dm"
-#include "modular_azurepeak\code\modules\jobs\job_types\roguetown\vagabond\failed_apprentice.dm"
 #include "modular_azurepeak\code\modules\jobs\job_types\roguetown\vagabond\goatherd.dm"
 #include "modular_azurepeak\code\modules\jobs\job_types\roguetown\vagabond\runner.dm"
 #include "modular_azurepeak\code\modules\jobs\job_types\roguetown\vagabond\the_original.dm"
