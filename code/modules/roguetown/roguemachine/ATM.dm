@@ -90,6 +90,25 @@
 
 /obj/structure/roguemachine/atm/attackby(obj/item/P, mob/user, params)
 	if(ishuman(user))
+		if(istype(P, /obj/item/bodypart/head))
+			var/obj/item/bodypart/head/stored_head = P
+			var/reward_amount = 0
+			var/correct_head = FALSE
+			
+			// Check for valid bounties
+			for(var/datum/bounty/b in GLOB.head_bounties)
+				if(b.target == stored_head.real_name)
+					correct_head = TRUE
+					say("A bounty has been sated.")
+					reward_amount += b.amount
+					GLOB.head_bounties -= b
+
+			if(correct_head)
+				budget2change(reward_amount, user)
+				playsound(src, 'sound/misc/coindispense.ogg', 100, FALSE, -1)
+				qdel(P)
+				return
+
 		if(istype(P, /obj/item/roguecoin))
 			var/mob/living/carbon/human/H = user
 			if(H in SStreasury.bank_accounts)
