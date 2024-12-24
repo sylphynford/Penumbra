@@ -83,9 +83,9 @@ SUBSYSTEM_DEF(family)
 
 		total_families--
 
-	for(var/mob/living/carbon/human/H in family_candidates) //Try and find a suitable family for all candidates. Note. this system is currently only built to match spouses. A more complex system would be needed for full families.
-		families = shuffle(current_families)
-		fam_loop:
+	can_loop:
+		for(var/mob/living/carbon/human/H in family_candidates) //Try and find a suitable family for all candidates. Note. this system is currently only built to match spouses. A more complex system would be needed for full families.
+			families = shuffle(current_families)
 			for(var/fam in current_families)
 				var/datum/family/F = fam
 				var/mob/living/carbon/human/connecting_member
@@ -98,7 +98,7 @@ SUBSYSTEM_DEF(family)
 						F.addRel(connecting_member,H,rel_type,TRUE)
 
 						current_families -= F
-						break fam_loop
+						break can_loop
 
 	for(var/fam in families) //Remove families with only one member.
 		var/datum/family/F = fam
