@@ -24,7 +24,7 @@
 	name = "Fishing"
 	dreams = list(
 		"...you struggle to unknot the fishing line for what feels like hours, pulling away at it on a small boat amidst a chasmic void. A gigantic, calloused, pale hand takes it from you and untangles the whole thing with a singular push...",
-		"...the old merchant nods his head, and gives you a small sack of baits. Worms and grubs and even slices of cheese, each supposed to bring you another of Abyssor's bounties..."
+		"...the old merchant nods his head, and gives you a small sack of baits. Worms and grubs and even slices of cheese, each supposed to bring you another of the sea's bounties..."
 	)
 
 /datum/skill/labor/butchering
