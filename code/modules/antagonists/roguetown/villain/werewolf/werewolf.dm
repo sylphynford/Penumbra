@@ -140,7 +140,7 @@
 	attack_verb = list("claws", "mauls", "eviscerates")
 	animname = "chop"
 	hitsound = "genslash"
-	penfactor = 70
+	penfactor = 50
 	candodge = TRUE
 	canparry = TRUE
 	miss_text = "slashes the air!"
