@@ -74,18 +74,13 @@
 		var/datum/roguestock/D = locate(href_list["export"]) in SStreasury.stockpile_datums
 		if(!D)
 			return
-		if((D.held_items[1] + D.held_items[2]) < D.importexport_amt)
-			say("Insufficient stock.")
+		if(D.held_items[1] < D.importexport_amt)
+			say("Insufficient stock in town stockpile.")
 			return
 		var/amt = D.get_export_price()
 
-		// Try to export everything from town stockpile
-		if(D.held_items[1] >= D.importexport_amt)
-			D.held_items[1] -= D.importexport_amt
-		// If not possible, first pull form town stockpile, then bog stockpile
-		else
-			D.held_items[2] -= (D.importexport_amt - D.held_items[1])
-			D.held_items[1] = 0
+		// Only export from town stockpile
+		D.held_items[1] -= D.importexport_amt
 
 		SStreasury.treasury_value += amt
 		SStreasury.log_to_steward("+[amt] exported [D.name]")
