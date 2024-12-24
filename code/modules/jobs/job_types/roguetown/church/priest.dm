@@ -167,8 +167,8 @@
 	refuse_message = "I refuse."
 
 /obj/effect/proc_holder/spell/self/convertrole/monk
-	name = "Recruit Acolyte"
-	new_role = "Acolyte"
+	name = "Recruit Monk"
+	new_role = "Monk"
 	overlay_state = "recruit_acolyte"
 	recruitment_faction = "Church"
 	recruitment_message = "Serve PSYDON, %RECRUIT!"

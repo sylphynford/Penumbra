@@ -9,6 +9,7 @@ GLOBAL_LIST_EMPTY(lord_titles)
 	faction = "Station"
 	total_positions = 1
 	spawn_positions = 1
+	zizo_roll = 50
 	selection_color = JCOLOR_NOBLE
 	allowed_races = NOBLE_RACES_TYPES
 	allowed_sexes = list(MALE, FEMALE)

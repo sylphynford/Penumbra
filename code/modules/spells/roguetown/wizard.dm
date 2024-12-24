@@ -1,4 +1,3 @@
-
 /obj/effect/proc_holder/spell/invoked/projectile/lightningbolt
 	name = "Bolt of Lightning"
 	desc = "Emit a bolt of lightning that burns and stuns a target."
@@ -47,7 +46,8 @@
 			return BULLET_ACT_BLOCK
 		if(isliving(target))
 			var/mob/living/L = target
-			L.electrocute_act(1, src)
+			var/flags = prob(50) ? SHOCK_NOSTUN : NONE
+			L.electrocute_act(1, src, 1, flags)
 	qdel(src)
 
 /obj/effect/proc_holder/spell/invoked/projectile/bloodlightning

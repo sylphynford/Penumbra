@@ -13,7 +13,7 @@
 	whitelist_req = TRUE
 	outfit = /datum/outfit/job/roguetown/knight
 	advclass_cat_rolls = list(CTAG_ROYALGUARD = 20)
-
+	zizo_roll = 75
 	give_bank_account = 22
 	noble_income = 10
 	min_pq = 0

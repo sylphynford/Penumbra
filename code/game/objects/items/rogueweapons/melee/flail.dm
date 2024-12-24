@@ -1,5 +1,5 @@
 /obj/item/rogueweapon/flail
-	force = 25
+	force = 35
 	possible_item_intents = list(/datum/intent/flail/strike, /datum/intent/flail/strike/smash)
 	name = "flail"
 	desc = "This is a swift, iron flail. Strikes hard and far."
@@ -17,6 +17,7 @@
 	swingsound = BLUNTWOOSH_MED
 	throwforce = 5
 	wdefense = -6
+	wbalance = 1
 	minstr = 4
 
 /datum/intent/flail/strike
@@ -85,7 +86,7 @@
 
 
 /obj/item/rogueweapon/flail/sflail
-	force = 30
+	force = 40
 	icon_state = "flail"
 	desc = "This is a swift, steel flail. Strikes hard and far."
 	smeltresult = /obj/item/ingot/steel
@@ -129,7 +130,7 @@
 	item_d_type = "blunt"
 
 /obj/item/rogueweapon/whip
-	force = 21
+	force = 18
 	possible_item_intents = list(/datum/intent/whip/crack, /datum/intent/whip/lash, /datum/intent/whip/punish)
 	name = "whip"
 	desc = "A leather whip, built to last with an sharp stone for a tip"
@@ -146,6 +147,7 @@
 	swingsound = WHIPWOOSH
 	throwforce = 5
 	wdefense = -8
+	wbalance = 2
 	minstr = 6
 
 /obj/item/rogueweapon/whip/getonmobprop(tag)
@@ -159,7 +161,7 @@
 
 
 /obj/item/rogueweapon/whip/antique
-	force = 29
+	force = 22
 	name = "Repenta En"
 	desc = "An extremely well maintained whip, with a polished steel tip and gilded handle"
 	minstr = 11

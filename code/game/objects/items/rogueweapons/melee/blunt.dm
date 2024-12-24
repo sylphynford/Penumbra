@@ -32,14 +32,13 @@
 	name = "bell ringer"
 	desc = "This heavy hammer is used to ring the church's bell."
 	icon_state = "churchmace"
-	wbalance = -1
 	smeltresult = /obj/item/ingot/steel
 	blade_dulling = DULLING_BASH
 	wdefense = 3
 
 /obj/item/rogueweapon/mace/steel
 	force = 25
-	force_wielded = 32
+	force_wielded = 35
 	name = "steel mace"
 	desc = "This steel mace is objectively superior to an iron one."
 	icon_state = "smace"
@@ -180,7 +179,7 @@
 
 /obj/item/rogueweapon/mace/cudgel
 	name = "cudgel"
-	desc = "A stubby little club for brigands."
+	desc = "A stubby little club used by civilized lawkeepers."
 	force = 25
 	icon_state = "cudgel"
 	force_wielded = 25
@@ -196,16 +195,16 @@
 /obj/item/rogueweapon/mace/cudgel/justice
 	name = "'Justice'"
 	desc = "The icon of the right of office of the Magistrate. While mostly ceremonial in design, it serves it's purpose in dishing out some much needed justice."
-	force = 30
+	force = 25
 	icon_state = "justice"
-	force_wielded = 30
+	force_wielded = 25
 	gripped_intents = list(/datum/intent/mace/strike,/datum/intent/mace/smash)
 	smeltresult = /obj/item/ingot/steel
 	wlength = WLENGTH_SHORT
 	w_class = WEIGHT_CLASS_NORMAL
-	wbalance = 4
+	wbalance = 3
 	minstr = 7
-	wdefense = 5
+	wdefense = 3
 
 /obj/item/rogueweapon/mace/cudgel/getonmobprop(tag)
 	. = ..()

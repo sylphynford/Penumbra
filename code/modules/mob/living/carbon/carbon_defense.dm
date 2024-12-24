@@ -390,7 +390,7 @@
 	var/should_stun = (!(flags & SHOCK_TESLA) || siemens_coeff > 0.5) && !(flags & SHOCK_NOSTUN)
 	if(!HAS_TRAIT(src, TRAIT_NOPAIN))
 		if(should_stun && !HAS_TRAIT(src, TRAIT_NOPAINSTUN))
-			Paralyze(30)
+			Paralyze(15)
 		//Jitter and other fluff.
 		jitteriness += 1000
 		do_jitter_animation(jitteriness)
@@ -403,7 +403,7 @@
 /mob/living/carbon/proc/secondary_shock(should_stun)
 	jitteriness = max(jitteriness - 990, 10)
 	if(should_stun && !HAS_TRAIT(src, TRAIT_NOPAINSTUN))
-		Paralyze(60)
+		Paralyze(30)
 
 /mob/living/carbon/proc/help_shake_act(mob/living/carbon/M)
 	if(on_fire)

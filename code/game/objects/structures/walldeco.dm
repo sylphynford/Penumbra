@@ -1,4 +1,3 @@
-
 /obj/structure/fluff/walldeco
 	name = ""
 	desc = ""
@@ -50,6 +49,15 @@
 		if(SSrole_class_handler.bandits_in_round)
 			. += span_bold("I see that bandits are active in the region.")
 			user.playsound_local(user, 'sound/misc/notice (2).ogg', 100, FALSE)
+			// Add list of known bandits
+			. += span_bold("\nKnown bandits:")
+			var/bandit_count = 0
+			for(var/datum/antagonist/A in GLOB.antagonists)
+				if(istype(A, /datum/antagonist/bandit) && A.owner && A.owner.current)
+					bandit_count++
+					. += "\n- [A.owner.current.real_name]"
+			if(!bandit_count)
+				. += "\nNo known bandits at this time."
 		else
 			. += span_bold("There doesn't seem to be any reports of bandit activity.")
 

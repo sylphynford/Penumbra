@@ -111,7 +111,7 @@ Slimecrossing Armor
 	throw_speed = 1
 	throw_range = 3
 
-/obj/item/clothing/head/peaceflower/equipped(mob/living/carbon/human/user, slot)
+/*/obj/item/clothing/head/peaceflower/equipped(mob/living/carbon/human/user, slot)
 	. = ..()
 	if(slot == SLOT_HEAD)
 		ADD_TRAIT(user, TRAIT_PACIFISM, "peaceflower_[REF(src)]")
@@ -135,7 +135,7 @@ Slimecrossing Armor
 
 /obj/item/clothing/head/peaceflower/attack_hand(mob/user)
 	if (!peace_check(user))
-		return ..()
+		return ..()*/
 
 /obj/item/clothing/suit/armor/heavy/adamantine
 	name = "adamantine armor"

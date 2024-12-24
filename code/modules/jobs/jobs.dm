@@ -92,7 +92,7 @@ GLOBAL_LIST_INIT(church_positions, list(
 	"Priest",
 	"Inquisitor",
 	"Confessor",
-	"Acolyte",
+	"Monk",
 	"Mortician",
 	"Templar",
 	"Occultist",

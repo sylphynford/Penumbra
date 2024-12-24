@@ -12,7 +12,7 @@
 	display_order = JDO_HUSKAR
 	whitelist_req = TRUE
 	outfit = /datum/outfit/job/roguetown/huskar
-
+	zizo_roll = 90
 	give_bank_account = 20
 	noble_income = 10
 	min_pq = 0

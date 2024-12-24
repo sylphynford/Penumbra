@@ -207,8 +207,20 @@ GLOBAL_VAR(roundstart_event_name)
 	to_chat(world, "<BR><BR><BR><span class='reallybig'>So ends this tale on Penumbra.</span>")
 	get_end_reason()
 
+	// Add Zizo followers report
+	var/list/zizo_followers = list()
+	for(var/mob/living/carbon/human/H in GLOB.player_list)
+		if(H.patron && istype(H.patron, /datum/patron/inhumen/zizo))
+			zizo_followers += H.mind
+
+	if(length(zizo_followers))
+		to_chat(world, "<br><span class='header'>The followers of Zizo were:</span>")
+		to_chat(world, printplayerlist(zizo_followers))
+
 	var/list/key_list = list()
 	for(var/client/C in GLOB.clients)
+		if(C.ckey)
+			key_list += C.ckey
 		if(C.mob)
 			SSdroning.kill_droning(C)
 			C.mob.playsound_local(C.mob, 'sound/music/credits.ogg', 100, FALSE)
