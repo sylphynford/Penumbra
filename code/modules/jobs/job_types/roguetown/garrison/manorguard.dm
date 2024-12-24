@@ -96,10 +96,8 @@
 	gloves = /obj/item/clothing/gloves/roguetown/leather
 	neck = /obj/item/clothing/neck/roguetown/chaincoif
 	shoes = /obj/item/clothing/shoes/roguetown/boots/leather
-	beltl = /obj/item/storage/keyring/guardcastle
 	belt = /obj/item/storage/belt/rogue/leather/black
 	backr = /obj/item/storage/backpack/rogue/satchel/black
-	backpack_contents = list(/obj/item/signal_horn = 1)
 
 // Maces + Axes + Shield	-	Better armor, typical Man-at-Arms loadout
 /datum/advclass/manorguard/footsman
@@ -219,10 +217,13 @@
 	gloves = /obj/item/clothing/gloves/roguetown/leather
 	neck = /obj/item/clothing/neck/roguetown/coif
 	shoes = /obj/item/clothing/shoes/roguetown/boots/leather
-	beltl = /obj/item/storage/keyring/guardcastle
 	belt = /obj/item/storage/belt/rogue/leather/black
 	backr = /obj/item/storage/backpack/rogue/satchel/black
-	backpack_contents = list(/obj/item/signal_horn = 1, /obj/item/rogueweapon/huntingknife/idagger/steel/special = 1, /obj/item/rope/chain = 1)
+	backpack_contents = list(
+		/obj/item/signal_horn = 1,
+		/obj/item/rogueweapon/huntingknife/idagger/steel/special = 1,
+		/obj/item/rope/chain = 1
+	)
 
 /datum/advclass/manorguard/boltman/equipme(mob/living/carbon/human/H)
 	if(!H)
@@ -232,6 +233,8 @@
 	if(outfit)
 		var/datum/outfit/O = new outfit
 		O.equip(H)
+
+	H.equip_to_slot_or_del(new /obj/item/storage/keyring/guardcastle(H), SLOT_IN_BACKPACK)
 
 	if(H.mind)
 		H.mind.adjust_skillrank(/datum/skill/combat/polearms, 2, TRUE)
@@ -296,13 +299,17 @@
 		if("Crossbow & Sword")
 			H.set_blindness(0)
 			to_chat(H, span_warning("You are a skilled crossbowman, with sword for close combat."))
+			// First equip quiver
+			H.equip_to_slot_or_del(new /obj/item/quiver/bolts(H), SLOT_BELT_L)
+			// Then weapons
 			H.equip_to_slot_or_del(new /obj/item/rogueweapon/sword/short(H), SLOT_BELT_R)
 			H.equip_to_slot_or_del(new /obj/item/gun/ballistic/revolver/grenadelauncher/crossbow(H), SLOT_BACK_L)
-			H.equip_to_slot_or_del(new /obj/item/quiver/bolts(H), SLOT_BELT_L)
 		if("Bow & Sword")
 			H.set_blindness(0)
 			to_chat(H, span_warning("You are a trained archer, carrying a sword for backup."))
-			H.equip_to_slot_or_del(new /obj/item/rogueweapon/sword/short(H), SLOT_BELT_R)
-			H.equip_to_slot_or_del(new /obj/item/gun/ballistic/revolver/grenadelauncher/crossbow(H), SLOT_BACK_L)
+			// First equip quiver
 			H.equip_to_slot_or_del(new /obj/item/quiver/arrows(H), SLOT_BELT_L)
+			// Then weapons
+			H.equip_to_slot_or_del(new /obj/item/rogueweapon/sword/short(H), SLOT_BELT_R)
+			H.equip_to_slot_or_del(new /obj/item/gun/ballistic/revolver/grenadelauncher/bow(H), SLOT_BACK_L)
 
