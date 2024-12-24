@@ -38,7 +38,8 @@
 /datum/antagonist/aspirant/can_be_owned(datum/mind/new_owner)
 	. = ..()
 	if(.)
-		if(!(new_owner.assigned_role in GLOB.noble_positions) || !(new_owner.assigned_role in GLOB.garrison_positions))
+		if(!(new_owner.assigned_role in GLOB.noble_positions) && !(new_owner.assigned_role in GLOB.garrison_positions))
+			world.log << "ASP FAIL! [new_owner.assigned_role]"
 			return FALSE
 
 /datum/antagonist/aspirant/on_gain()
