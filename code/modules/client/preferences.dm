@@ -2568,6 +2568,14 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 	if(!(new_gender in list("male", "female")))
 		return
 	gender = new_gender
+	// Set pronouns and voice type based on gender
+	switch(gender)
+		if(MALE)
+			pronouns = HE_HIM
+			voice_type = VOICE_TYPE_MASC
+		if(FEMALE)
+			pronouns = SHE_HER
+			voice_type = VOICE_TYPE_FEM
 	update_gender_customization()
 
 /datum/preferences/proc/ensure_genital_defaults()
