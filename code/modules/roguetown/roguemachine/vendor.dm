@@ -285,3 +285,96 @@
 		held_items[P]["NAME"] = P.name
 		held_items[P]["PRICE"] = 10
 	update_icon()
+
+/obj/structure/roguemachine/vendor/attack_right(mob/user)
+	if(user.get_active_held_item())
+		var/obj/item = user.get_active_held_item()
+		if(istype(item, /obj/item/roguekey) || istype(item, /obj/item/storage/keyring))
+			if(!locked)
+				to_chat(user, span_warning("It won't turn this way. Try turning to the left."))
+				playsound(loc, 'sound/misc/beep.ogg', 100, FALSE, -1)
+				return
+			trykeylock(item, user)
+		return
+
+	if(ishuman(user))
+		var/mob/living/carbon/human/H = user
+		var/obj/item/belt_l = H.get_item_by_slot(SLOT_BELT_L)
+		var/obj/item/belt_r = H.get_item_by_slot(SLOT_BELT_R)
+		var/obj/item/belt = H.get_item_by_slot(SLOT_BELT)
+
+		// Check hip-mounted keys/keyrings first
+		if(istype(belt_l, /obj/item/roguekey))
+			var/obj/item/roguekey/key = belt_l
+			if(key.lockid == "merchant")
+				lock_toggle(user)
+				return
+		else if(istype(belt_l, /obj/item/storage/keyring))
+			var/obj/item/storage/keyring/ring = belt_l
+			for(var/obj/item/roguekey/K in ring.contents)
+				if(K.lockid == "merchant")
+					lock_toggle(user)
+					return
+
+		if(istype(belt_r, /obj/item/roguekey))
+			var/obj/item/roguekey/key = belt_r
+			if(key.lockid == "merchant")
+				lock_toggle(user)
+				return
+		else if(istype(belt_r, /obj/item/storage/keyring))
+			var/obj/item/storage/keyring/ring = belt_r
+			for(var/obj/item/roguekey/K in ring.contents)
+				if(K.lockid == "merchant")
+					lock_toggle(user)
+					return
+
+		// Check for keys inside the primary belt slot
+		if(istype(belt, /obj/item/storage/belt/rogue))
+			var/obj/item/storage/belt/rogue/rogue_belt = belt
+			for(var/obj/item/roguekey/K in rogue_belt.contents)
+				if(K.lockid == "merchant")
+					lock_toggle(user)
+					return
+			for(var/obj/item/storage/keyring/ring in rogue_belt.contents)
+				for(var/obj/item/roguekey/K in ring.contents)
+					if(K.lockid == "merchant")
+						lock_toggle(user)
+						return
+
+	return ..()
+
+/obj/structure/roguemachine/vendor/proc/trykeylock(obj/item/I, mob/user)
+	if(!user.canUseTopic(src, BE_CLOSE))
+		return
+	user.changeNext_move(CLICK_CD_MELEE)
+	if(istype(I, /obj/item/storage/keyring))
+		var/obj/item/storage/keyring/R = I
+		if(!R.contents.len)
+			return
+		var/list/keysy = shuffle(R.contents.Copy())
+		for(var/obj/item/roguekey/K in keysy)
+			if(user.cmode)
+				if(!do_after(user, 10, TRUE, src))
+					break
+			if(K.lockid == "merchant")
+				lock_toggle(user)
+				break
+			else
+				if(user.cmode)
+					playsound(src, 'sound/misc/beep.ogg', 100, FALSE, -1)
+		return
+	else
+		var/obj/item/roguekey/K = I
+		if(K.lockid == "merchant")
+			lock_toggle(user)
+			return
+		else
+			playsound(src, 'sound/misc/beep.ogg', 100, FALSE, -1)
+		return
+
+/obj/structure/roguemachine/vendor/proc/lock_toggle(mob/living/user)
+	user.changeNext_move(CLICK_CD_MELEE)
+	locked = !locked
+	playsound(loc, 'sound/misc/beep.ogg', 100, FALSE, -1)
+	update_icon()
+	attack_hand(user)
