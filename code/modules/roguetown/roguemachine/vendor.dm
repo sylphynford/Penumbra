@@ -25,6 +25,7 @@
 			held_items[P]["PRICE"] = 0
 			P.forceMove(src)
 			playsound(loc, 'sound/misc/machinevomit.ogg', 100, TRUE, -1)
+			attack_hand(user)
 			return
 		else
 			to_chat(user, span_warning("Full."))
@@ -61,6 +62,8 @@
 			if(!usr.put_in_hands(O))
 				O.forceMove(get_turf(src))
 			update_icon()
+			attack_hand(usr)
+			return
 	if(href_list["retrieve"])
 		var/obj/item/O = locate(href_list["retrieve"]) in held_items
 		if(!O || !istype(O))
@@ -72,6 +75,7 @@
 			if(!usr.put_in_hands(O))
 				O.forceMove(get_turf(src))
 			update_icon()
+			return attack_hand(usr)
 	if(href_list["change"])
 		if(!usr.canUseTopic(src, BE_CLOSE) || !locked)
 			return
@@ -79,6 +83,8 @@
 			if(budget > 0)
 				budget2change(budget, usr)
 				budget = 0
+				attack_hand(usr)
+				return
 	if(href_list["withdrawgain"])
 		if(!usr.canUseTopic(src, BE_CLOSE) || locked)
 			return
@@ -86,6 +92,8 @@
 			if(wgain > 0)
 				budget2change(wgain, usr)
 				wgain = 0
+				attack_hand(usr)
+				return
 	if(href_list["setname"])
 		var/obj/item/O = locate(href_list["setname"]) in held_items
 		if(!O || !istype(O))
@@ -116,15 +124,23 @@
 				held_items[O]["PRICE"] = newprice
 	return attack_hand(usr)
 
-/obj/structure/roguemachine/vendor/proc/check_merchant_key(obj/item/I)
+/obj/structure/roguemachine/vendor/proc/check_merchant_key(obj/item/I, mob/user)
 	if(istype(I, /obj/item/roguekey))
 		var/obj/item/roguekey/K = I
-		return K.lockid == "merchant"
+		if(K.lockid == "merchant")
+			return TRUE
+		else
+			to_chat(user, span_warning("Wrong key."))
+		return FALSE
 	if(istype(I, /obj/item/storage/keyring))
 		var/obj/item/storage/keyring/R = I
+		if(!R.contents.len)
+			to_chat(user, span_warning("Wrong key."))
+			return FALSE
 		for(var/obj/item/roguekey/K in R.contents)
 			if(K.lockid == "merchant")
 				return TRUE
+		to_chat(user, span_warning("Wrong key."))
 	return FALSE
 
 /obj/structure/roguemachine/vendor/proc/toggle_lock(mob/user)
@@ -136,12 +152,9 @@
 /obj/structure/roguemachine/vendor/attack_right(mob/user)
 	if(user.get_active_held_item())
 		var/obj/item/I = user.get_active_held_item()
-		if(check_merchant_key(I))
+		if(check_merchant_key(I, user))
 			toggle_lock(user)
 			return
-		else if(locked)
-			to_chat(user, span_warning("Wrong key."))
-			playsound(src, 'sound/misc/beep.ogg', 50, FALSE, -1)
 		return
 
 	if(ishuman(user))
@@ -153,13 +166,13 @@
 		)
 		
 		for(var/obj/item/I in belt_slots)
-			if(check_merchant_key(I))
+			if(check_merchant_key(I, user))
 				toggle_lock(user)
 				return
 			if(istype(I, /obj/item/storage/belt/rogue))
 				var/obj/item/storage/belt/rogue/R = I
 				for(var/obj/item/contained in R.contents)
-					if(check_merchant_key(contained))
+					if(check_merchant_key(contained, user))
 						toggle_lock(user)
 						return
 	return
