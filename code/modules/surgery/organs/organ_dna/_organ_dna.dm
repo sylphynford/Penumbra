@@ -49,15 +49,13 @@
 /datum/organ_dna/penis/proc/inches_to_sprite_size(inches)
 	if(inches < 8)
 		return PENIS_SPRITE_SMALL
-	if(inches < 10)
+	if(inches < 11)
 		return PENIS_SPRITE_AVERAGE
-	if(inches < 12)
+	if(inches < 13)
 		return PENIS_SPRITE_LARGE
-	if(inches < 14)
+	if(inches < 15)
 		return PENIS_SPRITE_HUGE
-	if(inches < 16)
-		return PENIS_SPRITE_MASSIVE
-	return PENIS_SPRITE_MONSTROUS
+	return PENIS_SPRITE_MASSIVE
 
 /datum/organ_dna/testicles
 	var/ball_size = DEFAULT_TESTICLES_SIZE
