@@ -641,6 +641,9 @@
 					var/mob/living/carbon/human/H = L
 					if(!H.check_armor_skill())
 						return
+				if(HAS_TRAIT(L, TRAIT_NORUN))
+					to_chat(L, span_warning("My joints have decayed too much for running!"))
+					return
 			m_intent = MOVE_INTENT_RUN
 	if(hud_used && hud_used.static_inventory)
 		for(var/atom/movable/screen/rogmove/selector in hud_used.static_inventory)
