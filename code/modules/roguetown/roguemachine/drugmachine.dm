@@ -53,9 +53,7 @@
 /obj/structure/roguemachine/drugmachine/process()
 	if(recent_payments)
 		if(world.time > last_payout + rand(6 MINUTES,8 MINUTES))
-			var/amt = recent_payments * 0.10
-			if(drugrade_flags & DRUGRADE_MONEYA)
-				amt = recent_payments * 0.25
+			var/amt = recent_payments * 0.25
 			if(drugrade_flags & DRUGRADE_MONEYB)
 				amt = recent_payments * 0.50
 			recent_payments = 0
@@ -102,11 +100,8 @@
 			options += "Enable Paying Taxes"
 		else
 			options += "Stop Paying Taxes"
-		if(!(drugrade_flags & DRUGRADE_MONEYA))
-			options += "Unlock 25% Cut (30)"
-		else
-			if(!(drugrade_flags & DRUGRADE_MONEYB))
-				options += "Unlock 50% Cut (105)"
+		if(!(drugrade_flags & DRUGRADE_MONEYB))
+			options += "Unlock 50% Cut (105)"
 		var/select = input(usr, "Please select an option.", "", null) as null|anything in options
 		if(!select)
 			return
@@ -123,27 +118,27 @@
 				switch(select)
 					if("To Bank")
 						var/mob/living/carbon/human/H = usr
-						SStreasury.generate_money_account(secret_budget, H)
-						secret_budget = 0
-					if("Direct")
-						if(secret_budget > 0)
-							budget2change(secret_budget, usr)
+						if(secret_budget <= 0)
+							say("No cut available to withdraw.")
+							return
+						if(SStreasury.generate_money_account(secret_budget, H))
+							say("Cut transferred to bank account: [secret_budget] MAMMON")
 							secret_budget = 0
+						else
+							say("Bank transfer failed!")
+					if("Direct")
+						if(secret_budget <= 0)
+							say("No cut available to withdraw.")
+							return
+						var/amount_to_withdraw = secret_budget
+						budget2change(amount_to_withdraw, usr)
+						say("Cut withdrawn: [amount_to_withdraw] MAMMON")
+						secret_budget = 0
 			if("Enable Paying Taxes")
 				drugrade_flags &= ~DRUGRADE_NOTAX
 				playsound(loc, 'sound/misc/beep.ogg', 100, FALSE, -1)
 			if("Stop Paying Taxes")
 				drugrade_flags |= DRUGRADE_NOTAX
-				playsound(loc, 'sound/misc/beep.ogg', 100, FALSE, -1)
-			if("Unlock 25% Cut (30)")
-				if(drugrade_flags & DRUGRADE_MONEYA)
-					return
-				if(budget < 30)
-					say("Ask again when you're serious.")
-					playsound(src, 'sound/misc/machinetalk.ogg', 100, FALSE, -1)
-					return
-				budget -= 30
-				drugrade_flags |= DRUGRADE_MONEYA
 				playsound(loc, 'sound/misc/beep.ogg', 100, FALSE, -1)
 			if("Unlock 50% Cut (105)")
 				if(drugrade_flags & DRUGRADE_MONEYB)
@@ -169,22 +164,26 @@
 	playsound(loc, 'sound/misc/beep.ogg', 100, FALSE, -1)
 	var/canread = user.can_read(src, TRUE)
 	var/contents
+
 	if(canread)
 		contents = "<center>PURITY - In the name of pleasure.<BR>"
-		contents += "<a href='?src=[REF(src)];change=1'>MAMMON LOADED:</a> [budget]<BR>"
+		contents += "Current Balance: [budget] MAMMON<BR>"
+		contents += "<a href='?src=[REF(src)];change=1'>\[Withdraw All\]</a><BR><BR>"
 	else
 		contents = "<center>[stars("PURITY - In the name of pleasure.")]<BR>"
-		contents += "<a href='?src=[REF(src)];change=1'>[stars("MAMMON LOADED:")]</a> [budget]<BR>"
-
+		contents += "[stars("Current Balance:")] [budget] [stars("MAMMON")]<BR>"
+		contents += "<a href='?src=[REF(src)];change=1'>[stars("\[Withdraw All\]")]</a><BR><BR>"
 
 	var/mob/living/carbon/human/H = user
 	if(H.job == "Bathmaster")
+		contents += "<center>"
 		if(canread)
-			contents = "<a href='?src=[REF(src)];secrets=1'>Secrets</a>"
+			contents += "<a href='?src=[REF(src)];secrets=1'>Secrets</a>"
 		else
-			contents = "<a href='?src=[REF(src)];secrets=1'>[stars("Secrets")]</a>"
+			contents += "<a href='?src=[REF(src)];secrets=1'>[stars("Secrets")]</a>"
+		contents += "</center>"
 
-	contents += "</center>"
+	contents += "<BR>"
 
 	for(var/I in held_items)
 		var/price = FLOOR(held_items[I]["PRICE"] + (SStreasury.tax_value * held_items[I]["PRICE"]), 1)
@@ -195,9 +194,9 @@
 			held_items[I]["NAME"] = "thing"
 			namer = "thing"
 		if(canread)
-			contents += "[namer] + [price] <a href='?src=[REF(src)];buy=[I]'>BUY</a>"
+			contents += "[namer] ([price] MAMMON) <a href='?src=[REF(src)];buy=[I]'>\[BUY\]</a>"
 		else
-			contents += "[stars(namer)] + [stars(price)] <a href='?src=[REF(src)];buy=[I]'>[stars("BUY")]</a>"
+			contents += "[stars(namer)] ([stars(price)] [stars("MAMMON")]) <a href='?src=[REF(src)];buy=[I]'>[stars("\[BUY\]")]</a>"
 		contents += "<BR>"
 
 	var/datum/browser/popup = new(user, "VENDORTHING", "", 370, 400)

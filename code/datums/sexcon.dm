@@ -271,7 +271,7 @@
 			if("Priest")
 				add_stress(/datum/stressevent/virginchurch)
 				// adjust_triumphs(-2)
-			if("Acolyte")
+			if("Monk")
 				add_stress(/datum/stressevent/virginchurch)
 				// adjust_triumphs(-3)
 			if("Cleric")
