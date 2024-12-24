@@ -13,6 +13,7 @@
 
 	outfit = /datum/outfit/job/roguetown/merchant
 	give_bank_account = 22
+	noble_income = 8
 	min_pq = 0
 	max_pq = null
 	required = TRUE
@@ -38,6 +39,7 @@
 		H.mind.adjust_skillrank(/datum/skill/misc/lockpicking, 2, TRUE)
 		backpack_contents = /obj/item/rogueweapon/huntingknife/idagger/navaja
 	ADD_TRAIT(H, TRAIT_SEEPRICES, type)
+	ADD_TRAIT(H, TRAIT_NOBLE, TRAIT_GENERIC)
 	neck = /obj/item/clothing/neck/roguetown/horus
 	armor = /obj/item/clothing/suit/roguetown/shirt/robe/merchant
 	shirt = /obj/item/clothing/suit/roguetown/shirt/undershirt/sailor

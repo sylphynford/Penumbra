@@ -20,6 +20,7 @@
 
 	display_order = JDO_PRIEST
 	give_bank_account = 115
+	noble_income = 8
 	min_pq = 0 // You should know the basics of things if you're going to lead the town's entire religious sector
 	max_pq = null
 	round_contrib_points = 3
@@ -68,7 +69,7 @@
 	H.verbs |= /mob/living/carbon/human/proc/coronate_lord
 	H.verbs |= /mob/living/carbon/human/proc/churchexcommunicate
 	H.verbs |= /mob/living/carbon/human/proc/churchannouncement
-//	ADD_TRAIT(H, TRAIT_NOBLE, TRAIT_GENERIC)
+	ADD_TRAIT(H, TRAIT_NOBLE, TRAIT_GENERIC)
 
 
 /mob/living/carbon/human/proc/coronate_lord()
