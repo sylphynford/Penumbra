@@ -28,7 +28,7 @@
 	if (H.mind)
 		H.mind.adjust_skillrank(/datum/skill/misc/sneaking, 2, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/misc/stealing, 4, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/misc/climbing, 4, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/misc/climbing, 2, TRUE)
 		H.STALUC = rand(5, 15)
 		H.change_stat("intelligence", round(rand(-4,4)))
 		H.change_stat("constitution", -1)

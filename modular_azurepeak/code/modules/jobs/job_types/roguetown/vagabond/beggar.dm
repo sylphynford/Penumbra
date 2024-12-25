@@ -47,7 +47,7 @@
 	if (H.mind)
 		H.mind.adjust_skillrank(/datum/skill/misc/sneaking, rand(1,5), TRUE)
 		H.mind.adjust_skillrank(/datum/skill/misc/stealing, 4, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/misc/climbing, rand(1,5), TRUE)
+		H.mind.adjust_skillrank(/datum/skill/misc/climbing, rand(1,3), TRUE)
 		H.mind.adjust_skillrank(/datum/skill/misc/lockpicking, pick (1,2,3,4,5), TRUE)
 		H.STALUC = rand(5, 15)
 		H.change_stat("strength", -1)
