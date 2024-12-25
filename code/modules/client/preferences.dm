@@ -925,7 +925,7 @@ GLOBAL_LIST_EMPTY(chosen_names)
 
 <div class="tutorialhover"><font>[used_name]</font>
 <span class="tutorial">[job.tutorial]<br>
-Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contrib_points]" : ""]</span>
+Slots: [job.spawn_positions]</span>
 </div>
 
 			"}
