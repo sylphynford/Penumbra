@@ -21,17 +21,16 @@
 	return ..()
 
 /obj/structure/flora/newtree/attack_right(mob/user)
-	if(user.mind && isliving(user))
-		if(user.mind.special_items && user.mind.special_items.len)
-			var/item = input(user, "What will I take?", "STASH") as null|anything in user.mind.special_items
-			if(item)
-				if(user.Adjacent(src))
-					if(user.mind.special_items[item])
-						var/path2item = user.mind.special_items[item]
-						user.mind.special_items -= item
-						var/obj/item/I = new path2item(user.loc)
-						user.put_in_hands(I)
-			return
+	if(!user?.client || !user?.mind || user.mind.special_items["loadout_given"]) 
+		return
+	
+	if(!user.client.prefs?.loadout)
+		return
+		
+	var/obj/item/I = new user.client.prefs.loadout.path(get_turf(user))
+	user.put_in_hands(I)
+	user.mind.special_items["loadout_given"] = TRUE
+	return TRUE
 
 /obj/structure/flora/newtree/obj_destruction(damage_flag)//this proc is stupidly long for a destruction proc
 	var/turf/NT = get_turf(src)
