@@ -1528,10 +1528,6 @@
 "lw" = (
 /turf/open/floor/rogue/cobble,
 /area/rogue)
-"ms" = (
-/obj/structure/roguemachine/Hoardmaster,
-/turf/open/floor/rogue/herringbone,
-/area/rogue/indoors/banditcamp)
 "mM" = (
 /obj/structure/fluff/wallclock/l,
 /turf/open/floor/rogue/ruinedwood,
@@ -3739,7 +3735,7 @@ bz
 bz
 bz
 vp
-ms
+Hi
 Hi
 Hi
 Hi

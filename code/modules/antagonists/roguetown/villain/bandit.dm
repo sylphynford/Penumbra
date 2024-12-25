@@ -33,9 +33,9 @@
 	ADD_TRAIT(H, TRAIT_SEEPRICES, TRAIT_GENERIC)
 	ADD_TRAIT(H, TRAIT_STEELHEARTED, TRAIT_GENERIC)
 	ADD_TRAIT(H, TRAIT_COMMIE, TRAIT_GENERIC)
-	H.set_patron(/datum/patron/inhumen/zizo)
+	H.set_patron(/datum/patron/inhumen/faithless)
 	to_chat(H, span_alertsyndie("I am a BANDIT!"))
-	to_chat(H, span_boldwarning("Long ago I did a crime worthy of my bounty being hung on the wall outside of the local inn. I live now with fellow free men in reverence to ZIZO whose idol grants us boons and wishes when fed the money, treasures, and metals of the civilized wretches. I must feed the idol to satisfy my greed!"))
+	to_chat(H, span_boldwarning("Long ago I did a crime worthy of my bounty being hung on the wall outside of the local inn. I live now with fellow free men in rejection of PSYDON. I must satisfy my greed!"))
 
 /* /datum/antagonist/bandit/greet()
 	to_chat(owner.current, span_alertsyndie("I am a BANDIT!"))
@@ -79,7 +79,14 @@
 		if(ishuman(owner.current))
 			var/mob/living/carbon/human/H = owner.current
 			the_name = H.real_name
+		
 		if(!totaldonated)
 			to_chat(world, "[the_name] was a bandit.")
 		else
-			to_chat(world, "[the_name] was a bandit. Their band stole [totaldonated] mammons worth of loot!")
+			// Calculate triumphs (1 per 100 mammon)
+			var/triumphs_earned = round(totaldonated / 100)
+			if(triumphs_earned > 0)
+				owner.current.adjust_triumphs(triumphs_earned)
+				to_chat(world, "[the_name] was a bandit. Their band stole [totaldonated] mammons worth of loot, earning [triumphs_earned] triumph[triumphs_earned == 1 ? "" : "s"]!")
+			else
+				to_chat(world, "[the_name] was a bandit. Their band stole [totaldonated] mammons worth of loot!")
