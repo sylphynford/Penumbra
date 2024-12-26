@@ -19,7 +19,7 @@
 	min_pq = 0 //The second most powerful person in the realm...is Mhelping where the keep is
 	max_pq = null
 	round_contrib_points = 3
-	cmode_music = 'sound/music/combat_fancy.ogg'
+	cmode_music = 'sound/music/combat_noble.ogg'
 
 /*
 /datum/job/roguetown/hand/special_job_check(mob/dead/new_player/player)
