@@ -92,7 +92,7 @@ SUBSYSTEM_DEF(family)
 				for(var/name in F.members) //Loop through all family members and try and connect H to them.
 					connecting_member = F.members[name]:resolve()
 					var/rel_type = F.tryConnect(H,connecting_member)
-					if(F.checkFamilyCompat(H,connecting_member,rel_type)) //suitable. Add them to the family and connect them.
+					if(F.checkFamilyCompat(H,connecting_member,rel_type) && F.checkFamilyCompat(connecting_member,H,rel_type)) //suitable. Add them to the family and connect them. (Note using checkFamilyCompat for both falls apart for anything other than spouses. The checks should be moved to a different proc at some point.)
 						F.addMember(H)
 						F.addRel(H,connecting_member,getMatchingRel(rel_type),TRUE)
 						F.addRel(connecting_member,H,rel_type,TRUE)
@@ -252,27 +252,40 @@ SUBSYSTEM_DEF(family)
 /datum/family/proc/checkFamilyCompat(var/mob/living/carbon/human/target, var/mob/living/carbon/human/member, var/rel_type) //Checks target's suitability for being in a family with the family member.
 	switch(rel_type)
 		if(REL_TYPE_SPOUSE)
+			message_admins("Attempting to match [member.real_name] and [target.real_name]!")
 			if(!member.client)
 				return
 			//Check gender.
 			if(!member.client.prefs.family_gender.Find(target.gender))
+				message_admins("match [member.real_name] ([member.gender]) and [target.real_name] ([target.gender]) Gender Fail!")
 				return FALSE
 
 			//Check species.
 			if(!member.client.prefs.family_species.Find(target.dna.species.id))
+				message_admins("match [member.real_name] ([member.dna.species.id]) and [target.real_name] ([target.dna.species.id]) Species Fail!")
 				return FALSE
+
+			var/member_sex
+			var/target_sex
 
 			//Check sex.
 			for(var/G in list(ORGAN_SLOT_VAGINA,ORGAN_SLOT_PENIS)) //Ensure that member & target don't share the same sex.
+				if(member.getorganslot(G))
+					member_sex = G == ORGAN_SLOT_VAGINA ? "vagina" : "penis"
+				if(target.getorganslot(G))
+					target_sex = G == ORGAN_SLOT_VAGINA ? "vagina" : "penis"
 				if(member.getorganslot(G) && target.getorganslot(G))
+					message_admins("match [member.real_name]  and [target.real_name] Sex Fail!")
 					return FALSE
 
 			var/list/age_values = AGE_VALUES
 			var/target_value = age_values[target.age]
 			var/member_value = age_values[member.age]
 			if(max(member_value,target_value) - min(member_value,target_value) > 1) //Too high an age difference.
+				message_admins("match [member.real_name] ([member.age])  and [target.real_name] ([target.age]) Age Fail!!")
 				return FALSE
 
+			message_admins("MATCHING [member.real_name] ([member.age], [member.dna.species.id], [member_sex])  and [target.real_name] ([target.age], [target.dna.species.id], [target_sex])!")
 			return TRUE //suitable.
 
 		if(REL_TYPE_SIBLING)
