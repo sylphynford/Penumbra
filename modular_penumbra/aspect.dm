@@ -1054,6 +1054,9 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 		// Check for vampire lord and lich special_roles
 		if(H.mind?.special_role in list("Vampire Lord", "Lich"))
 			return TRUE
+		// Check for mattcoin
+		for(var/obj/item/mattcoin/M in H.GetAllContents())
+			return TRUE
 		return FALSE
 
 	proc/handle_throne_execution(mob/living/carbon/human/speaker, list/speech_args)
