@@ -33,3 +33,4 @@
 		H.change_stat("intelligence", round(rand(-4,4)))
 		H.change_stat("constitution", -1)
 		H.change_stat("endurance", -1)
+		H.change_stat("strength", -2)

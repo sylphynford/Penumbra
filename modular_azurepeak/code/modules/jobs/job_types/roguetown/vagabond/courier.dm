@@ -31,3 +31,4 @@
 		H.mind.adjust_skillrank(/datum/skill/craft/cooking, 1, TRUE)
 		H.change_stat("constitution", -2)
 		H.change_stat("perception", 2) // never going back to that place again
+		H.change_stat("strength", -2)

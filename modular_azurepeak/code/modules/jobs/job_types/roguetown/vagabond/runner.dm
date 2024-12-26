@@ -31,3 +31,4 @@
 		H.mind.adjust_skillrank(/datum/skill/misc/sneaking, 2, TRUE)
 		H.change_stat("endurance", 1)
 		H.change_stat("intelligence", -2)
+		H.change_stat("strength", -2)

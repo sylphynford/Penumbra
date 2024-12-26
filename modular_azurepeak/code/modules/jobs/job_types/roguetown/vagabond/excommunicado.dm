@@ -33,5 +33,5 @@
 		H.change_stat("perception", 2)
 		H.change_stat("constitution", -1)
 		H.change_stat("endurance", -1)
-
+		H.change_stat("strength", -2)
 		GLOB.excommunicated_players += H.real_name // john roguetown, you are EXCOMMUNICADO.
