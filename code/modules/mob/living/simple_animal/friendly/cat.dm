@@ -80,8 +80,21 @@
 
 
 /mob/living/simple_animal/pet/cat/inn
-	name = "inn cat"
-	desc = "This old, fat cat keeps the inn free of rats... allegedly. It seems like he mostly lazes about in the sun and asks for treats."
+	name = "Bintu"
+	desc = "This old, fat cat keeps the inn free of rats... allegedly. It seems like she mostly lazes about in the sun and asks for treats. There's something mystical about her presence..."
+	gender = FEMALE
+
+/mob/living/simple_animal/pet/cat/inn/death()
+	. = ..()
+	SEND_SIGNAL(src, COMSIG_LIVING_DEATH)
+
+/mob/living/simple_animal/pet/cat/inn/Initialize()
+	. = ..()
+	RegisterSignal(src, COMSIG_LIVING_DEATH, PROC_REF(on_death))
+
+/mob/living/simple_animal/pet/cat/inn/proc/on_death()
+	SIGNAL_HANDLER
+	visible_message(span_warning("\The [src] lets out a final weak meow before going still..."))
 
 /mob/living/simple_animal/pet/cat/black
 	name = "black cat"
@@ -351,7 +364,7 @@
 
 
 
-/mob/living/simple_animal/pet/cat/inn/attack_hand(mob/living/carbon/human/M) // Gato Basado - not all pets are welcome
+/mob/living/simple_animal/pet/cat/inn/attack_hand(mob/living/carbon/human/M)
 	. = ..()
 	if((isdarkelf(M)))  // l´cursed bonbonbon
 		visible_message("<span class='notice'>The cat hisses at [M] and recoils in disgust.</span>")
@@ -362,6 +375,7 @@
 		dir = pick(GLOB.alldirs)
 		step(src, dir)
 		personal_space()
+		return
 
 	if(M.mind && M.mind.has_antag_datum(/datum/antagonist/vampirelord))
 		visible_message("<span class='notice'>The cat hisses at [M] and recoils in disgust.</span>")
@@ -372,3 +386,7 @@
 		dir = pick(GLOB.alldirs)
 		step(src, dir)
 		personal_space()
+		return
+
+	if(M.used_intent.type == INTENT_HELP)
+		SEND_SIGNAL(src, COMSIG_MOB_PETTED, M)
