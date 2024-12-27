@@ -1,3 +1,6 @@
+#define TRAIT_FORTUNE_BLESSED "Bintu's Blessing"
+#define TRAIT_FORTUNE_CURSED "Bintu's Curse"
+
 // ROGUETRAITS (description when rmb skills button)
 #define TRAIT_WEBWALK "Webwalker"
 #define TRAIT_NOSTINK "Dead Nose"
@@ -96,6 +99,8 @@
 #define TRAIT_PARTY_MEMBER "Party Member"
 
 GLOBAL_LIST_INIT(roguetraits, list(
+	TRAIT_FORTUNE_BLESSED = span_notice("I feel particularly fortunate..."),
+	TRAIT_FORTUNE_CURSED = span_warning("My luck seems to have run out..."),
 	TRAIT_LEPROSY = span_necrosis("I'm a disgusting leper..."),
 	TRAIT_GUARDSMAN = span_info("I am vigilant in my duties. In the town of Somberwicke, my abilities are sharper due to my routine and familiarity."),
 	TRAIT_CHOSEN = "Astrata choose you to represent her glory.",

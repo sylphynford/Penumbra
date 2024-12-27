@@ -24,6 +24,67 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 
 
 
+// Bintu's Fortune special traits
+/datum/special_trait/bintus_blessing
+	name = "Bintu's Blessing"
+	greet_text = span_notice("You feel particularly fortunate...")
+	weight = 0 // Not randomly selectable
+
+/datum/special_trait/bintus_blessing/on_apply(mob/living/carbon/human/character, silent)
+	. = ..()
+	ADD_TRAIT(character, TRAIT_FORTUNE_BLESSED, ROUNDSTART_TRAIT)
+
+/datum/special_trait/bintus_curse
+	name = "Bintu's Curse"
+	greet_text = span_warning("Your luck seems to have run out...")
+	weight = 0 // Not randomly selectable
+
+/datum/special_trait/bintus_curse/on_apply(mob/living/carbon/human/character, silent)
+	. = ..()
+	ADD_TRAIT(character, TRAIT_FORTUNE_CURSED, ROUNDSTART_TRAIT)
+
+// Bintu's Fortune event
+/datum/round_event/roundstart/bintus_fortune
+	var/static/list/blessed_ckeys = list()
+
+/datum/round_event/roundstart/bintus_fortune/apply_effect()
+	. = ..()
+	is_active = TRUE
+	
+	// Find bintu and register signals for petting and death
+	for(var/mob/living/simple_animal/pet/cat/inn/C in GLOB.mob_list)
+		RegisterSignal(C, COMSIG_MOB_PETTED, PROC_REF(on_cat_petted))
+		RegisterSignal(C, COMSIG_LIVING_DEATH, PROC_REF(on_cat_death))
+
+/datum/round_event/roundstart/bintus_fortune/proc/on_cat_petted(mob/living/simple_animal/pet/cat/inn/source, mob/living/carbon/human/petter)
+	SIGNAL_HANDLER
+	
+	if(!petter?.mind?.key || (petter.mind.key in blessed_ckeys))
+		return
+		
+	blessed_ckeys += petter.mind.key
+	ADD_TRAIT(petter, TRAIT_FORTUNE_BLESSED, "bintus_fortune")
+	petter.change_stat("fortune", 1)
+	to_chat(petter, span_notice("You feel blessed by Bintu's presence..."))
+
+/datum/round_event/roundstart/bintus_fortune/proc/on_cat_death(mob/living/simple_animal/pet/cat/inn/source)
+	SIGNAL_HANDLER
+	
+	for(var/mob/living/carbon/human/H in GLOB.mob_list)
+		if(H.mind?.key in blessed_ckeys)
+			REMOVE_TRAIT(H, TRAIT_FORTUNE_BLESSED, "bintus_fortune")
+			ADD_TRAIT(H, TRAIT_FORTUNE_CURSED, "bintus_fortune")
+			H.change_stat("fortune", -2) // -1 from removing blessing, -1 from curse
+			to_chat(H, span_warning("You feel your fortune turn sour as Bintu's blessing fades..."))
+
+/datum/round_event_control/roundstart/bintus_fortune
+	name = "Bintu's Fortune"
+	typepath = /datum/round_event/roundstart/bintus_fortune
+	weight = 1000
+	event_announcement = "They say Bintu brings good fortune..."
+	runnable = TRUE
+
+
 //no gates event
 /datum/round_event/roundstart/drunk_jester
 
