@@ -847,32 +847,19 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 	. = ..()
 	is_active = TRUE
 
-	// Disable sunlight system
+	// Set permanent nighttime
+	GLOB.todoverride = "night"
+	
+	// Initial sunlight setup
 	for(var/obj/effect/sunlight/S in GLOB.sunlights)
 		S.light_power = 0
-		S.set_light(0)  // Just use set_light with brightness 0
+		S.set_light(0)
 		STOP_PROCESSING(SStodchange, S)
-
-	// Prevent nightshift system from re-enabling lights
-	GLOB.SSroundstart_events.eternal_night_active = TRUE
-	START_PROCESSING(SSprocessing, src)
-
-/datum/round_event/roundstart/eternal_night/process()
-	if(!is_active)
-		STOP_PROCESSING(SSprocessing, src)
-		return
-
-	// Continuously ensure lights stay disabled
-	for(var/obj/effect/sunlight/S in GLOB.sunlights)
-		if(S.light_power != 0)
-			S.light_power = 0
-			S.set_light(0)
-			STOP_PROCESSING(SStodchange, S)
 
 /datum/round_event_control/roundstart/eternal_night
 	name = "Magician's Curse"
 	typepath = /datum/round_event/roundstart/eternal_night
-	weight = 0
+	weight = 5
 	event_announcement = "The sky has been darkened by inhumen magicks..."
 	runnable = TRUE
 
@@ -1138,32 +1125,20 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 	. = ..()
 	is_active = TRUE
 	
-	// Keep sunlight bright
+	// Set permanent daytime
+	GLOB.todoverride = "day"
+	
+	// Initial sunlight setup
 	for(var/obj/effect/sunlight/S in GLOB.sunlights)
 		S.light_power = 1
 		S.light_color = pick("#dbbfbf", "#ddd7bd", "#add1b0", "#a4c0ca", "#ae9dc6", "#d09fbf")
 		S.set_light(S.brightness)
 		STOP_PROCESSING(SStodchange, S)
-	
-	START_PROCESSING(SSprocessing, src)
-
-/datum/round_event/roundstart/eternal_day/process()
-	if(!is_active)
-		STOP_PROCESSING(SSprocessing, src)
-		return
-
-	// Continuously ensure lights stay bright
-	for(var/obj/effect/sunlight/S in GLOB.sunlights)
-		if(S.light_power != 1 || S.light_color in list("#100a18", "#0c0412", "#0f0012", "#c26f56", "#c05271", "#b84933", "#394579", "#49385d", "#3a1537"))
-			S.light_power = 1
-			S.light_color = pick("#dbbfbf", "#ddd7bd", "#add1b0", "#a4c0ca", "#ae9dc6", "#d09fbf")
-			S.set_light(S.brightness)
-			STOP_PROCESSING(SStodchange, S)
 
 /datum/round_event_control/roundstart/eternal_day
 	name = "Eternal Day"
 	typepath = /datum/round_event/roundstart/eternal_day
-	weight = 0
+	weight = 5
 	event_announcement = "The sun refuses to set..."
 	runnable = TRUE
 

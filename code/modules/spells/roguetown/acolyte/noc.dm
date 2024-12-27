@@ -6,6 +6,7 @@
     releasedrain = 30
     chargedrain = 0
     chargetime = 0
+    cost = 1
     range = 7
     warnie = "sydwarning"
     movement_interrupt = FALSE
@@ -33,6 +34,7 @@
 	chargedrain = 0
 	chargetime = 0
 	charge_max = 30 SECONDS
+	cost = 2
 	range = 3
 	warnie = "sydwarning"
 	movement_interrupt = FALSE
