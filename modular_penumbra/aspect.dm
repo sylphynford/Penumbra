@@ -872,7 +872,7 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 /datum/round_event_control/roundstart/eternal_night
 	name = "Magician's Curse"
 	typepath = /datum/round_event/roundstart/eternal_night
-	weight = 5
+	weight = 0
 	event_announcement = "The sky has been darkened by inhumen magicks..."
 	runnable = TRUE
 
@@ -1163,7 +1163,7 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 /datum/round_event_control/roundstart/eternal_day
 	name = "Eternal Day"
 	typepath = /datum/round_event/roundstart/eternal_day
-	weight = 5
+	weight = 0
 	event_announcement = "The sun refuses to set..."
 	runnable = TRUE
 
