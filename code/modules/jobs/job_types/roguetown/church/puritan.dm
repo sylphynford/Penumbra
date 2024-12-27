@@ -213,20 +213,19 @@
 	category_tags = list(CTAG_INQUISITOR)
 
 /datum/outfit/job/roguetown/inquisitor/puritanclass
-	armor = /obj/item/clothing/suit/roguetown/armor/plate
+	armor = /obj/item/clothing/suit/roguetown/armor/plate/scale/inqcoat
 	shirt = /obj/item/clothing/suit/roguetown/shirt/undershirt/puritan
 	belt = /obj/item/storage/belt/rogue/leather
 	neck = /obj/item/clothing/neck/roguetown/chaincoif/full
 	wrists = /obj/item/clothing/neck/roguetown/psicross/silver
-	shoes = /obj/item/clothing/shoes/roguetown/boots/armor
+	shoes = /obj/item/clothing/shoes/roguetown/otavan/inqboots
 	pants = /obj/item/clothing/under/roguetown/trou/otavan
 	cloak = /obj/item/clothing/cloak/cape/puritan
 	backr = /obj/item/storage/backpack/rogue/satchel/black
 	backl = /obj/item/gun/ballistic/revolver/grenadelauncher/crossbow
 	beltr = /obj/item/quiver/bolts
-	head = /obj/item/clothing/head/roguetown/puritan
-	gloves = /obj/item/clothing/gloves/roguetown/leather
-	mask = /obj/item/clothing/mask/rogue/eyepatch
+	head = /obj/item/clothing/head/roguetown/inqhat
+	gloves = /obj/item/clothing/gloves/roguetown/otavan/inqgloves
 	backpack_contents = list(/obj/item/storage/keyring/puritan = 1, /obj/item/rogueweapon/huntingknife/idagger/silver = 1, /obj/item/storage/belt/rogue/pouch/coins/mid = 1)
 	beltl = /obj/item/rogueweapon/sword/falchion
 

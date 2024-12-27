@@ -1218,6 +1218,14 @@
 	sewrepair = TRUE
 	blocksound = SOFTHIT
 
+/obj/item/clothing/head/roguetown/inqhat
+	name = "inquisitorial hat"
+	desc = "To keep ones vision away from the heavens, and focused on the sin beneath the soil."
+	icon_state = "inqhat"
+	item_state = "inqhat"
+	sewrepair = TRUE
+
+
 //----------------- BLACKSTEEL ---------------------
 
 /obj/item/clothing/head/roguetown/helmet/blacksteel/bucket

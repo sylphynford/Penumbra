@@ -171,6 +171,13 @@
 	armor = list("blunt" = 90, "slash" = 100, "stab" = 80, "bullet" = 100, "laser" = 0,"energy" = 0, "bomb" = 0, "bio" = 0, "rad" = 0, "fire" = 0, "acid" = 0)
 	allowed_race = NON_DWARVEN_RACE_TYPES
 
+/obj/item/clothing/shoes/roguetown/otavan/inqboots
+	name = "inquisitorial boots"
+	desc = "Finely crafted boots, made to stomp out darkness."
+	icon_state = "inqboots"
+	item_state = "inqboots"
+	allowed_race = RACES_ALLPLUSKOBOLD
+
 /obj/item/clothing/shoes/roguetown/boots/furlinedboots
 	name = "fur lined boots"
 	desc = "Leather boots lined with fur."
