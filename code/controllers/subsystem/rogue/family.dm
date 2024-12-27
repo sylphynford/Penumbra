@@ -98,7 +98,8 @@ SUBSYSTEM_DEF(family)
 						F.addRel(connecting_member,H,rel_type,TRUE)
 
 						current_families -= F
-						break can_loop
+						family_candidates -= H // Remove the matched candidate
+						continue can_loop // Continue to next candidate instead of breaking completely
 
 	for(var/fam in families) //Remove families with only one member.
 		var/datum/family/F = fam
