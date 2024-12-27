@@ -80,7 +80,7 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 /datum/round_event_control/roundstart/bintus_fortune
 	name = "Bintu's Fortune"
 	typepath = /datum/round_event/roundstart/bintus_fortune
-	weight = 1000
+	weight = 5
 	event_announcement = "They say Bintu brings good fortune..."
 	runnable = TRUE
 
