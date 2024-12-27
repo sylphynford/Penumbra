@@ -91,7 +91,6 @@
 		/datum/sprite_accessory/ears/murid,
 		/datum/sprite_accessory/ears/otie,
 		/datum/sprite_accessory/ears/sergal,
-		/datum/sprite_accessory/ears/shark,
 		/datum/sprite_accessory/ears/skunk,
 		/datum/sprite_accessory/ears/squirrel,
 		/datum/sprite_accessory/ears/wolf,
