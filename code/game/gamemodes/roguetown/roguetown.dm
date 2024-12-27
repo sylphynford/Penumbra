@@ -160,11 +160,11 @@ var/global/list/roguegamemodes = list("Rebellion", "Vampires and Werewolves", "E
 				log_game("Major Antagonist: Rebellion")
 			*/
 			if(1 to 33)
+				pick_vampires()
 				pick_bandits()
 				pick_aspirants()
-				log_game("Antagonists: Bandits & Aspirants")
+				log_game("Antagonists: Vampires, Bandits & Aspirants")
 			if(34 to 66)
-				//"pick_vampires() was removed from here, normally they spawn together
 				pick_werewolves()
 				pick_bandits()
 				log_game("Antagonists: Werewolves & Bandits")
