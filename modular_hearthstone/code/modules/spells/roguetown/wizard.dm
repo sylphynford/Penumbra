@@ -224,7 +224,8 @@
 		/obj/effect/proc_holder/spell/invoked/projectile/arcynebolt
 	)
 	for(var/i = 1, i <= spell_choices.len, i++)
-		choices["[spell_choices[i].name]: [spell_choices[i].cost]"] = spell_choices[i]
+		var/obj/effect/proc_holder/spell/selected_spell = spell_choices[i]
+		choices["[selected_spell.name]: [selected_spell.cost]"] = spell_choices[i]
 
 	var/choice = input("Choose a spell, points left: [user.mind.spell_points - user.mind.used_spell_points]") as null|anything in choices
 	var/obj/effect/proc_holder/spell/item = choices[choice]
