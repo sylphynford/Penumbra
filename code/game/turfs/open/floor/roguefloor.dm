@@ -235,7 +235,7 @@
 
 /turf/open/floor/rogue/grassred
 	name = "red grass"
-	desc = "Grass, ripe with Dendor's blood."
+	desc = "Grass, ripe with the color of blood."
 	icon_state = "grass_red"
 	layer = MID_TURF_LAYER
 	footstep = FOOTSTEP_GRASS
@@ -262,7 +262,7 @@
 
 /turf/open/floor/rogue/grassyel
 	name = "yellow grass"
-	desc = "Grass, blessed by Astrata's light."
+	desc = "Grass, blessed by the Sun's light."
 	icon_state = "grass_yel"
 	layer = MID_TURF_LAYER
 	footstep = FOOTSTEP_GRASS
