@@ -105,7 +105,7 @@
 	belt = /obj/item/storage/belt/rogue/leather/black
 	wrists = /obj/item/clothing/wrists/roguetown/bracers/leather
 	backr = /obj/item/storage/backpack/rogue/satchel/black
-	backpack_contents = list(/obj/item/signal_horn = 1)
+	backpack_contents = list(/obj/item/signal_horn = 1, /obj/item/rope/chain = 1, /obj/item/rogueweapon/huntingknife/idagger/steel = 1)
 
 /datum/outfit/job/roguetown/guardsman/footsman
 	// Only define the base items that aren't handled in equipme()
@@ -115,7 +115,6 @@
 	neck = /obj/item/clothing/neck/roguetown/coif
 	shoes = /obj/item/clothing/shoes/roguetown/boots
 	wrists = /obj/item/clothing/wrists/roguetown/bracers/leather
-	backr = /obj/item/storage/backpack/rogue/satchel/black
 
 /datum/advclass/watchman/footsman
 	name = "Watch Footsman"
@@ -164,8 +163,6 @@
 	H.equip_to_slot_or_del(new /obj/item/storage/keyring/guardcastle(H), SLOT_BELT_L)
 	H.equip_to_slot_or_del(new /obj/item/storage/belt/rogue/leather/black(H), SLOT_BELT)
 	H.equip_to_slot_or_del(new /obj/item/clothing/gloves/roguetown/leather(H), SLOT_GLOVES)
-	H.equip_to_slot_or_del(new /obj/item/rogueweapon/huntingknife/idagger/steel(H), SLOT_IN_BACKPACK)
-	H.equip_to_slot_or_del(new /obj/item/rope/chain(H), SLOT_IN_BACKPACK)
 	
 	H.verbs |= /mob/proc/haltyell
 	
@@ -217,8 +214,6 @@
 	H.equip_to_slot_or_del(new /obj/item/storage/keyring/guardcastle(H), SLOT_BELT_L)
 	H.equip_to_slot_or_del(new /obj/item/storage/belt/rogue/leather/black(H), SLOT_BELT)
 	H.equip_to_slot_or_del(new /obj/item/clothing/gloves/roguetown/leather(H), SLOT_GLOVES)
-	H.equip_to_slot_or_del(new /obj/item/rogueweapon/huntingknife/idagger/steel(H), SLOT_IN_BACKPACK)
-	H.equip_to_slot_or_del(new /obj/item/rope/chain(H), SLOT_IN_BACKPACK)
 	
 	H.verbs |= /mob/proc/haltyell
 	
@@ -232,4 +227,3 @@
 	neck = /obj/item/clothing/neck/roguetown/coif
 	shoes = /obj/item/clothing/shoes/roguetown/boots
 	wrists = /obj/item/clothing/wrists/roguetown/bracers/leather
-	backr = /obj/item/storage/backpack/rogue/satchel/black
