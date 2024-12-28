@@ -435,22 +435,36 @@
 		break
 	
 	var/datum/antagonist/vampire/VD = mind.has_antag_datum(/datum/antagonist/vampire)
-	if(!istype(VD, /datum/antagonist/vampire))
+	var/datum/antagonist/vampirelord/VL = mind.has_antag_datum(/datum/antagonist/vampirelord)
+	if(!VD && !VL)
 		to_chat(src, span_warning("I am not a vampire."))
 		return
-	if(VD.disguised)
+	
+	var/vitae_check = 0
+	var/is_disguised = FALSE
+	if(VD)
+		vitae_check = VD.vitae
+		is_disguised = VD.disguised
+	else if(VL)
+		vitae_check = VL.vitae
+		is_disguised = VL.disguised
+	
+	if(is_disguised)
 		to_chat(src, span_warning("I cannot regenerate while disguised."))
 		return
 	if(silver_curse_status)
 		to_chat(src, span_warning("The silver curse prevents regeneration!"))
 		return
-	if(VD.vitae < 200)
-		to_chat(src, span_warning("I need at least 200 vitae to regenerate. (Current: [VD.vitae])"))
+	if(vitae_check < 200)
+		to_chat(src, span_warning("I need at least 200 vitae to regenerate. (Current: [vitae_check])"))
 		return
 	
 	to_chat(src, span_greentext("! REGENERATE !"))
 	src.playsound_local(get_turf(src), 'sound/misc/vampirespell.ogg', 100, FALSE, pressure_affected = FALSE)
-	VD.handle_vitae(-200)
+	if(VD)
+		VD.handle_vitae(-200)
+	else if(VL)
+		VL.handle_vitae(-200)
 	fully_heal()
 	regenerate_limbs()
 
