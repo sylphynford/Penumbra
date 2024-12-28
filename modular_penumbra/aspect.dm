@@ -927,6 +927,7 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 // Wealthy Benefactor event
 /datum/round_event/roundstart/wealthy_benefactor
 	var/static/list/rewarded_ckeys = list()
+	var/has_slept = FALSE
 
 	/datum/round_event/roundstart/wealthy_benefactor/apply_effect()
 		. = ..()
@@ -938,6 +939,14 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 			STOP_PROCESSING(SSprocessing, src)
 			return
 
+		if(!has_slept)
+			has_slept = TRUE
+			addtimer(CALLBACK(src, PROC_REF(choose_target)), 2 SECONDS)
+			return
+
+		choose_target()
+
+	/datum/round_event/roundstart/wealthy_benefactor/proc/choose_target()
 		for(var/mob/living/carbon/human/H in GLOB.alive_mob_list)
 			if(!H.mind || !H.mind.key)
 				continue

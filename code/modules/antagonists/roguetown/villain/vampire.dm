@@ -435,7 +435,7 @@
 		break
 	
 	var/datum/antagonist/vampire/VD = mind.has_antag_datum(/datum/antagonist/vampire)
-	if(!VD)
+	if(!istype(VD, /datum/antagonist/vampire))
 		to_chat(src, span_warning("I am not a vampire."))
 		return
 	if(VD.disguised)
