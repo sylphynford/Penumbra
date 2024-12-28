@@ -216,7 +216,7 @@
 		H.mind.adjust_skillrank(/datum/skill/misc/tracking, 2, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/misc/sneaking, 4, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/misc/stealing, 4, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/misc/lockpicking, 2, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/misc/lockpicking, 5, TRUE)
 		H.change_stat("strength", -1)
 		H.change_stat("perception", 2)
 		H.change_stat("speed", 2)
