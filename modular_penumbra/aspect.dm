@@ -22,6 +22,86 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 		return FALSE
 	return runnable
 
+// Six Sylphs event
+/datum/round_event/roundstart/six_sylphs
+
+/datum/round_event/roundstart/six_sylphs/apply_effect()
+	. = ..()
+	is_active = TRUE
+	
+	// Find the crown and register signals for equip/unequip
+	var/obj/item/clothing/head/roguetown/crown/serpcrown/crown = SSroguemachine.crown
+	if(crown)
+		RegisterSignal(crown, COMSIG_ITEM_EQUIPPED, PROC_REF(on_crown_equipped))
+		RegisterSignal(crown, COMSIG_ITEM_DROPPED, PROC_REF(on_crown_dropped))
+		
+		// Handle case where someone is already wearing the crown
+		if(istype(crown.loc, /mob/living/carbon/human))
+			var/mob/living/carbon/human/current_wearer = crown.loc
+			if(current_wearer.head == crown)
+				apply_protection(current_wearer)
+	
+	// Register signal for latejoin handling
+	RegisterSignal(SSdcs, COMSIG_GLOB_MOB_CREATED, PROC_REF(on_mob_created))
+
+/datum/round_event/roundstart/six_sylphs/proc/apply_protection(mob/living/carbon/human/user)
+	if(!istype(user))
+		return
+		
+	ADD_TRAIT(user, TRAIT_NODEATH, "six_sylphs")
+	ADD_TRAIT(user, TRAIT_NOBREATH, "six_sylphs")
+	ADD_TRAIT(user, TRAIT_NODISMEMBER, "six_sylphs")
+	ADD_TRAIT(user, TRAIT_NOCRITDAMAGE, "six_sylphs")
+	to_chat(user, span_notice("You feel the protection of the six legendary sylphs..."))
+
+/datum/round_event/roundstart/six_sylphs/proc/remove_protection(mob/living/carbon/human/user)
+	if(!istype(user))
+		return
+		
+	REMOVE_TRAIT(user, TRAIT_NODEATH, "six_sylphs")
+	REMOVE_TRAIT(user, TRAIT_NOBREATH, "six_sylphs")
+	REMOVE_TRAIT(user, TRAIT_NODISMEMBER, "six_sylphs")
+	REMOVE_TRAIT(user, TRAIT_NOCRITDAMAGE, "six_sylphs")
+	to_chat(user, span_warning("The sylphs' protection fades away..."))
+
+/datum/round_event/roundstart/six_sylphs/proc/on_crown_equipped(obj/item/clothing/head/roguetown/crown/serpcrown/source, mob/living/carbon/human/user, slot)
+	SIGNAL_HANDLER
+	
+	if(slot != SLOT_HEAD || !istype(user))
+		return
+		
+	apply_protection(user)
+
+/datum/round_event/roundstart/six_sylphs/proc/on_crown_dropped(obj/item/clothing/head/roguetown/crown/serpcrown/source, mob/living/carbon/human/user)
+	SIGNAL_HANDLER
+	
+	if(!istype(user))
+		return
+		
+	remove_protection(user)
+
+/datum/round_event/roundstart/six_sylphs/proc/on_mob_created(datum/source, mob/M)
+	SIGNAL_HANDLER
+	
+	if(!istype(M, /mob/living/carbon/human))
+		return
+		
+	var/mob/living/carbon/human/H = M
+	addtimer(CALLBACK(src, .proc/check_crown_on_spawn, H), 1 SECONDS)
+
+/datum/round_event/roundstart/six_sylphs/proc/check_crown_on_spawn(mob/living/carbon/human/H)
+	if(!H || !istype(H.head, /obj/item/clothing/head/roguetown/crown/serpcrown))
+		return
+		
+	apply_protection(H)
+
+/datum/round_event_control/roundstart/six_sylphs
+	name = "Six Sylphs"
+	typepath = /datum/round_event/roundstart/six_sylphs
+	weight = 5
+	event_announcement = "The Baron has made a pact with the faefolk - That whoever wears the crown will live forever!"
+	runnable = TRUE
+
 
 
 // Bintu's Fortune special traits
@@ -927,26 +1007,19 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 // Wealthy Benefactor event
 /datum/round_event/roundstart/wealthy_benefactor
 	var/static/list/rewarded_ckeys = list()
-	var/has_slept = FALSE
+	var/has_processed = FALSE
 
 	/datum/round_event/roundstart/wealthy_benefactor/apply_effect()
 		. = ..()
 		is_active = TRUE
-		START_PROCESSING(SSprocessing, src)
-
-	/datum/round_event/roundstart/wealthy_benefactor/process()
-		if(!is_active)
-			STOP_PROCESSING(SSprocessing, src)
-			return
-
-		if(!has_slept)
-			has_slept = TRUE
-			addtimer(CALLBACK(src, PROC_REF(choose_target)), 2 SECONDS)
-			return
-
-		choose_target()
+		addtimer(CALLBACK(src, .proc/choose_target), 2 SECONDS)
 
 	/datum/round_event/roundstart/wealthy_benefactor/proc/choose_target()
+		if(has_processed)
+			return
+		
+		has_processed = TRUE
+		
 		for(var/mob/living/carbon/human/H in GLOB.alive_mob_list)
 			if(!H.mind || !H.mind.key)
 				continue
@@ -959,7 +1032,6 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 			H.put_in_hands(reward)
 			rewarded_ckeys += H.mind.key
 			priority_announce("They say [H.real_name] recently had a large inheritence..", "Arcyne Phenomena")
-			STOP_PROCESSING(SSprocessing, src)
 			is_active = FALSE
 			return
 
