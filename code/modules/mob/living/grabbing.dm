@@ -476,6 +476,7 @@
 
 	if(user.mind && C.mind)
 		var/datum/antagonist/vampirelord/VDrinker = user.mind.has_antag_datum(/datum/antagonist/vampirelord)
+		var/datum/antagonist/vampire/VDrinkerBasic = user.mind.has_antag_datum(/datum/antagonist/vampire)
 		var/datum/antagonist/vampirelord/VVictim = C.mind.has_antag_datum(/datum/antagonist/vampirelord)
 		var/zomwerewolf = C.mind.has_antag_datum(/datum/antagonist/werewolf)
 		if(!zomwerewolf)
@@ -485,42 +486,48 @@
 			if(zomwerewolf)
 				to_chat(user, span_danger("I'm going to puke..."))
 				addtimer(CALLBACK(user, TYPE_PROC_REF(/mob/living/carbon, vomit), 0, TRUE), rand(8 SECONDS, 15 SECONDS))
+			else if(VVictim)
+				to_chat(user, span_warning("It's vitae, just like mine."))
 			else
-				if(VVictim)
-					to_chat(user, span_warning("It's vitae, just like mine."))
-				else if (C.vitae_bank > 500)
-					C.blood_volume = max(C.blood_volume-45, 0)
-					C.vitae_bank -= 500
-					if(ishuman(C))
-						var/mob/living/carbon/human/H = C
-						if(H.virginity)
-							to_chat(user, "<span class='love'>Virgin blood, delicious!</span>")
-							if(VDrinker.isspawn)
-								VDrinker.handle_vitae(750, 750)
-							else
-								VDrinker.handle_vitae(750)
-					if(VDrinker.isspawn)
-						VDrinker.handle_vitae(500, 500)
+				C.blood_volume = max(C.blood_volume-45, 0)
+				if(ishuman(C))
+					var/mob/living/carbon/human/H = C
+					if(H.virginity)
+						to_chat(user, "<span class='love'>Virgin blood, delicious!</span>")
+						VDrinker.handle_vitae(750)
 					else
 						VDrinker.handle_vitae(500)
-				else
-					to_chat(user, span_warning("No more vitae from this blood..."))
+		else if(VDrinkerBasic)
+			if(zomwerewolf)
+				to_chat(user, span_danger("I'm going to puke..."))
+				addtimer(CALLBACK(user, TYPE_PROC_REF(/mob/living/carbon, vomit), 0, TRUE), rand(8 SECONDS, 15 SECONDS))
+			else if(VVictim)
+				to_chat(user, span_warning("It's vitae, just like mine."))
+			else
+				C.blood_volume = max(C.blood_volume-45, 0)
+				if(ishuman(C))
+					var/mob/living/carbon/human/H = C
+					if(H.virginity)
+						to_chat(user, "<span class='love'>Virgin blood, delicious!</span>")
+						VDrinkerBasic.handle_vitae(750)
+					else
+						VDrinkerBasic.handle_vitae(500)
 		else
-/*			if(VVictim)
-				to_chat(user, "<span class='notice'>A strange, sweet taste tickles my throat.</span>")
-				addtimer(CALLBACK(user, .mob/living/carbon/human/proc/vampire_infect), 1 MINUTES) // I'll use this for succession later.
-			else */
 			to_chat(user, "<span class='warning'>I'm going to puke...</span>")
 			addtimer(CALLBACK(user, TYPE_PROC_REF(/mob/living/carbon, vomit), 0, TRUE), rand(8 SECONDS, 15 SECONDS))
 	else
 		if(user.mind)
-			if(user.mind.has_antag_datum(/datum/antagonist/vampirelord))
-				var/datum/antagonist/vampirelord/VDrinker = user.mind.has_antag_datum(/datum/antagonist/vampirelord)
+			var/datum/antagonist/vampirelord/VDrinker = user.mind.has_antag_datum(/datum/antagonist/vampirelord)
+			var/datum/antagonist/vampire/VDrinkerBasic = user.mind.has_antag_datum(/datum/antagonist/vampire)
+			if(VDrinker)
 				C.blood_volume = max(C.blood_volume-45, 0)
 				if(VDrinker.isspawn)
 					VDrinker.handle_vitae(300, 300)
 				else
 					VDrinker.handle_vitae(300)
+			else if(VDrinkerBasic)
+				C.blood_volume = max(C.blood_volume-45, 0)
+				VDrinkerBasic.handle_vitae(500)
 
 	C.blood_volume = max(C.blood_volume-5, 0)
 	C.handle_blood()

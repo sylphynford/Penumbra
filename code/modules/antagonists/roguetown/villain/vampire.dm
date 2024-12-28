@@ -27,7 +27,31 @@
 	var/cache_skin
 	var/cache_eyes
 	var/cache_hair
+	var/starved = FALSE
 	var/obj/effect/proc_holder/spell/targeted/shapeshift/bat/batform //attached to the datum itself to avoid cloning memes, and other duplicates
+
+/datum/antagonist/vampire/proc/handle_vitae(change)
+	var/tempcurrent = vitae
+	if(change > 0)
+		tempcurrent += change
+		if(tempcurrent > 1666)
+			tempcurrent = 1666 // to prevent overflow
+	if(change < 0)
+		tempcurrent += change
+		if(tempcurrent < 0)
+			tempcurrent = 0 // to prevent excessive negative
+	vitae = tempcurrent
+	if(vitae <= 20)
+		if(!starved)
+			to_chat(owner, span_userdanger("I starve, my power dwindles! I am so weak!"))
+			starved = TRUE
+			for(var/S in MOBSTATS)
+				owner.current.change_stat(S, -5)
+	else
+		if(starved)
+			starved = FALSE
+			for(var/S in MOBSTATS)
+				owner.current.change_stat(S, 5)
 
 /datum/antagonist/vampire/examine_friendorfoe(datum/antagonist/examined_datum,mob/examiner,mob/examined)
 	if(istype(examined_datum, /datum/antagonist/vampire/lesser))
@@ -84,10 +108,10 @@
 
 	// Basic vampire abilities
 	owner.current.verbs |= /mob/living/carbon/human/proc/disguise_button
+	owner.current.verbs |= /mob/living/carbon/human/proc/vamp_regenerate
 
 	// Only vampire lords get these abilities
 	if(owner.has_antag_datum(/datum/antagonist/vampirelord))
-		owner.current.verbs |= /mob/living/carbon/human/proc/vamp_regenerate
 		owner.current.verbs |= /mob/living/carbon/human/proc/blood_strength
 		owner.current.verbs |= /mob/living/carbon/human/proc/blood_celerity
 		owner.current.verbs |= /mob/living/carbon/human/proc/blood_fortitude
@@ -261,7 +285,6 @@
 			if(E)
 				E.imprint_organ_dna(eyes_dna)
 				E.update_accessory_colors()
-				E.lighting_alpha = LIGHTING_PLANE_ALPHA_MOSTLY_VISIBLE
 	
 	dna?.species.handle_body(src)
 	update_body()
@@ -411,9 +434,9 @@
 		silver_curse_status = TRUE
 		break
 	
-	var/datum/antagonist/vampirelord/VD = mind.has_antag_datum(/datum/antagonist/vampirelord)
+	var/datum/antagonist/vampire/VD = mind.has_antag_datum(/datum/antagonist/vampire)
 	if(!VD)
-		to_chat(src, span_warning("I am not a vampire lord."))
+		to_chat(src, span_warning("I am not a vampire."))
 		return
 	if(VD.disguised)
 		to_chat(src, span_warning("I cannot regenerate while disguised."))
