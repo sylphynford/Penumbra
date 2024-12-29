@@ -422,13 +422,16 @@ var/global/list/roguegamemodes = list("Rebellion", "Vampires and Werewolves", "E
 	restricted_jobs = list()
 
 /datum/game_mode/chaosmode/proc/pick_werewolves()
-	// Ideally we want adventurers/pilgrims/towners to roll it
+	if(living_player_count() < 20) // Check current living players instead of ready state
+		return
+
+	// Ideally we want adventurers/pilgrims/towners to roll it 
 	restricted_jobs = list(
 	"Baron",
 	"Consort",
 	"Dungeoneer",
 	"Inquisitor",
-	"Confessor",
+	"Confessor", 
 	"Town Guard",
 	"Sergeant at Arms",
 	"Priest",
@@ -443,7 +446,7 @@ var/global/list/roguegamemodes = list("Rebellion", "Vampires and Werewolves", "E
 	"Knight Lieutenant",
 	"Mortician",
 	"Desert Rider",
-	"Desert Rider Mercenary",
+	"Mercenary",
 	"Grenzelhoft Mercenary",
 	"Huskar"
 	)
