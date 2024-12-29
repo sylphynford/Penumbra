@@ -250,7 +250,6 @@
 		H.change_stat("intelligence", 1)
 		H.change_stat("speed", 2)
 	ADD_TRAIT(H, TRAIT_SQUIRE_REPAIR, TRAIT_GENERIC)
-	ADD_TRAIT(H, TRAIT_DODGEEXPERT, TRAIT_GENERIC)
 
 /datum/advclass/squire/skirmisher/equipme(mob/living/carbon/human/H)
 	if(!H || !istype(H))

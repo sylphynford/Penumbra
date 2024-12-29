@@ -73,7 +73,7 @@
 			if(H.mind)
 				H.mind.adjust_skillrank(/datum/skill/combat/swords, 4, TRUE)
 				H.mind.adjust_skillrank(/datum/skill/combat/knives, 3, TRUE)
-				H.mind.adjust_skillrank(/datum/skill/combat/whipsflails, 3, TRUE)
+				H.mind.adjust_skillrank(/datum/skill/combat/whipsflails, 2, TRUE)
 				H.mind.adjust_skillrank(/datum/skill/combat/maces, 2, TRUE)
 				H.mind.adjust_skillrank(/datum/skill/combat/bows, 3, TRUE)
 				H.mind.adjust_skillrank(/datum/skill/combat/wrestling, 3, TRUE)
@@ -93,7 +93,6 @@
 			H.put_in_hands(sword)
 
 	ADD_TRAIT(H, TRAIT_MEDIUMARMOR, TRAIT_GENERIC)
-	ADD_TRAIT(H, TRAIT_DODGEEXPERT, TRAIT_GENERIC)
 
 /datum/outfit/job/roguetown/mercenary/desert_rider
 	name = "Desert Rider Mercenary"

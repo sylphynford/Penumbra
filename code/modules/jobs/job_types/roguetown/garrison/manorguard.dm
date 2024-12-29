@@ -131,16 +131,11 @@
 		O.equip(H)
 
 	if(H.mind)
-		H.mind.adjust_skillrank(/datum/skill/combat/polearms, 4, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/combat/swords, 4, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/combat/knives, 3, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/combat/axes, 3, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/combat/whipsflails, 3, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/combat/maces, 4, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/combat/shields, 3, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/combat/swords, 2, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/combat/knives, 2, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/combat/whipsflails, 2, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/combat/crossbows, 3, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/combat/bows, 3, TRUE)
-
 		H.mind.adjust_skillrank(/datum/skill/combat/wrestling, 3, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/combat/unarmed, 3, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/misc/climbing, 3, TRUE)
@@ -194,11 +189,15 @@
 			to_chat(H, span_warning("You are a stalwart shield bearer, skilled with axe and shield."))
 			H.equip_to_slot_or_del(new /obj/item/rogueweapon/stoneaxe/woodcut/steel(H), SLOT_BELT_R)
 			H.equip_to_slot_or_del(new /obj/item/rogueweapon/shield/wood(H), SLOT_BACK_L)
+			H.mind.adjust_skillrank(/datum/skill/combat/axes, 4, TRUE)
+			H.mind.adjust_skillrank(/datum/skill/combat/shields, 3, TRUE)
 		if("Billhook & Cudgel")
 			H.set_blindness(0)
 			to_chat(H, span_warning("You are trained in the versatile combination of billhook and cudgel."))
 			H.equip_to_slot_or_del(new /obj/item/rogueweapon/mace/cudgel(H), SLOT_BELT_R)
 			H.put_in_r_hand(new /obj/item/rogueweapon/spear/billhook(H))
+			H.mind.adjust_skillrank(/datum/skill/combat/polearms, 4, TRUE)
+			H.mind.adjust_skillrank(/datum/skill/combat/maces, 3, TRUE)
 
 // Shield + Swords + Crossbow/Bow	-	Lighter armor, but ranged + sword skill in exchange for it.
 /datum/advclass/manorguard/boltman

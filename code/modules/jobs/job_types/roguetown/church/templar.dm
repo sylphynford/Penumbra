@@ -109,8 +109,6 @@
 		H.change_stat("constitution", 2)
 		H.change_stat("perception", -1)
 
-		ADD_TRAIT(H, TRAIT_DODGEEXPERT, TRAIT_GENERIC)
-
 	return TRUE
 
 /datum/advclass/templar/crusader
