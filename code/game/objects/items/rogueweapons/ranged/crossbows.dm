@@ -1,4 +1,3 @@
-
 /obj/item/gun/ballistic/revolver/grenadelauncher/crossbow
 	name = "crossbow"
 	desc = "A deadly weapon that shoots a bolt with terrific power."
@@ -22,7 +21,7 @@
 	fire_sound = 'sound/combat/Ranged/crossbow-small-shot-02.ogg'
 	anvilrepair = /datum/skill/craft/weaponsmithing
 	smeltresult = /obj/item/ingot/steel
-	var/damfactor = 2
+	var/damfactor = 1
 	resistance_flags = FIRE_PROOF
 
 /obj/item/gun/ballistic/revolver/grenadelauncher/crossbow/getonmobprop(tag)
