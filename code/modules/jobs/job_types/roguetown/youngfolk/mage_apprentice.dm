@@ -5,7 +5,7 @@
 	faction = "Station"
 	total_positions = 2
 	spawn_positions = 2
-
+	zizo_roll = 75
 	allowed_races = RACES_ALL_KINDS
 	allowed_ages = list(AGE_YOUNG, AGE_ADULT)
 
