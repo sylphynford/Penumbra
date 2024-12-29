@@ -84,6 +84,8 @@ SUBSYSTEM_DEF(ticker)
 	var/end_party = FALSE
 	var/last_lobby = 0
 
+	var/sound/custom_credits_music = null
+
 /datum/controller/subsystem/ticker/Initialize(timeofday)
 	load_mode()
 
@@ -870,3 +872,6 @@ SUBSYSTEM_DEF(ticker)
 	update_everything_flag_in_db()
 
 	text2file(login_music, "data/last_round_lobby_music.txt")
+
+/datum/controller/subsystem/ticker/proc/set_credits_music(sound/S)
+	custom_credits_music = S

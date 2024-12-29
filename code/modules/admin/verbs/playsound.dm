@@ -256,3 +256,35 @@ GLOBAL_LIST_INIT(ambience_files, list(
 	for(var/music in GLOB.ambience_files)
 		mob.playsound_local(mob, music, 0.1)
 		sleep(10)
+
+/client/proc/set_end_credits_music()
+	set category = "Fun"
+	set name = "Set Credits Music"
+	set desc = "Set custom music to play during end credits."
+	if(!check_rights(R_SOUND))
+		return
+
+	var/credits_music = input(usr, "Pick a sound file to play during end credits (leave blank to reset to default):", "Set Credits Music") as null|sound
+	if(isnull(credits_music)) // User cancelled
+		return
+	
+	if(credits_music == "") // User cleared the input
+		SSticker.custom_credits_music = null
+		log_admin("[key_name(src)] reset the end credits music to default")
+		message_admins("[key_name_admin(src)] reset the end credits music to default")
+		return
+
+	// Convert to sound and validate
+	var/sound/S = sound(credits_music)
+	if(!S)
+		to_chat(usr, span_warning("Invalid sound file."))
+		return
+	
+	if(length(credits_music) > 6485760) // ~6MB limit
+		to_chat(usr, span_warning("FILE TOO LARGE. 6 MEGS OR LESS."))
+		return
+
+	SSticker.custom_credits_music = S
+	log_admin("[key_name(src)] set the end credits music to [credits_music]")
+	message_admins("[key_name_admin(src)] set the end credits music to [credits_music]")
+	SSblackbox.record_feedback("tally", "admin_verb", 1, "Set Credits Music")

@@ -223,7 +223,11 @@ GLOBAL_VAR(roundstart_event_name)
 			key_list += C.ckey
 		if(C.mob)
 			SSdroning.kill_droning(C)
-			C.mob.playsound_local(C.mob, 'sound/music/credits.ogg', 100, FALSE)
+			// Only play custom credits music if set, otherwise play default
+			if(custom_credits_music)
+				C.mob.playsound_local(C.mob, custom_credits_music, 100, FALSE)
+			else
+				C.mob.playsound_local(C.mob, 'sound/music/credits.ogg', 100, FALSE)
 		if(isliving(C.mob) && C.ckey)
 			key_list += C.ckey
 //	if(key_list.len)
