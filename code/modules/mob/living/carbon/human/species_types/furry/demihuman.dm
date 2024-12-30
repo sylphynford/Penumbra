@@ -5,13 +5,14 @@
 	name = "Half-Kin"
 	id = "demihuman"
 	desc = "<b>Half-Kin</b><br>\
-	Half-kin were an ill-fated experiment by scholars and alchemists who sought to merge \
-	the resilience of humans with the primal ferocity of animals. Their goal was to create \
-	a superior warrior, one capable of withstanding great injury and thriving in the harshest \
+	The Halfkin are a race born from an ancient experiment aimed at blending the traits of humans and animals into a single superior being. \
+	Created by alchemists seeking to craft a species that would embody human intelligence alongside animalistic strength, agility, and sensory acuity, the project failed to meet it's lofty goals. \
+	The Halfkin emerged outwardly human in appearance, with only faint physical traits, such as unusual eye colors, animal ears and tails, or fur, hinting at their animalistic origins. \
 	environments.<br><br>\
-	While largely human, it's very common for them to be psychologically influenced by the animal \
-	they take after. For instance predatory half-kin often have a tendency toward assertiveness \
-	and aggression.<br><br>\
+Despite their physical similarities to humans, the Halfkin are notably influenced by primal instincts. They tend to act on emotion and impulse, which often manifests as heightened aggression or uninhibited behavior. \
+Their lack of self-restraint and their tendency to prioritize instinct over societal norms have led many to view them as creatures of excess—passionate and feral, rather than refined or rational. \
+This perception has fueled their marginalization, with Halfkin frequently regarded as a failed experiment and, in some circles, as little more than aberrations. \
+the Halfkin are largely dismissed as lesser beings due to their inability to suppress their primal drives. Over time, this prejudice has shaped their role in society, often forcing them into outcast communities or positions where their instincts are exploited rather than respected.<br><br>\
 	+1 Perception."
 	skin_tone_wording = "Ancestry"
 	default_color = "FFFFFF"
