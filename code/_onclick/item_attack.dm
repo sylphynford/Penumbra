@@ -413,7 +413,7 @@
 
 /obj/item/proc/funny_attack_effects(mob/living/target, mob/living/user, nodmg)
 	if(is_silver)
-		if(world.time < src.last_used + 120)
+		if(world.time < src.last_used + 12)
 			to_chat(user, span_notice("The silver effect is on cooldown."))
 			return
 
@@ -423,31 +423,18 @@
 			var/datum/antagonist/werewolf/W = H.mind.has_antag_datum(/datum/antagonist/werewolf/)
 			var/datum/antagonist/vampirelord/lesser/V = H.mind.has_antag_datum(/datum/antagonist/vampirelord/lesser)
 			var/datum/antagonist/vampirelord/V_lord = H.mind.has_antag_datum(/datum/antagonist/vampirelord/)
-			if(V)
-				if(V.disguised)
-					H.visible_message("<font color='white'>The silver weapon weakens the curse temporarily!</font>")
-					to_chat(H, span_userdanger("I'm hit by my BANE!"))
-					H.apply_status_effect(/datum/status_effect/debuff/silver_curse)
-					src.last_used = world.time
-				else
-					H.visible_message("<font color='white'>The silver weapon weakens the curse temporarily!</font>")
-					to_chat(H, span_userdanger("I'm hit by my BANE!"))
-					H.apply_status_effect(/datum/status_effect/debuff/silver_curse)
-					src.last_used = world.time
-			if(V_lord)
-				if(V_lord.vamplevel < 4 && !V)
-					H.visible_message("<font color='white'>The silver weapon weakens the curse temporarily!</font>")
-					to_chat(H, span_userdanger("I'm hit by my BANE!"))
-					H.apply_status_effect(/datum/status_effect/debuff/silver_curse)
-					src.last_used = world.time
-				if(V_lord.vamplevel == 4 && !V)
-					to_chat(s_user, "<font color='red'> The silver weapon fails!</font>")
-					H.visible_message(H, span_userdanger("This feeble metal can't hurt me, I AM ANCIENT!"))
-			if(W && W.transformed == TRUE)
-				H.visible_message("<font color='white'>The silver weapon weakens the curse temporarily!</font>")
+			var/datum/antagonist/vampire/V_basic = H.mind.has_antag_datum(/datum/antagonist/vampire/)
+			
+			if(V || V_basic || (V_lord && V_lord.vamplevel < 4) || (W && W.transformed))
+				H.visible_message("<font color='white'>The silver weapon burns [H]'s unholy flesh!</font>")
 				to_chat(H, span_userdanger("I'm hit by my BANE!"))
+				H.adjust_fire_stacks(2)
+				H.IgniteMob()
 				H.apply_status_effect(/datum/status_effect/debuff/silver_curse)
 				src.last_used = world.time
+			else if(V_lord && V_lord.vamplevel == 4)
+				to_chat(s_user, "<font color='red'> The silver weapon fails!</font>")
+				H.visible_message(H, span_userdanger("This feeble metal can't hurt me, I AM ANCIENT!"))
 	return
 
 /mob/living/attacked_by(obj/item/I, mob/living/user)
