@@ -435,6 +435,18 @@
 			else if(V_lord && V_lord.vamplevel == 4)
 				to_chat(s_user, "<font color='red'> The silver weapon fails!</font>")
 				H.visible_message(H, span_userdanger("This feeble metal can't hurt me, I AM ANCIENT!"))
+
+	if(istype(src, /obj/item/grown/log/tree/stake))
+		if(ishuman(target) && target.mind)
+			var/mob/living/carbon/human/H = target
+			var/datum/antagonist/vampire/V_basic = H.mind.has_antag_datum(/datum/antagonist/vampire/)
+			var/datum/antagonist/vampirelord/lesser/V = H.mind.has_antag_datum(/datum/antagonist/vampirelord/lesser)
+			var/datum/antagonist/vampirelord/V_lord = H.mind.has_antag_datum(/datum/antagonist/vampirelord/)
+			
+			if((V_basic || V || V_lord) && user.zone_selected == BODY_ZONE_CHEST && prob(10))
+				H.visible_message("<font color='red'>The stake pierces [H]'s heart!</font>")
+				to_chat(H, span_userdanger("The stake pierces my heart! I can't move!"))
+				H.Paralyze(600) // 60 seconds
 	return
 
 /mob/living/attacked_by(obj/item/I, mob/living/user)

@@ -41,7 +41,8 @@
 	if(mind)
 		if(!gibbed)
 			var/datum/antagonist/vampirelord/VD = mind.has_antag_datum(/datum/antagonist/vampirelord)
-			if(VD)
+			var/datum/antagonist/vampire/V = mind.has_antag_datum(/datum/antagonist/vampire)
+			if(VD || V)
 				dust(just_ash=TRUE,drop_items=TRUE)
 				return
 		var/datum/antagonist/lich/L = mind.has_antag_datum(/datum/antagonist/lich)
