@@ -293,21 +293,6 @@
 /turf/open/floor/rogue/cobble,
 /area/rogue/outdoors/woods)
 "ci" = (
-/obj/structure/closet/crate/chest,
-/obj/item/reagent_containers/food/snacks/grown/onion/rogue,
-/obj/item/reagent_containers/food/snacks/grown/onion/rogue,
-/obj/item/reagent_containers/food/snacks/grown/onion/rogue,
-/obj/item/reagent_containers/food/snacks/grown/onion/rogue,
-/obj/item/reagent_containers/food/snacks/grown/oat,
-/obj/item/reagent_containers/food/snacks/grown/oat,
-/obj/item/reagent_containers/food/snacks/grown/oat,
-/obj/item/reagent_containers/food/snacks/grown/oat,
-/obj/item/reagent_containers/food/snacks/grown/apple,
-/obj/item/reagent_containers/food/snacks/grown/apple,
-/obj/item/reagent_containers/food/snacks/grown/apple,
-/obj/item/reagent_containers/food/snacks/grown/apple,
-/obj/item/reagent_containers/food/snacks/butter,
-/obj/item/reagent_containers/food/snacks/butter,
 /turf/open/floor/rogue/cobble,
 /area/rogue/indoors)
 "cl" = (
@@ -857,10 +842,6 @@
 	},
 /turf/open/floor/rogue/metal/barograte/open,
 /area/rogue/under/town/basement)
-"gy" = (
-/obj/machinery/light/rogue/torchholder/l,
-/turf/open/floor/rogue/ruinedwood,
-/area/rogue/indoors)
 "gA" = (
 /obj/structure/fence,
 /turf/open/floor/rogue/metal/barograte,
@@ -928,8 +909,7 @@
 /area/rogue/under/cave/dungeon1/gethsmane/inner)
 "hl" = (
 /obj/machinery/light/rogue/smelter/great{
-	name = "fix1"
-	color = "#485775";
+	name = "fix1"color="#485775";
 	desc = ""
 	},
 /turf/open/floor/rogue/metal/barograte/open,
@@ -1246,10 +1226,6 @@
 /area/rogue/under/cavewet/bogcaves)
 "kj" = (
 /obj/structure/rack/rogue,
-/obj/item/gun/ballistic/revolver/grenadelauncher/bow/recurve,
-/obj/item/gun/ballistic/revolver/grenadelauncher/bow/recurve,
-/obj/item/gun/ballistic/revolver/grenadelauncher/bow/recurve,
-/obj/item/gun/ballistic/revolver/grenadelauncher/bow/recurve,
 /turf/open/floor/rogue/ruinedwood,
 /area/rogue/indoors)
 "kk" = (
@@ -1298,9 +1274,6 @@
 /obj/structure/closet/crate/roguecloset/dark,
 /obj/item/clothing/cloak/raincloak/furcloak/woad,
 /obj/item/clothing/cloak/raincloak/furcloak/woad,
-/obj/item/clothing/mask/rogue/wildguard,
-/obj/item/storage/keyring/guard,
-/obj/item/clothing/mask/rogue/wildguard,
 /turf/open/floor/rogue/ruinedwood{
 	dir = 1;
 	icon_state = "vertw"
@@ -1797,10 +1770,6 @@
 /turf/open/lava/acid,
 /area/rogue/under/cave/dungeon1/gethsmane/inner)
 "ox" = (
-/obj/item/rope/chain,
-/obj/item/rope/chain,
-/obj/item/rope/chain,
-/obj/item/rope/chain,
 /obj/machinery/light/rogue/torchholder/l,
 /obj/item/rope,
 /obj/item/rope,
@@ -2073,8 +2042,6 @@
 /turf/open/floor/rogue/dirt/road,
 /area/rogue/under/cavewet/bogcaves)
 "qV" = (
-/obj/item/quiver/arrows,
-/obj/item/quiver/arrows,
 /obj/structure/table/wood/bar{
 	icon_state = "longtable";
 	dir = 1
@@ -2708,9 +2675,6 @@
 	icon_state = "tablewood1";
 	dir = 1
 	},
-/obj/item/rogueweapon/stoneaxe/woodcut/wardenpick,
-/obj/item/rogueweapon/stoneaxe/woodcut/wardenpick,
-/obj/item/rogueweapon/stoneaxe/woodcut/wardenpick,
 /turf/open/floor/rogue/ruinedwood{
 	dir = 1;
 	icon_state = "vertw"
@@ -5184,10 +5148,6 @@
 /mob/living/simple_animal/hostile/retaliate/rogue/wolf,
 /turf/open/floor/rogue/naturalstone,
 /area/rogue/under/cave)
-"QH" = (
-/obj/machinery/light/rogue/torchholder/r,
-/turf/open/floor/rogue/ruinedwood,
-/area/rogue/indoors)
 "QI" = (
 /mob/living/carbon/human/species/goblin/npc/ambush,
 /turf/open/floor/rogue/dirt/road,
@@ -5831,7 +5791,6 @@
 	dir = 1;
 	icon_state = "tablewood1"
 	},
-/obj/item/rogueweapon/huntingknife,
 /turf/open/floor/rogue/ruinedwood{
 	dir = 1;
 	icon_state = "vertw"
@@ -6172,12 +6131,10 @@
 /turf/open/floor/rogue/greenstone,
 /area/rogue/under/cave/dungeon1/gethsmane/inner)
 "YT" = (
-/obj/item/rogueweapon/huntingknife/chefknife,
 /obj/structure/table/wood/bar{
 	icon_state = "longtable";
 	dir = 2
 	},
-/obj/structure/roguemachine/scomm,
 /turf/open/floor/rogue/ruinedwood/spiral,
 /area/rogue/indoors)
 "YW" = (
@@ -97432,7 +97389,7 @@ tP
 Jz
 Jg
 vR
-QH
+qJ
 vu
 nF
 Yg
@@ -97746,7 +97703,7 @@ vR
 MH
 YT
 vR
-gy
+qJ
 vK
 kv
 kv
