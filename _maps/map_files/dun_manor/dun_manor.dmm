@@ -6124,10 +6124,7 @@
 	},
 /area/rogue/indoors/town/magician)
 "fSN" = (
-/obj/machinery/light/rogue/oven/east{
-	pixel_x = 0;
-	pixel_y = -32
-	},
+/obj/machinery/light/rogue/oven/north,
 /turf/open/floor/rogue/blocks,
 /area/rogue/indoors/town/tavern)
 "fTF" = (
@@ -13571,10 +13568,7 @@
 	pixel_y = 0;
 	pixel_x = 32
 	},
-/obj/machinery/light/rogue/oven/east{
-	pixel_x = 0;
-	pixel_y = -32
-	},
+/obj/machinery/light/rogue/oven/north,
 /turf/open/floor/rogue/blocks,
 /area/rogue/indoors/town/tavern)
 "nna" = (
@@ -13605,6 +13599,10 @@
 	},
 /turf/open/floor/rogue/blocks,
 /area/rogue/indoors/town/church/chapel)
+"npO" = (
+/obj/effect/landmark/start/cook,
+/turf/open/floor/rogue/hexstone,
+/area/rogue/indoors/town/tavern)
 "npT" = (
 /obj/effect/decal/cobbleedge{
 	icon_state = "cobbleedge-w";
@@ -80968,7 +80966,7 @@ xIK
 xIK
 sjq
 tGm
-hkd
+npO
 epe
 hkd
 snM
@@ -81125,7 +81123,7 @@ xIK
 xIK
 vKT
 poj
-hkd
+npO
 epe
 hkd
 wLU
@@ -81282,7 +81280,7 @@ lIC
 sjq
 eVv
 kRO
-hkd
+npO
 epe
 hkd
 fSN

@@ -122,6 +122,19 @@ SUBSYSTEM_DEF(job)
 				to_chat(player, "<span class='warning'>You have been removed from Occultist selection as there is no Inquisitor.</span>")
 				return FALSE
 
+		// Check for Huskar requirements
+		if(job.title == "Huskar")
+			var/consort_exists = FALSE
+			for(var/mob/living/carbon/human/H in GLOB.human_list)
+				if(H?.mind?.assigned_role == "Consort")
+					consort_exists = TRUE
+					break
+			
+			if(!consort_exists)
+				player.client.prefs.job_preferences[job.title] = 0
+				to_chat(player, "<span class='warning'>You have been removed from Huskar selection as there is no Consort.</span>")
+				return FALSE
+
 		var/position_limit = job.total_positions
 		if(!latejoin)
 			position_limit = job.spawn_positions
@@ -367,6 +380,10 @@ SUBSYSTEM_DEF(job)
 		// Select Inquisitor second
 		if(!SelectInquisitor())
 			message_admins("WARNING: No Inquisitor selected, continuing without one")
+		
+		// Select Consort third
+		if(!SelectConsort())
+			message_admins("WARNING: No Consort selected, continuing without one")
 
 	//Jobs will have fewer access permissions if the number of players exceeds the threshold defined in game_options.txt
 	var/mat = CONFIG_GET(number/minimal_access_threshold)
@@ -483,6 +500,64 @@ SUBSYSTEM_DEF(job)
 						return TRUE
 	
 	return TRUE // Allow game to continue without inquisitor
+
+/datum/controller/subsystem/job/proc/SelectConsort()
+	var/datum/job/consort_job = GetJob("Consort")
+	if(!consort_job)
+		message_admins("WARNING: No consort job found, continuing without consort")
+		return TRUE // Allow game to continue
+	
+	// Try each preference level in order
+	for(var/pref_level in level_order)
+		for(var/mob/dead/new_player/player in unassigned)
+			if(player.client?.prefs?.job_preferences["Consort"] == pref_level)
+				if(!consort_job.player_old_enough(player.client))
+					continue
+				
+				if(consort_job.required_playtime_remaining(player.client))
+					continue
+				
+				// Find ruler's ckey from stored preferences
+				var/ruler_ckey
+				for(var/ckey in GLOB.preferences_datums)
+					var/datum/preferences/prefs = GLOB.preferences_datums[ckey]
+					if(prefs.job_preferences["Baron"] == JP_HIGH || prefs.job_preferences["Baroness"] == JP_HIGH)
+						ruler_ckey = ckey
+						break
+				
+				if(!ruler_ckey)
+					continue
+					
+				var/datum/preferences/ruler_prefs = GLOB.preferences_datums[ruler_ckey]
+				if(!ruler_prefs)
+					continue
+					
+				// Get ruler genital preferences
+				var/ruler_has_penis = FALSE
+				var/ruler_has_vagina = FALSE
+				for(var/datum/customizer_entry/entry as anything in ruler_prefs.customizer_entries)
+					if(istype(entry, /datum/customizer_entry/organ/penis))
+						ruler_has_penis = (entry.disabled == 0)
+					if(istype(entry, /datum/customizer_entry/organ/vagina))
+						ruler_has_vagina = (entry.disabled == 0)
+				
+				// Check candidate genitals
+				var/consort_has_penis = FALSE
+				var/consort_has_vagina = FALSE
+				for(var/datum/customizer_entry/entry as anything in player.client.prefs.customizer_entries)
+					if(istype(entry, /datum/customizer_entry/organ/penis))
+						consort_has_penis = (entry.disabled == 0)
+					if(istype(entry, /datum/customizer_entry/organ/vagina))
+						consort_has_vagina = (entry.disabled == 0)
+				
+				if((ruler_has_penis && consort_has_penis) || (ruler_has_vagina && consort_has_vagina))
+					continue
+				
+				if((consort_job.current_positions < 1))
+					if(AssignRole(player, "Consort"))
+						return TRUE
+	
+	return TRUE // Allow game to continue without consort
 
 /datum/controller/subsystem/job/proc/do_required_jobs()
 	var/amt_picked = 0
