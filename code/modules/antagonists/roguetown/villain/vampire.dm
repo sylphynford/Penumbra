@@ -455,16 +455,16 @@
 	if(silver_curse_status)
 		to_chat(src, span_warning("The silver curse prevents regeneration!"))
 		return
-	if(vitae_check < 200)
-		to_chat(src, span_warning("I need at least 200 vitae to regenerate. (Current: [vitae_check])"))
+	if(vitae_check < 500)
+		to_chat(src, span_warning("I need at least 500 vitae to regenerate. (Current: [vitae_check])"))
 		return
 	
 	to_chat(src, span_greentext("! REGENERATE !"))
 	src.playsound_local(get_turf(src), 'sound/misc/vampirespell.ogg', 100, FALSE, pressure_affected = FALSE)
 	if(VD)
-		VD.handle_vitae(-200)
+		VD.handle_vitae(-500)
 	else if(VL)
-		VL.handle_vitae(-200)
+		VL.handle_vitae(-500)
 	fully_heal()
 	regenerate_limbs()
 
