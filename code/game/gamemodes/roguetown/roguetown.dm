@@ -45,11 +45,36 @@ var/global/list/roguegamemodes = list("Rebellion", "Vampires and Werewolves", "E
 	var/ascended = FALSE
 	var/list/datum/mind/deathknights = list()
 
+	var/death_vote_called = FALSE
+
 /datum/game_mode/chaosmode/proc/reset_skeletons()
 	skeletons = FALSE
 
 /datum/game_mode/chaosmode/check_finished()
 	var/ttime = world.time - SSticker.round_start_time
+	
+	// Check if round should end due to vote
+	if(roundvoteend && ttime >= round_ends_at)
+		return TRUE
+
+	// Check total deaths vs alive players
+	var/total_alive = 0
+	var/total_dead = 0
+	for(var/mob/living/carbon/human/H in GLOB.human_list)
+		if(H.mind && !isnewplayer(H))
+			if(H.stat == DEAD)
+				total_dead++
+			else
+				total_alive++
+	
+	var/total_players = total_alive + total_dead
+	// If dead count is >= 60% of total players, initiate vote
+	if(total_players > 0 && (total_dead >= (total_players * 0.60)) && !death_vote_called && !roundvoteend)
+		if(!SSvote.mode && SSticker.autovote) 
+			SSvote.initiate_vote("endround", "Zizo")
+			death_vote_called = TRUE
+			return FALSE // Let the vote finish before ending
+
 	if(roguefight)
 		if(ttime >= 30 MINUTES)
 			return TRUE
@@ -61,12 +86,8 @@ var/global/list/roguegamemodes = list("Rebellion", "Vampires and Werewolves", "E
 		return FALSE
 
 	if(ttime >= GLOB.round_timer)
-		if(roundvoteend)
-			if(ttime >= round_ends_at)
-				return TRUE
-		else
-			if(!SSvote.mode && SSticker.autovote)
-				SSvote.initiate_vote("endround", "the Gods")
+		if(!SSvote.mode && !roundvoteend && SSticker.autovote)
+			SSvote.initiate_vote("endround", "the Gods")
 
 	if(headrebdecree)
 		if(reb_end_time == 0)
