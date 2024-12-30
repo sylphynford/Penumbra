@@ -68,10 +68,6 @@ GLOBAL_LIST_INIT(searaider_aggro, world.file2list("strings/rt/searaideraggroline
 			face_atom(get_step(src,pick(GLOB.cardinals)))
 	if(!wander && prob(10))
 		face_atom(get_step(src,pick(GLOB.cardinals)))
-	if(prob(12))
-		say(pick(GLOB.searaider_quotes))
-	if(prob(12))
-		emote(pick("laugh","burp","yawn","grumble","mumble","blink_r","clap"))
 
 /mob/living/carbon/human/species/human/northern/searaider/handle_combat()
 	if(mode == AI_HUNT)

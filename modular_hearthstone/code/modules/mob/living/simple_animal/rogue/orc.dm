@@ -8,7 +8,6 @@
 	gender = MALE
 	mob_biotypes = MOB_ORGANIC|MOB_HUMANOID|MOB_BEAST
 	robust_searching = 1
-	speak_chance = 5
 	turns_per_move = 2
 	move_to_delay = 3
 	STACON = 9
@@ -129,9 +128,6 @@
 
 /mob/living/simple_animal/hostile/retaliate/rogue/orc/Life()
 	. = ..()
-	if(!target)
-		if(prob(3))
-			emote(pick("idle"), TRUE)
 
 
 /mob/living/simple_animal/hostile/retaliate/rogue/orc/taunted(mob/user)
