@@ -30,6 +30,9 @@
 
 	family_blacklisted = TRUE
 
+	can_random = FALSE
+	always_show_on_latechoices = FALSE
+
 /datum/job/roguetown/bandit/after_spawn(mob/living/L, mob/M, latejoin = TRUE)
 	..()
 	if(L)
