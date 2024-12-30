@@ -57,7 +57,8 @@
 /* All other items are public. */
 /proc/log_game(text)
 	if (CONFIG_GET(flag/log_game))
-		WRITE_LOG(GLOB.world_game_log, "\[[logtime]] GAME: [text]")
+		if(usr?.ckey || usr?.mind?.key)
+			WRITE_LOG(GLOB.world_game_log, "\[[logtime]] GAME: [text]")
 
 /proc/log_mecha(text)
 	if (CONFIG_GET(flag/log_mecha))
@@ -112,7 +113,8 @@
 
 /proc/log_say(text)
 	if (CONFIG_GET(flag/log_say))
-		WRITE_LOG(GLOB.world_game_log, "\[[logtime]] SAY: [text]")
+		if(usr?.ckey || usr?.mind?.key)
+			WRITE_LOG(GLOB.world_game_log, "\[[logtime]] SAY: [text]")
 
 /proc/log_ooc(text)
 	if (CONFIG_GET(flag/log_ooc))
@@ -124,11 +126,13 @@
 
 /proc/log_whisper(text)
 	if (CONFIG_GET(flag/log_whisper))
-		WRITE_LOG(GLOB.world_game_log, "\[[logtime]] WHISPER: [text]")
+		if(usr?.ckey || usr?.mind?.key)
+			WRITE_LOG(GLOB.world_game_log, "\[[logtime]] WHISPER: [text]")
 
 /proc/log_emote(text)
 	if (CONFIG_GET(flag/log_emote))
-		WRITE_LOG(GLOB.world_game_log, "\[[logtime]] EMOTE: [text]")
+		if(usr?.ckey || usr?.mind?.key)
+			WRITE_LOG(GLOB.world_game_log, "\[[logtime]] EMOTE: [text]")
 
 /proc/log_prayer(text)
 	if (CONFIG_GET(flag/log_prayer))
