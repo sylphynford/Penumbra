@@ -505,10 +505,10 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/rp_prompt.txt"))
 		if(!isnull(job.max_pq) && (get_playerquality(ckey) > job.max_pq))
 			return JOB_UNAVAILABLE_GENERIC
 	var/datum/species/pref_species = client.prefs.pref_species
-	if(!latejoin && length(job.allowed_races) && !(pref_species.type in job.allowed_races))
+	if(length(job.allowed_races) && !(pref_species.type in job.allowed_races))
 		return JOB_UNAVAILABLE_RACE
 	var/list/allowed_sexes = list()
-	if(!latejoin && length(job.allowed_sexes))
+	if(length(job.allowed_sexes))
 		allowed_sexes |= job.allowed_sexes
 	if(!job.immune_to_genderswap && pref_species?.gender_swapping)
 		if(MALE in job.allowed_sexes)
@@ -517,11 +517,11 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/rp_prompt.txt"))
 		if(FEMALE in job.allowed_sexes)
 			allowed_sexes -= FEMALE
 			allowed_sexes += MALE
-	if(!latejoin && length(allowed_sexes) && !(client.prefs.gender in allowed_sexes))
+	if(length(allowed_sexes) && !(client.prefs.gender in allowed_sexes))
 		return JOB_UNAVAILABLE_SEX
-	if(!latejoin && length(job.allowed_ages) && !(client.prefs.age in job.allowed_ages))
+	if(length(job.allowed_ages) && !(client.prefs.age in job.allowed_ages))
 		return JOB_UNAVAILABLE_AGE
-	if(!latejoin && length(job.allowed_patrons) && !(client.prefs.selected_patron.type in job.allowed_patrons))
+	if(length(job.allowed_patrons) && !(client.prefs.selected_patron.type in job.allowed_patrons))
 		return JOB_UNAVAILABLE_PATRON
 	if((client.prefs.lastclass == job.title) && !job.bypass_lastclass)
 		return JOB_UNAVAILABLE_LASTCLASS
