@@ -15,7 +15,7 @@
 	desc = "The Older ones exist as mere slivers of their former powers, their names forgotten and mercilessly rent from the annals of history.\
 	But one remains. Wherever blood is spilt in bad blood, whereever the blood-joy is invited into the heart and flesh is defiled, he watches.\
 	And sometimes, he speaks and bestows his lessons upon those fortunate enough to catch his attention.\
-	In these susurations lay the Blood-Truth and tales of the godtallow gematria and Psydon's ignoble defilement of the sacred Past, which was once recorded in stone, now in the blood of Psydonians.\
+	In these susurations lay the Blood-Truth and tales of the Godtallow gematria and Psydon's ignoble defilement of the sacred Past, which was once recorded in stone, now in the blood of Psydonians.\
 	That one must live life proud, that the acts the false-church calls reprehensible are in fact necessary and good, and those who partake in them renew the world."
 	worshippers = "Necromancers, Warlords, those who venerate the older way of things, and the Undead"
 	mob_traits = list(TRAIT_CABAL)
