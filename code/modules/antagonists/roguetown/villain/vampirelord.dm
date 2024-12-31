@@ -54,8 +54,9 @@ GLOBAL_LIST_EMPTY(vampire_objects)
 	remove_antag_hud(antag_hud_type, M)
 
 /datum/antagonist/vampirelord/on_gain()
-	var/datum/game_mode/C = SSticker.mode
-	C.vampires |= owner
+	var/datum/game_mode/chaosmode/C = SSticker.mode
+	if(istype(C))
+		C.vampires |= owner
 	. = ..()
 	owner.special_role = name
 	ADD_TRAIT(owner.current, TRAIT_STRONGBITE, "[type]")
@@ -98,7 +99,6 @@ GLOBAL_LIST_EMPTY(vampire_objects)
 			mypool = mansion
 		equip_lord()
 		addtimer(CALLBACK(owner.current, TYPE_PROC_REF(/mob/living/carbon/human, choose_name_popup), "VAMPIRE LORD"), 5 SECONDS)
-		greet()
 	return ..()
 
 // OLD AND EDITED
@@ -415,6 +415,7 @@ GLOBAL_LIST_EMPTY(vampire_objects)
 			owner.current.verbs |= /mob/living/carbon/human/proc/vamp_regenerate
 			owner.current.AddSpell(new /obj/effect/proc_holder/spell/invoked/projectile/bloodsteal)
 			owner.current.AddSpell(new /obj/effect/proc_holder/spell/invoked/projectile/bloodlightning)
+			owner.current.AddSpell(new /obj/effect/proc_holder/spell/invoked/raise_vampire_dead)
 			owner.adjust_skillrank(/datum/skill/magic/blood, 3, TRUE)
 			gas = new
 			owner.current.AddSpell(gas)
@@ -422,7 +423,7 @@ GLOBAL_LIST_EMPTY(vampire_objects)
 				owner.current.change_stat(S, 2)
 			for(var/obj/structure/vampire/bloodpool/B in GLOB.vampire_objects)
 				B.nextlevel = VAMP_LEVEL_THREE
-			to_chat(owner, "<font color='red'>My power is returning. I can once again access my spells. I have also regained usage of my mist form.</font>")
+			to_chat(owner, "<font color='red'>My power is returning. I can once again access my spells and raise the dead to serve me. I have also regained usage of my mist form.</font>")
 		if(2)
 			vamplevel = 3
 			for(var/obj/structure/vampire/necromanticbook/S in GLOB.vampire_objects)
@@ -751,57 +752,12 @@ GLOBAL_LIST_EMPTY(vampire_objects)
 
 /obj/structure/vampire/necromanticbook/attack_hand(mob/living/carbon/human/user)
 	var/datum/antagonist/vampirelord/lord = user.mind.has_antag_datum(/datum/antagonist/vampirelord)
-	var/datum/game_mode/chaosmode/C = SSticker.mode
 	if(user.mind.special_role == "Vampire Lord")
 		if(!unlocked)
 			to_chat(user, "I have yet to regain this aspect of my power!")
 			return
 		var/choice = input(user,"What to do?", "ROGUETOWN") as anything in useoptions|null
 		switch(choice)
-			if("Create Death Knight")
-				if(alert(user, "Create a Death Knight? Cost:5000","","Yes","No") == "Yes")
-					if(C.deathknights.len >= 3)
-						to_chat(user, "You cannot summon any more death knights.")
-						return
-					if(!lord.mypool.check_withdraw(-5000))
-						to_chat(user, "I don't have enough vitae!")
-						return
-					var/list/candidates = pollGhostCandidates("Do you want to become a Death Knight?", "Death Knight", C, 0, 300)
-					if(!candidates || !candidates.len)
-						to_chat(user, "No spirits answer your call...")
-						return
-					if(do_after(user, 100))
-						var/mob/dead/selected = pick(candidates)
-						if(!selected || !selected.client)
-							to_chat(user, "The spirit has moved on...")
-							return
-						lord.handle_vitae(-5000)
-						to_chat(user, "I have summoned a knight from the underworld.")
-						var/mob/living/carbon/human/H = new(get_turf(user))
-						H.key = selected.key
-						selected.mind.transfer_to(H)
-						C.deathknights |= H.mind
-						H.mind.add_antag_datum(/datum/antagonist/skeleton/knight)
-						H.mind.special_role = "Death Knight"
-						H.mind.assigned_role = "Death Knight"
-						H.dna.species.species_traits |= NOBLOOD
-						H.dna.species.soundpack_m = new /datum/voicepack/skeleton()
-						H.dna.species.soundpack_f = new /datum/voicepack/skeleton()
-						H.can_do_sex = FALSE
-						H.base_intents = list(INTENT_HELP, INTENT_DISARM, INTENT_GRAB, /datum/intent/simple/claw)
-						H.update_a_intents()
-						// Remove and regenerate arms
-						var/obj/item/bodypart/O = H.get_bodypart(BODY_ZONE_R_ARM)
-						if(O)
-							O.drop_limb()
-							qdel(O)
-						O = H.get_bodypart(BODY_ZONE_L_ARM)
-						if(O)
-							O.drop_limb()
-							qdel(O)
-						H.regenerate_limb(BODY_ZONE_R_ARM)
-						H.regenerate_limb(BODY_ZONE_L_ARM)
-						user.playsound_local(get_turf(src), 'sound/misc/vcraft.ogg', 100, FALSE, pressure_affected = FALSE)
 			if("Steal the Sun")
 				if(sunstolen)
 					to_chat(user, "The sun is already stolen!")
@@ -1065,7 +1021,7 @@ GLOBAL_LIST_EMPTY(vampire_objects)
 /obj/structure/vampire/necromanticbook // Used to summon undead to attack town/defend manor.
 	name = "Tome of Souls"
 	icon_state = "tome"
-	var/list/useoptions = list("Create Death Knight", "Steal the Sun")
+	var/list/useoptions = list("Steal the Sun")
 	var/sunstolen = FALSE
 
 /obj/structure/vampire/portalmaker
@@ -1182,19 +1138,6 @@ GLOBAL_LIST_EMPTY(vampire_objects)
 
 	usr.forceMove(pick(L))
 	update_parallax_contents()
-
-/mob/dead/observer/rogue/arcaneeye/Initialize()
-	. = ..()
-	set_invisibility(GLOB.observer_default_invisibility)
-	verbs += list(
-		/mob/dead/observer/rogue/arcaneeye/proc/scry_tele,
-		/mob/dead/observer/rogue/arcaneeye/proc/cancel_scry,
-		/mob/dead/observer/rogue/arcaneeye/proc/eye_down,
-		/mob/dead/observer/rogue/arcaneeye/proc/eye_up,
-		/mob/dead/observer/rogue/arcaneeye/proc/vampire_telepathy)
-	testing("BEGIN LOC [loc]")
-	name = "Arcane Eye"
-	grant_all_languages()
 
 /mob/dead/observer/rogue/arcaneeye/proc/cancel_scry()
 	set category = "Arcane Eye"
@@ -1414,4 +1357,72 @@ GLOBAL_LIST_EMPTY(vampire_objects)
 				L.Slowdown(50)
 				sleep(50)
 				L.Sleeping(300)
+
+/obj/effect/proc_holder/spell/invoked/raise_vampire_dead
+	name = "Raise Dead"
+	desc = "Raise a corpse to serve you as an undead minion."
+	clothes_req = FALSE
+	range = 7
+	overlay_state = "animate"
+	sound = list('sound/magic/magnet.ogg')
+	releasedrain = 40
+	chargetime = 60
+	warnie = "spellwarning"
+	no_early_release = TRUE
+	charging_slowdown = 1
+	chargedloop = /datum/looping_sound/invokegen
+	associated_skill = /datum/skill/magic/blood
+	charge_max = 60 SECONDS
+
+/obj/effect/proc_holder/spell/invoked/raise_vampire_dead/cast(list/targets, mob/living/user)
+	. = ..()
+	var/turf/T = get_turf(targets[1])
+	var/mob/living/carbon/human/H = locate(/mob/living/carbon/human) in T
+	if(!H)
+		to_chat(user, span_warning("There is no human corpse here to raise."))
+		return FALSE
+	
+	if(!H.mind)
+		to_chat(user, span_warning("This corpse has no soul to bind to my will."))
+		return FALSE
+		
+	if(H.stat != DEAD)
+		to_chat(user, span_warning("I can only raise the dead."))
+		return FALSE
+		
+	if(H.mind.has_antag_datum(/datum/antagonist/skeleton) || H.mind.has_antag_datum(/datum/antagonist/vampirelord))
+		to_chat(user, span_warning("This one is already bound to dark powers."))
+		return FALSE
+	
+	H.revive(full_heal = TRUE, admin_revive = FALSE)
+	H.mind.add_antag_datum(/datum/antagonist/skeleton/knight)
+	H.mob_biotypes = MOB_UNDEAD
+	H.faction |= "undead"
+	H.can_do_sex = FALSE
+	ADD_TRAIT(H, TRAIT_NOSLEEP, "death_knight")
+	ADD_TRAIT(H, TRAIT_NOPAIN, "death_knight")
+	ADD_TRAIT(H, TRAIT_NOBREATH, "death_knight")
+	ADD_TRAIT(H, TRAIT_NOHUNGER, "death_knight")
+	ADD_TRAIT(H, TRAIT_TOXIMMUNE, "death_knight")
+	ADD_TRAIT(H, TRAIT_NOROGSTAM, "death_knight")
+	ADD_TRAIT(H, TRAIT_NOMOOD, "death_knight")
+	
+	var/obj/item/organ/eyes/eyes = H.getorganslot(ORGAN_SLOT_EYES)
+	if(eyes)
+		eyes.Remove(H,1)
+		QDEL_NULL(eyes)
+	eyes = new /obj/item/organ/eyes/night_vision/zombie
+	eyes.Insert(H)
+	
+	for(var/obj/item/bodypart/B in H.bodyparts)
+		B.skeletonize(FALSE)
+	H.update_body()
+	
+	H.resting = FALSE
+	H.stand_up()
+	
+	H.visible_message(span_warning("[H] rises with an unholy gleam in their eyes!"))
+	to_chat(H, span_userdanger("Darkness claims me as I rise to serve [user]!"))
+	playsound(H, 'sound/magic/magnet.ogg', 50, TRUE)
+	return TRUE
 
