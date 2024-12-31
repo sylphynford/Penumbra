@@ -377,6 +377,14 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/rp_prompt.txt"))
 		ready = PLAYER_NOT_READY
 		return FALSE
 
+	// Add admin check
+	if(!check_rights(R_ADMIN, 0))
+		to_chat(src, "<span class='warning'>You must be an admin to observe.</span>")
+		ready = PLAYER_NOT_READY
+		src << browse(null, "window=playersetup") //closes the player setup window
+		new_player_panel()
+		return FALSE
+
 	var/this_is_like_playing_right = alert(src,"Are you sure you wish to observe? Playing is a lot more fun.","VOYEUR","Yes","No")
 
 	if(QDELETED(src) || !src.client || this_is_like_playing_right != "Yes")
