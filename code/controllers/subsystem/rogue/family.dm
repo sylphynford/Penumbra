@@ -60,48 +60,42 @@ SUBSYSTEM_DEF(family)
 /datum/controller/subsystem/family/proc/SetupFamilies()
 	if(!length(family_candidates))
 		return
-	var/total_families
 
 	var/list/current_families = list()
-
 	var/list/head_candidates = list()
+	var/list/remaining_candidates = list()
+	
+	// Get initial head candidates
 	for(var/c in family_candidates)
 		var/mob/living/carbon/human/H = c
 		if(H.getorganslot(ORGAN_SLOT_PENIS))
 			head_candidates += H
+		else
+			remaining_candidates += H
 
-	family_candidates = shuffle(family_candidates)
-	total_families = max(1,round(length(family_candidates)/2)) //Since we're currently only matching spouses. Just assume we want enough families for groups of two.
-	while(total_families && length(head_candidates)) //Construct families.
+	// Shuffle both lists for randomness
+	head_candidates = shuffle(head_candidates)
+	remaining_candidates = shuffle(remaining_candidates)
+
+	// Try to match each head with one candidate
+	while(length(head_candidates) && length(remaining_candidates))
 		var/mob/living/carbon/head = pick(head_candidates)
+		var/datum/family/F = makeFamily(head)
+		current_families += F
+		head_candidates -= head
+		
+		// Try to find ONE match for this head
+		for(var/mob/living/carbon/human/H in remaining_candidates)
+			var/rel_type = F.tryConnect(H, head)
+			if(F.checkFamilyCompat(H, head, rel_type) && F.checkFamilyCompat(head, H, rel_type))
+				F.addMember(H)
+				F.addRel(H, head, getMatchingRel(rel_type), TRUE)
+				F.addRel(head, H, rel_type, TRUE)
+				remaining_candidates -= H
+				break  // Stop after first match - one head, one candidate
 
-		if(head)
-			var/datum/family/F = makeFamily(head)
-			current_families += F
-			family_candidates -= head
-			head_candidates -= head
-
-		total_families--
-
-	can_loop:
-		for(var/mob/living/carbon/human/H in family_candidates) //Try and find a suitable family for all candidates. Note. this system is currently only built to match spouses. A more complex system would be needed for full families.
-			families = shuffle(current_families)
-			for(var/fam in current_families)
-				var/datum/family/F = fam
-				var/mob/living/carbon/human/connecting_member
-				for(var/name in F.members) //Loop through all family members and try and connect H to them.
-					connecting_member = F.members[name]:resolve()
-					var/rel_type = F.tryConnect(H,connecting_member)
-					if(F.checkFamilyCompat(H,connecting_member,rel_type) && F.checkFamilyCompat(connecting_member,H,rel_type)) //suitable. Add them to the family and connect them. (Note using checkFamilyCompat for both falls apart for anything other than spouses. The checks should be moved to a different proc at some point.)
-						F.addMember(H)
-						F.addRel(H,connecting_member,getMatchingRel(rel_type),TRUE)
-						F.addRel(connecting_member,H,rel_type,TRUE)
-
-						current_families -= F
-						family_candidates -= H // Remove the matched candidate
-						continue can_loop // Continue to next candidate instead of breaking completely
-
-	for(var/fam in families) //Remove families with only one member.
+	// Clean up single member families
+	for(var/fam in families)
 		var/datum/family/F = fam
 		if(length(F.members) <= 1)
 			qdel(F)
