@@ -746,7 +746,9 @@ GLOBAL_LIST_EMPTY(chosen_names)
 				dat += "<a class='linkOff' href='byond://?src=[REF(N)];late_join=1'>JOINLATE</a>"
 			dat += " - <a href='?_src_=prefs;preference=migrants'>MIGRATION</a>"
 			dat += "<br><a href='?_src_=prefs;preference=manifest'>ACTORS</a>"
-			dat += " - <a href='?_src_=prefs;preference=observe'>VOYEUR</a>"
+			// Only show VOYEUR option for admins
+			if(check_rights(R_ADMIN, 0, user))
+				dat += " - <a href='?_src_=prefs;preference=observe'>VOYEUR</a>"
 	else
 		dat += "<a href='?_src_=prefs;preference=finished'>DONE</a>"
 
