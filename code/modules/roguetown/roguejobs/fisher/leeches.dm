@@ -82,7 +82,7 @@
 	. = ..()
 	switch(blood_storage/blood_maximum)
 		if(0.8 to INFINITY)
-			. += span_bloody("<B>[p_theyre(TRUE)] fat and engorged with blood.</B>")
+			. += span_bloody("<B>[p_theyre(TRUE)] fat and engloamed with blood.</B>")
 		if(0.5 to 0.8)
 			. += span_bloody("[p_theyre(TRUE)] well fed.")
 		if(0.1 to 0.5)
@@ -144,7 +144,7 @@
 		"dumb" = 2,
 		"demonic" = 1,
 		"graggoid" = 1,
-		"zizoid" = 1,
+		"noddic" = 1,
 	)
 	var/static/list/all_descs = list(
 		"What a disgusting creature." = 10,
