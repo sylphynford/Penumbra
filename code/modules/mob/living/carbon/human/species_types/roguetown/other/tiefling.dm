@@ -125,6 +125,7 @@
 		"Helixia" = SKIN_COLOR_HELIXIA,
 		"Nymsea" = SKIN_COLOR_NYMSEA,
 		"Calvus" = SKIN_COLOR_CALVUS
+		"Noddic" = SKIN_COLOR_NODDIC
 	)
 
 /datum/species/tieberian/get_hairc_list()
