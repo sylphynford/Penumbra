@@ -766,14 +766,42 @@ GLOBAL_LIST_EMPTY(vampire_objects)
 					if(!lord.mypool.check_withdraw(-5000))
 						to_chat(user, "I don't have enough vitae!")
 						return
+					var/list/candidates = pollGhostCandidates("Do you want to become a Death Knight?", "Death Knight", C, 0, 300)
+					if(!candidates || !candidates.len)
+						to_chat(user, "No spirits answer your call...")
+						return
 					if(do_after(user, 100))
-						to_chat(user, "I have summoned a knight from the underworld. I need only wait for them to materialize.")
-						C.deathknightspawn = TRUE
-						for(var/mob/dead/observer/D in GLOB.player_list)
-							D.death_knight_spawn()
-						for(var/mob/living/carbon/spirit/D in GLOB.player_list)
-							D.death_knight_spawn()
-				user.playsound_local(get_turf(src), 'sound/misc/vcraft.ogg', 100, FALSE, pressure_affected = FALSE)
+						var/mob/dead/selected = pick(candidates)
+						if(!selected || !selected.client)
+							to_chat(user, "The spirit has moved on...")
+							return
+						lord.handle_vitae(-5000)
+						to_chat(user, "I have summoned a knight from the underworld.")
+						var/mob/living/carbon/human/H = new(get_turf(user))
+						H.key = selected.key
+						selected.mind.transfer_to(H)
+						C.deathknights |= H.mind
+						H.mind.add_antag_datum(/datum/antagonist/skeleton/knight)
+						H.mind.special_role = "Death Knight"
+						H.mind.assigned_role = "Death Knight"
+						H.dna.species.species_traits |= NOBLOOD
+						H.dna.species.soundpack_m = new /datum/voicepack/skeleton()
+						H.dna.species.soundpack_f = new /datum/voicepack/skeleton()
+						H.can_do_sex = FALSE
+						H.base_intents = list(INTENT_HELP, INTENT_DISARM, INTENT_GRAB, /datum/intent/simple/claw)
+						H.update_a_intents()
+						// Remove and regenerate arms
+						var/obj/item/bodypart/O = H.get_bodypart(BODY_ZONE_R_ARM)
+						if(O)
+							O.drop_limb()
+							qdel(O)
+						O = H.get_bodypart(BODY_ZONE_L_ARM)
+						if(O)
+							O.drop_limb()
+							qdel(O)
+						H.regenerate_limb(BODY_ZONE_R_ARM)
+						H.regenerate_limb(BODY_ZONE_L_ARM)
+						user.playsound_local(get_turf(src), 'sound/misc/vcraft.ogg', 100, FALSE, pressure_affected = FALSE)
 			if("Steal the Sun")
 				if(sunstolen)
 					to_chat(user, "The sun is already stolen!")
