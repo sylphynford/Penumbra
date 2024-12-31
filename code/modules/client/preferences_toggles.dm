@@ -26,6 +26,28 @@
 	set category = "Options"
 	set desc = ""
 	if(prefs)
+		// Validate and reset any invalid job preferences before showing UI
+		for(var/job_title in prefs.job_preferences)
+			var/datum/job/job = SSjob.GetJob(job_title)
+			if(!job)
+				continue
+				
+			// Check patron restrictions
+			if(length(job.allowed_patrons) && !(prefs.selected_patron.type in job.allowed_patrons))
+				prefs.job_preferences[job_title] = 0
+				
+			// Check race restrictions
+			if(length(job.allowed_races) && !(prefs.pref_species.type in job.allowed_races))
+				prefs.job_preferences[job_title] = 0
+				
+			// Check PQ restrictions
+			if(!isnull(job.min_pq) && (get_playerquality(ckey) < job.min_pq))
+				if(prefs.job_preferences[job_title] != JP_LOW)
+					prefs.job_preferences[job_title] = JP_LOW
+					
+			if(!isnull(job.max_pq) && (get_playerquality(ckey) > job.max_pq))
+				prefs.job_preferences[job_title] = 0
+				
 		usr.client.prefs.current_tab = 1
 		usr.client.prefs.ShowChoices(usr, 4)
 

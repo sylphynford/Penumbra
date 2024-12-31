@@ -156,11 +156,17 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/rp_prompt.txt"))
 	if(href_list["ready"])
 		var/tready = text2num(href_list["ready"])
 		//Avoid updating ready if we're after PREGAME (they should use latejoin instead)
-		//This is likely not an actual issue but I don't have time to prove that this
-		//no longer is required
 		if(SSticker.current_state <= GAME_STATE_PREGAME)
-			if(!client.prefs.validate_genitals_with_message())
-				return
+			// Add validation before allowing ready state change
+			if(tready == PLAYER_READY_TO_PLAY)
+				// Check if any selected jobs are incompatible with current preferences
+				for(var/job_title in client.prefs.job_preferences)
+					if(client.prefs.job_preferences[job_title] == 0)
+						continue
+					
+					if(IsJobUnavailable(job_title) != JOB_AVAILABLE)
+						to_chat(src, span_danger("You cannot ready up with your current preferences. Please check your job/patron/race/age/gender settings."))
+						return
 			ready = tready
 		//if it's post initialisation and they're trying to observe they shouldn't be able to ready up, but startjoining instead
 		if(!SSticker.current_state < GAME_STATE_PREGAME && tready == PLAYER_READY_TO_OBSERVE)
@@ -943,7 +949,55 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/rp_prompt.txt"))
 	if(!client)
 		return FALSE //Not sure how this would get run without the mob having a client, but let's just be safe.
 	if(client.prefs.joblessrole != RETURNTOLOBBY)
+		// Add validation for patron/race/job combinations
+		for(var/job_title in client.prefs.job_preferences)
+			if(client.prefs.job_preferences[job_title] == 0)
+				continue
+				
+			var/datum/job/job = SSjob.GetJob(job_title)
+			if(!job)
+				continue
+				
+			// Check patron restrictions
+			if(length(job.allowed_patrons) && client.prefs.selected_patron && !(client.prefs.selected_patron.type in job.allowed_patrons))
+				to_chat(src, span_danger("Your selected patron is not compatible with the [job_title] role. Please update your preferences before readying up."))
+				ineligible_for_roles = TRUE
+				ready = PLAYER_NOT_READY
+				return FALSE
+			
+			// Check race restrictions
+			if(length(job.allowed_races) && client.prefs.pref_species && !(client.prefs.pref_species.type in job.allowed_races))
+				to_chat(src, span_danger("Your selected race is not compatible with the [job_title] role. Please update your preferences before readying up."))
+				ineligible_for_roles = TRUE
+				ready = PLAYER_NOT_READY
+				return FALSE
+
+			// Check sex restrictions
+			var/list/allowed_sexes = list()
+			if(length(job.allowed_sexes))
+				allowed_sexes |= job.allowed_sexes
+			if(!job.immune_to_genderswap && client.prefs.pref_species?.gender_swapping)
+				if(MALE in job.allowed_sexes)
+					allowed_sexes -= MALE
+					allowed_sexes += FEMALE
+				if(FEMALE in job.allowed_sexes)
+					allowed_sexes -= FEMALE
+					allowed_sexes += MALE
+			if(length(allowed_sexes) && !(client.prefs.gender in allowed_sexes))
+				to_chat(src, span_danger("Your selected gender is not compatible with the [job_title] role. Please update your preferences before readying up."))
+				ineligible_for_roles = TRUE
+				ready = PLAYER_NOT_READY
+				return FALSE
+
+			// Check age restrictions
+			if(length(job.allowed_ages) && !(client.prefs.age in job.allowed_ages))
+				to_chat(src, span_danger("Your selected age is not compatible with the [job_title] role. Please update your preferences before readying up."))
+				ineligible_for_roles = TRUE
+				ready = PLAYER_NOT_READY
+				return FALSE
+
 		return TRUE
+		
 	// If they have antags enabled, they're potentially doing this on purpose instead of by accident. Notify admins if so.
 	var/has_antags = FALSE
 	if(client.prefs.be_special.len > 0)

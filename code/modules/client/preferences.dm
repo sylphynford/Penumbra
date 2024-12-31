@@ -1052,6 +1052,19 @@ Slots: [job.spawn_positions]</span>
 		ShowChoices(user,4)
 		return
 
+	// Add validation checks before processing job preference
+	if(length(job.allowed_patrons) && !(selected_patron.type in job.allowed_patrons))
+		to_chat(user, span_warning("Your patron does not allow this job choice."))
+		SetJobPreferenceLevel(job, null)
+		SetChoices(user)
+		return
+
+	if(length(job.allowed_races) && !(pref_species.type in job.allowed_races))
+		to_chat(user, span_warning("Your race does not allow this job choice."))
+		SetJobPreferenceLevel(job, null) 
+		SetChoices(user)
+		return
+
 	var/jpval = null
 	switch(desiredLvl)
 		if(3)
@@ -1072,6 +1085,12 @@ Slots: [job.spawn_positions]</span>
 				used_name = "[job.f_title]"
 			to_chat(user, "<font color='red'>You have too low PQ for [used_name] (Min PQ: [job.min_pq]), you may only set it to low.</font>")
 			jpval = JP_LOW
+
+	if(!isnull(job.max_pq) && (get_playerquality(user.ckey) > job.max_pq))
+		to_chat(user, span_warning("Your player quality is too high for this job choice."))
+		SetJobPreferenceLevel(job, null)
+		SetChoices(user)
+		return
 
 	SetJobPreferenceLevel(job, jpval)
 	SetChoices(user)

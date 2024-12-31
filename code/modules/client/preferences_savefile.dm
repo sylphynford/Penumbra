@@ -204,6 +204,27 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	if(needs_update >= 0)
 		update_preferences(needs_update, S)		//needs_update = savefile_version if we need an update (positive integer)
 
+	// Add validation for patron/race/job combinations
+	if(job_preferences)
+		for(var/job_title in job_preferences)
+			var/datum/job/job = SSjob.GetJob(job_title)
+			if(!job)
+				continue
+				
+			var/should_reset = FALSE
+			
+			// Check patron restrictions
+			if(length(job.allowed_patrons) && selected_patron && !(selected_patron.type in job.allowed_patrons))
+				should_reset = TRUE
+				
+			// Check race restrictions
+			if(length(job.allowed_races) && pref_species && !(pref_species.type in job.allowed_races))
+				should_reset = TRUE
+				
+			// Reset job preference if invalid
+			if(should_reset)
+				job_preferences[job_title] = 0
+
 	//Sanitize
 	asaycolor		= sanitize_ooccolor(sanitize_hexcolor(asaycolor, 6, 1, initial(asaycolor)))
 	ooccolor		= sanitize_ooccolor(sanitize_hexcolor(ooccolor, 6, 1, initial(ooccolor)))
