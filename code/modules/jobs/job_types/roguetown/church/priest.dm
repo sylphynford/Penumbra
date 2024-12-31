@@ -17,7 +17,7 @@
 
 	spells = list(/obj/effect/proc_holder/spell/invoked/lesser_heal, /obj/effect/proc_holder/spell/targeted/churn, /obj/effect/proc_holder/spell/self/convertrole/templar, /obj/effect/proc_holder/spell/self/convertrole/monk)
 	outfit = /datum/outfit/job/roguetown/priest
-
+	zizo_roll = 100
 	display_order = JDO_PRIEST
 	give_bank_account = 115
 	min_pq = 0 // You should know the basics of things if you're going to lead the town's entire religious sector

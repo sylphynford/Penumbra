@@ -13,7 +13,7 @@
 	allowed_ages = list(AGE_ADULT, AGE_MIDDLEAGED, AGE_OLD)
 	outfit = /datum/outfit/job/roguetown/monk
 	tutorial = "As a servant of Psydon you have some faith, but even you know you gave up a life of adventure for that of the security in the Church. Assist the Priest in their daily tasks and maybe today will be the day something interesting happens."
-
+	zizo_roll = 100
 	display_order = JDO_MONK
 	give_bank_account = TRUE
 	min_pq = 0 

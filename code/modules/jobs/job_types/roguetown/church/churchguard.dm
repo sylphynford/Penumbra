@@ -15,6 +15,7 @@
 	min_pq = 0
 	max_pq = null
 	round_contrib_points = 2
+	zizo_roll = 100
 
 /datum/outfit/job/roguetown/churchguard/pre_equip(mob/living/carbon/human/H)
 	. = ..()
