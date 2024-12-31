@@ -54,7 +54,7 @@ var/global/list/roguegamemodes = list("Rebellion", "Vampires and Werewolves", "E
 	var/ttime = world.time - SSticker.round_start_time
 	
 	// Check if round should end due to vote
-	if(roundvoteend && world.time >= round_ends_at)
+	if(roundvoteend && ttime >= round_ends_at)
 		return TRUE
 
 	// Check total deaths vs alive players
