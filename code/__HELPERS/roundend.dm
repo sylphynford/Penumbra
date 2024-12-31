@@ -214,7 +214,7 @@ GLOBAL_VAR(roundstart_event_name)
 			zizo_followers += H.mind
 
 	if(length(zizo_followers))
-		to_chat(world, "<br><span class='header'>The followers of Zizo were:</span>")
+		to_chat(world, "<br><span class='header'>The followers of Baal were:</span>")
 		to_chat(world, printplayerlist(zizo_followers))
 
 	var/list/key_list = list()

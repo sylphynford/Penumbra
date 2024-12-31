@@ -194,7 +194,7 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/rp_prompt.txt"))
 			return
 
 		if(istype(client?.prefs?.selected_patron, /datum/patron/inhumen/zizo))
-			to_chat(usr, span_warning("You may not latejoin as a Zizo worshipper. Please set your faith to PSYDON or choose Faithless heresy."))
+			to_chat(usr, span_warning("You may not latejoin as a Baal worshipper. Please set your faith to PSYDON or choose Faithless heresy."))
 			return
 
 		if(href_list["late_join"] == "override")
@@ -568,7 +568,7 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/rp_prompt.txt"))
 
 	// This check only allows Faithless heretics
 	if(istype(client?.prefs?.selected_patron, /datum/patron/inhumen/zizo))
-		to_chat(src, span_warning("You may not latejoin as a Zizo worshipper. Please set your faith to PSYDON or choose Faithless heresy."))
+		to_chat(src, span_warning("You may not latejoin as a Baal worshipper. Please set your faith to PSYDON or choose Faithless heresy."))
 		return FALSE
 
 	// Handle class selection for jobs with advanced classes

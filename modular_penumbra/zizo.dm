@@ -1,7 +1,7 @@
 /datum/patron/inhumen/zizo/verb/remember_friends()
 	set name = "Remember Friends"
 	set category = "CULTIST"
-	set desc = "See who else follows Zizo."
+	set desc = "See who else follows Baal."
 
 	var/mob/living/carbon/human/H = usr
 	if(!istype(H))
@@ -11,7 +11,7 @@
 		return
 
 	if(!HAS_TRAIT(H, TRAIT_CABAL))
-		to_chat(H, span_warning("Only followers of Zizo may use this power."))
+		to_chat(H, span_warning("Only followers of Baal may use this power."))
 		return
 
 	var/list/cabal_members = list()
@@ -23,10 +23,10 @@
 			cabal_members += "[member.real_name] the [role_text]"
 
 	if(!length(cabal_members))
-		to_chat(H, span_warning("There are no other followers of Zizo."))
+		to_chat(H, span_warning("There are no other followers of Baal."))
 		return
 
-	to_chat(H, span_cultitalic("You remember other followers of Zizo:"))
+	to_chat(H, span_cultitalic("You remember other followers of Baal:"))
 	for(var/member in cabal_members)
 		to_chat(H, span_cult("• [member]"))
 
