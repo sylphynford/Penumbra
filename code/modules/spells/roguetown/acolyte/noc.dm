@@ -2,7 +2,6 @@
 /obj/effect/proc_holder/spell/invoked/blindness
     name = "Blindness"
     overlay_state = "blindness"
-    req_items = list(/obj/item/clothing/neck/roguetown/psicross)
     releasedrain = 30
     chargedrain = 0
     chargetime = 0

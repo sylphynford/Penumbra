@@ -10,18 +10,22 @@
 	)
 
 /datum/patron/inhumen/zizo
-	name = "Zizo"
+	name = "Baal"
 	domain = "The domain of ambition and defilement."
-	desc = "The disciples of Zizo are a faction that believes in the power and supremacy of Zizo, viewing him as the world's only hope against impending doom.  They work tirelessly to strengthen Zizo's hold on the world, conducting dark rituals and seeking out ancient artifacts. Despite their seemingly malevolent alliance, they see themselves as the world's protectors, believing that only by embracing the power of Zizo can the world be saved. They are united not by worship, but by a shared creed: power belongs to those who take it, not to those who wait for a absent god to bestow it."
-	worshippers = "Necromancers, Warlocks, and the Undead"
+	desc = "The Older ones exist as mere slivers of their former powers, their names forgotten and mercilessly "
+	worshippers = "Necromancers, Warlords, those who venerate the older way of things, and the Undead"
 	mob_traits = list(TRAIT_CABAL)
-	t1 = /obj/effect/proc_holder/spell/invoked/projectile/profane/miracle
-	t2 = /obj/effect/proc_holder/spell/invoked/raise_lesser_undead/miracle
+	t1 = /obj/effect/proc_holder/spell/invoked/blindness
+	t2 = /obj/effect/proc_holder/spell/invoked/raise_undead/miracle
 	t3 = /obj/effect/proc_holder/spell/invoked/rituos/miracle
 	confess_lines = list(
-		"PRAISE ZIZO!",
-		"LONG LIVE ZIZO!",
-		"ZIZO IS GOD!"
+		"PRAISE BAAL!",
+		"LONG LIVE BAAL!",
+		"BAAL IS GOD!",
+		"BAAL WILL DESTROY HEAVEN!",
+		"WE WILL CREATE A NEW WORLD!",
+		"NO HUNGER, NO SUFFERING!",
+		"ROT IN DEATH, PSYDONIC FILTH!"
 	)
 
 /datum/patron/inhumen/graggar
