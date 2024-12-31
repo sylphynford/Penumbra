@@ -52,8 +52,8 @@
 
 /datum/special_trait/cannibal
 	name = "Primal Blood"
-	weight = 5
-	greet_text = span_notice("I've always felt like I was more orc than man. I can eat raw limbs.")
+	weight = 4
+	greet_text = span_notice("I've always felt like I was more orc than man. I can eat raw limbs. <b>Limited to half-orcs.</b>")
 	allowed_races = list(/datum/species/halforc)
 
 /datum/special_trait/cannibal/on_apply(mob/living/carbon/human/character, silent)
