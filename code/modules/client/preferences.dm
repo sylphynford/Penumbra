@@ -170,13 +170,13 @@ GLOBAL_LIST_EMPTY(chosen_names)
 	// Class preferences for each job
 	var/town_guard_class = null
 	var/sergeant_class = null
-	// templar_class removed - class is now determined by Inquisitor's choice
 	var/knight_lieutenant_class = null
 	var/hand_class = null
 	var/squire_class = null
 	var/inquisitor_class = null
 	var/mercenary_class = null
 	var/heir_class = null
+	var/templar_class = null
 
 /datum/preferences/New(client/C)
 	parent = C
@@ -978,7 +978,7 @@ Slots: [job.spawn_positions]</span>
 			HTML += "</a></td></tr>"
 
 			// Add advclass selection for jobs with advanced classes
-			if(job.advclass_cat_rolls?.len && job_preferences[job.title] != null && job.title != "Towner" && job.title != "Vagabond" && job.title != "Occultist")
+			if(job.advclass_cat_rolls?.len && job_preferences[job.title] != null && job.title != "Towner" && job.title != "Vagabond")
 				HTML += "<tr bgcolor='#000000'><td width='60%' align='right'>"
 				HTML += "Class:</td><td><a href='?_src_=prefs;preference=advclass;job=[rank]'>"
 				var/selected_class
@@ -999,6 +999,8 @@ Slots: [job.spawn_positions]</span>
 						selected_class = mercenary_class
 					if("Heir")
 						selected_class = heir_class
+					if("Occultist") 
+						selected_class = templar_class
 				HTML += "[selected_class ? selected_class : "Random"]"
 				HTML += "</a></td></tr>"
 
@@ -2297,6 +2299,8 @@ Slots: [job.spawn_positions]</span>
 							class_type = /datum/advclass/mercenary
 						if("Heir")
 							class_type = /datum/advclass/heir
+						if("Occultist") 
+							class_type = /datum/advclass/templar
 
 					if(class_type)
 						for(var/type in subtypesof(class_type))
@@ -2327,6 +2331,8 @@ Slots: [job.spawn_positions]</span>
 								mercenary_class = (choice == "Random" ? null : choice)
 							if("Heir")
 								heir_class = (choice == "Random" ? null : choice)
+							if("Occultist")
+								templar_class = (choice == "Random" ? null : choice)
 
 						// Show tutorial text if a class was selected
 						if(choice != "Random")

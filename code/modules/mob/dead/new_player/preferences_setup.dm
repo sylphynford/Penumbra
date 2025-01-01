@@ -93,6 +93,8 @@
 		// Then check if this job has a selected class
 		var/selected_class
 		switch(previewJob.title)
+			if("Occultist")
+				selected_class = templar_class
 			if("Town Guard")
 				selected_class = town_guard_class
 			if("Sergeant at Arms")
