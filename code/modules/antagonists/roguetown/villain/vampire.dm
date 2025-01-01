@@ -25,7 +25,8 @@
 	var/last_transform
 	var/is_lesser = FALSE
 	var/cache_skin
-	var/cache_eyes
+	var/cache_eye_color
+	var/cache_second_color
 	var/cache_hair
 	var/starved = FALSE
 	var/obj/effect/proc_holder/spell/targeted/shapeshift/bat/batform //attached to the datum itself to avoid cloning memes, and other duplicates
@@ -97,8 +98,9 @@
 	if(istype(H))
 		var/obj/item/organ/eyes/E = H.getorganslot(ORGAN_SLOT_EYES)
 		if(E)
-			cache_eyes = E.eye_color
-			message_admins("DEBUG: Base vampire on_gain() - Caching eye color from eyes organ: [cache_eyes]")
+			cache_eye_color = E.eye_color
+			cache_second_color = E.second_color
+			message_admins("DEBUG: Base vampire on_gain() - Caching eye color from eyes organ: [cache_eye_color] [cache_second_color]")
 		cache_skin = H.skin_tone
 		cache_hair = H.hair_color
 	
@@ -193,14 +195,14 @@
 		
 		if(dna)
 			var/datum/organ_dna/eyes/eyes_dna = dna.organ_dna[ORGAN_SLOT_EYES]
-			if(eyes_dna)
-				eyes_dna.eye_color = "#ff0000"
-				eyes_dna.second_color = "#ff0000"
-				var/obj/item/organ/eyes/E = getorganslot(ORGAN_SLOT_EYES)
-				if(E)
+			var/obj/item/organ/eyes/E = getorganslot(ORGAN_SLOT_EYES)
+			if(E)
+				E.eye_color = "#ff0000"
+				E.second_color = "#ff0000"
+				if(eyes_dna)
 					E.imprint_organ_dna(eyes_dna)
-					E.update_accessory_colors()
-					E.lighting_alpha = LIGHTING_PLANE_ALPHA_MOSTLY_VISIBLE
+				E.update_accessory_colors()
+				E.lighting_alpha = LIGHTING_PLANE_ALPHA_MOSTLY_VISIBLE
 		
 		dna?.species.handle_body(src)
 		update_body()
@@ -212,16 +214,16 @@
 		to_chat(src, span_notice("I conceal my vampiric nature."))
 		V.disguised = TRUE
 		
-		if(V.cache_eyes && dna)
+		if(V.cache_eye_color && dna)
 			var/datum/organ_dna/eyes/eyes_dna = dna.organ_dna[ORGAN_SLOT_EYES]
-			if(eyes_dna)
-				eyes_dna.eye_color = "[V.cache_eyes]"
-				eyes_dna.second_color = "[V.cache_eyes]"
-				var/obj/item/organ/eyes/E = getorganslot(ORGAN_SLOT_EYES)
-				if(E)
+			var/obj/item/organ/eyes/E = getorganslot(ORGAN_SLOT_EYES)
+			if(E)
+				E.eye_color = V.cache_eye_color
+				E.second_color = V.cache_second_color
+				if(eyes_dna)
 					E.imprint_organ_dna(eyes_dna)
-					E.update_accessory_colors()
-					E.lighting_alpha = null
+				E.update_accessory_colors()
+				E.lighting_alpha = null
 		
 		dna?.species.handle_body(src)
 		update_body()
@@ -241,16 +243,16 @@
 		hair_color = VD.cache_hair
 		facial_hair_color = VD.cache_hair
 		
-		if(VD.cache_eyes && dna)
+		if(VD.cache_eye_color && dna)
 			var/datum/organ_dna/eyes/eyes_dna = dna.organ_dna[ORGAN_SLOT_EYES]
-			if(eyes_dna)
-				eyes_dna.eye_color = "[VD.cache_eyes]"
-				eyes_dna.second_color = "[VD.cache_eyes]"
-				var/obj/item/organ/eyes/E = getorganslot(ORGAN_SLOT_EYES)
-				if(E)
+			var/obj/item/organ/eyes/E = getorganslot(ORGAN_SLOT_EYES)
+			if(E)
+				E.eye_color = VD.cache_eye_color
+				E.second_color = VD.cache_second_color
+				if(eyes_dna)
 					E.imprint_organ_dna(eyes_dna)
-					E.update_accessory_colors()
-					E.lighting_alpha = null
+				E.update_accessory_colors()
+				E.lighting_alpha = null
 		
 		dna?.species.handle_body(src)
 		update_body()
@@ -278,13 +280,14 @@
 	
 	if(dna)
 		var/datum/organ_dna/eyes/eyes_dna = dna.organ_dna[ORGAN_SLOT_EYES]
-		if(eyes_dna)
-			eyes_dna.eye_color = "#ff0000"
-			eyes_dna.second_color = "#ff0000"
-			var/obj/item/organ/eyes/E = getorganslot(ORGAN_SLOT_EYES)
-			if(E)
+		var/obj/item/organ/eyes/E = getorganslot(ORGAN_SLOT_EYES)
+		if(E)
+			E.eye_color = "#ff0000"
+			E.second_color = "#ff0000"
+			if(eyes_dna)
 				E.imprint_organ_dna(eyes_dna)
-				E.update_accessory_colors()
+			E.update_accessory_colors()
+			E.lighting_alpha = LIGHTING_PLANE_ALPHA_MOSTLY_VISIBLE
 	
 	dna?.species.handle_body(src)
 	update_body()
