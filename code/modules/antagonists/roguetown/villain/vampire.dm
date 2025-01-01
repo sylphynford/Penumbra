@@ -150,7 +150,16 @@
 /datum/antagonist/vampire/proc/finalize_vampire()
 	owner.current.playsound_local(get_turf(owner.current), 'sound/music/vampintro.ogg', 80, FALSE, pressure_affected = FALSE)
 
+/mob/living/carbon/human/proc/set_organ_slot_color(organ_slot, organ_color)
+	var/obj/item/organ/Organ = getorganslot(organ_slot)
+	if (Organ)
+		Organ.accessory_colors = organ_color
 
+/mob/living/carbon/human/proc/set_skin_tone(n_skin_tone)
+	skin_tone = n_skin_tone
+	var/san_skin_tone = sanitize_hexcolor(skin_tone, 6, 1) //prepend # to hex
+	set_organ_slot_color(ORGAN_SLOT_PENIS, list(san_skin_tone, san_skin_tone))
+	set_organ_slot_color(ORGAN_SLOT_BREASTS, san_skin_tone)
 
 /datum/antagonist/vampire/on_life(mob/user)
 	if(!user)
@@ -172,6 +181,8 @@
 		if(disguised)
 			last_transform = world.time
 			H.vampire_undisguise(src)
+		else
+			H.set_skin_tone("c9d3de")
 		H.freak_out()
 
 	if(H.stat)
@@ -245,7 +256,7 @@
 	if(istype(V, /datum/antagonist/vampire))
 		var/datum/antagonist/vampire/VD = V
 		VD.disguised = TRUE
-		skin_tone = VD.cache_skin
+		set_skin_tone(VD.cache_skin)
 		hair_color = VD.cache_hair
 		facial_hair_color = VD.cache_hair
 		
@@ -280,7 +291,7 @@
 	else
 		return
 	
-	skin_tone = "c9d3de"
+	set_skin_tone("c9d3de")
 	hair_color = "181a1d"
 	facial_hair_color = "181a1d"
 	
