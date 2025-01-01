@@ -28,6 +28,21 @@
 	flags_inv = HIDECROTCH|HIDEBOOB
 	var/picked
 
+/obj/item/clothing/cloak/psydontabard
+	name = "templar tabard"
+	desc = "A long vest worn by the Templars of Psydon."
+	color = null
+	icon_state = "psydontabard"
+	item_state = "psydontabard"
+	mob_overlay_icon = 'icons/roguetown/clothing/onmob/cloaks.dmi'
+	alternate_worn_layer = TABARD_LAYER
+	body_parts_covered = CHEST|GROIN
+	boobed = TRUE
+	slot_flags = ITEM_SLOT_ARMOR|ITEM_SLOT_CLOAK
+	flags_inv = HIDECROTCH|HIDEBOOB
+	var/open_wear = FALSE
+
+
 /obj/item/clothing/cloak/tabard/update_icon()
 	cut_overlays()
 	if(get_detail_tag())

@@ -41,7 +41,7 @@
 		H.change_stat("speed", -1)
 
 /datum/outfit/job/roguetown/churchguard
-	cloak = /obj/item/clothing/cloak/templar/psydon
+	cloak = /obj/item/clothing/cloak/psydontabard
 	wrists = /obj/item/clothing/neck/roguetown/psicross/silver
 	belt = /obj/item/storage/belt/rogue/leather 
 	beltl = /obj/item/storage/keyring/templar

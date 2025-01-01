@@ -134,6 +134,7 @@
 	category_tags = list(CTAG_TEMPLAR)
 
 /datum/outfit/job/roguetown/templar/crusader
+	cloak = /obj/item/clothing/cloak/stabard/crusader
 	head = /obj/item/clothing/head/roguetown/helmet/heavy/bucket
 	neck = /obj/item/clothing/neck/roguetown/chaincoif
 	gloves = /obj/item/clothing/gloves/roguetown/chain/
