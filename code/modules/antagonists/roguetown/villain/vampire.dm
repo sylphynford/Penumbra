@@ -20,14 +20,19 @@
 		"CHILD OF KAIN!",
 	)
 	rogue_enabled = TRUE
-	var/disguised = TRUE
+	var/disguised = TRUE //just when the vamps eyes go red
+	var/exposed = FALSE //vamp got burnt and revealed
+	var/low_vitae = FALSE //vitae too low to disguise self
 	var/vitae = 1000
-	var/last_transform
+	var/last_transform = 0
 	var/is_lesser = FALSE
 	var/cache_skin
 	var/cache_eye_color
 	var/cache_second_color
 	var/cache_hair
+	var/cache_facial
+	var/cache_hair_nat
+	var/cache_facial_nat
 	var/starved = FALSE
 	var/obj/effect/proc_holder/spell/targeted/shapeshift/bat/batform //attached to the datum itself to avoid cloning memes, and other duplicates
 
@@ -102,7 +107,14 @@
 			cache_second_color = E.second_color
 			message_admins("DEBUG: Base vampire on_gain() - Caching eye color from eyes organ: [cache_eye_color] [cache_second_color]")
 		cache_skin = H.skin_tone
-		cache_hair = H.hair_color
+		var/datum/bodypart_feature/hair/head/Hair = H.get_bodypart_feature_of_slot(BODYPART_FEATURE_HAIR)
+		if (Hair)
+			cache_hair = Hair.accessory_colors
+			cache_hair_nat = Hair.natural_color
+		var/datum/bodypart_feature/hair/facial/Facial = H.get_bodypart_feature_of_slot(BODYPART_FEATURE_FACIAL_HAIR)
+		if (Facial)
+			cache_facial = Facial.accessory_colors
+			cache_facial_nat = Facial.natural_color
 	
 	if(increase_votepwr)
 		forge_vampire_objectives()
@@ -155,11 +167,64 @@
 	if (Organ)
 		Organ.accessory_colors = organ_color
 
-/mob/living/carbon/human/proc/set_skin_tone(n_skin_tone)
+/mob/living/carbon/human/proc/set_skin_tone(n_skin_tone, update = TRUE)
 	skin_tone = n_skin_tone
 	var/san_skin_tone = sanitize_hexcolor(skin_tone, 6, 1) //prepend # to hex
 	set_organ_slot_color(ORGAN_SLOT_PENIS, list(san_skin_tone, san_skin_tone))
 	set_organ_slot_color(ORGAN_SLOT_BREASTS, san_skin_tone)
+	if (update)
+		update_body_parts(TRUE)
+
+/datum/bodypart_feature/hair/proc/set_color(n_hair_color, n_natural_color, n_dye_color)
+	if (n_hair_color)
+		accessory_colors = n_hair_color
+	if (n_natural_color)
+		natural_color = n_natural_color
+	if (n_dye_color)
+		hair_dye_color = n_dye_color
+
+/datum/bodypart_feature/hair/proc/set_gradient(n_natural_gradient, n_dye_gradient)
+	if (n_natural_gradient)
+		natural_gradient = n_natural_gradient
+	if (n_dye_gradient)
+		hair_dye_gradient = n_dye_gradient
+
+/mob/living/carbon/human/proc/set_hair_color(n_hair_color, n_natural_color, n_dye_color, update = TRUE)
+	var/datum/bodypart_feature/hair/head/Hair = get_bodypart_feature_of_slot(BODYPART_FEATURE_HAIR)
+	if (Hair)
+		Hair.set_color(n_hair_color, n_natural_color, n_dye_color)
+	if (update)
+		update_hair()
+
+/mob/living/carbon/human/proc/set_hair_gradient(natural_gradient, dye_gradient, update = TRUE)
+	var/datum/bodypart_feature/hair/head/Hair = get_bodypart_feature_of_slot(BODYPART_FEATURE_HAIR)
+	if (Hair)
+		Hair.set_gradient(natural_gradient, dye_gradient)
+	if (update)
+		update_hair()
+
+/mob/living/carbon/human/proc/set_facial_hair_color(n_hair_color, n_natural_color, n_dye_color, update = TRUE)
+	var/datum/bodypart_feature/hair/facial/Facial = get_bodypart_feature_of_slot(BODYPART_FEATURE_FACIAL_HAIR)
+	if (Facial)
+		Facial.set_color(n_hair_color, n_natural_color, n_dye_color)
+	if (update)
+		update_hair()
+
+/mob/living/carbon/human/proc/set_facial_hair_gradient(n_natural_gradient, n_dye_gradient, update = TRUE)
+	var/datum/bodypart_feature/hair/facial/Facial = get_bodypart_feature_of_slot(BODYPART_FEATURE_FACIAL_HAIR)
+	if (Facial)
+		Facial.set_gradient(n_natural_gradient, n_dye_gradient)
+	if (update)
+		update_hair()
+
+/datum/antagonist/vampire/proc/recover(mob/user)
+	var/mob/living/carbon/human/H = user
+	if (!H)
+		return
+	if(H.stat == DEAD)
+		return
+	to_chat(H, span_warning("I can once more assume a human visage."))
+	exposed= FALSE
 
 /datum/antagonist/vampire/on_life(mob/user)
 	if(!user)
@@ -178,11 +243,14 @@
 		return
 
 	if(H.on_fire)
-		if(disguised)
-			last_transform = world.time
+		if (!exposed)
+			to_chat(H, span_warning("I cannot maintain my human visage!"))
 			H.vampire_undisguise(src)
-		else
-			H.set_skin_tone("c9d3de")
+			exposed = TRUE
+			if(disguised)
+				to_chat(H, span_warning("My disguise fails!"))
+		addtimer(CALLBACK(src, PROC_REF(recover), user), 30 SECONDS, TIMER_UNIQUE|TIMER_OVERRIDE)
+		//last_transform = world.time
 		H.freak_out()
 
 	if(H.stat)
@@ -191,12 +259,18 @@
 
 	vitae = CLAMP(vitae, 0, 1666)
 
-	if(vitae > 0)
-		H.blood_volume = BLOOD_VOLUME_NORMAL
+	if(vitae >= 0)
+		if (vitae > 0)
+			H.blood_volume = BLOOD_VOLUME_NORMAL
 		if(vitae < 200)
-			if(disguised)
-				to_chat(H, span_warning("My disguise fails!"))
+			if (!low_vitae)
+				to_chat(H, span_warning("My vitae reserves are depleted. I cannot maintain my human visage!"))
+				low_vitae = TRUE
+				if(disguised)
+					to_chat(H, span_warning("My disguise fails!"))
 				H.vampire_undisguise(src)
+		else
+			low_vitae = FALSE
 
 /mob/living/carbon/human/proc/disguise_button()
 	set name = "Toggle Disguise"
@@ -204,6 +278,10 @@
 	
 	var/datum/antagonist/vampire/V = mind.has_antag_datum(/datum/antagonist/vampire)
 	if(!V)
+		return
+	
+	if (V.exposed)
+		to_chat(src, span_notice("I am still recovering!"))
 		return
 	
 	if(V.disguised)
@@ -228,8 +306,14 @@
 		regenerate_icons()
 		update_sight()
 	else
+		if (V.low_vitae)
+			to_chat(src, span_notice("My vitae is too low!"))
+			return
 		to_chat(src, span_notice("I conceal my vampiric nature."))
 		V.disguised = TRUE
+		set_skin_tone(V.cache_skin, update = FALSE)
+		set_hair_color(V.cache_hair, V.cache_hair_nat, update = FALSE)
+		set_facial_hair_color(V.cache_facial, V.cache_facial_nat, update = FALSE)
 		
 		if(V.cache_eye_color && dna)
 			var/datum/organ_dna/eyes/eyes_dna = dna.organ_dna[ORGAN_SLOT_EYES]
@@ -256,9 +340,9 @@
 	if(istype(V, /datum/antagonist/vampire))
 		var/datum/antagonist/vampire/VD = V
 		VD.disguised = TRUE
-		set_skin_tone(VD.cache_skin)
-		hair_color = VD.cache_hair
-		facial_hair_color = VD.cache_hair
+		set_skin_tone(VD.cache_skin, update = FALSE)
+		set_hair_color(VD.cache_hair, VD.cache_hair_nat, update = FALSE)
+		set_facial_hair_color(VD.cache_facial, VD.cache_facial_nat, update = FALSE)
 		
 		if(VD.cache_eye_color && dna)
 			var/datum/organ_dna/eyes/eyes_dna = dna.organ_dna[ORGAN_SLOT_EYES]
@@ -291,9 +375,9 @@
 	else
 		return
 	
-	set_skin_tone("c9d3de")
-	hair_color = "181a1d"
-	facial_hair_color = "181a1d"
+	set_skin_tone("c9d3de", update = FALSE)
+	set_hair_color("#181a1d", "#181a1d", update = FALSE) //dye not affected
+	set_facial_hair_color("#181a1d", "#181a1d", update = FALSE)
 	
 	if(dna)
 		var/datum/organ_dna/eyes/eyes_dna = dna.organ_dna[ORGAN_SLOT_EYES]
