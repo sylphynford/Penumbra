@@ -24,7 +24,6 @@
 	var/exposed = FALSE //vamp got burnt and revealed
 	var/low_vitae = FALSE //vitae too low to disguise self
 	var/vitae = 1000
-	var/last_transform = 0
 	var/is_lesser = FALSE
 	var/cache_skin
 	//got a lot of shit to cache
@@ -214,7 +213,6 @@
 			if(disguised)
 				to_chat(H, span_notice("My disguise fails!"))
 		addtimer(CALLBACK(src, PROC_REF(recover), user), 30 SECONDS, TIMER_UNIQUE|TIMER_OVERRIDE)
-		//last_transform = world.time
 		H.freak_out()
 
 	if(H.stat)
