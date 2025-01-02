@@ -160,7 +160,7 @@ GLOBAL_LIST_EMPTY(vampire_objects)
 	owner.current.ambushable = FALSE
 
 /mob/living/carbon/human/proc/spawn_pick_class()
-	var/list/classoptions = list("Bard", "Fisher", "Hunter", "Miner", "Woodcutter", "Cheesemaker", "Blacksmith", "Carpenter", "Rogue", "Treasure Hunter", "Mage")
+	var/list/classoptions = list("Bard", "Fisher", "Hunter", "Miner", "Farmer", "Woodcutter", "Cheesemaker", "Blacksmith", "Carpenter", "Rogue", "Treasure Hunter", "Mage")
 	var/list/visoptions = list()
 
 	for(var/T in 1 to 5)
@@ -173,7 +173,9 @@ GLOBAL_LIST_EMPTY(vampire_objects)
 		if(A.name == selected)
 			equipOutfit(A.outfit)
 			//so examining isn't a dead giveaway
-			job = A.name
+			//if (CTAG_TOWNER in A.category_tags) //dont actually have to do this
+			job = "Towner"
+			advjob = A.name
 			islatejoin = TRUE
 			return
 
