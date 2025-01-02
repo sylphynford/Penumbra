@@ -177,6 +177,16 @@
 	throwforce = 10
 	max_integrity = 200
 	resistance_flags = FIRE_PROOF
+	experimental_inhand = TRUE
+	anvilrepair = TRUE
+
+/obj/item/grown/log/tree/stake/silver/getonmobprop(tag)
+	if(tag)
+		switch(tag)
+			if("gen")
+				return list("shrink" = 0.4,"sx" = -10,"sy" = -6,"nx" = 11,"ny" = -6,"wx" = -4,"wy" = -3,"ex" = 2,"ey" = -3,"northabove" = 0,"southabove" = 1,"eastabove" = 1,"westabove" = 0,"nturn" = 0,"sturn" = 0,"wturn" = 0,"eturn" = 0,"nflip" = 0,"sflip" = 8,"wflip" = 8,"eflip" = 0)
+
+
 
 /*/obj/item/grown/log/tree/lumber
 	name = "lumber"
