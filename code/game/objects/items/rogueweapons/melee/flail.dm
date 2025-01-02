@@ -100,7 +100,7 @@
 	hitsound = list('sound/combat/hits/blunt/flailhit.ogg')
 	chargetime = 0
 	recovery = 7
-	penfactor = 10
+	penfactor = 0
 	reach = 2
 	icon_state = "inlash"
 	item_d_type = "slash"
@@ -112,7 +112,7 @@
 	hitsound = list('sound/combat/hits/blunt/flailhit.ogg')
 	chargetime = 0
 	recovery = 10
-	penfactor = 40
+	penfactor = 0
 	reach = 3
 	icon_state = "incrack"
 	item_d_type = "slash"
