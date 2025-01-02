@@ -22,9 +22,7 @@
 /datum/outfit/job/roguetown/templar
 	has_loadout = TRUE
 	allowed_patrons = ALL_DIVINE_PATRONS
-	belt = /obj/item/storage/belt/rogue/leather/black
-	backr = /obj/item/storage/backpack/rogue/satchel
-	backpack_contents = list(/obj/item/storage/keyring/templar = 1, /obj/item/storage/belt/rogue/pouch/coins/poor = 1)
+
 
 /datum/job/roguetown/templar/after_spawn(mob/living/L, mob/M, latejoin = TRUE)
 	..()
@@ -98,6 +96,9 @@
 	shoes = /obj/item/clothing/shoes/roguetown/boots/leather
 	armor = /obj/item/clothing/suit/roguetown/armor/leather/hide
 	beltr = /obj/item/rogueweapon/mace
+	belt = /obj/item/storage/belt/rogue/leather/black
+	backr = /obj/item/storage/backpack/rogue/satchel
+	backpack_contents = list(/obj/item/storage/keyring/templar = 1, /obj/item/storage/belt/rogue/pouch/coins/poor = 1)
 
 /datum/advclass/templar/monk/equipme(mob/living/carbon/human/H)
 	if(!H)
@@ -146,6 +147,9 @@
 	backl = /obj/item/rogueweapon/shield/tower
 	beltl = /obj/item/rogueweapon/mace/cudgel
 	beltr = /obj/item/rogueweapon/sword/iron
+	belt = /obj/item/storage/belt/rogue/leather/black
+	backr = /obj/item/storage/backpack/rogue/satchel
+	backpack_contents = list(/obj/item/storage/keyring/templar = 1, /obj/item/storage/belt/rogue/pouch/coins/poor = 1)
 
 /datum/advclass/templar/crusader/equipme(mob/living/carbon/human/H)
 	if(!H)
@@ -197,6 +201,9 @@
 	armor = /obj/item/clothing/suit/roguetown/armor/leather/heavy/belted
 	beltr = /obj/item/rogueweapon/sword/iron/messer	
 	beltl = /obj/item/rogueweapon/huntingknife/idagger/silver
+	belt = /obj/item/storage/belt/rogue/leather/black
+	backr = /obj/item/storage/backpack/rogue/satchel
+	backpack_contents = list(/obj/item/storage/keyring/templar = 1, /obj/item/storage/belt/rogue/pouch/coins/poor = 1, /obj/item/grown/log/tree/stake = 1)
 
 /datum/advclass/templar/hunter/equipme(mob/living/carbon/human/H)
 	if(!H)

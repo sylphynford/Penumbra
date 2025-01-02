@@ -228,9 +228,10 @@
 	beltr = /obj/item/quiver/bolts
 	head = /obj/item/clothing/head/roguetown/inqhat
 	gloves = /obj/item/clothing/gloves/roguetown/otavan/inqgloves
-	backpack_contents = list(/obj/item/storage/keyring/puritan = 1, /obj/item/rogueweapon/huntingknife/idagger/silver = 1, /obj/item/storage/belt/rogue/pouch/coins/mid = 1)
-	beltl = /obj/item/rogueweapon/sword/falchion
+	backpack_contents = list(/obj/item/storage/keyring/puritan = 1, /obj/item/grown/log/tree/stake/silver = 1, /obj/item/storage/belt/rogue/pouch/coins/mid = 1)
+	beltl = /obj/item/rogueweapon/sword/silver
 
+	
 /datum/advclass/inquisitor/puritanclass/equipme(mob/living/carbon/human/H)
 	if(!H)
 		return FALSE

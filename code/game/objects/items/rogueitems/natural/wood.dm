@@ -168,6 +168,16 @@
 	slot_flags = ITEM_SLOT_MOUTH|ITEM_SLOT_HIP
 	lumber_amount = 0
 
+/obj/item/grown/log/tree/stake/silver
+	name = "silver stake"
+	desc = "A blessed silver stake, the bane of the unholy."
+	icon_state = "silverstake"
+	is_silver = TRUE
+	force = 20
+	throwforce = 10
+	max_integrity = 200
+	resistance_flags = FIRE_PROOF
+
 /*/obj/item/grown/log/tree/lumber
 	name = "lumber"
 	icon_state = "lumber"
