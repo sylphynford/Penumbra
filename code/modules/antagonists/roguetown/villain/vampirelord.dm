@@ -21,6 +21,8 @@ GLOBAL_LIST_EMPTY(vampire_objects)
 	rogue_enabled = TRUE
 	var/isspawn = FALSE
 	var/disguised = FALSE
+	var/exposed = FALSE //vamp got burnt and revealed
+	var/low_vitae = FALSE //vitae too low to disguise self
 	var/ascended = FALSE
 	var/starved = FALSE
 	var/sired = FALSE
@@ -30,8 +32,23 @@ GLOBAL_LIST_EMPTY(vampire_objects)
 	var/obj/structure/vampire/bloodpool/mypool
 	var/last_transform
 	var/cache_skin
-	var/cache_eyes
+	//in the future this shit is gonna inherit from the normal vampire antagonist, I honestly don't understand why it isn't like that in the first place
+	var/cache_pigment
+	var/cache_mcolor
+	var/cache_mcolor2
+	var/cache_mcolor3
+	var/cache_ear_color
+	var/cache_tail_color
+	var/cache_tail_feature_color
+	var/cache_frill_color
+	var/cache_snout_color
+	var/list/cache_chest_marking_color
+	var/cache_eye_color
+	var/cache_second_color
 	var/cache_hair
+	var/cache_facial
+	var/cache_hair_nat
+	var/cache_facial_nat
 	var/obj/effect/proc_holder/spell/targeted/shapeshift/bat/batform //attached to the datum itself to avoid cloning memes, and other duplicates
 	var/obj/effect/proc_holder/spell/targeted/shapeshift/gaseousform/gas
 
@@ -73,6 +90,8 @@ GLOBAL_LIST_EMPTY(vampire_objects)
 	owner.current.cmode_music = 'sound/music/combat_vamp.ogg'
 	var/obj/item/organ/eyes/eyes = owner.current.getorganslot(ORGAN_SLOT_EYES)
 	if(eyes)
+		cache_eye_color = eyes.eye_color
+		cache_second_color = eyes.second_color
 		eyes.Remove(owner.current,1)
 		QDEL_NULL(eyes)
 	eyes = new /obj/item/organ/eyes/night_vision/zombie
@@ -114,12 +133,14 @@ GLOBAL_LIST_EMPTY(vampire_objects)
 		owner.person_knows_me(MF)
 
 	var/mob/living/carbon/human/H = owner.current
+	/* THIS ALREADY HAPPENS
 	var/obj/item/organ/eyes/eyes = owner.current.getorganslot(ORGAN_SLOT_EYES)
 	if(eyes)
 		eyes.Remove(owner.current,1)
 		QDEL_NULL(eyes)
 	eyes = new /obj/item/organ/eyes/night_vision/zombie
 	eyes.Insert(owner.current)
+	*/
 	H.equipOutfit(/datum/outfit/job/roguetown/vamplord)
 	H.set_patron(/datum/patron/inhumen/zizo)
 
@@ -140,7 +161,7 @@ GLOBAL_LIST_EMPTY(vampire_objects)
 	owner.current.ambushable = FALSE
 
 /mob/living/carbon/human/proc/spawn_pick_class()
-	var/list/classoptions = list("Bard", "Fisher", "Hunter", "Miner", "Peasant", "Woodcutter", "Cheesemaker", "Blacksmith", "Carpenter", "Rogue", "Treasure Hunter", "Mage")
+	var/list/classoptions = list("Bard", "Fisher", "Hunter", "Miner", "Woodcutter", "Cheesemaker", "Blacksmith", "Carpenter", "Rogue", "Treasure Hunter", "Mage")
 	var/list/visoptions = list()
 
 	for(var/T in 1 to 5)
@@ -152,6 +173,9 @@ GLOBAL_LIST_EMPTY(vampire_objects)
 	for(var/datum/advclass/A in SSrole_class_handler.sorted_class_categories[CTAG_ALLCLASS])
 		if(A.name == selected)
 			equipOutfit(A.outfit)
+			//so examining isn't a dead giveaway
+			job = A.name
+			islatejoin = TRUE
 			return
 
 /datum/outfit/job/roguetown/vamplord/pre_equip(mob/living/carbon/human/H)
@@ -323,18 +347,47 @@ GLOBAL_LIST_EMPTY(vampire_objects)
 /datum/antagonist/vampirelord/proc/vamp_look()
 	var/mob/living/carbon/human/V = owner.current
 	cache_skin = V.skin_tone
-	cache_eyes = V.eye_color
-	cache_hair = V.hair_color
-	V.skin_tone = "c9d3de"
-	V.hair_color = "181a1d"
-	V.facial_hair_color = "181a1d"
-	V.eye_color = "ff0000"
-	V.update_body()
-	V.update_hair()
-	V.update_body_parts(redraw = TRUE)
+	var/datum/bodypart_feature/hair/head/Hair = V.get_bodypart_feature_of_slot(BODYPART_FEATURE_HAIR)
+	if (Hair)
+		cache_hair = Hair.accessory_colors
+		cache_hair_nat = Hair.natural_color
+	var/datum/bodypart_feature/hair/facial/Facial = V.get_bodypart_feature_of_slot(BODYPART_FEATURE_FACIAL_HAIR)
+	if (Facial)
+		cache_facial = Facial.accessory_colors
+		cache_facial_nat = Facial.natural_color
+	if (MUTCOLORS in V.dna.species.species_traits)
+		cache_snout_color = V.get_organ_slot_color(ORGAN_SLOT_SNOUT)
+		cache_frill_color = V.get_organ_slot_color(ORGAN_SLOT_FRILLS)
+		cache_tail_feature_color = V.get_organ_slot_color(ORGAN_SLOT_TAIL_FEATURE)
+		cache_chest_marking_color = V.get_chest_scales()
+	if (V.dna)
+		cache_mcolor = V.dna.features["mcolor"]
+		cache_mcolor2 = V.dna.features["mcolor2"]
+		cache_mcolor3 = V.dna.features["mcolor3"]
+	cache_tail_color = V.get_organ_slot_color(ORGAN_SLOT_TAIL)
+	cache_pigment = V.get_organ_slot_color(ORGAN_SLOT_PENIS)
+	cache_ear_color = V.get_organ_slot_color(ORGAN_SLOT_EARS)
+	//cache_hair = V.hair_color
+	//V.skin_tone = "c9d3de"
+	//V.hair_color = "181a1d"
+	//V.facial_hair_color = "181a1d"
+	//V.eye_color = "ff0000"
+	//V.update_body()
+	//V.update_hair()
+	//V.update_body_parts(redraw = TRUE)
+	V.vampire_undisguise(src)
 	V.mob_biotypes = MOB_UNDEAD
 	if(isspawn)
-		V.vampire_disguise()
+		V.vampire_disguise(src)
+
+/datum/antagonist/vampirelord/proc/recover(mob/user)
+	var/mob/living/carbon/human/H = user
+	if (!H)
+		return
+	if(H.stat == DEAD)
+		return
+	to_chat(H, span_warning("I can once more assume a human visage."))
+	exposed= FALSE
 
 /datum/antagonist/vampirelord/on_life(mob/user)
 	if(!user)
@@ -349,21 +402,33 @@ GLOBAL_LIST_EMPTY(vampire_objects)
 	if(ascended)
 		return
 	if(H.on_fire)
-		if(disguised)
-			last_transform = world.time
-			H.vampire_undisguise(src)
+		if (isspawn)
+			if (!exposed)
+				to_chat(H, span_notice("I cannot maintain my human visage!"))
+				H.vampire_undisguise(src)
+				exposed = TRUE
+				if(disguised)
+					to_chat(H, span_notice("My disguise fails!"))
+			addtimer(CALLBACK(src, PROC_REF(recover), user), 30 SECONDS, TIMER_UNIQUE|TIMER_OVERRIDE)
+		//last_transform = world.time
 		H.freak_out()
 
 	if(H.stat)
 		if(istype(H.loc, /obj/structure/closet/crate/coffin))
 			H.fully_heal()
 
-	if(vitae > 0)
-		H.blood_volume = BLOOD_VOLUME_NORMAL
+	if(vitae >= 0)
+		if (vitae > 0)
+			H.blood_volume = BLOOD_VOLUME_NORMAL
 		if(vitae < 200)
-			if(disguised)
-				to_chat(H, span_warning("My disguise fails!"))
+			if (!low_vitae && isspawn)
+				to_chat(H, span_notice("My vitae reserves are depleted. I cannot maintain my human visage!"))
+				low_vitae = TRUE
+				if(disguised)
+					to_chat(H, span_notice("My disguise fails!"))
 				H.vampire_undisguise(src)
+		else
+			low_vitae = FALSE
 
 /datum/antagonist/vampirelord/proc/handle_vitae(change, tribute)
 	var/tempcurrent = vitae

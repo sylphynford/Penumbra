@@ -27,6 +27,17 @@
 	var/last_transform = 0
 	var/is_lesser = FALSE
 	var/cache_skin
+	//got a lot of shit to cache
+	var/cache_pigment
+	var/cache_mcolor
+	var/cache_mcolor2
+	var/cache_mcolor3
+	var/cache_ear_color
+	var/cache_tail_color
+	var/cache_tail_feature_color
+	var/cache_frill_color
+	var/cache_snout_color
+	var/list/cache_chest_marking_color
 	var/cache_eye_color
 	var/cache_second_color
 	var/cache_hair
@@ -115,6 +126,18 @@
 		if (Facial)
 			cache_facial = Facial.accessory_colors
 			cache_facial_nat = Facial.natural_color
+		if (MUTCOLORS in H.dna.species.species_traits)
+			cache_snout_color = H.get_organ_slot_color(ORGAN_SLOT_SNOUT)
+			cache_frill_color = H.get_organ_slot_color(ORGAN_SLOT_FRILLS)
+			cache_tail_feature_color = H.get_organ_slot_color(ORGAN_SLOT_TAIL_FEATURE)
+			cache_chest_marking_color = H.get_chest_scales()
+		if (H.dna)
+			cache_mcolor = H.dna.features["mcolor"]
+			cache_mcolor2 = H.dna.features["mcolor2"]
+			cache_mcolor3 = H.dna.features["mcolor3"]
+		cache_tail_color = H.get_organ_slot_color(ORGAN_SLOT_TAIL)
+		cache_pigment = H.get_organ_slot_color(ORGAN_SLOT_PENIS) //hold on man gotta make sure the tiefling dicks are the right color
+		cache_ear_color = H.get_organ_slot_color(ORGAN_SLOT_EARS)
 	
 	if(increase_votepwr)
 		forge_vampire_objectives()
@@ -162,60 +185,7 @@
 /datum/antagonist/vampire/proc/finalize_vampire()
 	owner.current.playsound_local(get_turf(owner.current), 'sound/music/vampintro.ogg', 80, FALSE, pressure_affected = FALSE)
 
-/mob/living/carbon/human/proc/set_organ_slot_color(organ_slot, organ_color)
-	var/obj/item/organ/Organ = getorganslot(organ_slot)
-	if (Organ)
-		Organ.accessory_colors = organ_color
 
-/mob/living/carbon/human/proc/set_skin_tone(n_skin_tone, update = TRUE)
-	skin_tone = n_skin_tone
-	var/san_skin_tone = sanitize_hexcolor(skin_tone, 6, 1) //prepend # to hex
-	set_organ_slot_color(ORGAN_SLOT_PENIS, list(san_skin_tone, san_skin_tone))
-	set_organ_slot_color(ORGAN_SLOT_BREASTS, san_skin_tone)
-	if (update)
-		update_body_parts(TRUE)
-
-/datum/bodypart_feature/hair/proc/set_color(n_hair_color, n_natural_color, n_dye_color)
-	if (n_hair_color)
-		accessory_colors = n_hair_color
-	if (n_natural_color)
-		natural_color = n_natural_color
-	if (n_dye_color)
-		hair_dye_color = n_dye_color
-
-/datum/bodypart_feature/hair/proc/set_gradient(n_natural_gradient, n_dye_gradient)
-	if (n_natural_gradient)
-		natural_gradient = n_natural_gradient
-	if (n_dye_gradient)
-		hair_dye_gradient = n_dye_gradient
-
-/mob/living/carbon/human/proc/set_hair_color(n_hair_color, n_natural_color, n_dye_color, update = TRUE)
-	var/datum/bodypart_feature/hair/head/Hair = get_bodypart_feature_of_slot(BODYPART_FEATURE_HAIR)
-	if (Hair)
-		Hair.set_color(n_hair_color, n_natural_color, n_dye_color)
-	if (update)
-		update_hair()
-
-/mob/living/carbon/human/proc/set_hair_gradient(natural_gradient, dye_gradient, update = TRUE)
-	var/datum/bodypart_feature/hair/head/Hair = get_bodypart_feature_of_slot(BODYPART_FEATURE_HAIR)
-	if (Hair)
-		Hair.set_gradient(natural_gradient, dye_gradient)
-	if (update)
-		update_hair()
-
-/mob/living/carbon/human/proc/set_facial_hair_color(n_hair_color, n_natural_color, n_dye_color, update = TRUE)
-	var/datum/bodypart_feature/hair/facial/Facial = get_bodypart_feature_of_slot(BODYPART_FEATURE_FACIAL_HAIR)
-	if (Facial)
-		Facial.set_color(n_hair_color, n_natural_color, n_dye_color)
-	if (update)
-		update_hair()
-
-/mob/living/carbon/human/proc/set_facial_hair_gradient(n_natural_gradient, n_dye_gradient, update = TRUE)
-	var/datum/bodypart_feature/hair/facial/Facial = get_bodypart_feature_of_slot(BODYPART_FEATURE_FACIAL_HAIR)
-	if (Facial)
-		Facial.set_gradient(n_natural_gradient, n_dye_gradient)
-	if (update)
-		update_hair()
 
 /datum/antagonist/vampire/proc/recover(mob/user)
 	var/mob/living/carbon/human/H = user
@@ -238,11 +208,11 @@
 
 	if(H.on_fire)
 		if (!exposed)
-			to_chat(H, span_warning("I cannot maintain my human visage!"))
+			to_chat(H, span_notice("I cannot maintain my human visage!"))
 			H.vampire_undisguise(src)
 			exposed = TRUE
 			if(disguised)
-				to_chat(H, span_warning("My disguise fails!"))
+				to_chat(H, span_notice("My disguise fails!"))
 		addtimer(CALLBACK(src, PROC_REF(recover), user), 30 SECONDS, TIMER_UNIQUE|TIMER_OVERRIDE)
 		//last_transform = world.time
 		H.freak_out()
@@ -258,10 +228,10 @@
 			H.blood_volume = BLOOD_VOLUME_NORMAL
 		if(vitae < 200)
 			if (!low_vitae)
-				to_chat(H, span_warning("My vitae reserves are depleted. I cannot maintain my human visage!"))
+				to_chat(H, span_notice("My vitae reserves are depleted. I cannot maintain my human visage!"))
 				low_vitae = TRUE
 				if(disguised)
-					to_chat(H, span_warning("My disguise fails!"))
+					to_chat(H, span_notice("My disguise fails!"))
 				H.vampire_undisguise(src)
 		else
 			low_vitae = FALSE
@@ -271,73 +241,129 @@
 	set category = "VAMPIRE"
 	
 	var/datum/antagonist/vampire/V = mind.has_antag_datum(/datum/antagonist/vampire)
-	if(!V)
+	var/datum/antagonist/vampirelord/VL = mind.has_antag_datum(/datum/antagonist/vampirelord)
+	if(!V && !VL)
 		return
-	
-	if (V.exposed)
-		to_chat(src, span_notice("I am still recovering!"))
-		return
-	
-	if(V.disguised)
-		to_chat(src, span_notice("I reveal my true form."))
-		V.disguised = FALSE
-		
-		if(dna)
-			var/datum/organ_dna/eyes/eyes_dna = dna.organ_dna[ORGAN_SLOT_EYES]
-			var/obj/item/organ/eyes/E = getorganslot(ORGAN_SLOT_EYES)
-			if(E)
-				E.eye_color = "#ff0000"
-				E.second_color = "#ff0000"
-				if(eyes_dna)
-					E.imprint_organ_dna(eyes_dna)
-				E.update_accessory_colors()
-				E.lighting_alpha = LIGHTING_PLANE_ALPHA_MOSTLY_VISIBLE
-		
-		dna?.species.handle_body(src)
-		update_body()
-		update_hair()
-		update_body_parts(TRUE)
-		regenerate_icons()
-		update_sight()
-	else
-		if (V.low_vitae)
-			to_chat(src, span_notice("My vitae is too low!"))
+	if (V)
+		if (V.exposed)
+			to_chat(src, span_warning("I am still recovering!"))
 			return
-		to_chat(src, span_notice("I conceal my vampiric nature."))
-		V.disguised = TRUE
-		set_skin_tone(V.cache_skin, update = FALSE)
-		set_hair_color(V.cache_hair, V.cache_hair_nat, update = FALSE)
-		set_facial_hair_color(V.cache_facial, V.cache_facial_nat, update = FALSE)
 		
-		if(V.cache_eye_color && dna)
-			var/datum/organ_dna/eyes/eyes_dna = dna.organ_dna[ORGAN_SLOT_EYES]
-			var/obj/item/organ/eyes/E = getorganslot(ORGAN_SLOT_EYES)
-			if(E)
-				E.eye_color = V.cache_eye_color
-				E.second_color = V.cache_second_color
-				if(eyes_dna)
-					E.imprint_organ_dna(eyes_dna)
-				E.update_accessory_colors()
-				E.lighting_alpha = null
+		if(V.disguised)
+			to_chat(src, span_warning("I reveal my true form."))
+			V.disguised = FALSE
+			
+			if(dna)
+				var/datum/organ_dna/eyes/eyes_dna = dna.organ_dna[ORGAN_SLOT_EYES]
+				var/obj/item/organ/eyes/E = getorganslot(ORGAN_SLOT_EYES)
+				if(E)
+					E.eye_color = "#ff0000"
+					E.second_color = "#ff0000"
+					if(eyes_dna)
+						E.imprint_organ_dna(eyes_dna)
+					E.update_accessory_colors()
+					E.lighting_alpha = LIGHTING_PLANE_ALPHA_MOSTLY_VISIBLE
+		else
+			if (V.low_vitae)
+				to_chat(src, span_warning("My vitae is too low!"))
+				return
+			to_chat(src, span_warning("I conceal my vampiric nature."))
+			V.disguised = TRUE
+			if (MUTCOLORS in dna.species.species_traits)
+				set_mutant_colors(V.cache_mcolor, V.cache_mcolor2, V.cache_mcolor3, V.cache_chest_marking_color, update = FALSE)
+				set_organ_slot_color(ORGAN_SLOT_FRILLS, V.cache_frill_color)
+				set_organ_slot_color(ORGAN_SLOT_SNOUT, V.cache_snout_color)
+				set_organ_slot_color(ORGAN_SLOT_TAIL_FEATURE, V.cache_tail_feature_color)
+			else
+				set_skin_tone(V.cache_skin, V.cache_pigment, update = FALSE)
+			if (!(MUTCOLORS_PARTSONLY in dna.species.species_traits))
+				set_organ_slot_color(ORGAN_SLOT_TAIL, V.cache_tail_color)
+				set_organ_slot_color(ORGAN_SLOT_EARS, V.cache_ear_color)
+			set_hair_color(V.cache_hair, V.cache_hair_nat, update = FALSE)
+			set_facial_hair_color(V.cache_facial, V.cache_facial_nat, update = FALSE)
+			
+			if(V.cache_eye_color && dna)
+				var/datum/organ_dna/eyes/eyes_dna = dna.organ_dna[ORGAN_SLOT_EYES]
+				var/obj/item/organ/eyes/E = getorganslot(ORGAN_SLOT_EYES)
+				if(E)
+					E.eye_color = V.cache_eye_color
+					E.second_color = V.cache_second_color
+					if(eyes_dna)
+						E.imprint_organ_dna(eyes_dna)
+					E.update_accessory_colors()
+					E.lighting_alpha = null
+	else if (VL)
+		if (VL.exposed)
+			to_chat(src, span_warning("I am still recovering!"))
+			return
 		
-		dna?.species.handle_body(src)
-		update_body()
-		update_hair()
-		update_body_parts(TRUE)
-		regenerate_icons()
-		update_sight()
+		if(VL.disguised)
+			to_chat(src, span_warning("I reveal my true form."))
+			VL.disguised = FALSE
+			
+			if(dna)
+				var/datum/organ_dna/eyes/eyes_dna = dna.organ_dna[ORGAN_SLOT_EYES]
+				var/obj/item/organ/eyes/E = getorganslot(ORGAN_SLOT_EYES)
+				if(E)
+					E.eye_color = "#ff0000"
+					E.second_color = "#ff0000"
+					if(eyes_dna)
+						E.imprint_organ_dna(eyes_dna)
+					E.update_accessory_colors()
+		else
+			if (VL.low_vitae)
+				to_chat(src, span_warning("My vitae is too low!"))
+				return
+			to_chat(src, span_warning("I conceal my vampiric nature."))
+			VL.disguised = TRUE
+			if (MUTCOLORS in dna.species.species_traits)
+				set_mutant_colors(VL.cache_mcolor, VL.cache_mcolor2, VL.cache_mcolor3, VL.cache_chest_marking_color, update = FALSE)
+				set_organ_slot_color(ORGAN_SLOT_FRILLS, VL.cache_frill_color)
+				set_organ_slot_color(ORGAN_SLOT_SNOUT, VL.cache_snout_color)
+				set_organ_slot_color(ORGAN_SLOT_TAIL_FEATURE, VL.cache_tail_feature_color)
+			else
+				set_skin_tone(VL.cache_skin, VL.cache_pigment, update = FALSE)
+			if (!(MUTCOLORS_PARTSONLY in dna.species.species_traits))
+				set_organ_slot_color(ORGAN_SLOT_TAIL, VL.cache_tail_color)
+				set_organ_slot_color(ORGAN_SLOT_EARS, VL.cache_ear_color)
+			set_hair_color(VL.cache_hair, VL.cache_hair_nat, update = FALSE)
+			set_facial_hair_color(VL.cache_facial, VL.cache_facial_nat, update = FALSE)
+			
+			if(VL.cache_eye_color && dna)
+				var/datum/organ_dna/eyes/eyes_dna = dna.organ_dna[ORGAN_SLOT_EYES]
+				var/obj/item/organ/eyes/E = getorganslot(ORGAN_SLOT_EYES)
+				if(E)
+					E.eye_color = VL.cache_eye_color
+					E.second_color = VL.cache_second_color
+					if(eyes_dna)
+						E.imprint_organ_dna(eyes_dna)
+					E.update_accessory_colors()
+	dna?.species.handle_body(src)
+	update_body()
+	update_hair()
+	update_body_parts(TRUE)
+	regenerate_icons()
+	update_sight()
 
 /mob/living/carbon/human/proc/vampire_disguise(datum/antagonist/V)
 	if(!V)
 		return
-	
-	if(istype(V, /datum/antagonist/vampire))
-		var/datum/antagonist/vampire/VD = V
+	var/datum/antagonist/vampire/VD = mind.has_antag_datum(/datum/antagonist/vampire)
+	var/datum/antagonist/vampirelord/VL = mind.has_antag_datum(/datum/antagonist/vampirelord)
+	if(VD)
 		VD.disguised = TRUE
-		set_skin_tone(VD.cache_skin, update = FALSE)
+		if (MUTCOLORS in dna.species.species_traits)
+			set_mutant_colors(VD.cache_mcolor, VD.cache_mcolor2, VD.cache_mcolor3, VD.cache_chest_marking_color, update = FALSE)
+			set_organ_slot_color(ORGAN_SLOT_FRILLS, VD.cache_frill_color)
+			set_organ_slot_color(ORGAN_SLOT_SNOUT, VD.cache_snout_color)
+			set_organ_slot_color(ORGAN_SLOT_TAIL_FEATURE, VD.cache_tail_feature_color)
+		else
+			set_skin_tone(VD.cache_skin, VD.cache_pigment, update = FALSE)
+		if (!(MUTCOLORS_PARTSONLY in dna.species.species_traits))
+			set_organ_slot_color(ORGAN_SLOT_TAIL, VD.cache_tail_color)
+			set_organ_slot_color(ORGAN_SLOT_EARS, VD.cache_ear_color)
 		set_hair_color(VD.cache_hair, VD.cache_hair_nat, update = FALSE)
 		set_facial_hair_color(VD.cache_facial, VD.cache_facial_nat, update = FALSE)
-		
 		if(VD.cache_eye_color && dna)
 			var/datum/organ_dna/eyes/eyes_dna = dna.organ_dna[ORGAN_SLOT_EYES]
 			var/obj/item/organ/eyes/E = getorganslot(ORGAN_SLOT_EYES)
@@ -348,13 +374,35 @@
 					E.imprint_organ_dna(eyes_dna)
 				E.update_accessory_colors()
 				E.lighting_alpha = null
-		
-		dna?.species.handle_body(src)
-		update_body()
-		update_hair()
-		update_body_parts(TRUE)
-		regenerate_icons()
-		update_sight()
+	if(VL)
+		VL.disguised = TRUE
+		if (MUTCOLORS in dna.species.species_traits)
+			set_mutant_colors(VL.cache_mcolor, VL.cache_mcolor2, VL.cache_mcolor3, VL.cache_chest_marking_color, update = FALSE)
+			set_organ_slot_color(ORGAN_SLOT_FRILLS, VL.cache_frill_color)
+			set_organ_slot_color(ORGAN_SLOT_SNOUT, VL.cache_snout_color)
+			set_organ_slot_color(ORGAN_SLOT_TAIL_FEATURE, VL.cache_tail_feature_color)
+		else
+			set_skin_tone(VL.cache_skin, VL.cache_pigment, update = FALSE)
+		if (!(MUTCOLORS_PARTSONLY in dna.species.species_traits))
+			set_organ_slot_color(ORGAN_SLOT_TAIL, VL.cache_tail_color)
+			set_organ_slot_color(ORGAN_SLOT_EARS, VL.cache_ear_color)
+		set_hair_color(VL.cache_hair, VL.cache_hair_nat, update = FALSE)
+		set_facial_hair_color(VL.cache_facial, VL.cache_facial_nat, update = FALSE)
+		if(VL.cache_eye_color && dna)
+			var/datum/organ_dna/eyes/eyes_dna = dna.organ_dna[ORGAN_SLOT_EYES]
+			var/obj/item/organ/eyes/E = getorganslot(ORGAN_SLOT_EYES)
+			if(E)
+				E.eye_color = VL.cache_eye_color
+				E.second_color = VL.cache_second_color
+				if(eyes_dna)
+					E.imprint_organ_dna(eyes_dna)
+				E.update_accessory_colors()
+	dna?.species.handle_body(src)
+	update_body()
+	update_hair()
+	update_body_parts(TRUE)
+	regenerate_icons()
+	update_sight()
 
 /mob/living/carbon/human/proc/vampire_undisguise(datum/antagonist/V)
 	if(!V)
@@ -369,7 +417,22 @@
 	else
 		return
 	
-	set_skin_tone("c9d3de", update = FALSE)
+	if (MUTCOLORS in dna.species.species_traits)
+		if(istype(V, /datum/antagonist/vampirelord))
+			var/datum/antagonist/vampirelord/VD = V
+			set_mutant_colors("c9d3de", "c9d3de", "c9d3de", vampirized_scale_colors(VD.cache_chest_marking_color, FALSE), update = FALSE)
+		else if(istype(V, /datum/antagonist/vampire))
+			var/datum/antagonist/vampire/VD = V
+			set_mutant_colors("c9d3de", "c9d3de", "c9d3de", vampirized_scale_colors(VD.cache_chest_marking_color, FALSE), update = FALSE)
+		set_organ_slot_color(ORGAN_SLOT_FRILLS, vampire_organ_scales_color(ORGAN_SLOT_FRILLS))
+		set_organ_slot_color(ORGAN_SLOT_SNOUT, vampire_organ_scales_color(ORGAN_SLOT_SNOUT))
+		set_organ_slot_color(ORGAN_SLOT_TAIL, vampire_organ_scales_color(ORGAN_SLOT_TAIL))
+		set_organ_slot_color(ORGAN_SLOT_TAIL_FEATURE, vampire_organ_scales_color(ORGAN_SLOT_TAIL_FEATURE))
+	else
+		set_skin_tone("c9d3de", update = FALSE)
+		if (!(MUTCOLORS_PARTSONLY in dna.species.species_traits))
+			set_organ_slot_color(ORGAN_SLOT_TAIL, "c9d3de")
+			set_organ_slot_color(ORGAN_SLOT_EARS, "c9d3de")
 	set_hair_color("#181a1d", "#181a1d", update = FALSE) //dye not affected
 	set_facial_hair_color("#181a1d", "#181a1d", update = FALSE)
 	
@@ -382,7 +445,8 @@
 			if(eyes_dna)
 				E.imprint_organ_dna(eyes_dna)
 			E.update_accessory_colors()
-			E.lighting_alpha = LIGHTING_PLANE_ALPHA_MOSTLY_VISIBLE
+			if (istype(V, /datum/antagonist/vampire))
+				E.lighting_alpha = LIGHTING_PLANE_ALPHA_MOSTLY_VISIBLE
 	
 	dna?.species.handle_body(src)
 	update_body()
@@ -611,3 +675,148 @@
 		client.screen += H
 		H.Fade()
 		addtimer(CALLBACK(H, TYPE_PROC_REF(/atom/movable/screen/gameover, Fade), TRUE), 100)
+
+/*
+
+
+	All the code below was written while figuring out how to alter player appearances ingame,
+	it's intended to be rewritten it in the future
+
+
+*/
+/mob/living/carbon/human/proc/set_chest_scales(list/chest_colors)
+	var/obj/item/bodypart/chest = get_bodypart(BODY_ZONE_CHEST)
+	if(!chest)
+		return null
+	var/counter = 1
+	for(var/marking_name in chest.markings)
+		var/datum/body_marking/marking = GLOB.body_markings[marking_name]
+		if(!marking.covers_chest)
+			continue
+		chest.markings[marking_name] = chest_colors[counter]
+		counter++
+	return null
+
+/mob/living/carbon/human/proc/get_chest_scales()
+	var/obj/item/bodypart/chest = get_bodypart(BODY_ZONE_CHEST)
+	if(!chest)
+		return null
+	var/list/all_markings = list()
+	for(var/marking_name in chest.markings)
+		var/datum/body_marking/marking = GLOB.body_markings[marking_name]
+		if(!marking.covers_chest)
+			continue
+		all_markings += chest.markings[marking_name]
+	if (all_markings.len == 0)
+		return null
+	return all_markings
+/mob/living/carbon/human/proc/set_organ_slot_color(organ_slot, organ_color)
+	if (!organ_color)
+		return
+	var/obj/item/organ/Organ = getorganslot(organ_slot)
+	if (!Organ)
+		return
+	if (!Organ.accessory_type)
+		return
+	Organ.accessory_colors = organ_color
+
+/mob/living/carbon/human/proc/get_organ_slot_color(organ_slot)
+	var/obj/item/organ/Organ = getorganslot(organ_slot)
+	if (!Organ)
+		return
+	if (!Organ.accessory_type)
+		return
+	return Organ.accessory_colors
+
+//right now the whole list gets populated with the normal vampire skin color, in the future you can use stuff like MixRGB to apply color transforms onto the base ones
+/proc/vampirized_scale_colors(list/colors, include_crunch = TRUE)
+	if (!colors)
+		return null
+	var/list/v_colors = list()
+	for (var/col in colors)
+		if (include_crunch)
+			v_colors += "#c9d3de"
+		else
+			v_colors += "c9d3de"
+	return v_colors
+
+/mob/living/carbon/human/proc/vampire_organ_scales_color(organ_slot)
+	var/base_color_packed = get_organ_slot_color(organ_slot)
+	if (!base_color_packed)
+		return
+	var/list/base_color_unpacked = color_string_to_list(base_color_packed)
+	var/list/vamp_color_unpacked = vampirized_scale_colors(base_color_unpacked)
+	return color_list_to_string(vamp_color_unpacked)
+
+/mob/living/carbon/human/proc/set_skin_tone(n_skin_tone, n_pigmented, update = TRUE)
+	skin_tone = n_skin_tone
+	var/san_skin_tone = sanitize_hexcolor(skin_tone, 6, 1) //prepend # to hex
+	if (n_pigmented)
+		set_organ_slot_color(ORGAN_SLOT_PENIS, n_pigmented) //fuck your weird penis
+	else
+		set_organ_slot_color(ORGAN_SLOT_PENIS, list(san_skin_tone, san_skin_tone))
+	set_organ_slot_color(ORGAN_SLOT_BREASTS, san_skin_tone)
+	if (update)
+		update_body_parts(TRUE)
+
+//for lizards and kobolds
+/mob/living/carbon/human/proc/set_mutant_colors(mcolor, mcolor2, mcolor3, list/chest_color, update = TRUE)
+	if (!dna)
+		return
+	dna.features["mcolor"] = mcolor
+	dna.features["mcolor2"] = mcolor2
+	dna.features["mcolor3"] = mcolor3
+	if (chest_color)
+		set_chest_scales(chest_color)
+	var/san_mcolor = sanitize_hexcolor(mcolor, 6, 1)
+	if (chest_color)
+		var/san_chestcolor = sanitize_hexcolor(chest_color[1], 6, 1)
+		set_organ_slot_color(ORGAN_SLOT_PENIS, color_list_to_string(list(san_chestcolor, san_chestcolor)))
+		set_organ_slot_color(ORGAN_SLOT_BREASTS, color_list_to_string(list(san_chestcolor, san_chestcolor)))
+	else
+		set_organ_slot_color(ORGAN_SLOT_PENIS, color_list_to_string(list(san_mcolor, san_mcolor)))
+		set_organ_slot_color(ORGAN_SLOT_BREASTS, color_list_to_string(list(san_mcolor, san_mcolor)))
+	if (update)
+		update_body_parts(TRUE)
+
+/datum/bodypart_feature/hair/proc/set_color(n_hair_color, n_natural_color, n_dye_color)
+	if (n_hair_color)
+		accessory_colors = n_hair_color
+	if (n_natural_color)
+		natural_color = n_natural_color
+	if (n_dye_color)
+		hair_dye_color = n_dye_color
+
+/datum/bodypart_feature/hair/proc/set_gradient(n_natural_gradient, n_dye_gradient)
+	if (n_natural_gradient)
+		natural_gradient = n_natural_gradient
+	if (n_dye_gradient)
+		hair_dye_gradient = n_dye_gradient
+
+/mob/living/carbon/human/proc/set_hair_color(n_hair_color, n_natural_color, n_dye_color, update = TRUE)
+	var/datum/bodypart_feature/hair/head/Hair = get_bodypart_feature_of_slot(BODYPART_FEATURE_HAIR)
+	if (Hair)
+		Hair.set_color(n_hair_color, n_natural_color, n_dye_color)
+	if (update)
+		update_hair()
+
+/mob/living/carbon/human/proc/set_hair_gradient(natural_gradient, dye_gradient, update = TRUE)
+	var/datum/bodypart_feature/hair/head/Hair = get_bodypart_feature_of_slot(BODYPART_FEATURE_HAIR)
+	if (Hair)
+		Hair.set_gradient(natural_gradient, dye_gradient)
+	if (update)
+		update_hair()
+
+/mob/living/carbon/human/proc/set_facial_hair_color(n_hair_color, n_natural_color, n_dye_color, update = TRUE)
+	var/datum/bodypart_feature/hair/facial/Facial = get_bodypart_feature_of_slot(BODYPART_FEATURE_FACIAL_HAIR)
+	if (Facial)
+		Facial.set_color(n_hair_color, n_natural_color, n_dye_color)
+	if (update)
+		update_hair()
+
+/mob/living/carbon/human/proc/set_facial_hair_gradient(n_natural_gradient, n_dye_gradient, update = TRUE)
+	var/datum/bodypart_feature/hair/facial/Facial = get_bodypart_feature_of_slot(BODYPART_FEATURE_FACIAL_HAIR)
+	if (Facial)
+		Facial.set_gradient(n_natural_gradient, n_dye_gradient)
+	if (update)
+		update_hair()
