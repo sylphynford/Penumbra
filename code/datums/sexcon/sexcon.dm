@@ -97,8 +97,6 @@
 	else
 		playsound(target, 'sound/misc/mat/endin.ogg', 50, TRUE, ignore_walls = FALSE)
 	after_ejaculation()
-	if(!oral)
-		after_intimate_climax()
 
 /datum/sex_controller/proc/ejaculate()
 	log_combat(user, user, "Ejaculated")
@@ -117,7 +115,8 @@
 	user.playsound_local(user, 'sound/misc/mat/end.ogg', 100)
 	last_ejaculation_time = world.time
 	SSticker.cums++
-	cuckold_check()
+	if(target && target != user)
+		after_intimate_climax()
 
 /datum/sex_controller/proc/after_intimate_climax()
 	if(user == target)
@@ -132,6 +131,7 @@
 			target.mob_timers["cumtri"] = world.time
 			target.adjust_triumphs(1)
 			to_chat(target, span_love("Our loving is a true TRIUMPH!"))
+	cuckold_check()
 
 /datum/sex_controller/proc/just_ejaculated()
 	return (last_ejaculation_time + 2 SECONDS >= world.time)
@@ -614,24 +614,51 @@
 		if(SEX_FORCE_EXTREME)
 			return "<span class='love_extreme'>[string]</span>"
 
+/datum/sex_controller/proc/check_marriage(mob/living/carbon/human/person, mob/living/carbon/human/other, datum/family/family)
+	if(!family)
+		return
+	
+	var/list/spouses = family.getRelations(person, REL_TYPE_SPOUSE)
+	
+	for(var/datum/relation/R in spouses)
+		var/mob/living/carbon/human/spouse = R.target:resolve()
+		if(!spouse || spouse == other)
+			continue
+
+		var/spouse_has_penis = spouse.getorganslot(ORGAN_SLOT_PENIS)
+		var/spouse_has_vagina = spouse.getorganslot(ORGAN_SLOT_VAGINA)
+		var/person_has_penis = person.getorganslot(ORGAN_SLOT_PENIS)
+		var/person_has_vagina = person.getorganslot(ORGAN_SLOT_VAGINA)
+		var/other_has_penis = other.getorganslot(ORGAN_SLOT_PENIS)
+		var/other_has_vagina = other.getorganslot(ORGAN_SLOT_VAGINA)
+
+		if(person_has_vagina && other_has_vagina)
+			GLOB.adulterers |= "[person.job] [person.real_name] (with [other.real_name])"
+			return
+
+		if(person_has_penis && other_has_penis)
+			GLOB.adulterers |= "[person.job] [person.real_name] (with [other.real_name])"
+			return
+
+		if(spouse_has_penis && !spouse_has_vagina && person_has_vagina && other_has_penis)
+			GLOB.cuckolds |= "[spouse.job] [spouse.real_name] (by [other.real_name])"
+			return
+
+		else if(spouse_has_vagina && !spouse_has_penis && person_has_penis && other_has_vagina)
+			GLOB.cuckqueans |= "[spouse.job] [spouse.real_name] (by [other.real_name])"
+			return
 
 /datum/sex_controller/proc/cuckold_check()
 	if(!target || target == user)
 		return
-	//First, check if the target has a family.
-	var/datum/family/F = target.getFamily(TRUE)
-	if(!F)
+
+	// Get both participants' families
+	var/datum/family/target_family = target.getFamily(TRUE)
+	var/datum/family/user_family = user.getFamily(TRUE)
+	
+	if(!target_family && !user_family)
 		return
 
-
-	//Second, check if target has a spouse relation.
-	var/list/rels = F.getRelations(target,REL_TYPE_SPOUSE)
-
-	if(!length(rels))
-		return
-
-	for(var/datum/relation/R in rels) //Loop through all the spouses (Should only be one.)
-		var/mob/living/carbon/human/cuckold = R.target:resolve()
-		if(!cuckold || cuckold == user)
-			continue
-		GLOB.cuckolds |= "[cuckold.job] [cuckold.real_name] (by [user.real_name])"
+	// Check both participants' marriages
+	check_marriage(target, user, target_family)
+	check_marriage(user, target, user_family)

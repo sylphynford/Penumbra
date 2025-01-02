@@ -419,6 +419,18 @@ GLOBAL_VAR(roundstart_event_name)
 			shit += GLOB.cuckolds[i]
 			if(i != GLOB.cuckolds.len)
 				shit += ","
+	if(GLOB.cuckqueans.len)
+		shit += "<br><font color='#a02fa4'><span class='bold'>Cuckqueans were:</span></font> "
+		for(var/i in 1 to GLOB.cuckqueans.len)
+			shit += GLOB.cuckqueans[i]
+			if(i != GLOB.cuckqueans.len)
+				shit += ","
+	if(GLOB.adulterers.len)
+		shit += "<br><font color='#a02fa4'><span class='bold'>Adulterers were:</span></font> "
+		for(var/i in 1 to GLOB.adulterers.len)
+			shit += GLOB.adulterers[i]
+			if(i != GLOB.adulterers.len)
+				shit += ", "
 	if(GLOB.confessors.len)
 		shit += "<br><font color='#93cac7'><span class='bold'>Confessors:</span></font> "
 		for(var/x in GLOB.confessors)
