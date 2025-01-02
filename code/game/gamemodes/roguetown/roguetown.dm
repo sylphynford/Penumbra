@@ -394,6 +394,8 @@ var/global/list/roguegamemodes = list("Rebellion", "Vampires and Werewolves", "E
 	restricted_jobs = list()
 
 /datum/game_mode/chaosmode/proc/pick_vampires()
+	if(living_player_count() < 30)
+		return
 	var/vampsremaining = 3
 	restricted_jobs = list(
 	"Baron",
