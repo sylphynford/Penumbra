@@ -1408,6 +1408,7 @@ GLOBAL_LIST_EMPTY(vampire_objects)
 		return FALSE
 	
 	H.revive(full_heal = TRUE, admin_revive = FALSE)
+	H.grab_ghost()
 	H.mind.add_antag_datum(/datum/antagonist/skeleton/knight)
 	H.mob_biotypes = MOB_UNDEAD
 	H.faction |= "undead"

@@ -550,8 +550,9 @@
 							C.visible_message("[C] rises as a new spawn!")
 							var/datum/antagonist/vampirelord/lesser/new_antag = new /datum/antagonist/vampirelord/lesser()
 							new_antag.sired = TRUE
+							C.revive(full_heal = TRUE, admin_revive = FALSE)
+							C.grab_ghost() // In case they've ghosted
 							C.mind.add_antag_datum(new_antag)
 							sleep(20)
-							C.fully_heal()
 					if("No")
 						to_chat(user, span_warning("I decide [C] is unworthy."))
