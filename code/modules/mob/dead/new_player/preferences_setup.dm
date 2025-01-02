@@ -6,6 +6,19 @@
 		gender = gender_override
 	else
 		gender = pick(MALE,FEMALE)
+	
+	// Update pronouns and voice type to match gender
+	switch(gender)
+		if(MALE)
+			pronouns = HE_HIM
+			voice_type = VOICE_TYPE_MASC
+		if(FEMALE)
+			pronouns = SHE_HER
+			voice_type = VOICE_TYPE_FEM
+		else
+			pronouns = THEY_THEM
+			voice_type = VOICE_TYPE_ANDR
+			
 	age = AGE_ADULT
 	var/list/skins = pref_species.get_skin_list()
 	skin_tone = skins[pick(skins)]
