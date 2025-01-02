@@ -1115,6 +1115,11 @@ GLOBAL_LIST_EMPTY(vampire_objects)
 	eye.vampirelord = src
 	eye.ghostize_time = world.time
 	eye.key = key
+	eye.verbs += /mob/dead/observer/rogue/arcaneeye/proc/cancel_scry
+	eye.verbs += /mob/dead/observer/rogue/arcaneeye/proc/scry_tele
+	eye.verbs += /mob/dead/observer/rogue/arcaneeye/proc/vampire_telepathy
+	eye.verbs += /mob/dead/observer/rogue/arcaneeye/proc/eye_up
+	eye.verbs += /mob/dead/observer/rogue/arcaneeye/proc/eye_down
 	return eye
 
 /mob/dead/observer/rogue/arcaneeye/proc/scry_tele()
