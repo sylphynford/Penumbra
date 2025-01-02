@@ -1544,6 +1544,7 @@
 	if(on_fire)
 		on_fire = 0
 		fire_stacks = 0
+		silver_fire = FALSE  // Reset silver fire flag
 		for(var/obj/effect/dummy/lighting_obj/moblight/fire/F in src)
 			qdel(F)
 		clear_alert("fire")
@@ -1561,8 +1562,11 @@
 /mob/living/proc/spreadFire(mob/living/L)
 	if(!istype(L))
 		return
-
+	
 	if(on_fire)
+		if(silver_fire)  // Don't spread silver fire
+			return
+		
 		if(L.on_fire) // If they were also on fire
 			var/firesplit = (fire_stacks + L.fire_stacks)/2
 			fire_stacks = firesplit
@@ -1573,7 +1577,7 @@
 			if(L.IgniteMob()) // Ignite them
 				log_game("[key_name(src)] bumped into [key_name(L)] and set them on fire")
 
-	else if(L.on_fire) // If they were on fire and we were not
+	else if(L.on_fire && !L.silver_fire) // If they were on fire and we were not
 		L.fire_stacks /= 2
 		fire_stacks += L.fire_stacks
 		IgniteMob() // Ignite us
@@ -2087,4 +2091,7 @@
 	reset_perspective()
 	update_cone_show()
 //	UnregisterSignal(src, COMSIG_MOVABLE_PRE_MOVE)
+
+/mob/living
+	var/silver_fire = FALSE  // Add this var
 
