@@ -257,6 +257,8 @@
 					testing("failparry")
 					return FALSE
 		if(INTENT_DODGE)
+			if(!can_see_cone(user))
+				return FALSE
 			if(pulledby && pulledby.grab_state >= GRAB_AGGRESSIVE)
 				return FALSE
 			if(pulling == user)
