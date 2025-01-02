@@ -30,7 +30,6 @@ GLOBAL_LIST_EMPTY(vampire_objects)
 	var/vitae = 2000
 	var/vmax = 2500
 	var/obj/structure/vampire/bloodpool/mypool
-	var/last_transform
 	var/cache_skin
 	//in the future this shit is gonna inherit from the normal vampire antagonist, I honestly don't understand why it isn't like that in the first place
 	var/cache_pigment
@@ -367,14 +366,6 @@ GLOBAL_LIST_EMPTY(vampire_objects)
 	cache_tail_color = V.get_organ_slot_color(ORGAN_SLOT_TAIL)
 	cache_pigment = V.get_organ_slot_color(ORGAN_SLOT_PENIS)
 	cache_ear_color = V.get_organ_slot_color(ORGAN_SLOT_EARS)
-	//cache_hair = V.hair_color
-	//V.skin_tone = "c9d3de"
-	//V.hair_color = "181a1d"
-	//V.facial_hair_color = "181a1d"
-	//V.eye_color = "ff0000"
-	//V.update_body()
-	//V.update_hair()
-	//V.update_body_parts(redraw = TRUE)
 	V.vampire_undisguise(src)
 	V.mob_biotypes = MOB_UNDEAD
 	if(isspawn)
@@ -418,7 +409,6 @@ GLOBAL_LIST_EMPTY(vampire_objects)
 				if(disguised)
 					to_chat(H, span_notice("My disguise fails!"))
 			addtimer(CALLBACK(src, PROC_REF(recover), user), 30 SECONDS, TIMER_UNIQUE|TIMER_OVERRIDE)
-		//last_transform = world.time
 		H.freak_out()
 
 	if(H.stat)
