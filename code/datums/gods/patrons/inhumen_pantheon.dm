@@ -1,3 +1,5 @@
+GLOBAL_LIST_EMPTY(zizo_followers)
+
 /datum/patron/inhumen
 	name = null
 	associated_faith = /datum/faith/inhumen
@@ -23,6 +25,30 @@
 		"LONG LIVE ZIZO!",
 		"ZIZO IS GOD!"
 	)
+
+/datum/patron/inhumen/zizo/New()
+	. = ..()
+	addtimer(CALLBACK(src, PROC_REF(check_initial_followers)), 10 SECONDS)
+
+/datum/patron/inhumen/zizo/proc/check_initial_followers()
+	for(var/mob/living/carbon/human/H in GLOB.player_list)
+		if(H.mind && H.patron && istype(H.patron, /datum/patron/inhumen/zizo))
+			GLOB.zizo_followers |= H.mind
+
+/datum/patron/inhumen/zizo/on_gain(mob/living/pious)
+	. = ..()
+	if(ishuman(pious))
+		var/mob/living/carbon/human/H = pious
+		H.verbs |= /datum/patron/inhumen/zizo/verb/remember_friends
+		GLOB.zizo_followers |= H.mind
+
+/datum/patron/inhumen/zizo/on_loss(mob/living/pious)
+	. = ..()
+	if(ishuman(pious))
+		var/mob/living/carbon/human/H = pious
+		REMOVE_TRAIT(H, TRAIT_CABAL, "[type]")
+		H.verbs -= /datum/patron/inhumen/zizo/verb/remember_friends
+		GLOB.zizo_followers -= H.mind
 
 /datum/patron/inhumen/graggar
 	name = "Graggar"
