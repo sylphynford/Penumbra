@@ -201,6 +201,41 @@ SUBSYSTEM_DEF(job)
 		if(job.title in GLOB.noble_positions) //If you want a command position, select it!
 			continue
 
+		// Add Consort specific check
+		if(job.title == "Consort")
+			// Find ruler
+			var/mob/living/carbon/human/ruler
+			for(var/mob/living/carbon/human/H in GLOB.human_list)
+				if(H?.mind?.assigned_role in list("Baron", "Baroness"))
+					ruler = H
+					break
+			
+			if(!ruler)
+				continue
+			
+			// Get player genital preferences
+			var/player_has_penis = FALSE
+			var/player_has_vagina = FALSE
+			for(var/datum/customizer_entry/entry as anything in player.client.prefs.customizer_entries)
+				if(istype(entry, /datum/customizer_entry/organ/penis))
+					player_has_penis = (entry.disabled == 0)
+				if(istype(entry, /datum/customizer_entry/organ/vagina))
+					player_has_vagina = (entry.disabled == 0)
+			
+			// Get ruler genital preferences
+			var/ruler_has_penis = FALSE
+			var/ruler_has_vagina = FALSE
+			var/datum/preferences/ruler_prefs = GLOB.preferences_datums[ruler.ckey]
+			for(var/datum/customizer_entry/entry as anything in ruler_prefs.customizer_entries)
+				if(istype(entry, /datum/customizer_entry/organ/penis))
+					ruler_has_penis = (entry.disabled == 0)
+				if(istype(entry, /datum/customizer_entry/organ/vagina))
+					ruler_has_vagina = (entry.disabled == 0)
+			
+			// Skip if incompatible
+			if((ruler_has_penis && player_has_penis) || (ruler_has_vagina && player_has_vagina))
+				continue
+
 		if(is_banned_from(player.ckey, job.title) || QDELETED(player))
 			if(QDELETED(player))
 				JobDebug("GRJ isbanned failed, Player deleted")
