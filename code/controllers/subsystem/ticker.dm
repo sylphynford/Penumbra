@@ -875,3 +875,6 @@ SUBSYSTEM_DEF(ticker)
 
 /datum/controller/subsystem/ticker/proc/set_credits_music(sound/S)
 	custom_credits_music = S
+
+/datum/controller/subsystem/ticker/proc/setup_round()
+	addtimer(CALLBACK(src, PROC_REF(setup_cabal_leader)), 5 SECONDS)

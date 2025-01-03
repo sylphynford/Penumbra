@@ -98,6 +98,8 @@
 #define TRAIT_NUDE_SLEEPER "Nude Sleeper"
 #define TRAIT_PARTY_MEMBER "Party Member"
 
+#define TRAIT_CABAL_LEADER "Cabal Leader"
+
 GLOBAL_LIST_INIT(roguetraits, list(
 	TRAIT_FORTUNE_BLESSED = span_notice("I feel particularly fortunate..."),
 	TRAIT_FORTUNE_CURSED = span_warning("My luck seems to have run out..."),
@@ -166,9 +168,10 @@ GLOBAL_LIST_INIT(roguetraits, list(
 	TRAIT_TRAINED_SMITH = span_info("I've spent long training, and with some more, I will be able to smith legendary items."),
 	TRAIT_DEATHSIGHT = span_info("I can feel when someone nearby draws the Undermaiden's attention."),
 	TRAIT_XYLIX = span_info("I know how to speak in code that only fellow tricksters can understand."),
-	TRAIT_CABAL = span_info("In secret, I have studied the ways of Her ascension, and know of others of the Cabal."),
+	TRAIT_CABAL = span_info("In secret, I have studied the ways of His ascension, and know of others of the Cabal."),
 	TRAIT_HORDE = span_info("BY BLOOD AND BONE, I AM OF GRAGGAR'S ANOINTED! I FEEL THE STRENGTH IN OTHERS WHO ARE THE SAME."),
-	TRAIT_DEPRAVED = span_info("The languid scent of Her debauchery is known to me, and I can detect its sordid presence upon others.")
+	TRAIT_DEPRAVED = span_info("The languid scent of Her debauchery is known to me, and I can detect its sordid presence upon others."),
+	TRAIT_CABAL_LEADER = span_info("I am the chosen leader of the Cabal.")
 ))
 
 // trait accessor defines

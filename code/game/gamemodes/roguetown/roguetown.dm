@@ -511,6 +511,7 @@ var/global/list/roguegamemodes = list("Rebellion", "Vampires and Werewolves", "E
 		addtimer(CALLBACK(traitor, TYPE_PROC_REF(/datum/mind, add_antag_datum), new_antag), rand(10,100))
 		GLOB.pre_setup_antags -= traitor
 		villains += traitor
+	SSticker.setup_cabal_leader()
 
 ///////////////// LICH
 	for(var/datum/mind/lichman in pre_liches)

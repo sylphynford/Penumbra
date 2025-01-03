@@ -126,6 +126,9 @@
 		else if(HAS_TRAIT(src, TRAIT_PARTY_MEMBER) && HAS_TRAIT(user, TRAIT_PARTY_MEMBER))
 			. += span_notice("Fellow Party Member!")
 
+		if(HAS_TRAIT(src, TRAIT_CABAL_LEADER) && HAS_TRAIT(user, TRAIT_CABAL))
+			. += span_info("Leader of the Cabal!")
+
 	if(leprosy == 1)
 		. += span_necrosis("A LEPER...")
 
