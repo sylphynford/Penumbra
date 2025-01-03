@@ -153,7 +153,7 @@
 	return ..()
 
 /obj/item/bodypart/onbite(mob/living/carbon/human/user)
-	if((user.mind && user.mind.has_antag_datum(/datum/antagonist/zombie)) || istype(user.dna.species, /datum/species/werewolf))
+	if((user.mind && user.mind.has_antag_datum(/datum/antagonist/zombie)) || istype(user.dna.species, /datum/species/werewolf) || HAS_TRAIT(user, TRAIT_ORGAN_EATER))
 		if(user.has_status_effect(/datum/status_effect/debuff/silver_curse))
 			to_chat(user, span_notice("My power is weakened, I cannot heal!"))
 			return
@@ -636,7 +636,7 @@
 			limb.color = "#[draw_color]"
 			if(aux_zone && !hideaux)
 				aux.color = "#[draw_color]"
-	
+
 	var/draw_organ_features = TRUE
 	var/draw_bodypart_features = TRUE
 	if(owner && owner.dna)
@@ -645,13 +645,13 @@
 			draw_organ_features = FALSE
 		if(NO_BODYPART_FEATURES in owner_species.species_traits)
 			draw_bodypart_features = FALSE
-	
+
 	// Markings overlays
 	if(!skeletonized)
 		var/list/marking_overlays = get_markings_overlays(override_color)
 		if(marking_overlays)
 			. += marking_overlays
-	
+
 	// Organ overlays
 	if(!skeletonized && draw_organ_features)
 		for(var/obj/item/organ/organ as anything in get_organs())
@@ -660,7 +660,7 @@
 			var/mutable_appearance/organ_appearance = organ.get_bodypart_overlay(src)
 			if(organ_appearance)
 				. += organ_appearance
-	
+
 	// Feature overlays
 	if(!skeletonized && draw_bodypart_features)
 		for(var/datum/bodypart_feature/feature as anything in bodypart_features)
