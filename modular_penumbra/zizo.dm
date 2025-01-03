@@ -72,7 +72,16 @@
 	if(!HAS_TRAIT(H, TRAIT_CABAL_LEADER)) 
 		return
 
-	H.next_cabal_message = world.time + (1 MINUTES)
+	// Visual feedback for nearby observers
+	H.visible_message(span_warning("[H] starts contorting their hands in strange ways!"), \
+					span_notice("You begin the ritual to send a telepathic message..."))
+	
+	// Start a do_after that will cancel if the caster moves
+	if(!do_after(H, 150, H))  // 15 seconds
+		to_chat(H, span_warning("Your concentration was broken! The message failed."))
+		return
+
+	H.next_cabal_message = world.time + (3 MINUTES)
 
 	for(var/mob/living/carbon/human/member in GLOB.human_list)
 		if(HAS_TRAIT(member, TRAIT_CABAL))
