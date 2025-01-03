@@ -56,9 +56,6 @@
 					remove_stress(/datum/stressevent/sleepytime)
 					if(mind)
 						mind.sleep_adv.advance_cycle()
-						allmig_reward++
-						adjust_triumphs(1)
-						to_chat(src, span_danger("Nights Survived: \Roman[allmig_reward]"))
 		if(leprosy == 1)
 			adjustToxLoss(2)
 		else if(leprosy == 2)
