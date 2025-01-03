@@ -11,6 +11,7 @@
 	throw_speed = 0.5
 	var/fuze = 10
 	var/lit = FALSE
+	var/random_fuze = FALSE
 	var/prob2fail = 10
 
 
@@ -27,7 +28,10 @@
 
 /obj/item/bomb/proc/light()
 	if(!lit)
-		START_PROCESSING(SSfastprocess, src)
+		if(random_fuze)
+			addtimer(CALLBACK(src, PROC_REF(explode), TRUE), rand(0, fuze) SECONDS)
+		else
+			addtimer(CALLBACK(src, PROC_REF(explode), TRUE), fuze SECONDS)
 		icon_state = "bbomb-lit"
 		lit = TRUE
 		playsound(src.loc, 'sound/items/firelight.ogg', 100)
@@ -68,8 +72,3 @@
 /obj/item/bomb/throw_impact(atom/hit_atom, datum/thrownthing/throwingdatum)
 	..()
 	explode()
-
-/obj/item/bomb/process()
-	fuze--
-	if(fuze <= 0)
-		explode(TRUE)
