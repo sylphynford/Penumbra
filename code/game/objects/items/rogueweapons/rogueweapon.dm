@@ -94,11 +94,14 @@
 
 /obj/item/rogueweapon/pre_attack(atom/A, mob/living/user, params)
 	if(is_hot && !user.cmode)
+		var/obj/item/bodypart/BP
 		if(istype(A, /obj/item/bodypart))
-			var/obj/item/bodypart/BP = A
-			if(!BP.owner)
-				return TRUE
-			
+			BP = A
+		else if(ismob(A))
+			var/mob/living/M = A
+			BP = M.get_bodypart(check_zone(user.zone_selected))
+		
+		if(BP?.owner)
 			for(var/datum/wound/W in BP.wounds)
 				if(W.bleed_rate)
 					user.visible_message(span_warning("[user] begins cauterizing [BP.owner]'s [BP.name] with [src]!"), 
@@ -114,25 +117,6 @@
 										span_warning("You cauterize [BP.owner]'s [BP.name] with [src]!"))
 						playsound(src.loc, "burn", 100, FALSE, -1)
 					return TRUE
-		if(ismob(A))
-			var/mob/living/M = A
-			var/obj/item/bodypart/BP = M.get_bodypart(check_zone(user.zone_selected))
-			if(BP)
-				for(var/datum/wound/W in BP.wounds)
-					if(W.bleed_rate)
-						user.visible_message(span_warning("[user] begins cauterizing [M]'s [BP.name] with [src]!"), 
-										span_warning("You begin cauterizing [M]'s [BP.name] with [src]!"))
-						
-						if(do_after(user, 5 SECONDS, target = M))
-							// Remove all bleeding wounds
-							for(var/datum/wound/W2 in BP.wounds)
-								if(W2.bleed_rate)
-									qdel(W2)
-							BP.receive_damage(burn = 80) // Massive burn damage
-							user.visible_message(span_warning("[user] cauterizes [M]'s [BP.name] with [src]!"),
-											span_warning("You cauterize [M]'s [BP.name] with [src]!"))
-							playsound(src.loc, "burn", 100, FALSE, -1)
-						return TRUE
 	return ..()
 
 /obj/item/rogueweapon/fire_act(added, maxstacks)
