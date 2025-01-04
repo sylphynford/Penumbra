@@ -76,14 +76,6 @@ GLOBAL_VAR(last_connection)
 				log_access("Failed Login: [ckey] - PQ at -100")
 				return list("reason"="pqlow", "desc"="\nYou have completed the game!")
 
-	//Account age check
-	if(!real_bans_only && !C && CONFIG_GET(flag/account_age_restriction))
-		if(!admin && !bunker_bypass_check())
-			var/account_age = get_account_age(ckey)
-			if(account_age < 365) // Less than 1 year old
-				log_access("Failed Login: [key] - Account too new ([account_age] days)")
-				return list("reason"="account_age", "desc" = "\nReason: Your BYOND account must be at least 1 year old to connect.\nContact an admin on our Discord for an exception.")
-
 	//Guest Checking
 	if(!real_bans_only && !C && IsGuestKey(key))
 		if (CONFIG_GET(flag/guest_ban))
@@ -296,23 +288,3 @@ GLOBAL_VAR(last_connection)
 #undef STICKYBAN_MAX_MATCHES
 #undef STICKYBAN_MAX_EXISTING_USER_MATCHES
 #undef STICKYBAN_MAX_ADMIN_MATCHES
-
-/proc/bunker_bypass_check(ckey)
-	if(!ckey)
-		return FALSE
-	var/client/C = GLOB.directory[ckey]
-	if(C && (GLOB.admin_datums[ckey] || GLOB.deadmins[ckey]))
-		return TRUE
-	// You can add more bypass conditions here
-	return FALSE
-
-/proc/get_account_age(ckey)
-	if(!ckey)
-		return -1
-	var/client/C = GLOB.directory[ckey]
-	if(!C)
-		return -1
-	var/days = 0
-	if(C.player_age != -1)
-		days = C.player_age
-	return days
