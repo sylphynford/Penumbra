@@ -12,12 +12,14 @@
 	var/needed_item
 	var/needed_item_text
 	var/quality_mod = 0
+	var/improving = FALSE
 	var/progress
 	var/max_progress = 100
 	var/i_type
 	var/bar_health = 100 // Current material bar health, reduced by failures. At 0 HP it is deleted.
 	var/numberofhits = 0 // Increased every time you hit the bar, the more you have to hit the bar the less quality of the product.
 	var/numberofbreakthroughs = 0 // How many good hits we got on the metal, advances recipes 50% faster, reduces number of hits total, and restores bar_health
+	var/improves = 0
 	var/datum/parent
 
 /datum/anvil_recipe/New(datum/P, ...)
@@ -34,11 +36,15 @@
 	if(progress >= max_progress)
 		to_chat(user, span_info("It's ready."))
 		user.visible_message(span_warning("[user] strikes the bar!"))
+		if(improving)
+			improves += 1
+			improving = FALSE
 		return FALSE
 	if(needed_item)
 		to_chat(user, span_info("Now it's time to add a [needed_item_text]."))
 		user.visible_message(span_warning("[user] strikes the bar!"))
 		return FALSE
+
 	// Calculate probability of a successful strike, based on smith's skill level
 	if(!skill_level && !craftdiff)
 		proab = 35
@@ -46,15 +52,20 @@
 		proab = 10
 	else
 		proab = min(45 * skill_level, 100)
+
+	if(improving)
+		proab = get_improve_chance(user)
 	// Roll the dice to see if the hit actually causes to accumulate progress
 	if(prob(proab))
 		moveup += round((skill_level * 6 * L.STASTR/10) * (breakthrough == 1 ? 1.5 : 1))
 		moveup -= craftdiff
 		progress = min(progress + moveup * advance_multiplier, max_progress)
-		numberofhits += 1 * advance_multiplier
+		if(!improving)
+			numberofhits += 1 * advance_multiplier
 	else
 		moveup = 0
-		numberofhits += 1 * advance_multiplier // Increase regardless of success
+		if(!improving)
+			numberofhits += 1 * advance_multiplier // Increase regardless of success
 
 	// This step is finished, check if more items are needed and restart the process
 	if(progress >= max_progress && additional_items.len)
@@ -69,7 +80,8 @@
 		user.mind.add_sleep_experience(appro_skill, advance_multiplier*L.STAINT/(craftdiff+3), FALSE) //Pity XP
 		if(!prob(proab)) // Roll again, this time negatively, for consequences.
 			user.visible_message(span_warning("[user] ruins the bar!"))
-			skill_quality -= 1 // The more you fuck up, the less quality the end result will be.
+			if(!improving)
+				skill_quality -= 1 // The more you fuck up, the less quality the end result will be.
 			bar_health -= craftdiff // Difficulty of the recipe adds to how critical the failure is
 			if(parent)
 				var/obj/item/P = parent
@@ -93,7 +105,8 @@
 
 	else
 		if(user.mind)
-			skill_quality += (rand(skill_level*12, skill_level*14) * moveup)*advance_multiplier
+			if(!improving)
+				skill_quality += (rand(skill_level*12, skill_level*14) * moveup)*advance_multiplier
 			user.mind.add_sleep_experience(appro_skill, advance_multiplier*L.STAINT/(craftdiff+1), FALSE)
 
 		if(breakthrough)
@@ -109,7 +122,31 @@
 	user.visible_message(span_info("[user] adds [needed_item_text]"))
 	needed_item_text = null
 
+/datum/anvil_recipe/proc/get_improve_chance(var/mob/living/carbon/user)
+	var/skill_level	= user.mind.get_skill_level(appro_skill)
+	var/probability = 25 - (25 * (0.1 * ((get_final_quality() + 1) - skill_level)))
+	if(skill_level > (get_final_quality() + 1))
+		return 100 // They can make this quality normally, let them improve up to it.
+
+	probability += user.STAPER
+	return clamp(probability, 5, 100) // Smith always has SOME chance of getting a good hit, but RNG gods would have to bless you.
+
+/datum/anvil_recipe/proc/get_final_quality()
+	var/temp_numberofhits = numberofhits
+	var/temp_num_of_materials = num_of_materials
+	var/result = skill_quality
+	var/temp_material_quality = material_quality
+	temp_numberofhits = ceil(temp_numberofhits / temp_num_of_materials) // Divide the hits equally among the number of bars required, rounded up.
+	if(numberofbreakthroughs) // Hitting the bar the perfect way should be rewarding quality-wise
+		temp_numberofhits -= numberofbreakthroughs
+	temp_material_quality = floor(temp_material_quality/temp_num_of_materials)-4
+	result = floor((result/temp_num_of_materials)/1500)+temp_material_quality
+	// Finally, the more hits the thing required, the less quality it will be, to prevent low level smiths from dishing good stuff
+	result -= floor(temp_numberofhits * 0.25)
+	return result + improves
+
 /datum/anvil_recipe/proc/handle_creation(obj/item/I)
+/*
 	numberofhits = ceil(numberofhits / num_of_materials) // Divide the hits equally among the number of bars required, rounded up.
 	if(numberofbreakthroughs) // Hitting the bar the perfect way should be rewarding quality-wise
 		numberofhits -= numberofbreakthroughs
@@ -117,8 +154,9 @@
 	skill_quality = floor((skill_quality/num_of_materials)/1500)+material_quality
 	// Finally, the more hits the thing required, the less quality it will be, to prevent low level smiths from dishing good stuff
 	skill_quality -= floor(numberofhits * 0.25)
+	*/
 	var/modifier // Multiplier which will determine quality of final product depending on final skill_quality calculation
-	switch(skill_quality)
+	switch(get_final_quality())
 		if(BLACKSMITH_LEVEL_MIN to BLACKSMITH_LEVEL_SPOIL)
 			I.name = "ruined [I.name]"
 			modifier = 0.3
