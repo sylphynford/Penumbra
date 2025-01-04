@@ -249,10 +249,13 @@ SUBSYSTEM_DEF(ticker)
 	var/last_bot_update = 0
 
 /datum/controller/subsystem/ticker/proc/checkreqroles()
+	// Skip the check if start_immediately is true (set by Start Now admin command)
+	if(start_immediately)
+		job_change_locked = TRUE
+		return TRUE
+		
 	var/list/readied_jobs = list()
 	var/list/required_jobs = list("Baron")
-
-	//var/list/required_jobs = list("Queen","King","Merchant") //JTGSZ - 4/11/2024 - This was the prev set of required jobs to go with the hardcoded checks commented out below
 
 	for(var/V in required_jobs)
 		for(var/mob/dead/new_player/player in GLOB.player_list)
