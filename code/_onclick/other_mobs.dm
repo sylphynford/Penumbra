@@ -297,6 +297,9 @@
 					return
 				if(src.get_num_legs() < 2)
 					return
+				if(HAS_TRAIT(src, TRAIT_NORUN))
+					to_chat(src, span_warning("My joints have decayed too much for jumping!"))
+					return
 				if(pulledby && pulledby != src)
 					to_chat(src, span_warning("I'm being grabbed."))
 					return
