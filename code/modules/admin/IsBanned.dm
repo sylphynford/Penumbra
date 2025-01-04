@@ -76,6 +76,29 @@ GLOBAL_VAR(last_connection)
 				log_access("Failed Login: [ckey] - PQ at -100")
 				return list("reason"="pqlow", "desc"="\nYou have completed the game!")
 
+	//Account age check
+	if(!real_bans_only && !C && CONFIG_GET(flag/account_age_restriction))
+		if(!bunker_bypass_check(ckey))  // Check for bunker bypass
+			var/list/http = world.Export("http://www.byond.com/members/[ckey]?format=text")
+			if(http && http["CONTENT"])
+				var/content = file2text(http["CONTENT"])
+				var/regex/R = new("joined = \"(\\d{4})-(\\d{2})-(\\d{2})\"")
+				if(R.Find(content))
+					var/year = text2num(R.group[1])
+					var/month = text2num(R.group[2])
+					var/day = text2num(R.group[3])
+					
+					//Get current date
+					var/current_time = world.timeofday
+					var/current_year = text2num(time2text(current_time, "YYYY"))
+					var/current_month = text2num(time2text(current_time, "MM"))
+					var/current_day = text2num(time2text(current_time, "DD"))
+					
+					//Check if account is less than 1 year old
+					if((current_year - year) < 1 || (current_year - year == 1 && current_month < month) || (current_year - year == 1 && current_month == month && current_day < day))
+						log_access("Failed Login: [key] - Account too new (Created: [year]-[month]-[day])")
+						return list("reason"="account_age", "desc" = "\nReason: Your BYOND account must be at least 1 year old to connect.\nContact an admin on our Discord for an exception.")
+			
 	//Guest Checking
 	if(!real_bans_only && !C && IsGuestKey(key))
 		if (CONFIG_GET(flag/guest_ban))
@@ -288,3 +311,19 @@ GLOBAL_VAR(last_connection)
 #undef STICKYBAN_MAX_MATCHES
 #undef STICKYBAN_MAX_EXISTING_USER_MATCHES
 #undef STICKYBAN_MAX_ADMIN_MATCHES
+
+/proc/bunker_bypass_check(ckey)
+	if(!ckey)
+		return FALSE
+	var/datum/DBQuery/query = SSdbcore.NewQuery(
+		"SELECT ckey FROM [format_table_name("role_whitelist")] WHERE ckey = :ckey AND role = 'bunker_bypass'",
+		list("ckey" = ckey)
+	)
+	if(!query.Execute())
+		qdel(query)
+		return FALSE
+	if(query.NextRow())
+		qdel(query)
+		return TRUE
+	qdel(query)
+	return FALSE
