@@ -495,3 +495,6 @@
 
 /datum/config_entry/flag/reopen_roundstart_suicide_roles_command_report
 
+/datum/config_entry/flag/account_age_restriction
+	default = FALSE
+
