@@ -304,7 +304,7 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/rp_prompt.txt"))
 			if(!inquisitor_exists)
 				to_chat(src, "<span class='warning'>There must be or have been an Inquisitor for you to join as Occultist!</span>")
 				return
-
+		/* Depreciated since Huskar was changed from the Consort's bodyguard into the Baron's knight.
 		if(href_list["SelectedJob"] == "Huskar")
 			// Check for consort
 			var/mob/living/carbon/human/consort
@@ -316,7 +316,7 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/rp_prompt.txt"))
 			if(!consort)
 				to_chat(src, "<span class='warning'>There must be a Consort for you to join as Huskar!</span>")
 				return
-
+		*/
 		if(!SSticker?.IsRoundInProgress())
 			to_chat(usr, span_danger("The round is either not ready, or has already finished..."))
 			return

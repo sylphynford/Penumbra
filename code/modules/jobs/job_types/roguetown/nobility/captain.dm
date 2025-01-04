@@ -3,8 +3,8 @@
 	flag = GUARD_CAPTAIN
 	department_flag = NOBLEMEN
 	faction = "Station"
-	total_positions = 1
-	spawn_positions = 1
+	total_positions = 0
+	spawn_positions = 0
 	zizo_roll = 100
 	allowed_races = NOBLE_RACES_TYPES
 	allowed_sexes = list(MALE, FEMALE)
@@ -95,6 +95,7 @@
 	ADD_TRAIT(H, TRAIT_STEELHEARTED, TRAIT_GENERIC)
 	H.verbs |= /mob/proc/haltyell
 
+/* Given to Huskar instead
 /obj/effect/proc_holder/spell/self/convertrole
 	name = "Recruit Beggar"
 	desc = "Recruit someone to your cause."
@@ -189,8 +190,10 @@
 // used for blackguards event
 /datum/job/roguetown/blackguard_banneret
 	title = "Blackguard Banneret"
-	flag = GUARD_CAPTAIN
+	flag = HUSKAR
 	department_flag = NOBLEMEN
 	faction = "Station"
 	total_positions = 0
 	spawn_positions = 0
+
+*/
