@@ -12,6 +12,19 @@
 	desc = ""
 	icon_state = "off_balanced"
 
+/datum/status_effect/erp
+	id = "erpcheck"
+	alert_type = null
+	status_type = STATUS_EFFECT_REPLACE
+	duration = 12000 // 20 minutes to erp check
+	tick_interval = 12001
+
+/datum/status_effect/erp/good
+	status_type = STATUS_EFFECT_UNIQUE
+
+/datum/status_effect/erp/bad
+	status_type = STATUS_EFFECT_UNIQUE
+
 //ENDROGUE
 
 /datum/status_effect/sigil_mark //allows the affected target to always trigger sigils while mindless

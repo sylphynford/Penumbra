@@ -193,3 +193,54 @@
 			target.adjustFireLoss(-50)
 		return TRUE
 	return FALSE
+
+//Check purity
+/obj/effect/proc_holder/spell/targeted/check_purity
+	name = "Check Purity"
+	overlay_state = "lesserheal"
+	range = 2
+	max_targets = 0
+	warnie = "sydwarning"
+	sound = 'sound/magic/heal.ogg'
+	invocation_type = "none"
+	associated_skill = /datum/skill/magic/holy
+	antimagic_allowed = TRUE
+	miracle = TRUE
+	devotion_cost = 10
+	include_user = TRUE
+	random_target = TRUE
+	cast_without_targets = FALSE
+	random_target_priority = TARGET_CLOSEST
+
+/obj/effect/proc_holder/spell/targeted/check_purity/cast(list/targets,mob/living/user = usr)
+	var/fakeout = 1
+	for(var/mob/living/L in targets)
+		var/text
+		if(/datum/round_event/roundstart/epicsexfail in GLOB.active_roundstart_events)
+			fakeout = 100
+		if(prob(fakeout))
+			text = pick("This person is impure, and they ENJOYED IT.", "This person is impure, and they HATED IT.", "This person's purity has been touched.", "This person's purity remains untouched.")
+		else
+			if(L.has_status_effect(/datum/status_effect/erp/good))
+				text = "This person is impure, and they ENJOYED IT."
+			else if(L.has_status_effect(/datum/status_effect/erp/bad))
+				text = "This person is impure, and they HATED IT."
+			else if(L.has_status_effect(/datum/status_effect/erp))
+				text = "This person's purity has been touched."
+			else
+				text = "This person's purity remains untouched."
+		to_chat(user, span_notice(text))
+	..()
+	return TRUE
+
+/obj/effect/proc_holder/spell/targeted/check_purity/can_target(mob/living/target)
+	if(iscarbon(target))
+		for(var/obj/item/grabbing/G in target.grabbedby)
+			if(G.grabbee == usr)
+				if(G.sublimb_grabbed == BODY_ZONE_PRECISE_GROIN)
+					return TRUE
+	return FALSE
+
+/obj/effect/proc_holder/spell/targeted/check_purity/revert_cast(mob/user)
+	. = ..()
+	to_chat(user, span_warning("I need to be holding someone's purity."))

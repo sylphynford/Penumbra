@@ -1103,7 +1103,7 @@
 	max_integrity = 80
 	chance2hear = 10
 
-/obj/structure/fluff/psycross/attackby(obj/item/W, mob/user, params)
+/obj/structure/fluff/psycross/attackby(obj/item/W, mob/living/user, params)
 	if(user.mind)
 		if(user.mind.assigned_role == "Priest")
 			if(istype(W, /obj/item/reagent_containers/food/snacks/grown/apple))
@@ -1161,6 +1161,36 @@
 				if(!marriage)
 					A.burn()
 					return
+	if(istype(W, /obj/item/clothing/neck/roguetown/psicross))
+
+		if(!istype(user.patron, /datum/patron/divine/astrata))
+			to_chat(user, span_warning("HERESY!"))
+			return FALSE
+
+		user.visible_message(span_info("[user] kneels down in-front of [src]."))
+		animate(user, 15, pixel_y = -3)
+		user.set_mob_offsets("praying", _x = 0, _y = -3)
+		addtimer(CALLBACK(user, TYPE_PROC_REF(/mob/living, reset_offsets), "praying"), 160) //dogshit code but i cant do anything else
+		if(do_after(user, 50))
+			user.whisper(pick("Oh Psydon...", "He who watches over us...", "Holy Creator...", "Tri-Father forgive me...", "Blessed I am to be here..."))
+			if(do_after(user,50))
+				user.whisper(pick("... Please forgive me...", "... I ask for your protection...", "... I pray unto you..."))
+				if(do_after(user,50))
+					user.reset_offsets("praying")
+					user.whisper(pick("... Suffer not, for I have not forgotten.", "... Though we miss you, we carry your embers.", "... Your follower, forever.", "... In debt. In your grace. Amen."))
+					playsound(loc, 'sound/misc/notice (2).ogg', 100, TRUE, -2)
+					if(user.has_flaw(/datum/charflaw/addiction/godfearing))
+						if(!istype(get_area(user), /area/rogue/indoors/town/church/chapel))
+							to_chat(user, span_warning("I need to do this in the chapel for Psydon to notice my prayers."))
+							return ..()
+						var/datum/charflaw/addiction/godfearing/omg = user.get_flaw(/datum/charflaw/addiction/godfearing)
+						if(omg?.prayer_done)
+							omg.prayer_done = FALSE
+							user.sate_addiction()
+						else
+							to_chat(user, span_warning("I haven't done my preparations."))
+							return ..()
+
 	return ..()
 
 /obj/structure/fluff/psycross/copper/Destroy()

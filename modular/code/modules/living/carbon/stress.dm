@@ -25,5 +25,10 @@
 
 /datum/stressevent/cumpaingood
 	timer = 10 MINUTES
-	stressadd = -5
+	stressadd = -3
 	desc = "<span class='green'>Pain makes it better.</span>"
+
+/datum/stressevent/cumclose
+	timer = 5 MINUTES
+	stressadd = -1
+	desc = "<span class='green'>It feels good...</span>"

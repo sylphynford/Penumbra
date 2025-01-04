@@ -201,16 +201,27 @@
 		if(m)
 			user.say(m)
 
-/obj/item/book/rogue/bibble/attack(mob/living/M, mob/user)
-	if(user.mind && user.mind.assigned_role == "Priest")
+/obj/item/book/rogue/bibble/attack(mob/living/M, mob/living/user)
+	if(user.mind && user.mind.assigned_role == "Priest" && istype(user.patron, /datum/patron/divine/astrata))
 		if(!user.can_read(src))
 			to_chat(user, span_warning("I don't understand these scribbly black lines."))
 			return
-		M.apply_status_effect(/datum/status_effect/buff/blessed)
-		M.add_stress(/datum/stressevent/blessed)
-		user.visible_message(span_notice("[user] blesses [M]."))
-		playsound(user, 'sound/magic/bless.ogg', 100, FALSE)
-		return
+		if(istype(M.patron, /datum/patron/divine/astrata))
+			if(M.has_flaw(/datum/charflaw/addiction/godfearing))
+				var/datum/charflaw/addiction/godfearing/omg = M.get_flaw(/datum/charflaw/addiction/godfearing)
+				if(omg?.prayer_done)
+					omg.prayer_done = FALSE
+					M.sate_addiction()
+			M.apply_status_effect(/datum/status_effect/buff/blessed)
+			M.add_stress(/datum/stressevent/blessed)
+			user.visible_message(span_notice("[user] blesses [M]."))
+			playsound(user, 'sound/magic/bless.ogg', 100, FALSE)
+			return
+		else
+			to_chat(M, span_warning("HERESY!"))
+			user.visible_message(span_notice("[user] blesses [M]."))
+			playsound(user, 'sound/magic/bless.ogg', 100, FALSE)
+			return
 
 /datum/status_effect/buff/blessed
 	id = "blessed"

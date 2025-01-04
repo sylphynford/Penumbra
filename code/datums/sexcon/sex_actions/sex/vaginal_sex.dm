@@ -29,6 +29,11 @@
 /datum/sex_action/vaginal_sex/on_start(mob/living/carbon/human/user, mob/living/carbon/human/target)
 	user.visible_message(span_warning("[user] slides [user.p_their()] cock into [target]'s cunt!"))
 	playsound(target, list('sound/misc/mat/insert (1).ogg','sound/misc/mat/insert (2).ogg'), 20, TRUE, ignore_walls = FALSE)
+	if(target.virginity)
+		target.visible_message(span_warning("[user] pops [target]'s cherry!"))
+		playsound(target, 'sound/combat/tf2crit.ogg', 2, TRUE, ignore_walls = FALSE)
+		target.virginity = FALSE
+		target.bleed(3)
 
 /datum/sex_action/vaginal_sex/on_perform(mob/living/carbon/human/user, mob/living/carbon/human/target)
 	user.visible_message(user.sexcon.spanify_force("[user] [user.sexcon.get_generic_force_adjective()] fucks [target]'s cunt."))
@@ -39,8 +44,6 @@
 		user.visible_message(span_love("[user] cums into [target]'s cunt!"))
 		user.sexcon.cum_into()
 		user.try_impregnate(target)
-		user.virginity = FALSE
-		target.virginity = FALSE
 
 	if(user.sexcon.considered_limp())
 		user.sexcon.perform_sex_action(target, 1.2, 3, FALSE)

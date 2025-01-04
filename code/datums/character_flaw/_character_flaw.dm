@@ -2,23 +2,24 @@
 GLOBAL_LIST_INIT(character_flaws, list(
 	"Alcoholic"=/datum/charflaw/addiction/alcoholic,
 	"Devout Follower"=/datum/charflaw/addiction/godfearing,
-	"Colorblind"=/datum/charflaw/colorblind,
+//	"Colorblind"=/datum/charflaw/colorblind,
 	"Smoker"=/datum/charflaw/addiction/smoker,
 	"Junkie"=/datum/charflaw/addiction/junkie,
 	"Greedy"=/datum/charflaw/greedy,
 	"Narcoleptic"=/datum/charflaw/narcoleptic,
 	"Nymphomaniac"=/datum/charflaw/addiction/lovefiend,
-	"Sadist"=/datum/charflaw/addiction/sadist,
+//	"Sadist"=/datum/charflaw/addiction/sadist,
 	"Masochist"=/datum/charflaw/masochist,
 	"Paranoid"=/datum/charflaw/paranoid,
-	"Clingy"=/datum/charflaw/clingy,
-	"Isolationist"=/datum/charflaw/isolationist,
+//	"Clingy"=/datum/charflaw/clingy,
+//	"Isolationist"=/datum/charflaw/isolationist,
 	"Bad Sight"=/datum/charflaw/badsight,
 	"Cyclops (R)"=/datum/charflaw/noeyer,
 	"Cyclops (L)"=/datum/charflaw/noeyel,
 	"Wood Arm (R)"=/datum/charflaw/limbloss/arm_r,
 	"Wood Arm (L)"=/datum/charflaw/limbloss/arm_l,
 	"Random or No Flaw"=/datum/charflaw/randflaw,
+	"Picky Sleeper"=/datum/charflaw/pickysleeper,
 	"No Flaw (3 TRIUMPHS)"=/datum/charflaw/noflaw
 	))
 
@@ -354,6 +355,16 @@ GLOBAL_LIST_INIT(character_flaws, list(
 
 	last_checked_mammons = new_mammon_amount
 
+/proc/get_mammons_in_atom(atom/movable/movable)
+	var/static/list/coins_types = typecacheof(/obj/item/roguecoin)
+	var/mammons = 0
+	if(coins_types[movable.type])
+		var/obj/item/roguecoin/coin = movable
+		mammons += coin.quantity * coin.sellprice
+	for(var/atom/movable/content in movable.contents)
+		mammons += get_mammons_in_atom(content)
+	return mammons
+
 /datum/charflaw/narcoleptic
 	name = "Narcoleptic"
 	desc = "I get drowsy during the day and tend to fall asleep suddenly, but I can sleep easier if I want to, and moon dust can help me stay awake."
@@ -435,7 +446,7 @@ GLOBAL_LIST_INIT(character_flaws, list(
 	var/current_pain = user.get_complex_pain()
 	// Bloodloss makes the pain count as extra large to allow people to bloodlet themselves with cutting weapons to satisfy vice
 	var/bloodloss_factor = clamp(1.0 - (user.blood_volume / BLOOD_VOLUME_NORMAL), 0.0, 0.5)
-	var/new_pain_threshold = get_pain_threshold(current_pain * (1.0 + (bloodloss_factor * 1.4))) // Bloodloss factor goes up to 50%, and then counts at 140% value of that
+	var/new_pain_threshold = get_pain_threshold(current_pain * (2.5 + (bloodloss_factor * 1.6))) // Bloodloss factor goes up to 50%, and then counts at 140% value of that - comment isnt relevant anymore but keeping it in case of revert
 	if(last_pain_threshold == NONE)
 		to_chat(user, span_boldwarning("I could really use some pain right now..."))
 	else if (new_pain_threshold != last_pain_threshold)
@@ -463,19 +474,16 @@ GLOBAL_LIST_INIT(character_flaws, list(
 	switch(pain_amt)
 		if(-INFINITY to 50)
 			return MASO_THRESHOLD_ONE
-		if(50 to 95)
+		if(50 to 100)
 			return MASO_THRESHOLD_TWO
-		if(95 to 140)
+		if(100 to 150)
 			return MASO_THRESHOLD_THREE
-		if(140 to INFINITY)
+		if(150 to INFINITY)
 			return MASO_THRESHOLD_FOUR
 
-/proc/get_mammons_in_atom(atom/movable/movable)
-	var/static/list/coins_types = typecacheof(/obj/item/roguecoin)
-	var/mammons = 0
-	if(coins_types[movable.type])
-		var/obj/item/roguecoin/coin = movable
-		mammons += coin.quantity * coin.sellprice
-	for(var/atom/movable/content in movable.contents)
-		mammons += get_mammons_in_atom(content)
-	return mammons
+/datum/charflaw/pickysleeper
+	name = "Picky Sleeper"
+	desc = "It's an embarrassing secret, but I only sleep comfortable naked in my bed. Otherwise I just can't seem to sleep."
+
+/datum/charflaw/pickysleeper/on_mob_creation(mob/user)
+	ADD_TRAIT(user, TRAIT_NUDE_SLEEPER, "[type]")

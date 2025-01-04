@@ -208,3 +208,24 @@
 
 	var/cup_size = find_key_by_value(GLOB.named_breast_sizes, breasts.breast_size)
 	return "<font color='#e9a8d1'>[adjective] [cup_size] breasts</font>"
+
+/datum/mob_descriptor/virginity
+	name = "virginity"
+	slot = MOB_DESCRIPTOR_SLOT_VIRGIN
+	verbage = "has"
+	show_obscured = TRUE
+
+/datum/mob_descriptor/vagina/can_describe(mob/living/described)
+	if(!ishuman(described))
+		return FALSE
+	if(!described.virginity)
+		return FALSE
+	var/mob/living/carbon/human/H = described
+	if(H.underwear)
+		return FALSE
+	if(!get_location_accessible(H, BODY_ZONE_PRECISE_GROIN))
+		return FALSE
+	return TRUE
+
+/datum/mob_descriptor/vagina/get_description(mob/living/described)
+	return "[described.p_their()] <font color='#f14c5a'>freshness</font>"

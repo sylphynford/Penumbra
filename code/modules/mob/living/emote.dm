@@ -42,9 +42,16 @@
 	if(!L || !message || !ishuman(L))
 		return FALSE
 	var/mob/living/carbon/human/M = L
-	if(length(message) > 15)
+	if(length(message) > 50)
 		if(L.has_flaw(/datum/charflaw/addiction/godfearing))
-			L.sate_addiction()
+			if(istype(L.patron, /datum/patron/divine/astrata))
+				var/datum/charflaw/addiction/godfearing/omg = L.get_flaw(/datum/charflaw/addiction/godfearing)
+				if(!omg?.prayer_done)
+					omg.prayer_done = TRUE
+					to_chat(L, span_notice("My praying is done. I must feel closer to Psydon now."))
+			else
+				L.sate_addiction()
+
 		if(L.mob_timers[MT_PSYPRAY])
 			if(world.time < L.mob_timers[MT_PSYPRAY] + 1 MINUTES)
 				L.mob_timers[MT_PSYPRAY] = world.time

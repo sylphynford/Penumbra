@@ -197,6 +197,12 @@
 		for(var/S in jobstats)
 			H.change_stat(S, jobstats[S])
 
+	if(prob(4))
+		to_chat(H, span_love("My virginity is still intact. I might want to keep it that way..."))
+		H.virginity = TRUE
+	if(prob(1))
+		ADD_TRAIT(H, TRAIT_BADLOVER, TRAIT_GENERIC)
+
 	for(var/X in peopleknowme)
 		for(var/datum/mind/MF in get_minds(X))
 			H.mind.person_knows_me(MF)

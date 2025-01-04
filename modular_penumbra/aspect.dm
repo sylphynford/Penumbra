@@ -12,7 +12,7 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 /datum/round_event/roundstart
 	var/is_active = FALSE
 
-	proc/apply_effect()
+/datum/round_event/roundstart/proc/apply_effect()
 		SHOULD_CALL_PARENT(TRUE)
 		GLOB.active_roundstart_events += src
 		return
@@ -338,44 +338,44 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 /datum/round_event/roundstart/noble_vampires
 	is_active = FALSE
 
-	/datum/round_event/roundstart/noble_vampires/apply_effect()
-		. = ..()
-		is_active = TRUE
-		
-		RegisterSignal(SSdcs, COMSIG_GLOB_MOB_CREATED, PROC_REF(on_mob_created))
-		for(var/mob/living/carbon/human/H in GLOB.alive_mob_list)
-			make_vampire(H)
-
-	/datum/round_event/roundstart/noble_vampires/proc/make_vampire(mob/living/carbon/human/H)
-		if(!H.mind?.assigned_role)
-			return
-			
-		var/datum/job/J = SSjob.GetJob(H.mind.assigned_role)
-		if(!J || !(J.department_flag & NOBLEMEN))
-			return
-			
-		if(H.mind.has_antag_datum(/datum/antagonist/vampire))
-			return
-			
-		var/datum/antagonist/vampire/new_antag = new()
-		new_antag.increase_votepwr = FALSE
-		H.mind.add_antag_datum(new_antag)
-		to_chat(H, span_userdanger("You are the true masters of the world. But it is imperative you maintain the Masquerade..."))
-
-	/datum/round_event/roundstart/noble_vampires/proc/on_mob_created(datum/source, mob/M)
-		SIGNAL_HANDLER
-		
-		if(!is_active || !istype(M, /mob/living/carbon/human))
-			return
-			
-		var/mob/living/carbon/human/H = M
-		addtimer(CALLBACK(src, .proc/check_and_convert_noble, H), 1 SECONDS)
-
-	/datum/round_event/roundstart/noble_vampires/proc/check_and_convert_noble(mob/living/carbon/human/H)
-		if(!H?.mind?.assigned_role)
-			return
-			
+/datum/round_event/roundstart/noble_vampires/apply_effect()
+	. = ..()
+	is_active = TRUE
+	
+	RegisterSignal(SSdcs, COMSIG_GLOB_MOB_CREATED, PROC_REF(on_mob_created))
+	for(var/mob/living/carbon/human/H in GLOB.alive_mob_list)
 		make_vampire(H)
+
+/datum/round_event/roundstart/noble_vampires/proc/make_vampire(mob/living/carbon/human/H)
+	if(!H.mind?.assigned_role)
+		return
+		
+	var/datum/job/J = SSjob.GetJob(H.mind.assigned_role)
+	if(!J || !(J.department_flag & NOBLEMEN))
+		return
+		
+	if(H.mind.has_antag_datum(/datum/antagonist/vampire))
+		return
+		
+	var/datum/antagonist/vampire/new_antag = new()
+	new_antag.increase_votepwr = FALSE
+	H.mind.add_antag_datum(new_antag)
+	to_chat(H, span_userdanger("You are the true masters of the world. But it is imperative you maintain the Masquerade..."))
+
+/datum/round_event/roundstart/noble_vampires/proc/on_mob_created(datum/source, mob/M)
+	SIGNAL_HANDLER
+	
+	if(!is_active || !istype(M, /mob/living/carbon/human))
+		return
+		
+	var/mob/living/carbon/human/H = M
+	addtimer(CALLBACK(src, .proc/check_and_convert_noble, H), 1 SECONDS)
+
+/datum/round_event/roundstart/noble_vampires/proc/check_and_convert_noble(mob/living/carbon/human/H)
+	if(!H?.mind?.assigned_role)
+		return
+		
+	make_vampire(H)
 
 /datum/round_event_control/roundstart/noble_vampires
 	name = "Bloodlines"
@@ -496,80 +496,80 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 	antag_moodlet = /datum/mood_event/focused
 	show_in_roundend = TRUE
 	
-	/datum/antagonist/blackguard/on_gain()
-		. = ..()
-		if(owner && owner.current)
-			to_chat(owner.current, "<span class='warning'><B>You are a Blackguard mercenary. Your loyalties lie with coin rather than honor.</B></span>")
+/datum/antagonist/blackguard/on_gain()
+	. = ..()
+	if(owner && owner.current)
+		to_chat(owner.current, "<span class='warning'><B>You are a Blackguard mercenary. Your loyalties lie with coin rather than honor.</B></span>")
+		
+		if(ishuman(owner.current))
+			var/mob/living/carbon/human/H = owner.current
 			
-			if(ishuman(owner.current))
-				var/mob/living/carbon/human/H = owner.current
-				
-				// Remove noble trait
-				REMOVE_TRAIT(H, TRAIT_NOBLE, ROUNDSTART_TRAIT)
-				REMOVE_TRAIT(H, TRAIT_NOBLE, TRAIT_GENERIC)
-				
-				// Remove honorary title (Ser/Dame)
-				var/new_name = H.real_name
-				new_name = replacetext(new_name, "Ser ", "")
-				new_name = replacetext(new_name, "Dame ", "")
-				H.real_name = new_name
-				H.name = new_name
-				
-				// Update job titles
-				if(H.mind.assigned_role == "Knight Lieutenant")
-					H.mind.assigned_role = "Blackguard Lieutenant"
-					H.job = "Blackguard Lieutenant"
-				else if(H.mind.assigned_role == "Knight Banneret")
-					H.mind.assigned_role = "Blackguard Banneret"
-					H.job = "Blackguard Banneret"
-				
-				// Cancel adventurer setup
-				H.advsetup = FALSE
-				H.invisibility = 0
-				var/atom/movable/screen/advsetup/GET_IT_OUT = locate() in H.hud_used.static_inventory
-				qdel(GET_IT_OUT)
-				H.cure_blind("advsetup")
-				
-				H.dna.species.soundpack_m = new /datum/voicepack/male/knight()
-				
-				// Equipment handling
-				if(H.head) qdel(H.head)
-				if(H.wear_neck) qdel(H.wear_neck)
-				if(H.wear_armor) qdel(H.wear_armor)
-				if(H.wear_shirt) qdel(H.wear_shirt)
-				if(H.wear_pants) qdel(H.wear_pants)
-				if(H.gloves) qdel(H.gloves)
-				if(H.wear_wrists) qdel(H.wear_wrists)
-				if(H.shoes) qdel(H.shoes)
-				if(H.cloak) qdel(H.cloak)
-				if(H.backl) qdel(H.backl)
-				
-				// Equipment based on role
-				if(H.mind.assigned_role == "Blackguard Lieutenant")
-					// Lieutenant equipment
-					H.equip_to_slot_or_del(new /obj/item/clothing/head/roguetown/helmet/heavy/knight/black(H), SLOT_HEAD)
-					H.equip_to_slot_or_del(new /obj/item/clothing/neck/roguetown/chaincoif(H), SLOT_NECK)
-					H.equip_to_slot_or_del(new /obj/item/clothing/suit/roguetown/armor/plate/blkknight/death(H), SLOT_ARMOR)
-					H.equip_to_slot_or_del(new /obj/item/clothing/suit/roguetown/armor/chainmail(H), SLOT_SHIRT)
-					H.equip_to_slot_or_del(new /obj/item/clothing/under/roguetown/chainlegs/blk(H), SLOT_PANTS)
-					H.equip_to_slot_or_del(new /obj/item/clothing/gloves/roguetown/plate/blk(H), SLOT_GLOVES)
-					H.equip_to_slot_or_del(new /obj/item/clothing/wrists/roguetown/bracers(H), SLOT_WRISTS)
-					H.equip_to_slot_or_del(new /obj/item/clothing/shoes/roguetown/boots/armor/blk(H), SLOT_SHOES)
-					H.equip_to_slot_or_del(new /obj/item/clothing/cloak/tabard/blkknight(H), SLOT_CLOAK)
+			// Remove noble trait
+			REMOVE_TRAIT(H, TRAIT_NOBLE, ROUNDSTART_TRAIT)
+			REMOVE_TRAIT(H, TRAIT_NOBLE, TRAIT_GENERIC)
+			
+			// Remove honorary title (Ser/Dame)
+			var/new_name = H.real_name
+			new_name = replacetext(new_name, "Ser ", "")
+			new_name = replacetext(new_name, "Dame ", "")
+			H.real_name = new_name
+			H.name = new_name
+			
+			// Update job titles
+			if(H.mind.assigned_role == "Knight Lieutenant")
+				H.mind.assigned_role = "Blackguard Lieutenant"
+				H.job = "Blackguard Lieutenant"
+			else if(H.mind.assigned_role == "Knight Banneret")
+				H.mind.assigned_role = "Blackguard Banneret"
+				H.job = "Blackguard Banneret"
+			
+			// Cancel adventurer setup
+			H.advsetup = FALSE
+			H.invisibility = 0
+			var/atom/movable/screen/advsetup/GET_IT_OUT = locate() in H.hud_used.static_inventory
+			qdel(GET_IT_OUT)
+			H.cure_blind("advsetup")
+			
+			H.dna.species.soundpack_m = new /datum/voicepack/male/knight()
+			
+			// Equipment handling
+			if(H.head) qdel(H.head)
+			if(H.wear_neck) qdel(H.wear_neck)
+			if(H.wear_armor) qdel(H.wear_armor)
+			if(H.wear_shirt) qdel(H.wear_shirt)
+			if(H.wear_pants) qdel(H.wear_pants)
+			if(H.gloves) qdel(H.gloves)
+			if(H.wear_wrists) qdel(H.wear_wrists)
+			if(H.shoes) qdel(H.shoes)
+			if(H.cloak) qdel(H.cloak)
+			if(H.backl) qdel(H.backl)
+			
+			// Equipment based on role
+			if(H.mind.assigned_role == "Blackguard Lieutenant")
+				// Lieutenant equipment
+				H.equip_to_slot_or_del(new /obj/item/clothing/head/roguetown/helmet/heavy/knight/black(H), SLOT_HEAD)
+				H.equip_to_slot_or_del(new /obj/item/clothing/neck/roguetown/chaincoif(H), SLOT_NECK)
+				H.equip_to_slot_or_del(new /obj/item/clothing/suit/roguetown/armor/plate/blkknight/death(H), SLOT_ARMOR)
+				H.equip_to_slot_or_del(new /obj/item/clothing/suit/roguetown/armor/chainmail(H), SLOT_SHIRT)
+				H.equip_to_slot_or_del(new /obj/item/clothing/under/roguetown/chainlegs/blk(H), SLOT_PANTS)
+				H.equip_to_slot_or_del(new /obj/item/clothing/gloves/roguetown/plate/blk(H), SLOT_GLOVES)
+				H.equip_to_slot_or_del(new /obj/item/clothing/wrists/roguetown/bracers(H), SLOT_WRISTS)
+				H.equip_to_slot_or_del(new /obj/item/clothing/shoes/roguetown/boots/armor/blk(H), SLOT_SHOES)
+				H.equip_to_slot_or_del(new /obj/item/clothing/cloak/tabard/blkknight(H), SLOT_CLOAK)
 
 
-				else if(H.mind.assigned_role == "Blackguard Banneret")
-					// Banneret equipment - lighter armor variant
-					H.equip_to_slot_or_del(new /obj/item/clothing/head/roguetown/helmet/blacksteel/bucket(H), SLOT_HEAD)
-					H.equip_to_slot_or_del(new /obj/item/clothing/neck/roguetown/chaincoif(H), SLOT_NECK)
-					H.equip_to_slot_or_del(new /obj/item/clothing/suit/roguetown/armor/blacksteel/platechest(H), SLOT_ARMOR)
-					H.equip_to_slot_or_del(new /obj/item/clothing/suit/roguetown/armor/chainmail/hauberk(H), SLOT_SHIRT)
-					H.equip_to_slot_or_del(new /obj/item/clothing/under/roguetown/blacksteel/platelegs(H), SLOT_PANTS)
-					H.equip_to_slot_or_del(new /obj/item/clothing/gloves/roguetown/blacksteel/plategloves(H), SLOT_GLOVES)
-					H.equip_to_slot_or_del(new /obj/item/clothing/wrists/roguetown/bracers(H), SLOT_WRISTS)
-					H.equip_to_slot_or_del(new /obj/item/clothing/shoes/roguetown/boots/blacksteel/plateboots(H), SLOT_SHOES)
-					H.equip_to_slot_or_del(new /obj/item/clothing/cloak/cape/blkknight(H), SLOT_CLOAK)
-					H.equip_to_slot_or_del(new /obj/item/rogueweapon/sword/long/blackflamb(H), SLOT_BACK_L)
+			else if(H.mind.assigned_role == "Blackguard Banneret")
+				// Banneret equipment - lighter armor variant
+				H.equip_to_slot_or_del(new /obj/item/clothing/head/roguetown/helmet/blacksteel/bucket(H), SLOT_HEAD)
+				H.equip_to_slot_or_del(new /obj/item/clothing/neck/roguetown/chaincoif(H), SLOT_NECK)
+				H.equip_to_slot_or_del(new /obj/item/clothing/suit/roguetown/armor/blacksteel/platechest(H), SLOT_ARMOR)
+				H.equip_to_slot_or_del(new /obj/item/clothing/suit/roguetown/armor/chainmail/hauberk(H), SLOT_SHIRT)
+				H.equip_to_slot_or_del(new /obj/item/clothing/under/roguetown/blacksteel/platelegs(H), SLOT_PANTS)
+				H.equip_to_slot_or_del(new /obj/item/clothing/gloves/roguetown/blacksteel/plategloves(H), SLOT_GLOVES)
+				H.equip_to_slot_or_del(new /obj/item/clothing/wrists/roguetown/bracers(H), SLOT_WRISTS)
+				H.equip_to_slot_or_del(new /obj/item/clothing/shoes/roguetown/boots/blacksteel/plateboots(H), SLOT_SHOES)
+				H.equip_to_slot_or_del(new /obj/item/clothing/cloak/cape/blkknight(H), SLOT_CLOAK)
+				H.equip_to_slot_or_del(new /obj/item/rogueweapon/sword/long/blackflamb(H), SLOT_BACK_L)
 
 /datum/round_event/roundstart/blackguards/apply_effect()
 	. = ..()
@@ -622,16 +622,16 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 	
 	var/triumph_points = 5 // Points awarded for success
 	
-	/datum/antagonist/traitor_guard/on_gain()
-		. = ..()
-		if(owner && owner.current)
-			to_chat(owner.current, "<span class='warning'><B>Enough is enough. You have been offered knighthood by a rival noble family in exchange for betraying the Baron. Prove your loyalty to them by getting revenge on the Baron for their misdeeds..</B></span>")
-			
-	/datum/antagonist/traitor_guard/roundend_report_header()
-		return "<span class='header'>A guard turned traitor...</span><br>"
+/datum/antagonist/traitor_guard/on_gain()
+	. = ..()
+	if(owner && owner.current)
+		to_chat(owner.current, "<span class='warning'><B>Enough is enough. You have been offered knighthood by a rival noble family in exchange for betraying the Baron. Prove your loyalty to them by getting revenge on the Baron for their misdeeds..</B></span>")
 		
-	/datum/antagonist/traitor_guard/roundend_report_footer()
-		return "<br>The guard's betrayal will be remembered in the annals of history."
+/datum/antagonist/traitor_guard/roundend_report_header()
+	return "<span class='header'>A guard turned traitor...</span><br>"
+	
+/datum/antagonist/traitor_guard/roundend_report_footer()
+	return "<br>The guard's betrayal will be remembered in the annals of history."
 
 /datum/round_event/roundstart/guard_rumors
 	var/mob/living/carbon/human/chosen_guard = null
@@ -1009,31 +1009,31 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 	var/static/list/rewarded_ckeys = list()
 	var/has_processed = FALSE
 
-	/datum/round_event/roundstart/wealthy_benefactor/apply_effect()
-		. = ..()
-		is_active = TRUE
-		addtimer(CALLBACK(src, .proc/choose_target), 2 SECONDS)
+/datum/round_event/roundstart/wealthy_benefactor/apply_effect()
+	. = ..()
+	is_active = TRUE
+	addtimer(CALLBACK(src, .proc/choose_target), 2 SECONDS)
 
-	/datum/round_event/roundstart/wealthy_benefactor/proc/choose_target()
-		if(has_processed)
-			return
-		
-		has_processed = TRUE
-		
-		for(var/mob/living/carbon/human/H in GLOB.alive_mob_list)
-			if(!H.mind || !H.mind.key)
-				continue
-			if(H.mind.key in rewarded_ckeys)
-				continue
-			if(H.mind.special_role in list("Vampire Lord", "Lich", "Bandit"))
-				continue
+/datum/round_event/roundstart/wealthy_benefactor/proc/choose_target()
+	if(has_processed)
+		return
+	
+	has_processed = TRUE
+	
+	for(var/mob/living/carbon/human/H in GLOB.alive_mob_list)
+		if(!H.mind || !H.mind.key)
+			continue
+		if(H.mind.key in rewarded_ckeys)
+			continue
+		if(H.mind.special_role in list("Vampire Lord", "Lich", "Bandit"))
+			continue
 
-			var/obj/item/storage/belt/rogue/pouch/coins/reallyrich/reward = new(get_turf(H))
-			H.put_in_hands(reward)
-			rewarded_ckeys += H.mind.key
-			priority_announce("They say [H.real_name] recently had a large inheritence..", "Arcyne Phenomena")
-			is_active = FALSE
-			return
+		var/obj/item/storage/belt/rogue/pouch/coins/reallyrich/reward = new(get_turf(H))
+		H.put_in_hands(reward)
+		rewarded_ckeys += H.mind.key
+		priority_announce("They say [H.real_name] recently had a large inheritence..", "Arcyne Phenomena")
+		is_active = FALSE
+		return
 
 /datum/round_event_control/roundstart/wealthy_benefactor
 	name = "Wealthy Benefactor"
@@ -1134,30 +1134,29 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 	runnable = TRUE
 
 // Great Lover event
-/datum/round_event/roundstart/great_lover
-	/datum/round_event/roundstart/great_lover/apply_effect()
-		. = ..()
-		var/list/valid_lovers = list()
-		for(var/mob/living/carbon/human/H in GLOB.alive_mob_list)
-			if(H.mind)
-				valid_lovers += H
+/datum/round_event/roundstart/great_lover/apply_effect()
+	. = ..()
+	var/list/valid_lovers = list()
+	for(var/mob/living/carbon/human/H in GLOB.alive_mob_list)
+		if(H.mind)
+			valid_lovers += H
 
-		if(!length(valid_lovers))
-			return
+	if(!length(valid_lovers))
+		return
 
-		var/mob/living/carbon/human/chosen_lover = pick(valid_lovers)
-		ADD_TRAIT(chosen_lover, TRAIT_GOODLOVER, "great_lover_event")
+	var/mob/living/carbon/human/chosen_lover = pick(valid_lovers)
+	ADD_TRAIT(chosen_lover, TRAIT_GOODLOVER, "great_lover_event")
 
-		var/list/lover_titles = list(
-			"legendary lover",
-			"fabled seducer",
-			"incomparable romantic",
-			"extraordinary paramour",
-			"illustrious heartbreaker"
-		)
+	var/list/lover_titles = list(
+		"legendary lover",
+		"fabled seducer",
+		"incomparable romantic",
+		"extraordinary paramour",
+		"illustrious heartbreaker"
+	)
 
-		var/chosen_title = pick(lover_titles)
-		priority_announce("The stars have aligned... [chosen_lover.real_name] has been blessed as a [chosen_title]!", "Arcyne Phenomena")
+	var/chosen_title = pick(lover_titles)
+	priority_announce("The stars have aligned... [chosen_lover.real_name] has been blessed as a [chosen_title]!", "Arcyne Phenomena")
 
 /datum/round_event_control/roundstart/great_lover
 	name = "Great Lover"
@@ -1167,91 +1166,6 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 	runnable = TRUE
 
 	// Throne execution event
-/datum/round_event/roundstart/throne_execution
-	proc/announce_execution(message, failed = FALSE)
-		priority_announce(message, "Official Execution[failed ? " Failed" : ""]")
-		// Play decree sound to all living mobs
-		for(var/mob/living/L in GLOB.mob_list)
-			SEND_SOUND(L, sound('sound/misc/royal_decree.ogg', volume = 100))
-
-	proc/is_execution_immune(mob/living/carbon/human/H)
-		if(!H)
-			return FALSE
-		// Check for werewolf species
-		if(istype(H, /mob/living/carbon/human/species/werewolf))
-			return TRUE
-		// Check for vampire lord and lich special_roles
-		if(H.mind?.special_role in list("Vampire Lord", "Lich"))
-			return TRUE
-		// Check for mattcoin
-		for(var/obj/item/mattcoin/M in H.GetAllContents())
-			return TRUE
-		return FALSE
-
-	proc/handle_throne_execution(mob/living/carbon/human/speaker, list/speech_args)
-		if(!speaker || !(speaker.job in list("Baron", "Baroness")))
-			return
-
-		// Check if they're buckled to the throne
-		if(!speaker.buckled || !istype(speaker.buckled, /obj/structure/roguethrone))
-			return
-
-		var/spoken_text = speech_args[SPEECH_MESSAGE]
-
-		// Convert to lowercase and remove punctuation for comparison
-		spoken_text = lowertext(spoken_text)
-		spoken_text = replacetext(spoken_text, "!", "")
-		spoken_text = replacetext(spoken_text, ".", "")
-		spoken_text = replacetext(spoken_text, "?", "")
-		spoken_text = replacetext(spoken_text, ",", "")
-
-		// Check if the message starts with "execute" (case insensitive)
-		if(!findtext(spoken_text, "execute ", 1, 9))
-			return
-
-		// Extract and clean the name after "execute "
-		var/target_name = trim(copytext(spoken_text, 9))
-		if(!length(target_name))
-			return
-
-		// Look for a mob matching the spoken name (case insensitive)
-		for(var/mob/living/carbon/human/H in GLOB.alive_mob_list)
-			if(lowertext(H.real_name) == target_name)
-				// Check if target has a mind
-				if(!H.mind)
-					return
-
-				// Check for execution immunity
-				if(is_execution_immune(H))
-					announce_execution("[H.real_name] resists the execution through supernatural power!", TRUE)
-					// Optional: Add visual effect to show immunity
-					var/turf/T = get_turf(H)
-					if(T)
-						new /obj/effect/temp_visual/dir_setting/bloodsplatter(T)
-					return
-
-				// If not immune and has mind, proceed with execution
-				announce_execution("[H.real_name] has been violently executed by official decree!")
-				var/turf/T = get_turf(H)
-				if(T)
-					new /obj/effect/temp_visual/dir_setting/bloodsplatter(T)
-				H.gib(TRUE, TRUE, TRUE)  // Full gibbing with animation
-				break
-
-	/datum/round_event/roundstart/throne_execution/apply_effect()
-		. = ..()
-		// Add throne speech handling to all humans
-		for(var/mob/living/carbon/human/H in GLOB.alive_mob_list)
-			if(H.job in list("Baron", "Baroness"))
-				RegisterSignal(H, COMSIG_MOB_SAY, PROC_REF(handle_throne_execution))
-
-
-		addtimer(CALLBACK(src, .proc/announce_titan_instructions), 2 SECONDS)
-
-/datum/round_event/roundstart/throne_execution/proc/announce_titan_instructions()
-	for(var/obj/structure/roguemachine/titan/T in world)
-		T.say("Say EXECUTE followed by the criminal's name while sitting on the throne to destroy them.")
-		playsound(T.loc, 'sound/misc/machinetalk.ogg', 100, FALSE)
 
 /datum/round_event_control/roundstart/throne_execution
 	name = "Throne Execution Power"
@@ -1259,6 +1173,91 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 	weight = 2
 	event_announcement = "The throne crackles with newfound power.. The Baron could execute anyone with it.."
 	runnable = TRUE
+
+/datum/round_event/roundstart/throne_execution/proc/announce_execution(message, failed = FALSE)
+	priority_announce(message, "Official Execution[failed ? " Failed" : ""]")
+	// Play decree sound to all living mobs
+	for(var/mob/living/L in GLOB.mob_list)
+		SEND_SOUND(L, sound('sound/misc/royal_decree.ogg', volume = 100))
+
+/datum/round_event/roundstart/throne_execution/proc/is_execution_immune(mob/living/carbon/human/H)
+	if(!H)
+		return FALSE
+	// Check for werewolf species
+	if(istype(H, /mob/living/carbon/human/species/werewolf))
+		return TRUE
+	// Check for vampire lord and lich special_roles
+	if(H.mind?.special_role in list("Vampire Lord", "Lich"))
+		return TRUE
+	// Check for mattcoin
+	for(var/obj/item/mattcoin/M in H.GetAllContents())
+		return TRUE
+	return FALSE
+
+/datum/round_event/roundstart/throne_execution/proc/handle_throne_execution(mob/living/carbon/human/speaker, list/speech_args)
+	if(!speaker || !(speaker.job in list("Baron", "Baroness")))
+		return
+
+	// Check if they're buckled to the throne
+	if(!speaker.buckled || !istype(speaker.buckled, /obj/structure/roguethrone))
+		return
+
+	var/spoken_text = speech_args[SPEECH_MESSAGE]
+
+	// Convert to lowercase and remove punctuation for comparison
+	spoken_text = lowertext(spoken_text)
+	spoken_text = replacetext(spoken_text, "!", "")
+	spoken_text = replacetext(spoken_text, ".", "")
+	spoken_text = replacetext(spoken_text, "?", "")
+	spoken_text = replacetext(spoken_text, ",", "")
+
+	// Check if the message starts with "execute" (case insensitive)
+	if(!findtext(spoken_text, "execute ", 1, 9))
+		return
+
+	// Extract and clean the name after "execute "
+	var/target_name = trim(copytext(spoken_text, 9))
+	if(!length(target_name))
+		return
+
+	// Look for a mob matching the spoken name (case insensitive)
+	for(var/mob/living/carbon/human/H in GLOB.alive_mob_list)
+		if(lowertext(H.real_name) == target_name)
+			// Check if target has a mind
+			if(!H.mind)
+				return
+
+			// Check for execution immunity
+			if(is_execution_immune(H))
+				announce_execution("[H.real_name] resists the execution through supernatural power!", TRUE)
+				// Optional: Add visual effect to show immunity
+				var/turf/T = get_turf(H)
+				if(T)
+					new /obj/effect/temp_visual/dir_setting/bloodsplatter(T)
+				return
+
+			// If not immune and has mind, proceed with execution
+			announce_execution("[H.real_name] has been violently executed by official decree!")
+			var/turf/T = get_turf(H)
+			if(T)
+				new /obj/effect/temp_visual/dir_setting/bloodsplatter(T)
+			H.gib(TRUE, TRUE, TRUE)  // Full gibbing with animation
+			break
+
+/datum/round_event/roundstart/throne_execution/apply_effect()
+	. = ..()
+	// Add throne speech handling to all humans
+	for(var/mob/living/carbon/human/H in GLOB.alive_mob_list)
+		if(H.job in list("Baron", "Baroness"))
+			RegisterSignal(H, COMSIG_MOB_SAY, PROC_REF(handle_throne_execution))
+
+
+	addtimer(CALLBACK(src, .proc/announce_titan_instructions), 2 SECONDS)
+
+/datum/round_event/roundstart/throne_execution/proc/announce_titan_instructions()
+	for(var/obj/structure/roguemachine/titan/T in world)
+		T.say("Say EXECUTE followed by the criminal's name while sitting on the throne to destroy them.")
+		playsound(T.loc, 'sound/misc/machinetalk.ogg', 100, FALSE)
 
 // Eternal Day event
 /datum/round_event/roundstart/eternal_day
@@ -1318,6 +1317,32 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 		message_admins("[key_name_admin(usr)] forced the roundstart event: [chosen_event.name]")
 		log_admin("[key_name(usr)] forced the roundstart event: [chosen_event.name]")
 
+/datum/round_event_control/roundstart/dorkfortress
+	name = "Dork Fortress"
+	typepath = /datum/round_event/roundstart/dorkfortress
+	weight = 5
+	event_announcement = "Nobody in Somberwicke knows a thing about romance."
+	runnable = TRUE
+
+/datum/round_event/roundstart/dorkfortress/apply_effect()
+	. = ..()
+	for(var/mob/living/carbon/human/H in GLOB.alive_mob_list)
+		if(H.mind)
+			H.virginity = TRUE
+			ADD_TRAIT(H, TRAIT_BADLOVER, "dork_fortress_event")
+			REMOVE_TRAIT(H, TRAIT_GOODLOVER, TRAIT_GENERIC)
+
+/datum/round_event_control/roundstart/epicsexfail
+	name = "Purity Problems"
+	typepath = /datum/round_event/roundstart/epicsexfail
+	weight = 5
+	event_announcement = ""
+	runnable = TRUE
+
+/datum/round_event/roundstart/epicsexfail/apply_effect()
+	. = ..()
+	is_active = TRUE
+
 
 /datum/controller/subsystem/roundstart_events
 	name = "Roundstart Events"
@@ -1332,62 +1357,62 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 	var/eternal_night_active = FALSE  // Keep existing variables
 	var/is_active = FALSE            // Keep existing variables
 
-	Initialize()
-		. = ..()
-		for(var/path in subtypesof(/datum/round_event_control/roundstart))
-			var/datum/round_event_control/roundstart/RE = new path()
-			roundstart_events += RE
+/datum/controller/subsystem/roundstart_events/Initialize()
+	. = ..()
+	for(var/path in subtypesof(/datum/round_event_control/roundstart))
+		var/datum/round_event_control/roundstart/RE = new path()
+		roundstart_events += RE
 
-		var/datum/callback/cb = CALLBACK(src, .proc/early_round_start)
-		if(SSticker.round_start_events)
-			SSticker.round_start_events += cb
-		else
-			SSticker.round_start_events = list(cb)
+	var/datum/callback/cb = CALLBACK(src, .proc/early_round_start)
+	if(SSticker.round_start_events)
+		SSticker.round_start_events += cb
+	else
+		SSticker.round_start_events = list(cb)
 
-	proc/early_round_start()
-		if(has_fired)
-			return
-		has_fired = TRUE
-		
-		if(!pick_roundstart_event())
-			message_admins("Failed to pick a roundstart event")
-			return
-		fire_event()
+/datum/controller/subsystem/roundstart_events/proc/early_round_start()
+	if(has_fired)
+		return
+	has_fired = TRUE
+	
+	if(!pick_roundstart_event())
+		message_admins("Failed to pick a roundstart event")
+		return
+	fire_event()
 
-	proc/pick_roundstart_event()
-		selected_event = null
-		
-		if(forced_event_path)
-			var/datum/round_event_control/roundstart/forced = new forced_event_path()
-			if(forced?.runnable)
-				selected_event = forced
-				message_admins("DEBUG: Using forced event: [forced.name]")
-				forced_event_path = null
-				return TRUE
-			
-		var/list/possible_events = list()
-		for(var/datum/round_event_control/roundstart/RE as anything in roundstart_events)
-			if(RE.runnable && RE.can_spawn_event() && RE.weight > 0)
-				possible_events[RE] = RE.weight
-
-		if(length(possible_events))
-			selected_event = pickweight(possible_events)
+/datum/controller/subsystem/roundstart_events/proc/pick_roundstart_event()
+	selected_event = null
+	
+	if(forced_event_path)
+		var/datum/round_event_control/roundstart/forced = new forced_event_path()
+		if(forced?.runnable)
+			selected_event = forced
+			message_admins("DEBUG: Using forced event: [forced.name]")
+			forced_event_path = null
 			return TRUE
-			
-		return FALSE
+		
+	var/list/possible_events = list()
+	for(var/datum/round_event_control/roundstart/RE as anything in roundstart_events)
+		if(RE.runnable && RE.can_spawn_event() && RE.weight > 0)
+			possible_events[RE] = RE.weight
 
-	proc/fire_event()
-		if(!selected_event?.typepath)
-			return
+	if(length(possible_events))
+		selected_event = pickweight(possible_events)
+		return TRUE
+		
+	return FALSE
 
-		var/datum/round_event/roundstart/E = new selected_event.typepath()
-		if(E && istype(E))
-			active_events += E
-			if(selected_event.runnable)
-				E.apply_effect()
-				if(selected_event.event_announcement && length(selected_event.event_announcement) > 0)
-					priority_announce(selected_event.event_announcement, "Arcyne Phenomena")
-				GLOB.roundstart_event_name = selected_event.name
+/datum/controller/subsystem/roundstart_events/proc/fire_event()
+	if(!selected_event?.typepath)
+		return
+
+	var/datum/round_event/roundstart/E = new selected_event.typepath()
+	if(E && istype(E))
+		active_events += E
+		if(selected_event.runnable)
+			E.apply_effect()
+			if(selected_event.event_announcement && length(selected_event.event_announcement) > 0)
+				priority_announce(selected_event.event_announcement, "Arcyne Phenomena")
+			GLOB.roundstart_event_name = selected_event.name
 
 /proc/announce_active_events(mob/M)
 	if(!M)

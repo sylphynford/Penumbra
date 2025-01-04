@@ -372,7 +372,7 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 /datum/preferences/proc/_load_flaw(S)
 	var/charflaw_type
 	S["charflaw"]			>> charflaw_type
-	if(charflaw_type)
+	if(charflaw_type && GLOB.character_flaws.Find(charflaw_type))
 		charflaw = new charflaw_type()
 	else
 		charflaw = pick(GLOB.character_flaws)

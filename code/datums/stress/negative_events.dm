@@ -146,6 +146,11 @@
 	stressadd = 10
 	desc = span_boldred("What have I done?")
 
+/datum/stressevent/cummediocre
+	timer = 5 MINUTES
+	stressadd = 5
+	desc = span_boldred("That was some really bad sex.")
+
 /datum/stressevent/blueb
 	timer = 1 MINUTES
 	stressadd = 2

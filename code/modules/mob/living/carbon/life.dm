@@ -35,6 +35,19 @@
 				if(getOxyLoss() < 20)
 					heart_attacking = FALSE
 
+		var/cant_fall_asleep = FALSE
+		var/cause = " I just can't..."
+		for(var/obj/item/clothing/thing in get_equipped_items(FALSE))
+			if(thing.clothing_flags & CANT_SLEEP_IN)
+				cant_fall_asleep = TRUE
+				cause = " \The [thing] bothers me..."
+				break
+
+		if(HAS_TRAIT(src, TRAIT_NUDE_SLEEPER))
+			if(length(get_equipped_items()))
+				cause = " I need to be nude to be comfortable..."
+				cant_fall_asleep = TRUE
+
 		//Healing while sleeping in a bed
 		if(IsSleeping())
 			var/sleepy_mod = 0.5
@@ -73,54 +86,32 @@
 				if(bed)
 					sleepy_mod = bed.sleepy
 			if(sleepy_mod > 0)
-				if(eyesclosed)
-					var/armor_blocked
-					if(ishuman(src))
-						if(stat == CONSCIOUS)
-							var/mob/living/carbon/human/H = src
-							var/list/gear_to_check = list(H.wear_shirt, H.wear_armor, H.head)
-							for(var/obj/item/clothing/gear in gear_to_check)
-								if(gear.armor.blunt > 70)
-									armor_blocked = TRUE
-									if(!fallingas)
-										to_chat(src, span_warning("I can't sleep like this. My armor is burdening me."))
-									fallingas = TRUE
-									break
-					if(!armor_blocked)
-						if(!fallingas)
-							to_chat(src, span_warning("I'll fall asleep soon..."))
+				if((eyesclosed && !cant_fall_asleep) || (eyesclosed && !(fallingas >= 14 && cant_fall_asleep)) || InCritical()) // its a little slop but im not sure on how to else
+					if(!fallingas)
+						to_chat(src, span_warning("I'll fall asleep soon..."))
+					fallingas++
+					if(HAS_TRAIT(src, TRAIT_FASTSLEEP))
 						fallingas++
-						if(HAS_TRAIT(src, TRAIT_FASTSLEEP))
-							fallingas++
-						if(fallingas > 15)
-							Sleeping(300)
+					if(fallingas > 15)
+						Sleeping(300)
+				else if(eyesclosed && fallingas >= 14 && cant_fall_asleep)
+					to_chat(src, span_boldwarning("I can't sleep...[cause]"))
+					fallingas = 1
 				else
-					if(buckled)
-						rogstam_add(buckled.sleepy * 10)
 					rogstam_add(sleepy_mod * 10)
 			// Resting on the ground (not sleeping or with eyes closed and about to fall asleep)
 			else if(!(mobility_flags & MOBILITY_STAND))
-				if(eyesclosed)
-					var/armor_blocked
-					if(ishuman(src))
-						if(stat == CONSCIOUS)
-							var/mob/living/carbon/human/H = src
-							var/list/gear_to_check = list(H.wear_shirt, H.wear_armor, H.head)
-							for(var/obj/item/clothing/gear in gear_to_check)
-								if(gear.armor.blunt > 70)
-									armor_blocked = TRUE
-									if(!fallingas)
-										to_chat(src, span_warning("I can't sleep like this. My armor is burdening me."))
-									fallingas = TRUE
-									break
-					if(!armor_blocked)
-						if(!fallingas)
-							to_chat(src, span_warning("I'll fall asleep soon, although a bed would be more comfortable..."))
+				if((eyesclosed && !HAS_TRAIT(src, TRAIT_NUDE_SLEEPER) && !cant_fall_asleep) || (eyesclosed && !HAS_TRAIT(src, TRAIT_NUDE_SLEEPER) && !(fallingas >= 14 && cant_fall_asleep)) || InCritical())
+					if(!fallingas)
+						to_chat(src, span_warning("I'll fall asleep soon, although a bed would be more comfortable..."))
+					fallingas++
+					if(HAS_TRAIT(src, TRAIT_FASTSLEEP))
 						fallingas++
-						if(HAS_TRAIT(src, TRAIT_FASTSLEEP))
-							fallingas++
-						if(fallingas > 25)
-							Sleeping(300)
+					if(fallingas > 25)
+						Sleeping(300)
+				else if(eyesclosed && fallingas >= 14 && cant_fall_asleep)
+					to_chat(src, span_boldwarning("I can't sleep...[cause]"))
+					fallingas = 1
 				else
 					rogstam_add(10)
 			else if(fallingas)
@@ -705,9 +696,10 @@ GLOBAL_LIST_INIT(ballmer_windows_me_msg, list("Yo man, what if, we like, uh, put
 			add_stress(/datum/stressevent/drunk)
 		else
 			remove_stress(/datum/stressevent/drunk)
-		if(drunkenness >= 8.5) // Roughly 2 cups
+		if(drunkenness >= 10)
 			if(has_flaw(/datum/charflaw/addiction/alcoholic))
-				sate_addiction()
+				if(prob(drunkenness/2) || drunkenness >= 40)
+					sate_addiction()
 		if(drunkenness >= 11 && slurring < 5)
 			slurring += 1.2
 

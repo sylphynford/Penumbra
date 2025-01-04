@@ -97,6 +97,17 @@
 	else
 		playsound(target, 'sound/misc/mat/endin.ogg', 50, TRUE, ignore_walls = FALSE)
 	after_ejaculation()
+	if(target.cmode && !target.sexcon.target)
+		if(target.has_flaw(/datum/charflaw/masochist))
+			to_chat(target, span_blue("Oh fuck, more please!"))
+			target.add_stress(/datum/stressevent/cumclose)
+			target.apply_status_effect(/datum/status_effect/erp/good)
+		else if(HAS_TRAIT(target, TRAIT_GOODLOVER))
+			target.add_stress(/datum/stressevent/cumclose)
+			target.apply_status_effect(/datum/status_effect/erp/bad)
+		else
+			target.add_stress(/datum/stressevent/cumbad)
+			target.apply_status_effect(/datum/status_effect/erp/bad)
 	if(!oral)
 		after_intimate_climax()
 
@@ -110,9 +121,52 @@
 /datum/sex_controller/proc/after_ejaculation()
 	set_arousal(40)
 	adjust_charge(-CHARGE_FOR_CLIMAX)
-	if(user.has_flaw(/datum/charflaw/addiction/lovefiend))
-		user.sate_addiction()
-	user.add_stress(/datum/stressevent/cumok)
+
+	var/datum/charflaw/addiction/lovefiend/hoe = user.get_flaw(/datum/charflaw/addiction/lovefiend)
+	if(hoe)
+		if(target == user)
+			hoe.counter++
+		else if(HAS_TRAIT(target, TRAIT_GOODLOVER))
+			hoe.counter += 4
+		else if(!hoe.already_screwed.Find(target))
+			hoe.already_screwed += target
+			if(HAS_TRAIT(target, TRAIT_BADLOVER))
+				hoe.counter++
+			else
+				hoe.counter += rand(1,3)
+		if(hoe.counter >= 4)
+			user.sate_addiction()
+			hoe.counter = 0
+			hoe.already_screwed = list()
+
+	if(user.cmode && !target)
+		if(target.has_flaw(/datum/charflaw/masochist))
+			var/datum/charflaw/masochist/maso = target.get_flaw(/datum/charflaw/masochist)
+			to_chat(target, span_blue("<b>That's more like it...</b>"))
+			maso.next_paincrave = world.time + rand(35 MINUTES, 45 MINUTES)
+			target.add_stress(/datum/stressevent/cumpaingood)
+			target.apply_status_effect(/datum/status_effect/erp/good)
+		else if(HAS_TRAIT(target, TRAIT_GOODLOVER))
+			user.add_stress(/datum/stressevent/cumgood)
+			user.apply_status_effect(/datum/status_effect/erp/bad)
+		else
+			user.add_stress(/datum/stressevent/cumbad)
+			user.apply_status_effect(/datum/status_effect/erp/bad)
+
+	else
+		if(target == user)
+			user.add_stress(/datum/stressevent/cumok)
+			user.apply_status_effect(/datum/status_effect/erp)
+		else if(HAS_TRAIT(target, TRAIT_BADLOVER))
+			user.add_stress(/datum/stressevent/cummediocre)
+			user.apply_status_effect(/datum/status_effect/erp/bad)
+		else if(HAS_TRAIT(target, TRAIT_GOODLOVER))
+			user.add_stress(/datum/stressevent/cumgood)
+			user.apply_status_effect(/datum/status_effect/erp/good)
+		else
+			user.add_stress(/datum/stressevent/cumok)
+			user.apply_status_effect(/datum/status_effect/erp/good)
+
 	user.emote("sexmoanhvy", forced = TRUE)
 	user.playsound_local(user, 'sound/misc/mat/end.ogg', 100)
 	last_ejaculation_time = world.time
@@ -439,6 +493,8 @@
 	current_action = action_type
 	var/datum/sex_action/action = SEX_ACTION(current_action)
 	log_combat(user, target, "Started sex action: [action.name]")
+	user.apply_status_effect(/datum/status_effect/erp)
+	target.apply_status_effect(/datum/status_effect/erp)
 	INVOKE_ASYNC(src, PROC_REF(sex_action_loop))
 
 /datum/sex_controller/proc/sex_action_loop()

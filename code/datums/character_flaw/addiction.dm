@@ -102,6 +102,7 @@
 	desc = "I need to pray to my Patron, their blessings are stronger."
 	time = 40 MINUTES
 	needsate_text = "Time to pray to my Patron."
+	var/prayer_done = FALSE
 
 /// SADIST
 
