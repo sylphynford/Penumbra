@@ -43,6 +43,8 @@
 	var/cache_facial
 	var/cache_hair_nat
 	var/cache_facial_nat
+	var/cache_hair_dye
+	var/cache_facial_dye
 	var/starved = FALSE
 	var/obj/effect/proc_holder/spell/targeted/shapeshift/bat/batform //attached to the datum itself to avoid cloning memes, and other duplicates
 
@@ -121,10 +123,12 @@
 		if (Hair)
 			cache_hair = Hair.accessory_colors
 			cache_hair_nat = Hair.natural_color
+			cache_hair_dye = Hair.hair_dye_color
 		var/datum/bodypart_feature/hair/facial/Facial = H.get_bodypart_feature_of_slot(BODYPART_FEATURE_FACIAL_HAIR)
 		if (Facial)
 			cache_facial = Facial.accessory_colors
 			cache_facial_nat = Facial.natural_color
+			cache_facial_dye = Facial.hair_dye_color
 		if (MUTCOLORS in H.dna.species.species_traits)
 			cache_snout_color = H.get_organ_slot_color(ORGAN_SLOT_SNOUT)
 			cache_frill_color = H.get_organ_slot_color(ORGAN_SLOT_FRILLS)
@@ -283,8 +287,8 @@
 			if (!(MUTCOLORS_PARTSONLY in dna.species.species_traits))
 				set_organ_slot_color(ORGAN_SLOT_TAIL, V.cache_tail_color)
 				set_organ_slot_color(ORGAN_SLOT_EARS, V.cache_ear_color)
-			set_hair_color(V.cache_hair, V.cache_hair_nat, update = FALSE)
-			set_facial_hair_color(V.cache_facial, V.cache_facial_nat, update = FALSE)
+			set_hair_color(V.cache_hair, V.cache_hair_nat, V.cache_hair_dye, update = FALSE)
+			set_facial_hair_color(V.cache_facial, V.cache_facial_nat, V.cache_facial_dye, update = FALSE)
 			
 			if(V.cache_eye_color && dna)
 				var/datum/organ_dna/eyes/eyes_dna = dna.organ_dna[ORGAN_SLOT_EYES]
@@ -330,8 +334,8 @@
 			if (!(MUTCOLORS_PARTSONLY in dna.species.species_traits))
 				set_organ_slot_color(ORGAN_SLOT_TAIL, VL.cache_tail_color)
 				set_organ_slot_color(ORGAN_SLOT_EARS, VL.cache_ear_color)
-			set_hair_color(VL.cache_hair, VL.cache_hair_nat, update = FALSE)
-			set_facial_hair_color(VL.cache_facial, VL.cache_facial_nat, update = FALSE)
+			set_hair_color(VL.cache_hair, VL.cache_hair_nat, VL.cache_hair_dye, update = FALSE)
+			set_facial_hair_color(VL.cache_facial, VL.cache_facial_nat, VL.cache_hair_dye, update = FALSE)
 			
 			if(VL.cache_eye_color && dna)
 				var/datum/organ_dna/eyes/eyes_dna = dna.organ_dna[ORGAN_SLOT_EYES]
@@ -366,8 +370,8 @@
 		if (!(MUTCOLORS_PARTSONLY in dna.species.species_traits))
 			set_organ_slot_color(ORGAN_SLOT_TAIL, VD.cache_tail_color)
 			set_organ_slot_color(ORGAN_SLOT_EARS, VD.cache_ear_color)
-		set_hair_color(VD.cache_hair, VD.cache_hair_nat, update = FALSE)
-		set_facial_hair_color(VD.cache_facial, VD.cache_facial_nat, update = FALSE)
+		set_hair_color(VD.cache_hair, VD.cache_hair_nat, VD.cache_hair_dye, update = FALSE)
+		set_facial_hair_color(VD.cache_facial, VD.cache_facial_nat, VD.cache_facial_dye, update = FALSE)
 		if(VD.cache_eye_color && dna)
 			var/datum/organ_dna/eyes/eyes_dna = dna.organ_dna[ORGAN_SLOT_EYES]
 			var/obj/item/organ/eyes/E = getorganslot(ORGAN_SLOT_EYES)
@@ -390,8 +394,8 @@
 		if (!(MUTCOLORS_PARTSONLY in dna.species.species_traits))
 			set_organ_slot_color(ORGAN_SLOT_TAIL, VL.cache_tail_color)
 			set_organ_slot_color(ORGAN_SLOT_EARS, VL.cache_ear_color)
-		set_hair_color(VL.cache_hair, VL.cache_hair_nat, update = FALSE)
-		set_facial_hair_color(VL.cache_facial, VL.cache_facial_nat, update = FALSE)
+		set_hair_color(VL.cache_hair, VL.cache_hair_nat, VL.cache_hair_dye, update = FALSE)
+		set_facial_hair_color(VL.cache_facial, VL.cache_facial_nat, VL.cache_facial_dye, update = FALSE)
 		if(VL.cache_eye_color && dna)
 			var/datum/organ_dna/eyes/eyes_dna = dna.organ_dna[ORGAN_SLOT_EYES]
 			var/obj/item/organ/eyes/E = getorganslot(ORGAN_SLOT_EYES)
@@ -437,8 +441,8 @@
 		if (!(MUTCOLORS_PARTSONLY in dna.species.species_traits))
 			set_organ_slot_color(ORGAN_SLOT_TAIL, "c9d3de")
 			set_organ_slot_color(ORGAN_SLOT_EARS, "c9d3de")
-	set_hair_color("#181a1d", "#181a1d", update = FALSE) //dye not affected
-	set_facial_hair_color("#181a1d", "#181a1d", update = FALSE)
+	set_hair_color("#181a1d", "#181a1d", "#181a1d", update = FALSE) //dye not affected
+	set_facial_hair_color("#181a1d", "#181a1d", "#181a1d", update = FALSE)
 	
 	if(dna)
 		var/datum/organ_dna/eyes/eyes_dna = dna.organ_dna[ORGAN_SLOT_EYES]

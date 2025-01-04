@@ -48,6 +48,8 @@ GLOBAL_LIST_EMPTY(vampire_objects)
 	var/cache_facial
 	var/cache_hair_nat
 	var/cache_facial_nat
+	var/cache_hair_dye
+	var/cache_facial_dye
 	var/obj/effect/proc_holder/spell/targeted/shapeshift/bat/batform //attached to the datum itself to avoid cloning memes, and other duplicates
 	var/obj/effect/proc_holder/spell/targeted/shapeshift/gaseousform/gas
 
@@ -353,6 +355,7 @@ GLOBAL_LIST_EMPTY(vampire_objects)
 	if (Hair)
 		cache_hair = Hair.accessory_colors
 		cache_hair_nat = Hair.natural_color
+		cache_hair_dye = Hair.hair_dye_color
 	var/datum/bodypart_feature/hair/facial/Facial = V.get_bodypart_feature_of_slot(BODYPART_FEATURE_FACIAL_HAIR)
 	if (Facial)
 		cache_facial = Facial.accessory_colors
