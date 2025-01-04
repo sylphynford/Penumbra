@@ -100,8 +100,8 @@
 #define LORD		(1<<0)
 #define LADY		(1<<1)
 #define HAND		(1<<2)
-#define STEWARD		(1<<3)
-#define HUSKAR		(1<<4)
+#define HUSKAR		(1<<3)
+#define STEWARD		(1<<4)
 #define KNIGHT		(1<<5)
 #define GUARD_CAPTAIN		(1<<6)
 #define MARSHAL		(1<<7)
@@ -221,11 +221,11 @@
 #define JDO_LADY 1.1
 #define JDO_PRINCE 1.2
 #define JDO_HAND 2
+#define JDO_HUSKAR 2.5
 #define JDO_STEWARD 3
 #define JDO_CLERK 3.1
 #define JDO_MARSHAL 4
 #define JDO_COUNCILLOR 4.1
-#define JDO_HUSKAR 4.2
 
 
 // Courtiers

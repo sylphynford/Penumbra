@@ -3,8 +3,8 @@
 	flag = GUARDSMAN
 	department_flag = GARRISON
 	faction = "Station"
-	total_positions = 4
-	spawn_positions = 4
+	total_positions = 3
+	spawn_positions = 3
 	selection_color = JCOLOR_SOLDIER
 	allowed_sexes = list(MALE, FEMALE)
 	allowed_races = RACES_ALL_KINDS
@@ -157,7 +157,7 @@
 	ADD_TRAIT(H, TRAIT_MEDIUMARMOR, TRAIT_GENERIC)
 
 	H.equip_to_slot_or_del(new /obj/item/clothing/head/roguetown/helmet/kettle(H), SLOT_HEAD)
-	H.equip_to_slot_or_del(new /obj/item/clothing/suit/roguetown/armor/chainmail(H), SLOT_ARMOR)
+	H.equip_to_slot_or_del(new /obj/item/clothing/suit/roguetown/armor/chainmail/iron(H), SLOT_ARMOR)
 	H.equip_to_slot_or_del(new /obj/item/rogueweapon/mace/cudgel(H), SLOT_BELT_R)
 	H.equip_to_slot_or_del(new /obj/item/rogueweapon/shield/wood(H), SLOT_BACK_R)
 	H.equip_to_slot_or_del(new /obj/item/storage/keyring/guardcastle(H), SLOT_BELT_L)
