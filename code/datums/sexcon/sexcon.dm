@@ -81,10 +81,7 @@
 /datum/sex_controller/proc/start(mob/living/carbon/human/new_target)
 	if(!ishuman(new_target))
 		return
-	// Clear any existing target first
-	clear_target()
-	// Set new target and show UI
-	target = new_target
+	set_target(new_target)
 	show_ui()
 
 /datum/sex_controller/proc/cum_onto()
@@ -425,7 +422,6 @@
 	desire_stop = FALSE
 	user.doing = FALSE
 	current_action = null
-	clear_target() // Clear target when action ends
 
 /datum/sex_controller/proc/try_start_action(action_type)
 	if(action_type == current_action)
@@ -438,7 +434,7 @@
 		return
 	if(!can_perform_action(action_type))
 		return
-	
+	// Set vars
 	desire_stop = FALSE
 	current_action = action_type
 	var/datum/sex_action/action = SEX_ACTION(current_action)
@@ -666,9 +662,3 @@
 	// Check both participants' marriages
 	check_marriage(target, user, target_family)
 	check_marriage(user, target, user_family)
-
-/datum/sex_controller/proc/clear_target()
-	if(current_action)
-		return
-	target = null
-
