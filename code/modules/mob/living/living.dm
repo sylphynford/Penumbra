@@ -187,6 +187,7 @@
 	if(m_intent == MOVE_INTENT_RUN && dir == get_dir(src, M))
 		if(isliving(M))
 			var/sprint_distance = sprinted_tiles
+			var/instafail = FALSE
 			toggle_rogmove_intent(MOVE_INTENT_WALK, TRUE)
 
 			var/mob/living/L = M
@@ -197,7 +198,8 @@
 			switch(sprint_distance)
 				// Point blank
 				if(0 to 1)
-					self_points -= 4
+					self_points -= 99
+					instafail = TRUE
 				// One to two tile between the people
 				if(2 to 3)
 					self_points -= 2
@@ -223,11 +225,15 @@
 			var/playsound = FALSE
 			if(apply_damage(15, BRUTE, "head", run_armor_check("head", "blunt", damage = 20)))
 				playsound = TRUE
-			if(L.apply_damage(15, BRUTE, "chest", L.run_armor_check("chest", "blunt", damage = 10)))
-				playsound = TRUE
+			if(!instafail)
+				if(L.apply_damage(15, BRUTE, "chest", L.run_armor_check("chest", "blunt", damage = 10)))
+					playsound = TRUE
 			if(playsound)
 				playsound(src, "genblunt", 100, TRUE)
-			visible_message(span_warning("[src] charges into [L]!"), span_warning("I charge into [L]!"))
+			if(!instafail)
+				visible_message(span_warning("[src] charges into [L]!"), span_warning("I charge into [L]!"))
+			else
+				visible_message(span_warning("[src] smashes into [L] with no headstart!"), span_warning("I charge into [L] too early!"))
 			return TRUE
 
 	//okay, so we didn't switch. but should we push?
@@ -1538,6 +1544,7 @@
 	if(on_fire)
 		on_fire = 0
 		fire_stacks = 0
+		silver_fire = FALSE  // Reset silver fire flag
 		for(var/obj/effect/dummy/lighting_obj/moblight/fire/F in src)
 			qdel(F)
 		clear_alert("fire")
@@ -1555,8 +1562,11 @@
 /mob/living/proc/spreadFire(mob/living/L)
 	if(!istype(L))
 		return
-
+	
 	if(on_fire)
+		if(silver_fire)  // Don't spread silver fire
+			return
+		
 		if(L.on_fire) // If they were also on fire
 			var/firesplit = (fire_stacks + L.fire_stacks)/2
 			fire_stacks = firesplit
@@ -1567,7 +1577,7 @@
 			if(L.IgniteMob()) // Ignite them
 				log_game("[key_name(src)] bumped into [key_name(L)] and set them on fire")
 
-	else if(L.on_fire) // If they were on fire and we were not
+	else if(L.on_fire && !L.silver_fire) // If they were on fire and we were not
 		L.fire_stacks /= 2
 		fire_stacks += L.fire_stacks
 		IgniteMob() // Ignite us
@@ -2081,4 +2091,7 @@
 	reset_perspective()
 	update_cone_show()
 //	UnregisterSignal(src, COMSIG_MOVABLE_PRE_MOVE)
+
+/mob/living
+	var/silver_fire = FALSE  // Add this var
 

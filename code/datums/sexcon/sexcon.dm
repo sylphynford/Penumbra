@@ -81,7 +81,10 @@
 /datum/sex_controller/proc/start(mob/living/carbon/human/new_target)
 	if(!ishuman(new_target))
 		return
-	set_target(new_target)
+	// Clear any existing target first
+	clear_target()
+	// Set new target and show UI
+	target = new_target
 	show_ui()
 
 /datum/sex_controller/proc/cum_onto()
@@ -108,8 +111,6 @@
 		else
 			target.add_stress(/datum/stressevent/cumbad)
 			target.apply_status_effect(/datum/status_effect/erp/bad)
-	if(!oral)
-		after_intimate_climax()
 
 /datum/sex_controller/proc/ejaculate()
 	log_combat(user, user, "Ejaculated")
@@ -171,7 +172,8 @@
 	user.playsound_local(user, 'sound/misc/mat/end.ogg', 100)
 	last_ejaculation_time = world.time
 	SSticker.cums++
-	cuckold_check()
+	if(target && target != user)
+		after_intimate_climax()
 
 /datum/sex_controller/proc/after_intimate_climax()
 	if(user == target)
@@ -186,6 +188,7 @@
 			target.mob_timers["cumtri"] = world.time
 			target.adjust_triumphs(1)
 			to_chat(target, span_love("Our loving is a true TRIUMPH!"))
+	cuckold_check()
 
 /datum/sex_controller/proc/just_ejaculated()
 	return (last_ejaculation_time + 2 SECONDS >= world.time)
@@ -476,6 +479,7 @@
 	desire_stop = FALSE
 	user.doing = FALSE
 	current_action = null
+	clear_target() // Clear target when action ends
 
 /datum/sex_controller/proc/try_start_action(action_type)
 	if(action_type == current_action)
@@ -488,7 +492,7 @@
 		return
 	if(!can_perform_action(action_type))
 		return
-	// Set vars
+	
 	desire_stop = FALSE
 	current_action = action_type
 	var/datum/sex_action/action = SEX_ACTION(current_action)
@@ -670,24 +674,57 @@
 		if(SEX_FORCE_EXTREME)
 			return "<span class='love_extreme'>[string]</span>"
 
+/datum/sex_controller/proc/check_marriage(mob/living/carbon/human/person, mob/living/carbon/human/other, datum/family/family)
+	if(!family)
+		return
+	
+	var/list/spouses = family.getRelations(person, REL_TYPE_SPOUSE)
+	
+	for(var/datum/relation/R in spouses)
+		var/mob/living/carbon/human/spouse = R.target:resolve()
+		if(!spouse || spouse == other)
+			continue
+
+		var/spouse_has_penis = spouse.getorganslot(ORGAN_SLOT_PENIS)
+		var/spouse_has_vagina = spouse.getorganslot(ORGAN_SLOT_VAGINA)
+		var/person_has_penis = person.getorganslot(ORGAN_SLOT_PENIS)
+		var/person_has_vagina = person.getorganslot(ORGAN_SLOT_VAGINA)
+		var/other_has_penis = other.getorganslot(ORGAN_SLOT_PENIS)
+		var/other_has_vagina = other.getorganslot(ORGAN_SLOT_VAGINA)
+
+		if(person_has_vagina && other_has_vagina)
+			GLOB.adulterers |= "[person.job] [person.real_name] (with [other.real_name])"
+			return
+
+		if(person_has_penis && other_has_penis)
+			GLOB.adulterers |= "[person.job] [person.real_name] (with [other.real_name])"
+			return
+
+		if(spouse_has_penis && !spouse_has_vagina && person_has_vagina && other_has_penis)
+			GLOB.cuckolds |= "[spouse.job] [spouse.real_name] (by [other.real_name])"
+			return
+
+		else if(spouse_has_vagina && !spouse_has_penis && person_has_penis && other_has_vagina)
+			GLOB.cuckqueans |= "[spouse.job] [spouse.real_name] (by [other.real_name])"
+			return
 
 /datum/sex_controller/proc/cuckold_check()
 	if(!target || target == user)
 		return
-	//First, check if the target has a family.
-	var/datum/family/F = target.getFamily(TRUE)
-	if(!F)
+
+	// Get both participants' families
+	var/datum/family/target_family = target.getFamily(TRUE)
+	var/datum/family/user_family = user.getFamily(TRUE)
+	
+	if(!target_family && !user_family)
 		return
 
+	// Check both participants' marriages
+	check_marriage(target, user, target_family)
+	check_marriage(user, target, user_family)
 
-	//Second, check if target has a spouse relation.
-	var/list/rels = F.getRelations(target,REL_TYPE_SPOUSE)
-
-	if(!length(rels))
+/datum/sex_controller/proc/clear_target()
+	if(current_action)
 		return
+	target = null
 
-	for(var/datum/relation/R in rels) //Loop through all the spouses (Should only be one.)
-		var/mob/living/carbon/human/cuckold = R.target:resolve()
-		if(!cuckold || cuckold == user)
-			continue
-		GLOB.cuckolds |= "[cuckold.job] [cuckold.real_name] (by [user.real_name])"

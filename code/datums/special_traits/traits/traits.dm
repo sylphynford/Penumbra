@@ -50,6 +50,15 @@
 	greet_text = span_notice("I have innate magical potential.")
 	weight = 25
 
+/datum/special_trait/cannibal
+	name = "Primal Blood"
+	weight = 4
+	greet_text = span_notice("I've always felt like I was more orc than man. I can eat raw limbs. <b>Limited to half-orcs.</b>")
+	allowed_races = list(/datum/species/halforc)
+
+/datum/special_trait/cannibal/on_apply(mob/living/carbon/human/character, silent)
+	ADD_TRAIT(character, TRAIT_ORGAN_EATER, "[type]")
+
 /datum/special_trait/latentmagic/on_apply(mob/living/carbon/human/character, silent)
 	character.mind.adjust_skillrank(/datum/skill/magic/arcane, 1, TRUE)
 
@@ -549,7 +558,7 @@
 	greet_text = span_notice("I'm sick of working as an underling, I will start my own trade emporium. I've got my hands on a hidden merchant key and a curious magical device")
 	req_text = "Be a Shophand"
 	allowed_jobs = list(/datum/job/roguetown/shophand)
-	weight = 50
+	weight = 0
 
 /datum/special_trait/illicit_merchant/on_apply(mob/living/carbon/human/character, silent)
 	character.mind.special_items["Merchant Key"] = /obj/item/roguekey/merchant

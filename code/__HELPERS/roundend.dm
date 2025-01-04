@@ -207,15 +207,8 @@ GLOBAL_VAR(roundstart_event_name)
 	to_chat(world, "<BR><BR><BR><span class='reallybig'>So ends this tale on Penumbra.</span>")
 	get_end_reason()
 
-	// Add Zizo followers report
-	var/list/zizo_followers = list()
-	for(var/mob/living/carbon/human/H in GLOB.player_list)
-		if(H.patron && istype(H.patron, /datum/patron/inhumen/zizo))
-			zizo_followers += H.mind
-
-	if(length(zizo_followers))
-		to_chat(world, "<br><span class='header'>The followers of Zizo were:</span>")
-		to_chat(world, printplayerlist(zizo_followers))
+	// Print Zizo followers report
+	to_chat(world, print_zizo_report())
 
 	var/list/key_list = list()
 	for(var/client/C in GLOB.clients)
@@ -233,9 +226,6 @@ GLOBAL_VAR(roundstart_event_name)
 //	if(key_list.len)
 //		add_roundplayed(key_list)
 	for(var/mob/living/carbon/human/H in GLOB.player_list)
-		if(H.stat != DEAD)
-			if(H.get_triumphs() < 0)
-				H.adjust_triumphs(1)
 		if(GLOB.round_join_times[H.ckey] && H.job && H.allmig_reward)
 			if((GLOB.round_join_times[H.ckey] + 45 MINUTES) < world.time)
 				var/datum/job/job = SSjob.GetJob(H.job)
@@ -419,6 +409,18 @@ GLOBAL_VAR(roundstart_event_name)
 			shit += GLOB.cuckolds[i]
 			if(i != GLOB.cuckolds.len)
 				shit += ","
+	if(GLOB.cuckqueans.len)
+		shit += "<br><font color='#a02fa4'><span class='bold'>Cuckqueans were:</span></font> "
+		for(var/i in 1 to GLOB.cuckqueans.len)
+			shit += GLOB.cuckqueans[i]
+			if(i != GLOB.cuckqueans.len)
+				shit += ","
+	if(GLOB.adulterers.len)
+		shit += "<br><font color='#a02fa4'><span class='bold'>Adulterers were:</span></font> "
+		for(var/i in 1 to GLOB.adulterers.len)
+			shit += GLOB.adulterers[i]
+			if(i != GLOB.adulterers.len)
+				shit += ", "
 	if(GLOB.confessors.len)
 		shit += "<br><font color='#93cac7'><span class='bold'>Confessors:</span></font> "
 		for(var/x in GLOB.confessors)
@@ -814,3 +816,32 @@ GLOBAL_VAR(roundstart_event_name)
 /datum/controller/subsystem/ticker/proc/announce_roundstart_event()
 	if(GLOB.roundstart_event_name)
 		to_chat(world, "<span class='header'>This week's Phenomena: [GLOB.roundstart_event_name]</span>")
+
+/proc/print_zizo_report()
+	var/list/parts = list()
+	
+	if(length(GLOB.zizo_followers))
+		parts += "<br><span class='header'>The followers of Zizo were:</span><br>"
+		parts += "<ul class='playerlist'>"
+		for(var/datum/mind/M in GLOB.zizo_followers)
+			var/job_text = ""
+			if(M.assigned_role)
+				job_text = " the <b>[M.assigned_role]</b>"
+			var/status_text = ""
+			if(!M.current)
+				status_text = " <span class='redtext'>was destroyed</span>"
+			else if(M.current.stat == DEAD)
+				status_text = " <span class='redtext'>died</span>"
+			else
+				status_text = " <span class='greentext'>survived</span>"
+			parts += "<li><b>[M.name]</b>[job_text][status_text]</li>"
+		parts += "</ul>"
+	
+	return parts.Join()
+
+/datum/controller/subsystem/ticker/proc/roundend_report_footer()
+	var/list/parts = list()
+	
+	parts += print_zizo_report()
+	
+	return parts.Join()

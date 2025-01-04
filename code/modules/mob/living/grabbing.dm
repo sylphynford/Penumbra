@@ -521,13 +521,19 @@
 			var/datum/antagonist/vampire/VDrinkerBasic = user.mind.has_antag_datum(/datum/antagonist/vampire)
 			if(VDrinker)
 				C.blood_volume = max(C.blood_volume-45, 0)
-				if(VDrinker.isspawn)
-					VDrinker.handle_vitae(300, 300)
+				if(C.mind)
+					if(VDrinker.isspawn)
+						VDrinker.handle_vitae(300, 300)
+					else
+						VDrinker.handle_vitae(300)
 				else
-					VDrinker.handle_vitae(300)
+					to_chat(user, span_warning("This soulless blood provides no sustenance."))
 			else if(VDrinkerBasic)
 				C.blood_volume = max(C.blood_volume-45, 0)
-				VDrinkerBasic.handle_vitae(500)
+				if(C.mind)
+					VDrinkerBasic.handle_vitae(500)
+				else
+					to_chat(user, span_warning("This soulless blood provides no sustenance."))
 
 	C.blood_volume = max(C.blood_volume-5, 0)
 	C.handle_blood()
@@ -543,15 +549,25 @@
 		var/datum/antagonist/vampirelord/VDrinker = user.mind.has_antag_datum(/datum/antagonist/vampirelord)
 		if(C.blood_volume <= BLOOD_VOLUME_SURVIVE)
 			if(!VDrinker.isspawn)
+				var/datum/game_mode/chaosmode/mode = SSticker.mode
+				var/spawn_count = 0
+				for(var/datum/mind/V in mode.vampires)
+					if(V.has_antag_datum(/datum/antagonist/vampirelord/lesser))
+						spawn_count++
+				if(spawn_count >= 2)
+					to_chat(user, span_warning("I cannot control more spawns."))
+					return
 				switch(alert("Would you like to sire a new spawn?",,"Yes","No"))
 					if("Yes")
 						user.visible_message("[user] begins to infuse dark magic into [C]")
 						if(do_after(user, 30))
-							C.visible_message("[C] rises as a new spawn!")
+							var/mob/living/carbon/human/H = C
+							H.visible_message("[H] rises as a new spawn!")
 							var/datum/antagonist/vampirelord/lesser/new_antag = new /datum/antagonist/vampirelord/lesser()
 							new_antag.sired = TRUE
-							C.mind.add_antag_datum(new_antag)
+							H.revive(full_heal = TRUE, admin_revive = FALSE)
+							H.grab_ghost() // In case they've ghosted
+							H.mind.add_antag_datum(new_antag)
 							sleep(20)
-							C.fully_heal()
 					if("No")
 						to_chat(user, span_warning("I decide [C] is unworthy."))

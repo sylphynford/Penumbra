@@ -979,3 +979,22 @@
 	if(locate(/obj/machinery/light/rogue/firebowl) in get_turf(mover))
 		return 1
 	return !density
+
+/obj/machinery/light/rogue/attackby(obj/item/W, mob/living/user, params)
+	if(istype(W, /obj/item/rogueweapon))
+		var/obj/item/rogueweapon/RW = W
+		if(!RW.smeltresult)
+			return ..()
+		if(RW.is_hot)
+			to_chat(user, span_warning("[RW] is already heated!"))
+			return ..()
+		if(!on)
+			return ..()
+			
+		user.visible_message(span_notice("[user] begins heating [RW] in [src]'s flames..."), 
+							span_notice("You begin heating [RW] in [src]'s flames..."))
+		
+		if(do_after(user, 5 SECONDS, target = src))
+			RW.fire_act(20)
+		return TRUE
+	return ..()

@@ -121,5 +121,5 @@
 	name = "Shields"
 	dreams = list(
 	"...a terrible lizard spews fire unto you. And yet, you stand fast, for you wield a tower's worth of metal...",
-	"...the half-moon crest upon your shield shines, even in the bright of Astrata's day. You catch a gleam on it, and reflexively pull it upwards. An arrow bounces off..."
+	"...the half-moon crest upon your shield shines, even in the bright of day. You catch a gleam on it, and reflexively pull it upwards. An arrow bounces off..."
 	)

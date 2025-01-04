@@ -217,6 +217,8 @@ GLOBAL_LIST_INIT(lockids, list())
 GLOBAL_LIST_EMPTY(credits_icons)
 GLOBAL_LIST_EMPTY(confessors)
 GLOBAL_LIST_EMPTY(cuckolds)
+GLOBAL_LIST_EMPTY(cuckqueans)
+GLOBAL_LIST_EMPTY(adulterers)
 
 //preference stuff
 #define FAMILY_NONE 0

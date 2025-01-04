@@ -429,6 +429,7 @@
 				H.visible_message("<font color='white'>The silver weapon burns [H]'s unholy flesh!</font>")
 				to_chat(H, span_userdanger("I'm hit by my BANE!"))
 				H.adjust_fire_stacks(2)
+				H.silver_fire = TRUE
 				H.IgniteMob()
 				H.apply_status_effect(/datum/status_effect/debuff/silver_curse)
 				src.last_used = world.time

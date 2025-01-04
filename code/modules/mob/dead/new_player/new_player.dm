@@ -377,6 +377,14 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/rp_prompt.txt"))
 		ready = PLAYER_NOT_READY
 		return FALSE
 
+	// Add admin check
+	if(!check_rights(R_ADMIN, 0))
+		to_chat(src, "<span class='warning'>You must be an admin to observe.</span>")
+		ready = PLAYER_NOT_READY
+		src << browse(null, "window=playersetup") //closes the player setup window
+		new_player_panel()
+		return FALSE
+
 	var/this_is_like_playing_right = alert(src,"Are you sure you wish to observe? Playing is a lot more fun.","VOYEUR","Yes","No")
 
 	if(QDELETED(src) || !src.client || this_is_like_playing_right != "Yes")
@@ -497,10 +505,10 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/rp_prompt.txt"))
 		if(!isnull(job.max_pq) && (get_playerquality(ckey) > job.max_pq))
 			return JOB_UNAVAILABLE_GENERIC
 	var/datum/species/pref_species = client.prefs.pref_species
-	if(!latejoin && length(job.allowed_races) && !(pref_species.type in job.allowed_races))
+	if(length(job.allowed_races) && !(pref_species.type in job.allowed_races))
 		return JOB_UNAVAILABLE_RACE
 	var/list/allowed_sexes = list()
-	if(!latejoin && length(job.allowed_sexes))
+	if(length(job.allowed_sexes))
 		allowed_sexes |= job.allowed_sexes
 	if(!job.immune_to_genderswap && pref_species?.gender_swapping)
 		if(MALE in job.allowed_sexes)
@@ -509,11 +517,11 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/rp_prompt.txt"))
 		if(FEMALE in job.allowed_sexes)
 			allowed_sexes -= FEMALE
 			allowed_sexes += MALE
-	if(!latejoin && length(allowed_sexes) && !(client.prefs.gender in allowed_sexes))
+	if(length(allowed_sexes) && !(client.prefs.gender in allowed_sexes))
 		return JOB_UNAVAILABLE_SEX
-	if(!latejoin && length(job.allowed_ages) && !(client.prefs.age in job.allowed_ages))
+	if(length(job.allowed_ages) && !(client.prefs.age in job.allowed_ages))
 		return JOB_UNAVAILABLE_AGE
-	if(!latejoin && length(job.allowed_patrons) && !(client.prefs.selected_patron.type in job.allowed_patrons))
+	if(length(job.allowed_patrons) && !(client.prefs.selected_patron.type in job.allowed_patrons))
 		return JOB_UNAVAILABLE_PATRON
 	if((client.prefs.lastclass == job.title) && !job.bypass_lastclass)
 		return JOB_UNAVAILABLE_LASTCLASS
@@ -567,8 +575,7 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/rp_prompt.txt"))
 	var/datum/job/latejoin_job = SSjob.GetJob(rank)
 	if(latejoin_job?.advclass_cat_rolls?.len)
 		var/client/C = src.client
-		// Skip class selection for Templars as their class is determined by Inquisitor
-		if(rank == "Occultist" || rank == "Towner" || rank == "Vagabond")
+		if(rank == "Towner" || rank == "Vagabond")
 			var/inquisitor_class
 			for(var/mob/living/carbon/human/inq in GLOB.human_list)
 				if(inq.mind?.assigned_role == "Inquisitor")
@@ -603,6 +610,8 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/rp_prompt.txt"))
 					class_type = /datum/advclass/mercenary
 				if("Heir")
 					class_type = /datum/advclass/heir
+				if("Occultist")
+					class_type = /datum/advclass/templar
 
 			if(class_type)
 				for(var/type in subtypesof(class_type))
@@ -645,6 +654,8 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/rp_prompt.txt"))
 							C.prefs.mercenary_class = choice
 						if("Heir")
 							C.prefs.heir_class = choice
+						if("Occultist")
+							C.prefs.templar_class = choice
 					C.prefs.save_preferences()
 				else
 					return FALSE // Cancel spawn if they didn't pick a class

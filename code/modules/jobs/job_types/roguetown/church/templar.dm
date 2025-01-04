@@ -22,45 +22,59 @@
 /datum/outfit/job/roguetown/templar
 	has_loadout = TRUE
 	allowed_patrons = ALL_DIVINE_PATRONS
-	belt = /obj/item/storage/belt/rogue/leather/black
-	backr = /obj/item/storage/backpack/rogue/satchel
-	backpack_contents = list(/obj/item/storage/keyring/templar = 1, /obj/item/storage/belt/rogue/pouch/coins/poor = 1)
+
 
 /datum/job/roguetown/templar/after_spawn(mob/living/L, mob/M, latejoin = TRUE)
 	..()
 	if(L && M?.client)
 		var/mob/living/carbon/human/H = L
+		var/list/valid_classes = list()
+		var/preferred_class = M.client?.prefs?.templar_class
+
+		// Build list of valid classes for this character
+		for(var/type in subtypesof(/datum/advclass/templar))
+			var/datum/advclass/templar/AC = new type()
+			if(!AC.name)
+				qdel(AC)
+				continue
+
+			// Check if class is allowed for this player
+			if(AC.allowed_sexes?.len && !(H.gender in AC.allowed_sexes))
+				qdel(AC)
+				continue
+			if(AC.allowed_races?.len && !(H.dna.species.type in AC.allowed_races))
+				qdel(AC)
+				continue
+			if(AC.min_pq != -100 && !(get_playerquality(M.client.ckey) >= AC.min_pq))
+				qdel(AC)
+				continue
+
+			valid_classes[AC.name] = AC
+
+		// If no valid classes found, something is wrong
+		if(!length(valid_classes))
+			to_chat(M, span_warning("No valid classes found! Please report this to an admin."))
+			return
+
 		var/datum/advclass/templar/chosen_class
-		
-		// Find the Inquisitor and their class
-		var/inquisitor_class
-		// Check actual Inquisitors
-		for(var/mob/living/carbon/human/inq in GLOB.human_list)
-			if(inq.mind?.assigned_role == "Inquisitor")
-				if(inq.client?.prefs?.inquisitor_class)
-					inquisitor_class = inq.client.prefs.inquisitor_class
-					break
-		if(!inquisitor_class)
-			for(var/datum/mind/mind in SSticker.minds)
-				if(mind.assigned_role == "Inquisitor")
-					var/client/inq_client = GLOB.directory[mind.key]
-					if(inq_client?.prefs?.inquisitor_class)
-						inquisitor_class = inq_client.prefs.inquisitor_class
-						break
-		
-		// Determine Occultist class based on Inquisitor class
-		var/class_type
-		if(!inquisitor_class || inquisitor_class == "random") // Handle random/unset class preference
-			class_type = pick(/datum/advclass/templar/monk, /datum/advclass/templar/crusader, /datum/advclass/templar/hunter)
-		else if(inquisitor_class == "Zealot")
-			class_type = /datum/advclass/templar/monk
-		else if(inquisitor_class == "Puritan")
-			class_type = /datum/advclass/templar/hunter
-		else // Confessor
-			class_type = /datum/advclass/templar/crusader
-		
-		chosen_class = new class_type()
-		
+		if(preferred_class && valid_classes[preferred_class])
+			// Use preferred class if it's valid
+			chosen_class = valid_classes[preferred_class]
+			to_chat(M, span_notice("Using your preferred class: [preferred_class]"))
+			// Clean up other classes
+			for(var/name in valid_classes)
+				if(name != preferred_class)
+					qdel(valid_classes[name])
+		else
+			// Choose random class from valid options
+			var/chosen_name = pick(valid_classes)
+			chosen_class = valid_classes[chosen_name]
+			to_chat(M, span_warning("No class preference set. You have been randomly assigned: [chosen_name]"))
+			// Clean up other classes
+			for(var/name in valid_classes)
+				if(name != chosen_name)
+					qdel(valid_classes[name])
+
 		// Let the class handle everything through its own equipme()
 		if(chosen_class)
 			H.mind?.transfer_to(H) // Ensure mind is properly set up
@@ -82,6 +96,9 @@
 	shoes = /obj/item/clothing/shoes/roguetown/boots/leather
 	armor = /obj/item/clothing/suit/roguetown/armor/leather/hide
 	beltr = /obj/item/rogueweapon/mace
+	belt = /obj/item/storage/belt/rogue/leather/black
+	backr = /obj/item/storage/backpack/rogue/satchel
+	backpack_contents = list(/obj/item/storage/keyring/templar = 1, /obj/item/storage/belt/rogue/pouch/coins/poor = 1)
 
 /datum/advclass/templar/monk/equipme(mob/living/carbon/human/H)
 	if(!H)
@@ -112,23 +129,27 @@
 	return TRUE
 
 /datum/advclass/templar/crusader
-	name = "Golden Retainer"
-	tutorial = "You are a Golden Retainer, having dedicated your life and service to the Confessor. You subscribe to the ideal of such a savior, choosing to display the golden rays of light upon your armor. It's pretty convincing, too!"
+	name = "Crusader"
+	tutorial = "You are a righteous Crusader, having dedicated your life and service to the Confessor. You subscribe to the ideal of such a savior, striking the fear of PSYDON into the hearts of the heretics."
 	outfit = /datum/outfit/job/roguetown/templar/crusader
 	category_tags = list(CTAG_TEMPLAR)
 
 /datum/outfit/job/roguetown/templar/crusader
-	head = /obj/item/clothing/head/roguetown/helmet/heavy/bucket/fakegold
-	neck = /obj/item/clothing/neck/roguetown/chaincoif/fakegold
-	gloves = /obj/item/clothing/gloves/roguetown/chain/fakegold
+	cloak = /obj/item/clothing/cloak/stabard/crusader
+	head = /obj/item/clothing/head/roguetown/helmet/heavy/bucket
+	neck = /obj/item/clothing/neck/roguetown/chaincoif
+	gloves = /obj/item/clothing/gloves/roguetown/chain/
 	wrists = /obj/item/clothing/wrists/roguetown/bracers/leather
 	pants = /obj/item/clothing/under/roguetown/trou/leather
 	shirt = /obj/item/clothing/suit/roguetown/armor/gambeson
 	shoes = /obj/item/clothing/shoes/roguetown/boots
-	armor = /obj/item/clothing/suit/roguetown/armor/plate/scale/fakegold
+	armor = /obj/item/clothing/suit/roguetown/armor/plate/scale
 	backl = /obj/item/rogueweapon/shield/tower
 	beltl = /obj/item/rogueweapon/mace/cudgel
 	beltr = /obj/item/rogueweapon/sword/iron
+	belt = /obj/item/storage/belt/rogue/leather/black
+	backr = /obj/item/storage/backpack/rogue/satchel
+	backpack_contents = list(/obj/item/storage/keyring/templar = 1, /obj/item/storage/belt/rogue/pouch/coins/poor = 1)
 
 /datum/advclass/templar/crusader/equipme(mob/living/carbon/human/H)
 	if(!H)
@@ -163,7 +184,7 @@
 	return TRUE
 
 /datum/advclass/templar/hunter
-	name = "Hunter"
+	name = "Monster Hunter"
 	tutorial = "You are a monster hunter, having followed the Puritan for some time as a dedicated hunting party. You are entrusted with the silver required to rid the world of the vilest evils."
 	outfit = /datum/outfit/job/roguetown/templar/hunter
 	category_tags = list(CTAG_TEMPLAR)
@@ -180,6 +201,9 @@
 	armor = /obj/item/clothing/suit/roguetown/armor/leather/heavy/belted
 	beltr = /obj/item/rogueweapon/sword/iron/messer	
 	beltl = /obj/item/rogueweapon/huntingknife/idagger/silver
+	belt = /obj/item/storage/belt/rogue/leather/black
+	backr = /obj/item/storage/backpack/rogue/satchel
+	backpack_contents = list(/obj/item/storage/keyring/templar = 1, /obj/item/storage/belt/rogue/pouch/coins/poor = 1, /obj/item/grown/log/tree/stake = 1)
 
 /datum/advclass/templar/hunter/equipme(mob/living/carbon/human/H)
 	if(!H)

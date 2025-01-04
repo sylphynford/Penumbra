@@ -394,6 +394,8 @@ var/global/list/roguegamemodes = list("Rebellion", "Vampires and Werewolves", "E
 	restricted_jobs = list()
 
 /datum/game_mode/chaosmode/proc/pick_vampires()
+	if(num_players() < 30)
+		return
 	var/vampsremaining = 3
 	restricted_jobs = list(
 	"Baron",
@@ -443,7 +445,7 @@ var/global/list/roguegamemodes = list("Rebellion", "Vampires and Werewolves", "E
 	restricted_jobs = list()
 
 /datum/game_mode/chaosmode/proc/pick_werewolves()
-	if(living_player_count() < 20) // Check current living players instead of ready state
+	if(num_players() < 20)
 		return
 
 	// Ideally we want adventurers/pilgrims/towners to roll it 
@@ -509,6 +511,7 @@ var/global/list/roguegamemodes = list("Rebellion", "Vampires and Werewolves", "E
 		addtimer(CALLBACK(traitor, TYPE_PROC_REF(/datum/mind, add_antag_datum), new_antag), rand(10,100))
 		GLOB.pre_setup_antags -= traitor
 		villains += traitor
+	SSticker.setup_cabal_leader()
 
 ///////////////// LICH
 	for(var/datum/mind/lichman in pre_liches)

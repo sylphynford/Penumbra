@@ -867,3 +867,40 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 		return
 	if(alert(usr, "Are you absolutely sure you want to reload the configuration from the default path on the disk, wiping any in-round modificatoins?", "Really reset?", "No", "Yes") == "Yes")
 		config.admin_reload()
+
+/client/proc/check_zizoids()
+	set category = "GameMaster"
+	set name = "Check Zizoids"
+	set desc = "Check who currently follows Zizo."
+	
+	if(!check_rights(R_ADMIN))
+		return
+	
+	var/list/parts = list()
+	parts += "<span class='header'>Current followers of Zizo:</span>"
+	parts += "<ul class='playerlist'>"
+	
+	if(!length(GLOB.zizo_followers))
+		parts += "<li>No followers found.</li>"
+	else
+		for(var/datum/mind/M in GLOB.zizo_followers)
+			var/job_text = ""
+			if(M.assigned_role)
+				job_text = " the <b>[M.assigned_role]</b>"
+			var/status_text = ""
+			if(!M.current)
+				status_text = " <span class='redtext'>destroyed</span>"
+			else if(M.current.stat == DEAD)
+				status_text = " <span class='redtext'>dead</span>"
+			else
+				status_text = " <span class='greentext'>alive</span>"
+			parts += "<li><b>[M.name]</b>[job_text][status_text]</li>"
+	
+	parts += "</ul>"
+	
+	var/datum/browser/popup = new(usr, "zizoids", "Zizo Followers", 500, 600)
+	popup.set_content(parts.Join())
+	popup.open()
+	
+	message_admins("[key_name_admin(usr)] checked the list of Zizo followers.")
+	log_admin("[key_name(usr)] checked the list of Zizo followers.")

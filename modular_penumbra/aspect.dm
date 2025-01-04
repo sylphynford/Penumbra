@@ -625,7 +625,10 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 /datum/antagonist/traitor_guard/on_gain()
 	. = ..()
 	if(owner && owner.current)
-		to_chat(owner.current, "<span class='warning'><B>Enough is enough. You have been offered knighthood by a rival noble family in exchange for betraying the Baron. Prove your loyalty to them by getting revenge on the Baron for their misdeeds..</B></span>")
+		to_chat(owner.current, "<span class='warning'><font size=4><B>Enough is enough. You have been offered knighthood by a rival noble family in exchange for betraying the Baron. Prove your loyalty to them by getting revenge on the Baron for their misdeeds..</B></font></span>")
+	
+/datum/antagonist/traitor_guard/roundend_report_header()
+	return "<span class='header'>A guard turned traitor...</span><br>"
 		
 /datum/antagonist/traitor_guard/roundend_report_header()
 	return "<span class='header'>A guard turned traitor...</span><br>"
@@ -1000,7 +1003,7 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 /datum/round_event_control/roundstart/eternal_night
 	name = "Magician's Curse"
 	typepath = /datum/round_event/roundstart/eternal_night
-	weight = 5
+	weight = 2
 	event_announcement = "The sky has been darkened by inhumen magicks..."
 	runnable = TRUE
 
@@ -1279,7 +1282,7 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 /datum/round_event_control/roundstart/eternal_day
 	name = "Eternal Day"
 	typepath = /datum/round_event/roundstart/eternal_day
-	weight = 5
+	weight = 2
 	event_announcement = "The sun refuses to set..."
 	runnable = TRUE
 
