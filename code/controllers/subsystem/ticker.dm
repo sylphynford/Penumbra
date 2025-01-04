@@ -250,7 +250,7 @@ SUBSYSTEM_DEF(ticker)
 
 /datum/controller/subsystem/ticker/proc/checkreqroles()
 	var/list/readied_jobs = list()
-	var/list/required_jobs = list()
+	var/list/required_jobs = list("Baron")
 
 	//var/list/required_jobs = list("Queen","King","Merchant") //JTGSZ - 4/11/2024 - This was the prev set of required jobs to go with the hardcoded checks commented out below
 
@@ -268,18 +268,13 @@ SUBSYSTEM_DEF(ticker)
 					if(V in list("Baron", "Baroness"))
 						GLOB.preferences_datums[player.ckey] = player.client.prefs
 						message_admins("DEBUG: Stored ruler ([player.ckey]) preferences early for genital checks")
-				readied_jobs.Add(V)
-		/*
-			// These else conditions stop the round from starting unless there is a merchant, king, and queen.
-		else
-			var/list/stuffy = list("Set a Ruler to 'high' in your class preferences to start the game!", "PLAY Ruler NOW!", "A Ruler is required to start.", "Pray for a Ruler.", "One day, there will be a Ruler.", "Just try playing Ruler.", "If you don't play Ruler, the game will never start.", "We need at least one Ruler to start the game.", "We're waiting for you to pick Ruler to start.", "Still no Ruler is readied..", "I'm going to lose my mind if we don't get a Ruler readied up.","No. The game will not start because there is no Ruler.","What's the point of ROGUETOWN without a Ruler?")
-			to_chat(world, span_purple("[pick(stuffy)]"))
-			return FALSE
-	else
-		var/list/stuffy = list("Set Merchant to 'high' in your class preferences to start the game!", "PLAY Merchant NOW!", "A Merchant is required to start.", "Pray for a Merchant.", "One day, there will be a Merchant.", "Just try playing Merchant.", "If you don't play Merchant, the game will never start.", "We need at least one Merchant to start the game.", "We're waiting for you to pick Merchant to start.", "Still no Merchant is readied..", "I'm going to lose my mind if we don't get a Merchant readied up.","No. The game will not start because there is no Merchant.","What's the point of ROGUETOWN without a Merchant?")
+					readied_jobs.Add(V)
+					
+	// Check if Baron role is filled
+	if(!("Baron" in readied_jobs))
+		var/list/stuffy = list("Set Baron to 'high' in your class preferences to start the game!", "PLAY Baron NOW!", "A Baron is required to start.", "Pray for a Baron.", "One day, there will be a Baron.", "Just try playing Baron.", "If you don't play Baron, the game will never start.", "We need at least one Baron to start the game.", "We're waiting for you to pick Baron to start.", "Still no Baron is readied..", "I'm going to lose my mind if we don't get a Baron readied up.","No. The game will not start because there is no Baron.","What's the point of ROGUETOWN without a Baron?")
 		to_chat(world, span_purple("[pick(stuffy)]"))
 		return FALSE
-	*/
 
 	/*
 		This prevents any gamemode from starting unless theres at least 2 players ready, but the comments say 20 or it defaults into a deathmatch mode.
