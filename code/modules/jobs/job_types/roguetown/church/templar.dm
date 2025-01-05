@@ -12,8 +12,8 @@
 	min_pq = 0 
 	max_pq = null
 	round_contrib_points = 2
-	total_positions = 3
-	spawn_positions = 3
+	total_positions = 2
+	spawn_positions = 2
 	advclass_cat_rolls = list(CTAG_TEMPLAR = 20)
 	display_order = JDO_TEMPLAR
 	zizo_roll = 100
