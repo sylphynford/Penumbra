@@ -231,7 +231,7 @@
 			continue
 		nearby_followers += nearby
 
-	if(length(nearby_followers) < 0)  // Keeping at 0 for debugging
+	if(length(nearby_followers) < 2)
 		to_chat(H, span_warning("The ritual requires three followers of Zizo standing together. (Only found [length(nearby_followers) + 1] including you)"))
 		return
 
@@ -296,7 +296,7 @@
 		current_followers += nearby
 
 	// Check if we still have enough followers
-	if(length(current_followers) < 0)
+	if(length(current_followers) < 2)
 		return FALSE
 
 	return TRUE
