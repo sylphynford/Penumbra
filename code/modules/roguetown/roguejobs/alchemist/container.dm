@@ -5,6 +5,9 @@
 /obj/item/reagent_containers/glass/bottle/rogue/jumppot
 	list_reagents = list(/datum/reagent/potion/high_jump = 45)
 
+/obj/item/reagent_containers/glass/bottle/rogue/penispot
+	list_reagents = list(/datum/reagent/potion/penis = 45)
+
 /obj/item/reagent_containers/glass/bottle/rogue/healthpotnew
 	list_reagents = list(/datum/reagent/medicine/healthpotnew = 45)
 

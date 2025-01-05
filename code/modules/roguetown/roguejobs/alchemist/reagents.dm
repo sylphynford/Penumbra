@@ -204,16 +204,19 @@
 		to_chat(M, span_small("I feel even worse..."))
 	return ..()
 
-// Used for reagents with a second duration and alchemy skill.
+// Applies a status effect that expires when the reagent is done metabolizing.
+// Quality is currently only set by mortar.
 /datum/reagent/potion
 	name = "Generic Potion"
 	description = "You shouldn't be seeing this."
 	reagent_state = LIQUID
 	color = "#f2eb22"
-	metabolization_rate = 0.7 // Default yield is 45, this is how many units are metabolized per second.
+	metabolization_rate = 0.7 // Default yield for potions is usually 45, this is how many units are metabolized per second.
 	var/min_volume // How much volume is needed for this potion to work.
+	var/effect_type // What effect is given when metabolized?
+
+	var/quality = 1
 	var/datum/status_effect/potion/status
-	var/effect_type
 
 /datum/reagent/potion/on_mob_end_metabolize(mob/living/M)
 	qdel(status)
@@ -221,11 +224,17 @@
 
 /datum/reagent/potion/on_mob_life(mob/living/carbon/M)
 	if(!status && volume >= min_volume)
-		status = M.apply_status_effect(effect_type)
+		status = M.apply_status_effect(effect_type, quality)
 	return ..()
 
+/datum/reagent/potion/on_new(list/data)
+	. = ..()
+	if(!data)
+		return
+	quality = data["quality"]
+
 /datum/reagent/potion/high_jump
-	name = "Jump Juice"
+	name = "Jump Potion"
 	description = "A yellow fluid. When consumed it lets the drinker jump higher."
 	reagent_state = LIQUID
 	color = "#f2eb22"
@@ -233,3 +242,16 @@
 	min_volume = 5
 	effect_type = /datum/status_effect/potion/high_jump
 
+/datum/reagent/potion/penis
+	name = "Bone Potion"
+	description = "A white fluid. A popular concotion used to make bones larger."
+	reagent_state = LIQUID
+	color = "#ededeb"
+	metabolization_rate = 0.3
+	min_volume = 15
+	effect_type = /datum/status_effect/potion/penis
+
+/datum/reagent/potion/penis/on_mob_life(mob/living/carbon/M)
+	if(!status && volume >= min_volume && M.getorganslot(ORGAN_SLOT_PENIS))
+		status = M.apply_status_effect(effect_type, quality)
+	return ..()
