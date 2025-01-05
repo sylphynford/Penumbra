@@ -34,9 +34,16 @@
 
 	add_initial_reagents()
 
+/obj/item/reagent_containers/proc/update_price()
+	if(!reagents)
+		return
+	sellprice = reagents.calculate_price()
+
+
 /obj/item/reagent_containers/proc/add_initial_reagents()
 	if(list_reagents)
 		reagents.add_reagent_list(list_reagents)
+		update_price()
 /*
 /obj/item/reagent_containers/attack_self(mob/user)
 	if(possible_transfer_amounts.len)
@@ -138,6 +145,7 @@
 
 /obj/item/reagent_containers/on_reagent_change(changetype)
 	update_icon()
+	update_price()
 
 /obj/item/reagent_containers/update_icon(dont_fill=FALSE)
 	if(!fill_icon_thresholds || dont_fill)
