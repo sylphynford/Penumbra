@@ -255,7 +255,7 @@ SUBSYSTEM_DEF(ticker)
 		return TRUE
 		
 	var/list/readied_jobs = list()
-	var/list/required_jobs = list("Baron")
+	var/list/required_jobs = list()
 
 	for(var/V in required_jobs)
 		for(var/mob/dead/new_player/player in GLOB.player_list)
