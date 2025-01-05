@@ -4,6 +4,10 @@
 #define REL_TYPE_OFFSPRING 4
 #define REL_TYPE_RELATIVE 5
 
+#define MATCH_FAIL_SPECIES 1
+#define MATCH_FAIL_SEX 2
+#define MATCH_FAIL_GENDER 3
+#define MATCH_FAIL_AGE 4
 SUBSYSTEM_DEF(family)
 	name = "family"
 
@@ -57,6 +61,64 @@ SUBSYSTEM_DEF(family)
 
 	return F
 
+/datum/controller/subsystem/family/proc/DoSetSpouse()
+	var/list/players = GLOB.player_list.Copy()
+	var/list/grouped = list()
+	var/list/grouping = list()
+	for(var/mob/living/carbon/human/H in players)
+		if(grouped.Find(H))
+			continue
+		if(H.client.prefs.spouse)
+			for(var/mob/living/carbon/human/S in GLOB.player_list) //Find the spouse.
+				if(S.key == H.client.prefs.spouse && S.client.prefs.spouse == H.key) //Check if they also have H as a spouse.
+					grouping.Add(list(list(H,S)))
+					grouped += S
+
+	for(var/l in grouping)
+		var/list/group = l
+		if(length(group) < 2)
+			continue
+		var/mob/living/carbon/human/head //For consistency, we set the head to be the person with a dick.
+		var/mob/living/carbon/human/partner
+		for(var/c in group)
+			var/mob/living/carbon/human/H = c
+			if(H.getorganslot(ORGAN_SLOT_PENIS))
+				head = H
+
+		group -= head
+		partner = group[1]
+
+		//done here so both parties can receive the fail message.
+		if(head.family || partner.family)
+			to_chat(head,span_warning("Setspouse failed. [head.family ? "You already have" : "Your spouse already has"] a family."))
+			to_chat(partner,span_warning("Setspouse failed. [partner.family ? "You already have" : "Your spouse already has"] a family."))
+			continue
+
+		var/head_blacklist = SSjob.GetJob(head.job).family_blacklisted
+		var/partner_blacklist = SSjob.GetJob(partner.job).family_blacklisted
+		if(head_blacklist || partner_blacklist)
+			to_chat(head,span_warning("Setspouse failed. [head_blacklist ? "Your" : "Your spouse's"] role cannot be in a family."))
+			to_chat(partner,span_warning("Setspouse failed. [partner_blacklist ? "Your" : "Your spouse's"] role cannot be in a family."))
+			continue
+
+		var/datum/family/F = makeFamily(head)
+		if(F.checkFamilyCompat(partner, head, REL_TYPE_SPOUSE) && F.checkFamilyCompat(head, partner, REL_TYPE_SPOUSE))
+			F.addMember(partner)
+			F.addRel(partner, head, REL_TYPE_SPOUSE, TRUE)
+			F.addRel(head, partner, REL_TYPE_SPOUSE, TRUE)
+		else
+			for(var/c in list(head,partner))
+				switch(F.match_fail)
+					if(MATCH_FAIL_SPECIES)
+						to_chat(c,span_warning("Setspouse failed. Character's races were incompatible with selected preferences."))
+					if(MATCH_FAIL_SEX)
+						to_chat(c,span_warning("Setspouse failed. incompatible sexes."))
+					if(MATCH_FAIL_GENDER)
+						to_chat(c,span_warning("Setspouse failed. incompatible gender."))
+					if(MATCH_FAIL_AGE)
+						to_chat(c,span_warning("Setspouse failed. incompatible age."))
+			qdel(F)
+
 /datum/controller/subsystem/family/proc/SetupFamilies()
 	if(!length(family_candidates))
 		return
@@ -64,7 +126,7 @@ SUBSYSTEM_DEF(family)
 	var/list/current_families = list()
 	var/list/head_candidates = list()
 	var/list/remaining_candidates = list()
-	
+
 	// Get initial head candidates
 	for(var/c in family_candidates)
 		var/mob/living/carbon/human/H = c
@@ -83,7 +145,7 @@ SUBSYSTEM_DEF(family)
 		var/datum/family/F = makeFamily(head)
 		current_families += F
 		head_candidates -= head
-		
+
 		// Try to find ONE match for this head
 		for(var/mob/living/carbon/human/H in remaining_candidates)
 			var/rel_type = F.tryConnect(H, head)
@@ -183,6 +245,8 @@ SUBSYSTEM_DEF(family)
 	var/list/relations = list()
 	var/list/member_identity = list() //stores uni_identity of members to compare against.
 
+	var/match_fail //Hack. Used to easily inform failed matching for setspouse.
+
 /datum/family/New()
 	SSfamily.families += src
 
@@ -253,11 +317,13 @@ SUBSYSTEM_DEF(family)
 			//Check gender.
 			if(!member.client.prefs.family_gender.Find(target.gender))
 				message_admins("match [member.real_name] ([member.gender]) and [target.real_name] ([target.gender]) Gender Fail!")
+				match_fail = MATCH_FAIL_GENDER
 				return FALSE
 
 			//Check species.
 			if(!member.client.prefs.family_species.Find(target.dna.species.id))
 				message_admins("match [member.real_name] ([member.dna.species.id]) and [target.real_name] ([target.dna.species.id]) Species Fail!")
+				match_fail = MATCH_FAIL_SPECIES
 				return FALSE
 
 			var/member_sex
@@ -271,6 +337,7 @@ SUBSYSTEM_DEF(family)
 					target_sex = G == ORGAN_SLOT_VAGINA ? "vagina" : "penis"
 				if(member.getorganslot(G) && target.getorganslot(G))
 					message_admins("match [member.real_name]  and [target.real_name] Sex Fail!")
+					match_fail = MATCH_FAIL_SEX
 					return FALSE
 
 			var/list/age_values = AGE_VALUES
@@ -278,6 +345,7 @@ SUBSYSTEM_DEF(family)
 			var/member_value = age_values[member.age]
 			if(max(member_value,target_value) - min(member_value,target_value) > 1) //Too high an age difference.
 				message_admins("match [member.real_name] ([member.age])  and [target.real_name] ([target.age]) Age Fail!!")
+				match_fail = MATCH_FAIL_AGE
 				return FALSE
 
 			message_admins("MATCHING [member.real_name] ([member.age], [member.dna.species.id], [member_sex])  and [target.real_name] ([target.age], [target.dna.species.id], [target_sex])!")
