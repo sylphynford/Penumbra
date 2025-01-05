@@ -23,6 +23,8 @@
 	var/last_ejaculation_time = 0
 	var/last_moan = 0
 	var/last_pain = 0
+	/// Who last caused arousal/climax
+	var/mob/living/last_arousal_source = null
 
 /datum/sex_controller/New(mob/living/carbon/human/owner)
 	user = owner
@@ -30,6 +32,7 @@
 /datum/sex_controller/Destroy()
 	user = null
 	target = null
+	last_arousal_source = null
 	. = ..()
 
 /datum/sex_controller/proc/is_spent()
@@ -81,20 +84,19 @@
 /datum/sex_controller/proc/start(mob/living/carbon/human/new_target)
 	if(!ishuman(new_target))
 		return
-	// Clear any existing target first
-	clear_target()
-	// Set new target and show UI
-	target = new_target
+	set_target(new_target)
 	show_ui()
 
 /datum/sex_controller/proc/cum_onto()
-	log_combat(user, target, "Came onto the target")
+	if(last_arousal_source)
+		log_combat(user, last_arousal_source, "Came onto")
 	playsound(target, 'sound/misc/mat/endout.ogg', 50, TRUE, ignore_walls = FALSE)
 	add_cum_floor(get_turf(target))
 	after_ejaculation()
 
 /datum/sex_controller/proc/cum_into(oral = FALSE)
-	log_combat(user, target, "Came inside the target")
+	if(last_arousal_source)
+		log_combat(user, last_arousal_source, "Came inside")
 	if(oral)
 		playsound(target, pick(list('sound/misc/mat/mouthend (1).ogg','sound/misc/mat/mouthend (2).ogg')), 100, FALSE, ignore_walls = FALSE)
 	else
@@ -172,23 +174,29 @@
 	user.playsound_local(user, 'sound/misc/mat/end.ogg', 100)
 	last_ejaculation_time = world.time
 	SSticker.cums++
-	if(target && target != user)
-		after_intimate_climax()
+	if(last_arousal_source && last_arousal_source != user)
+		after_intimate_climax(last_arousal_source)
+		cuckold_check(last_arousal_source)
+		last_arousal_source.sexcon.cuckold_check(user)
+	last_arousal_source = null
 
-/datum/sex_controller/proc/after_intimate_climax()
-	if(user == target)
+/datum/sex_controller/proc/after_intimate_climax(mob/living/partner)
+	if(user == partner)
 		return
-	if(HAS_TRAIT(target, TRAIT_GOODLOVER))
+	if(HAS_TRAIT(partner, TRAIT_GOODLOVER))
 		if(!user.mob_timers["cumtri"])
 			user.mob_timers["cumtri"] = world.time
 			user.adjust_triumphs(1)
 			to_chat(user, span_love("Our loving is a true TRIUMPH!"))
 	if(HAS_TRAIT(user, TRAIT_GOODLOVER))
-		if(!target.mob_timers["cumtri"])
-			target.mob_timers["cumtri"] = world.time
-			target.adjust_triumphs(1)
-			to_chat(target, span_love("Our loving is a true TRIUMPH!"))
-	cuckold_check()
+		if(!partner.mob_timers["cumtri"])
+			partner.mob_timers["cumtri"] = world.time
+			partner.adjust_triumphs(1)
+			to_chat(partner, span_love("Our loving is a true TRIUMPH!"))
+	
+	// Check both participants for cuckolding
+	cuckold_check(partner)
+	partner.sexcon.cuckold_check(user)
 
 /datum/sex_controller/proc/just_ejaculated()
 	return (last_ejaculation_time + 2 SECONDS >= world.time)
@@ -248,6 +256,13 @@
 	action_target.adjustOxyLoss(oxyloss_amt)
 
 /datum/sex_controller/proc/perform_sex_action(mob/living/carbon/human/action_target, arousal_amt, pain_amt, giving)
+	if(!action_target?.sexcon)
+		return
+	
+	if(giving && action_target != user)
+		last_arousal_source = action_target
+		action_target.sexcon.last_arousal_source = user
+	
 	action_target.sexcon.receive_sex_action(arousal_amt, pain_amt, giving, force, speed)
 
 /datum/sex_controller/proc/receive_sex_action(arousal_amt, pain_amt, giving, applied_force, applied_speed)
@@ -259,7 +274,7 @@
 		arousal_amt = 0
 		pain_amt = 0
 
-	if(!arousal_frozen)
+	if(!arousal_frozen && arousal_amt > 0)
 		adjust_arousal(arousal_amt)
 
 	damage_from_pain(pain_amt)
@@ -363,6 +378,11 @@
 	if(!can_ejaculate())
 		return FALSE
 	ejaculate()
+	if(last_arousal_source && last_arousal_source != user)
+		after_intimate_climax(last_arousal_source)
+		cuckold_check(last_arousal_source)
+		last_arousal_source.sexcon.cuckold_check(user)
+	last_arousal_source = null
 
 /datum/sex_controller/proc/can_use_penis()
 	if(HAS_TRAIT(user, TRAIT_LIMPDICK))
@@ -472,14 +492,11 @@
 	user.doing = FALSE
 
 /datum/sex_controller/proc/stop_current_action()
-	if(!current_action)
-		return
-	var/datum/sex_action/action = SEX_ACTION(current_action)
-	action.on_finish(user, target)
-	desire_stop = FALSE
-	user.doing = FALSE
-	current_action = null
-	clear_target() // Clear target when action ends
+	if(current_action)
+		var/datum/sex_action/action = SEX_ACTION(current_action)
+		action.on_finish(user, target)
+		current_action = null
+		// Don't clear last_arousal_source as it tracks who caused arousal
 
 /datum/sex_controller/proc/try_start_action(action_type)
 	if(action_type == current_action)
@@ -492,7 +509,7 @@
 		return
 	if(!can_perform_action(action_type))
 		return
-	
+	// Set vars
 	desire_stop = FALSE
 	current_action = action_type
 	var/datum/sex_action/action = SEX_ACTION(current_action)
@@ -708,23 +725,17 @@
 			GLOB.cuckqueans |= "[spouse.job] [spouse.real_name] (by [other.real_name])"
 			return
 
-/datum/sex_controller/proc/cuckold_check()
-	if(!target || target == user)
+/datum/sex_controller/proc/cuckold_check(mob/living/carbon/human/partner)
+	if(!partner || partner == user)
 		return
 
-	// Get both participants' families
-	var/datum/family/target_family = target.getFamily(TRUE)
+	// Get both participants' families 
+	var/datum/family/partner_family = partner.getFamily(TRUE)
 	var/datum/family/user_family = user.getFamily(TRUE)
 	
-	if(!target_family && !user_family)
+	if(!partner_family && !user_family)
 		return
 
 	// Check both participants' marriages
-	check_marriage(target, user, target_family)
-	check_marriage(user, target, user_family)
-
-/datum/sex_controller/proc/clear_target()
-	if(current_action)
-		return
-	target = null
-
+	check_marriage(partner, user, partner_family)
+	check_marriage(user, partner, user_family)

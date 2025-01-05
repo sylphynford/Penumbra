@@ -346,7 +346,7 @@ GLOBAL_LIST_EMPTY(vampire_objects)
 		return
 
 	// Add burn damage check
-	if(H.getFireLoss() >= 150)
+	if(H.getFireLoss() >= 350)
 		to_chat(H, span_userdanger("Even my ancient form cannot withstand these flames!"))
 		H.visible_message(span_warning("[H] crumbles to ash!"))
 		H.dust(TRUE, FALSE, TRUE) // Force dusting, no gibbing, leave items

@@ -12,10 +12,12 @@
 	allowed_patrons = ALL_DIVINE_PATRONS
 	allowed_sexes = list(MALE, FEMALE)
 	allowed_ages = list(AGE_ADULT, AGE_MIDDLEAGED, AGE_OLD)
+
 	tutorial = "The Divine is all that matters in a world of the immoral, and you will preach His wisdom to any who still heed His will. The faithless are growing in number. It is up to you to shepard them toward a God-fearing future; for you are a priest of PSYDON."
 	whitelist_req = FALSE
 
-	spells = list(/obj/effect/proc_holder/spell/invoked/lesser_heal, /obj/effect/proc_holder/spell/targeted/churn, /obj/effect/proc_holder/spell/self/convertrole/templar, /obj/effect/proc_holder/spell/self/convertrole/monk, /obj/effect/proc_holder/spell/targeted/check_purity)
+	spells = list(/obj/effect/proc_holder/spell/invoked/diagnose/secular, /obj/effect/proc_holder/spell/invoked/invisibility, /obj/effect/proc_holder/spell/invoked/haste, /obj/effect/proc_holder/spell/invoked/fortitude, /obj/effect/proc_holder/spell/self/message, /obj/effect/proc_holder/spell/invoked/heal, /obj/effect/proc_holder/spell/targeted/churn, /obj/effect/proc_holder/spell/self/convertrole/templar, /obj/effect/proc_holder/spell/self/convertrole/monk, /obj/effect/proc_holder/spell/targeted/check_purity)
+  
 	outfit = /datum/outfit/job/roguetown/priest
 	zizo_roll = 100
 	display_order = JDO_PRIEST
@@ -43,9 +45,10 @@
 		/obj/item/needle/pestra = 1,
 		/obj/item/natural/worms/leech/cheele = 1, //little buddy
 	)
+	ADD_TRAIT(H, TRAIT_CRITICAL_RESISTANCE, TRAIT_GENERIC) // psydon protects
 	ADD_TRAIT(H, TRAIT_CHOSEN, TRAIT_GENERIC)
 	if(H.mind)
-		H.mind.adjust_skillrank(/datum/skill/combat/polearms, 3, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/combat/polearms, 2, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/misc/reading, 4, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/misc/medicine, 4, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/craft/cooking, 2, TRUE)
@@ -55,17 +58,15 @@
 		H.mind.adjust_skillrank(/datum/skill/magic/holy, 4, TRUE)
 		if(H.age == AGE_OLD)
 			H.mind.adjust_skillrank(/datum/skill/magic/holy, 1, TRUE)
-		H.change_stat("strength", -1)
 		H.change_stat("intelligence", 3)
-		H.change_stat("constitution", -1)
-		H.change_stat("endurance", 1)
-		H.change_stat("speed", -1)
+		H.change_stat("constitution", 2)
 //	C.grant_spells_priest(H)
 	H.verbs += list(/mob/living/carbon/human/proc/devotionreport, /mob/living/carbon/human/proc/clericpray)
 	new /datum/devotion(H, H.patron)
 	H.verbs |= /mob/living/carbon/human/proc/coronate_lord
 	H.verbs |= /mob/living/carbon/human/proc/churchexcommunicate
 	H.verbs |= /mob/living/carbon/human/proc/churchannouncement
+
 //	ADD_TRAIT(H, TRAIT_NOBLE, TRAIT_GENERIC)
 
 

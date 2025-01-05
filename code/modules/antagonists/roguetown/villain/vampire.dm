@@ -160,7 +160,7 @@
 		return
 
 	// Add burn damage check
-	if(H.getFireLoss() >= 150)
+	if(H.getFireLoss() >= 250)
 		to_chat(H, span_userdanger("The flames consume me completely!"))
 		H.visible_message(span_warning("[H] crumbles to ash!"))
 		H.dust(TRUE, FALSE, TRUE) // Force dusting, no gibbing, leave items

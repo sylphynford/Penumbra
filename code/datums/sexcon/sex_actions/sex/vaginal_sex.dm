@@ -36,12 +36,16 @@
 		target.bleed(3)
 
 /datum/sex_action/vaginal_sex/on_perform(mob/living/carbon/human/user, mob/living/carbon/human/target)
+	user.sexcon.last_arousal_source = target
+	target.sexcon.last_arousal_source = user
+	
 	user.visible_message(user.sexcon.spanify_force("[user] [user.sexcon.get_generic_force_adjective()] fucks [target]'s cunt."))
 	playsound(target, 'sound/misc/mat/segso.ogg', 50, TRUE, -2, ignore_walls = FALSE)
 
 	user.sexcon.perform_sex_action(user, 2, 0, TRUE)
 	if(user.sexcon.check_active_ejaculation())
 		user.visible_message(span_love("[user] cums into [target]'s cunt!"))
+		
 		user.sexcon.cum_into()
 		user.try_impregnate(target)
 
