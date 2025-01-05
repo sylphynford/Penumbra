@@ -316,7 +316,7 @@ GLOBAL_VAR(last_connection)
 	if(!ckey)
 		return FALSE
 	var/datum/DBQuery/query = SSdbcore.NewQuery(
-		"SELECT ckey FROM [format_table_name("role_whitelist")] WHERE ckey = :ckey AND role = 'bunker_bypass'",
+		"SELECT ckey FROM [format_table_name("player")] WHERE ckey = :ckey AND (flags & 1)",  // Check for bunker bypass flag
 		list("ckey" = ckey)
 	)
 	if(!query.Execute())
