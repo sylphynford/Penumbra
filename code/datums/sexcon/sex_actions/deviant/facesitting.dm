@@ -25,8 +25,11 @@
 	user.visible_message(span_warning("[user] sits [user.p_their()] butt on [target]'s face!"))
 
 /datum/sex_action/facesitting/on_perform(mob/living/carbon/human/user, mob/living/carbon/human/target)
+	user.sexcon.last_arousal_source = target
+	target.sexcon.last_arousal_source = user
+	
 	var/verbstring = pick(list("rubs", "smushes", "forces"))
-	user.visible_message(user.sexcon.spanify_force("[user] [user.sexcon.get_generic_force_adjective()] [verbstring] [user.p_their()] butt against [target] face."))
+	user.visible_message(user.sexcon.spanify_force("[user] [user.sexcon.get_generic_force_adjective()] [verbstring] [user.p_their()] butt against [target]'s face."))
 	target.make_sucking_noise()
 
 	user.sexcon.perform_sex_action(user, 1, 3, TRUE)
