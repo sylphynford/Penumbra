@@ -239,8 +239,8 @@
 
 #define JDO_GUARD_CAPTAIN 8
 #define JDO_KNIGHT 8.1
-#define JDO_SQUIRE 8.2
-#define JDO_CASTLEGUARD 8.3
+#define JDO_CASTLEGUARD 8.2
+#define JDO_SQUIRE 8.3
 #define JDO_GATEMASTER 8.4
 #define JDO_SHERIFF 8.5
 #define JDO_TOWNGUARD 8.6
