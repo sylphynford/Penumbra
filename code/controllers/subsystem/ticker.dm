@@ -274,10 +274,10 @@ SUBSYSTEM_DEF(ticker)
 					readied_jobs.Add(V)
 					
 	// Check if Baron role is filled
-	if(!("Baron" in readied_jobs))
+	/*if(!("Baron" in readied_jobs))
 		var/list/stuffy = list("Set Baron to 'high' in your class preferences to start the game!", "PLAY Baron NOW!", "A Baron is required to start.", "Pray for a Baron.", "One day, there will be a Baron.", "Just try playing Baron.", "If you don't play Baron, the game will never start.", "We need at least one Baron to start the game.", "We're waiting for you to pick Baron to start.", "Still no Baron is readied..", "I'm going to lose my mind if we don't get a Baron readied up.","No. The game will not start because there is no Baron.","What's the point of ROGUETOWN without a Baron?")
 		to_chat(world, span_purple("[pick(stuffy)]"))
-		return FALSE
+		return FALSE */
 
 	/*
 		This prevents any gamemode from starting unless theres at least 2 players ready, but the comments say 20 or it defaults into a deathmatch mode.
