@@ -27,8 +27,8 @@
 	item_state = "ozium"
 	possible_transfer_amounts = list()
 	volume = 45
-	list_reagents = list(/datum/reagent/potion/penis = 45)
-	grind_results = list(/datum/reagent/potion/penis = 45)
+	list_reagents = list(/datum/reagent/potion/high_jump = 45)
+	grind_results = list(/datum/reagent/potion/high_jump = 45)
 	sellprice = 30
 
 /obj/item/reagent_containers/powder/penis

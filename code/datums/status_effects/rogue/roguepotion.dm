@@ -4,8 +4,8 @@
 	var/effect_quality = 1 // The alchemist's skill. Shouldn't be modified, use this for improving an effects quality based on reagent quality.
 
 /datum/status_effect/potion/on_creation(mob/living/new_owner, quality)
-	..()
 	effect_quality = quality
+	return ..()
 
 /datum/status_effect/potion/high_jump
 	id = "High Jumper"
