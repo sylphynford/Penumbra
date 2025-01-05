@@ -220,10 +220,8 @@
 	return ..()
 
 /datum/reagent/potion/on_mob_life(mob/living/carbon/M)
-	if(status)
-		status.duration = (metabolization_rate * volume)
-	else if(volume >= min_volume && istype(effect_type))
-		status = new effect_type
+	if(!status && volume >= min_volume)
+		status = M.apply_status_effect(effect_type)
 	return ..()
 
 /datum/reagent/potion/high_jump
