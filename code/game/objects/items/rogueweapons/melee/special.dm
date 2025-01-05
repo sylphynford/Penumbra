@@ -78,9 +78,11 @@
 				return
 				
 			// Check if target is a blackguard
+			/* Disabled along with Knight Banneret and Lieutenant
 			if(H.job in list("Blackguard Lieutenant", "Blackguard Banneret"))
 				to_chat(user, span_warning("The rod's power seems ineffective against the blackguard!"))
 				return
+			*/
 
 			// Check if target is NOT a garrison role(+jester)
 			if(!(H.job in list("Dungeoneer", "Town Guard", "Sergeant at Arms", "Knight Banneret", "Knight Lieutenant", "Jester", "Warden", "Gatemaster", "Squire")))

@@ -488,7 +488,7 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 	runnable = TRUE
 
 //Blackguards event
-
+/* Disabled along with Knight Banneret & Lieutenant
 /datum/antagonist/blackguard
 	name = "Blackguard"
 	roundend_category = "blackguards"
@@ -609,7 +609,7 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 	weight = 5
 	event_announcement = "With the Baron's finest knights slain in battle, he has been forced to hire Blackguard mercenaries to lead his forces. They are less loyal, but their skill and cruelty is well proven.."
 	runnable = TRUE
-
+*/
 
 //Traitor guard event
 /datum/antagonist/traitor_guard

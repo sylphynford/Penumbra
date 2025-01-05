@@ -422,6 +422,7 @@
 			H.equip_to_slot_or_del(new /obj/item/rogueweapon/shield/tower/metal(H), SLOT_BACK_L)
 
 // used for blackguards event
+/* Disabled along with Knight Lieutenant
 /datum/job/roguetown/blackguard_lieutenant
 	title = "Blackguard Lieutenant"
 	flag = KNIGHT
@@ -429,3 +430,4 @@
 	faction = "Station"
 	total_positions = 0 
 	spawn_positions = 0
+*/
