@@ -6,7 +6,7 @@
 	taste_description = "red"
 	overdose_threshold = 45
 	metabolization_rate = 0.5 * REAGENTS_METABOLISM
-	alpha = 85
+	alpha = 173
 	value = 0.5 // 23. Oz is bigger than volume.
 
 /datum/reagent/medicine/healthpot/on_mob_life(mob/living/carbon/M)
