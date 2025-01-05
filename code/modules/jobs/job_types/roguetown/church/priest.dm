@@ -12,6 +12,7 @@
 	allowed_patrons = ALL_DIVINE_PATRONS
 	allowed_sexes = list(MALE, FEMALE)
 	allowed_ages = list(AGE_ADULT, AGE_MIDDLEAGED, AGE_OLD)
+
 	tutorial = "The Divine is all that matters in a world of the immoral, and you will preach His wisdom to any who still heed His will. The faithless are growing in number. It is up to you to shepard them toward a God-fearing future; for you are a priest of PSYDON."
 	whitelist_req = FALSE
 
@@ -43,7 +44,7 @@
 		/obj/item/needle/pestra = 1,
 		/obj/item/natural/worms/leech/cheele = 1, //little buddy
 	)
-	ADD_TRAIT(H, TRAIT_CHOSEN, TRAIT_GENERIC)
+	ADD_TRAIT(H, TRAIT_CRITICAL_RESISTANCE, TRAIT_GENERIC) // psydon protects
 	if(H.mind)
 		H.mind.adjust_skillrank(/datum/skill/combat/polearms, 2, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/misc/reading, 4, TRUE)
