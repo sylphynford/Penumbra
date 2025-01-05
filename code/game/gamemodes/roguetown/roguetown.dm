@@ -52,7 +52,7 @@ var/global/list/roguegamemodes = list("Rebellion", "Vampires and Werewolves", "E
 
 /datum/game_mode/chaosmode/check_finished()
 	var/ttime = world.time - SSticker.round_start_time
-
+	
 	// Check if round should end due to vote
 	if(roundvoteend && ttime >= round_ends_at)
 		return TRUE
@@ -66,11 +66,11 @@ var/global/list/roguegamemodes = list("Rebellion", "Vampires and Werewolves", "E
 				total_dead++
 			else
 				total_alive++
-
+	
 	var/total_players = total_alive + total_dead
 	// If dead count is >= 60% of total players, initiate vote
 	if(total_players > 0 && (total_dead >= (total_players * 0.60)) && !death_vote_called && !roundvoteend)
-		if(!SSvote.mode && SSticker.autovote)
+		if(!SSvote.mode && SSticker.autovote) 
 			SSvote.initiate_vote("endround", "Zizo")
 			death_vote_called = TRUE
 			return FALSE // Let the vote finish before ending
@@ -448,13 +448,13 @@ var/global/list/roguegamemodes = list("Rebellion", "Vampires and Werewolves", "E
 	if(GLOB.player_list.len < 10)
 		return
 
-	// Ideally we want adventurers/pilgrims/towners to roll it
+	// Ideally we want adventurers/pilgrims/towners to roll it 
 	restricted_jobs = list(
 	"Baron",
 	"Consort",
 	"Dungeoneer",
 	"Inquisitor",
-	"Confessor",
+	"Confessor", 
 	"Town Guard",
 	"Sergeant at Arms",
 	"Priest",
@@ -511,6 +511,7 @@ var/global/list/roguegamemodes = list("Rebellion", "Vampires and Werewolves", "E
 		addtimer(CALLBACK(traitor, TYPE_PROC_REF(/datum/mind, add_antag_datum), new_antag), rand(10,100))
 		GLOB.pre_setup_antags -= traitor
 		villains += traitor
+	SSticker.setup_cabal_leader()
 
 ///////////////// LICH
 	for(var/datum/mind/lichman in pre_liches)
