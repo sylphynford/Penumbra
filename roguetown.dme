@@ -3617,4 +3617,5 @@
 #include "modular_penumbra\convertheretic.dm"
 #include "modular_penumbra\medical.dm"
 #include "modular_penumbra\oil.dm"
+#include "modular_penumbra\zizo.dm"
 // END_INCLUDE
