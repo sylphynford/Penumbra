@@ -439,8 +439,8 @@ SUBSYSTEM_DEF(ticker)
 			if(H.client.prefs.family == FAMILY_FULL)
 				SSfamily.family_candidates += H
 
-		SSfamily.DoSetSpouse()
 		SSfamily.SetupLordFamily()
+		SSfamily.DoSetSpouse()
 		SSfamily.SetupFamilies()
 
 	for(var/I in round_start_events)
