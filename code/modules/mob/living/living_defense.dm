@@ -179,6 +179,8 @@
 		to_chat(M, span_danger("I push [src] out of the way."))
 
 /mob/living/fire_act(added, maxstacks)
+	if(HAS_TRAIT(src,TRAIT_MOB_FIRE_IMMUNE))
+		return
 	if(added > 20)
 		added = 20
 	if(maxstacks > 20)
