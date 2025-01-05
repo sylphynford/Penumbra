@@ -203,4 +203,35 @@
 		M.reagents.add_reagent(src, rand(1,3))
 		to_chat(M, span_small("I feel even worse..."))
 	return ..()
-	
+
+// Used for reagents with a second duration and alchemy skill.
+/datum/reagent/potion
+	name = "Generic Potion"
+	description = "You shouldn't be seeing this."
+	reagent_state = LIQUID
+	color = "#f2eb22"
+	metabolization_rate = 0.7 // Default yield is 45, this is how many units are metabolized per second.
+	var/min_volume // How much volume is needed for this potion to work.
+	var/datum/status_effect/potion/status
+	var/effect_type
+
+/datum/reagent/potion/on_mob_end_metabolize(mob/living/M)
+	qdel(status)
+	return ..()
+
+/datum/reagent/potion/on_mob_life(mob/living/carbon/M)
+	if(status)
+		status.duration = (metabolization_rate * volume)
+	else if(volume >= min_volume && istype(effect_type))
+		status = new effect_type
+	return ..()
+
+/datum/reagent/potion/high_jump
+	name = "Jump Juice"
+	description = "A yellow fluid. When consumed it lets the drinker jump higher."
+	reagent_state = LIQUID
+	color = "#f2eb22"
+	metabolization_rate = 0.7
+	min_volume = 5
+	effect_type = /datum/status_effect/potion/high_jump
+

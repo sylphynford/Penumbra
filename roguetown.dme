@@ -740,6 +740,7 @@
 #include "code\datums\status_effects\rogue\alerts.dm"
 #include "code\datums\status_effects\rogue\debuff.dm"
 #include "code\datums\status_effects\rogue\roguebuff.dm"
+#include "code\datums\status_effects\rogue\roguepotion.dm"
 #include "code\datums\status_effects\rogue\roguestatus.dm"
 #include "code\datums\stress\_stressevent.dm"
 #include "code\datums\stress\negative_events.dm"
@@ -3616,5 +3617,4 @@
 #include "modular_penumbra\convertheretic.dm"
 #include "modular_penumbra\medical.dm"
 #include "modular_penumbra\oil.dm"
-#include "modular_penumbra\zizo.dm"
 // END_INCLUDE
