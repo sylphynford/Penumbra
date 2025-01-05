@@ -26,7 +26,7 @@
 	cmode_music = 'sound/music/combat_knight.ogg'
 	family_blacklisted = TRUE
 
-/datum/job/roguetown/captain/after_spawn(mob/living/L, mob/M, latejoin = TRUE)
+/datum/job/roguetown/huskar/after_spawn(mob/living/L, mob/M, latejoin = TRUE)
 	. = ..()
 	if(ishuman(L))
 		var/mob/living/carbon/human/H = L
