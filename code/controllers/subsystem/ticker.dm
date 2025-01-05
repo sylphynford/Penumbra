@@ -253,7 +253,7 @@ SUBSYSTEM_DEF(ticker)
 	if(start_immediately)
 		job_change_locked = TRUE
 		return TRUE
-		
+
 	var/list/readied_jobs = list()
 	var/list/required_jobs = list()
 
@@ -272,7 +272,7 @@ SUBSYSTEM_DEF(ticker)
 						GLOB.preferences_datums[player.ckey] = player.client.prefs
 						message_admins("DEBUG: Stored ruler ([player.ckey]) preferences early for genital checks")
 					readied_jobs.Add(V)
-					
+
 	// Check if Baron role is filled
 	/*if(!("Baron" in readied_jobs))
 		var/list/stuffy = list("Set Baron to 'high' in your class preferences to start the game!", "PLAY Baron NOW!", "A Baron is required to start.", "Pray for a Baron.", "One day, there will be a Baron.", "Just try playing Baron.", "If you don't play Baron, the game will never start.", "We need at least one Baron to start the game.", "We're waiting for you to pick Baron to start.", "Still no Baron is readied..", "I'm going to lose my mind if we don't get a Baron readied up.","No. The game will not start because there is no Baron.","What's the point of ROGUETOWN without a Baron?")
@@ -426,19 +426,20 @@ SUBSYSTEM_DEF(ticker)
 		transfer_characters()	//transfer keys to the new mobs
 		log_game("GAME SETUP: transfer characters success")
 
-		for(var/mob/living/carbon/human/H in GLOB.mob_list)
-			if(H.client)
-				var/datum/job/J = SSjob.GetJob(H.job)
-				if(!J)
-					continue
-				if(SSjob.GetJob(H.job).family_blacklisted)
-					continue
-				if(SSfamily.special_role_blacklist.Find(H.mind.special_role))
-					continue
-				if(H.client.prefs.family == FAMILY_FULL)
-					SSfamily.family_candidates += H
+		for(var/mob/living/carbon/human/H in GLOB.player_list)
+			var/datum/job/J = SSjob.GetJob(H.job)
+			if(!J)
+				continue
+			if(SSjob.GetJob(H.job).family_blacklisted)
+				continue
+			if(SSfamily.special_role_blacklist.Find(H.mind.special_role))
+				continue
+			if(H.client.prefs.spouse)
+				continue
+			if(H.client.prefs.family == FAMILY_FULL)
+				SSfamily.family_candidates += H
 
-
+		SSfamily.DoSetSpouse()
 		SSfamily.SetupLordFamily()
 		SSfamily.SetupFamilies()
 

@@ -147,6 +147,7 @@ GLOBAL_LIST_EMPTY(chosen_names)
 	var/family = FAMILY_NONE
 	var/list/family_species = list()
 	var/list/family_gender = list()
+	var/spouse = null //target's ckey.
 
 	var/crt = FALSE
 	var/grain = TRUE
@@ -411,7 +412,7 @@ GLOBAL_LIST_EMPTY(chosen_names)
 				dat += "<B>Family Preferences:</B>"
 				dat += " <small><a href='?_src_=prefs;preference=familypref;res=gender'>Gender</a></small>"
 				dat += " <small><a href='?_src_=prefs;preference=familypref;res=race'>Race</a></small>"
-				dat += "<BR>"
+				dat += "<BR><small><a href='?_src_=prefs;preference=familypref;res=spouse'>[!spouse ? "Select a Spouse?" : "Spouse: [spouse]"]</a></small><BR>"
 			dat += "<b>Dominance:</b> <a href='?_src_=prefs;preference=domhand'>[domhand == 1 ? "Left-handed" : "Right-handed"]</a><BR>"
 
 /*
@@ -999,7 +1000,7 @@ Slots: [job.spawn_positions]</span>
 						selected_class = mercenary_class
 					if("Heir")
 						selected_class = heir_class
-					if("Occultist") 
+					if("Occultist")
 						selected_class = templar_class
 				HTML += "[selected_class ? selected_class : "Random"]"
 				HTML += "</a></td></tr>"
@@ -1065,7 +1066,7 @@ Slots: [job.spawn_positions]</span>
 
 	if(length(job.allowed_races) && !(pref_species.type in job.allowed_races))
 		to_chat(user, span_warning("Your race does not allow this job choice."))
-		SetJobPreferenceLevel(job, null) 
+		SetJobPreferenceLevel(job, null)
 		SetChoices(user)
 		return
 
@@ -1440,7 +1441,7 @@ Slots: [job.spawn_positions]</span>
 						choices = list("[(MALE in family_gender) ? "(+)" : ""]Male" = MALE,"[(FEMALE in family_gender) ? "(+)" : ""]Shemale" = FEMALE)
 					else
 						choices = list("[(MALE in family_gender) ? "(+)" : ""]Male" = MALE,"[(FEMALE in family_gender) ? "(+)" : ""]Female" = FEMALE)
-					
+
 					choices += "(DONE)"
 					choice = input(usr,"I've always found my eyes wander towards those that appear... (+) = ON","GENDER") as anything in choices
 					if(choice != "(DONE)")
@@ -1464,6 +1465,28 @@ Slots: [job.spawn_positions]</span>
 							family_species -= choices[choice]
 						else
 							family_species += choices[choice]
+
+			if("spouse")
+				var/target = input(user,"Enter your Spouse's key.","True Love") as null|text
+				if(!target || target == user.key)
+					target = null
+				var/hit = FALSE
+				for(var/client/C)
+					if(C.key == spouse && target != spouse)
+						to_chat(C,"[user.key] no longer wishes to be your spouse.")
+					if(C.key == target)
+						hit = TRUE
+						to_chat(C,"[user] chooses you as their Spouse. If you wish to accept, you must also choose them. Both of your characters must also be compatible.")
+
+				if(!hit)
+					if(target != null)
+						to_chat(user, span_warning("No player with that key exists!"))
+					spouse = null
+				else
+					to_chat(user,"Your chosen spouse is: [target]. They must also choose you. Both of your characters must also be compatible.")
+					spouse = target
+
+
 
 
 	else if(href_list["preference"] == "keybinds")
@@ -2299,7 +2322,7 @@ Slots: [job.spawn_positions]</span>
 							class_type = /datum/advclass/mercenary
 						if("Heir")
 							class_type = /datum/advclass/heir
-						if("Occultist") 
+						if("Occultist")
 							class_type = /datum/advclass/templar
 
 					if(class_type)
