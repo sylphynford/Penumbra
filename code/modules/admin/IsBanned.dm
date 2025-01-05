@@ -315,15 +315,4 @@ GLOBAL_VAR(last_connection)
 /proc/bunker_bypass_check(ckey)
 	if(!ckey)
 		return FALSE
-	var/datum/DBQuery/query = SSdbcore.NewQuery(
-		"SELECT ckey FROM [format_table_name("player")] WHERE ckey = :ckey AND (flags & 1)",  // Check for bunker bypass flag
-		list("ckey" = ckey)
-	)
-	if(!query.Execute())
-		qdel(query)
-		return FALSE
-	if(query.NextRow())
-		qdel(query)
-		return TRUE
-	qdel(query)
-	return FALSE
+	return (ckey in GLOB.bunker_bypasses)
