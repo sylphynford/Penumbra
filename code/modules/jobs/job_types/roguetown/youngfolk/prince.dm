@@ -63,18 +63,18 @@
 	ADD_TRAIT(H, TRAIT_GOODLOVER, TRAIT_GENERIC)
 
 	if(H.mind)
-		H.mind.adjust_skillrank(/datum/skill/misc/reading, 3)
-		H.mind.adjust_skillrank(/datum/skill/misc/music, 1)
-		H.mind.adjust_skillrank(/datum/skill/misc/riding, 3)
-		H.mind.adjust_skillrank(/datum/skill/misc/sewing, 2)
-		H.mind.adjust_skillrank(/datum/skill/craft/cooking, 1)
+		H.mind.adjust_skillrank(/datum/skill/misc/reading, 3, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/misc/music, 1, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/misc/riding, 3, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/misc/sewing, 2, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/craft/cooking, 1, TRUE)
 		
-		H.mind.adjust_skillrank(/datum/skill/combat/bows, 3)
-		H.mind.adjust_skillrank(/datum/skill/combat/swords, 1)
-		H.mind.adjust_skillrank(/datum/skill/combat/wrestling, 1)
+		H.mind.adjust_skillrank(/datum/skill/combat/bows, 3, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/combat/swords, 1, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/combat/wrestling, 1, TRUE)
 		
-		H.mind.adjust_skillrank(/datum/skill/misc/swimming, 1)
-		H.mind.adjust_skillrank(/datum/skill/misc/athletics, 1)
+		H.mind.adjust_skillrank(/datum/skill/misc/swimming, 1, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/misc/athletics, 1, TRUE)
 		
 		H.change_stat("intelligence", 2)
 		H.change_stat("perception", 2)
