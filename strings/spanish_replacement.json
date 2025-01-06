@@ -10,11 +10,13 @@
 		"the": "el",
 		"yes": "sí",
 		"thanks": "gracias",
-		"form of": "forma de",
-		"shape of": "forma de",
 		"bean": "frijol",
 		"beans": "frijoles",
 		"cat": "gato"
+	},
+	"multiword": {
+		"form of": "forma de",
+		"shape of": "forma de"
 	},
 	"start": {
 		"friend": "amigo",
