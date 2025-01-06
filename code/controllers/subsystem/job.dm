@@ -121,7 +121,7 @@ SUBSYSTEM_DEF(job)
 				player.client.prefs.job_preferences[rank] = 0  // Set preference to 0 instead of removing
 				to_chat(player, "<span class='warning'>You have been removed from Occultist selection as there is no Inquisitor.</span>")
 				return FALSE
-
+		/* Depreciated since Huskar was changed from the Consort's bodyguard into the Baron's knight.
 		// Check for Huskar requirements
 		if(job.title == "Huskar")
 			var/consort_exists = FALSE
@@ -134,6 +134,7 @@ SUBSYSTEM_DEF(job)
 				player.client.prefs.job_preferences[job.title] = 0
 				to_chat(player, "<span class='warning'>You have been removed from Huskar selection as there is no Consort.</span>")
 				return FALSE
+			*/
 
 		var/position_limit = job.total_positions
 		if(!latejoin)

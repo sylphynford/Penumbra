@@ -606,7 +606,7 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 /datum/round_event_control/roundstart/blackguards
 	name = "Blackguards"
 	typepath = /datum/round_event/roundstart/blackguards
-	weight = 5
+	weight = 0
 	event_announcement = "With the Baron's finest knights slain in battle, he has been forced to hire Blackguard mercenaries to lead his forces. They are less loyal, but their skill and cruelty is well proven.."
 	runnable = TRUE
 

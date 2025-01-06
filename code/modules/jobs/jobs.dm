@@ -64,7 +64,7 @@ GLOBAL_LIST_INIT(noble_positions, list(
 	"Consort",
 	"Heir",
 	"Hand",
-	"Knight Banneret",
+
 	"Magistrate",
 	"Councillor",
 	"Steward",
@@ -80,6 +80,7 @@ GLOBAL_LIST_INIT(courtier_positions, list(
 ))
 
 GLOBAL_LIST_INIT(garrison_positions, list(
+	"Guard Captain",
 	"Town Guard",
 	"Warden",
 	"Bog Master",
