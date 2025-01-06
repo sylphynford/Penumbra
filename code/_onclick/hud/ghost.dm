@@ -31,8 +31,8 @@
 /atom/movable/screen/ghost/orbit/rogue/Click(location, control, params)
 	var/mob/dead/observer/G = usr
 	var/paramslist = params2list(params)
-	if(paramslist["right"]) // screen objects don't do the normal Click() stuff so we'll cheat
-		G.follow()
+	if(paramslist["right"])
+		return
 	else
 		if(G.client)
 			if(istype(G, /mob/dead/observer/rogue/arcaneeye))
