@@ -608,8 +608,6 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/rp_prompt.txt"))
 					class_type = /datum/advclass/inquisitor
 				if("Mercenary")
 					class_type = /datum/advclass/mercenary
-				if("Heir")
-					class_type = /datum/advclass/heir
 				if("Occultist")
 					class_type = /datum/advclass/templar
 
@@ -652,8 +650,6 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/rp_prompt.txt"))
 							C.prefs.inquisitor_class = choice
 						if("Mercenary")
 							C.prefs.mercenary_class = choice
-						if("Heir")
-							C.prefs.heir_class = choice
 						if("Occultist")
 							C.prefs.templar_class = choice
 					C.prefs.save_preferences()
