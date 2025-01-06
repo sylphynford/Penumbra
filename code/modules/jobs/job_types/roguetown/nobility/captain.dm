@@ -46,7 +46,7 @@
 	wrists = /obj/item/clothing/wrists/roguetown/bracers
 	gloves = /obj/item/clothing/gloves/roguetown/leather
 	neck = /obj/item/clothing/neck/roguetown/chaincoif
-	shoes = /obj/item/clothing/shoes/roguetown/boots/leather
+	shoes = /obj/item/storage/belt/rogue/leather/black
 	belt = /obj/item/storage/belt/rogue/leather/black
 	beltl = /obj/item/rogueweapon/mace/cudgel
 	beltr = /obj/item/storage/keyring/guardcastle
