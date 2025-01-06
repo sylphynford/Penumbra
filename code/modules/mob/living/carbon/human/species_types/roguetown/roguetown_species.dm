@@ -56,9 +56,10 @@
 /datum/species/proc/handle_speech(datum/source, mob/speech_args)
 	var/message = speech_args[SPEECH_MESSAGE]
 
-	message = treat_message_accent(message, strings("accent_universal.json", "universal"), REGEX_FULLWORD)
+	//message = treat_message_accent(message, strings("accent_universal.json", "universal"), REGEX_FULLWORD)
 
-	message = treat_message_accent(message, get_accent(source), REGEX_FULLWORD)
+	//message = treat_message_accent(message, get_accent(source), REGEX_FULLWORD)
+	message = treat_message_accent_fullword(message, strings("accent_universal.json", "universal"), get_accent(source))
 	message = treat_message_accent(message, get_accent_start(source), REGEX_STARTWORD)
 	message = treat_message_accent(message, get_accent_end(source), REGEX_ENDWORD)
 	message = treat_message_accent(message, get_accent_any(source), REGEX_ANY)
@@ -67,6 +68,43 @@
 
 	speech_args[SPEECH_MESSAGE] = trim(message)
 
+/proc/get_value_from_accent(key, list/accent_list)
+	if (!key)
+		return
+	if (!accent_list)
+		return
+	var/value = accent_list[key]
+	if (!value)
+		value = accent_list[lowertext(key)]
+	if (!value)
+		value = accent_list[uppertext(key)]
+	if (!value)
+		value = accent_list[capitalize(key)]
+	return value
+
+/proc/treat_message_accent_fullword(message, list/universal, list/accent_list)
+	if(!message)
+		return
+	if(!accent_list && !universal)
+		return message
+	if(message[1] == "*")
+		return message
+	message = "[message]"
+	var/list/message_words = splittext_char(message, regex("\[^(&#39;|\\w)\]+"))
+	for (var/key in message_words)
+		var/value = get_value_from_accent(key, accent_list)
+		if (!value)
+			value = get_value_from_accent(key, universal)
+		if (!value)
+			continue
+		if (islist(value))
+			value = pick(value)
+			// Full word regex (full world replacements)
+		//to_chat(world, "[key]: [value]")
+		message = replacetextEx(message, regex("\\b[uppertext(key)]\\b|\\A[uppertext(key)]\\b|\\b[uppertext(key)]\\Z|\\A[uppertext(key)]\\Z", "(\\w+)/g"), uppertext(value))
+		message = replacetextEx(message, regex("\\b[capitalize(key)]\\b|\\A[capitalize(key)]\\b|\\b[capitalize(key)]\\Z|\\A[capitalize(key)]\\Z", "(\\w+)/g"), capitalize(value))
+		message = replacetextEx(message, regex("\\b[key]\\b|\\A[key]\\b|\\b[key]\\Z|\\A[key]\\Z", "(\\w+)/g"), value)
+	return message
 
 /proc/treat_message_accent(message, list/accent_list, chosen_regex)
 	if(!message)
@@ -83,7 +121,6 @@
 
 		switch(chosen_regex)
 			if(REGEX_FULLWORD)
-				// Full word regex (full world replacements)
 				message = replacetextEx(message, regex("\\b[uppertext(key)]\\b|\\A[uppertext(key)]\\b|\\b[uppertext(key)]\\Z|\\A[uppertext(key)]\\Z", "(\\w+)/g"), uppertext(value))
 				message = replacetextEx(message, regex("\\b[capitalize(key)]\\b|\\A[capitalize(key)]\\b|\\b[capitalize(key)]\\Z|\\A[capitalize(key)]\\Z", "(\\w+)/g"), capitalize(value))
 				message = replacetextEx(message, regex("\\b[key]\\b|\\A[key]\\b|\\b[key]\\Z|\\A[key]\\Z", "(\\w+)/g"), value)
