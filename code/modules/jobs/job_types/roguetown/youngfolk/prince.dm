@@ -64,7 +64,6 @@
 
 	if(H.mind)
 		H.mind.adjust_skillrank(/datum/skill/misc/reading, 3)
-		H.mind.adjust_skillrank(/datum/skill/misc/etiquette, 2)
 		H.mind.adjust_skillrank(/datum/skill/misc/music, 1)
 		H.mind.adjust_skillrank(/datum/skill/misc/riding, 3)
 		H.mind.adjust_skillrank(/datum/skill/misc/sewing, 2)
