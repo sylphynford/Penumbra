@@ -8,8 +8,6 @@
 		"pussy": "twat",
 		"idiot": "clotpole",
 		"stupid": "nay more brain than stone",
-		"are stupid": "haveth nay more brain than stone",
-		"is stupid": "haveth nay more brain than stone",
 		"douche": "maidenless",
 		"dick": "cock",
 		"my": "mine own",
@@ -17,10 +15,8 @@
 		"your": "thy",
 		"you": "thee",
 		"listen": "hark",
-		"it is": "tis",
 		"ugh": "fie",
 		"consume": "englut",
-		"if you": "if't'",
 		"want": "wanteth",
 		"no": "nay",
 		"takes": "doth taketh",
@@ -52,12 +48,15 @@
 		"sex": "amorous rite",
 		"lazy": "distemperate",
 		"here": "hither",
+		"welp": "alas"
+	},
+	"multiword": {
+		"are stupid": "haveth nay more brain than stone",
+		"is stupid": "haveth nay more brain than stone",
+		"it is": "tis",
+		"if you": "if't'",
 		"on time": "most carefully upon the hour",
-		"welp": "alas",
 		"well now": "alas"
-
-
-
 	},
 	"start": {
 		"help": "holp"
