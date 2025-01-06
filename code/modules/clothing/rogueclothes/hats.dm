@@ -605,6 +605,11 @@
 	smeltresult = /obj/item/ingot/steel
 	smelt_bar_num = 2
 
+obj/item/clothing/head/roguetown/helmet/heavy/knight/queensguard
+	detail_tag = "_detail"
+	detail_color = "#933030"
+
+
 /obj/item/clothing/head/roguetown/helmet/heavy/knight/black
 	color = CLOTHING_GREY
 	detail_tag = "_detail"

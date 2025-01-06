@@ -78,8 +78,8 @@
 				return
 				
 			// Check if target is a blackguard
-			if(H.job in list("Blackguard Lieutenant", "Blackguard Banneret"))
-				to_chat(user, span_warning("The rod's power seems ineffective against the blackguard!"))
+			if(H.job in list("Knight Lieutenant", "Knight Captain"))
+				to_chat(user, span_warning("The rod's power seems ineffective against the Queen's Guard!"))
 				return
 
 			// Check if target is NOT a garrison role(+jester)

@@ -85,3 +85,10 @@
 	ADD_TRAIT(H, TRAIT_STEELHEARTED, TRAIT_GENERIC)
 	H.verbs |= /mob/proc/haltyell
 
+/datum/job/roguetown/knight_captain
+	title = "Knight Captain"
+	flag = KNIGHT
+	department_flag = NOBLEMEN
+	faction = "Station"
+	total_positions = 0 
+	spawn_positions = 0
