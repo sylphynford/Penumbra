@@ -160,7 +160,7 @@
 	if(user.mouth)
 		to_chat(user, span_warning("My mouth has something in it."))
 		return FALSE
-	if(user.IsImmobilized())
+	if(user.IsImmobilized() || user.incapacitated() || user.has_status_effect(STATUS_EFFECT_STUN))
 		to_chat(user, span_warning("I can't bite while pinned down!"))
 		return FALSE
 	// Check if mouth is being grabbed
