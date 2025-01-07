@@ -35,19 +35,26 @@
 /mob/living/proc/spread_bodyparts()
 	return
 
-/mob/living/dust(just_ash, drop_items, force)
+/mob/living/dust(just_ash = FALSE, drop_items = TRUE, force = FALSE)
+	if(mind)
+		var/datum/antagonist/vampirelord/VD = mind.has_antag_datum(/datum/antagonist/vampirelord)
+		if(VD && !VD.isspawn)
+			log_game("Vampire Lord [real_name] dusting - triggering spawn dusting")
+			VD.dust_all_spawns()
+	
 	death(TRUE)
 
 	spill_embedded_objects()
-
+	
+	if(buckled)
+		buckled.unbuckle_mob(src,force=1)
+	
 	if(drop_items)
 		unequip_everything()
 	
-	if(buckled)
-		buckled.unbuckle_mob(src, force = TRUE)
-
 	dust_animation()
 	spawn_dust(just_ash)
+	
 	QDEL_IN(src,5) // since this is sometimes called in the middle of movement, allow half a second for movement to finish, ghosting to happen and animation to play. Looks much nicer and doesn't cause multiple runtimes.
 
 /mob/living/proc/dust_animation()

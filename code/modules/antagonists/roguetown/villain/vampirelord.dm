@@ -1517,3 +1517,39 @@ GLOBAL_LIST_EMPTY(vampire_objects)
 		V.minions_raised++
 	return TRUE
 
+/datum/antagonist/vampirelord/proc/dust_all_spawns()
+	var/datum/game_mode/chaosmode/C = SSticker.mode
+	if(!istype(C))
+		return
+	
+	log_game("Attempting to dust vampire spawns")
+	
+	for(var/datum/mind/V in C.vampires)
+		log_game("Checking vampire: [V.current ? V.current.real_name : "NO CURRENT"]")
+		if(!V.current)
+			continue
+		
+		var/datum/antagonist/vampirelord/lesser/spawn_check = V.has_antag_datum(/datum/antagonist/vampirelord/lesser)
+		log_game("Spawn check result: [spawn_check ? "IS SPAWN" : "NOT SPAWN"]")
+		
+		if(spawn_check)
+			var/mob/living/carbon/human/H = V.current
+			if(istype(H))
+				log_game("Dusting vampire spawn: [H.real_name]")
+				to_chat(H, span_userdanger("My master has fallen! The dark power that sustained me crumbles!"))
+				H.visible_message(span_warning("[H] crumbles to ash as their master's power fades!"))
+				H.dust(TRUE, FALSE, TRUE)
+
+/datum/antagonist/vampirelord/proc/on_death()
+	if(isspawn)
+		return // Don't trigger for vampire spawns
+	log_game("Vampire Lord [owner.current.real_name] died - triggering spawn dusting") // Debug log
+	dust_all_spawns()
+
+/datum/species/vampire/spec_death(gibbed, mob/living/carbon/human/H)
+	. = ..()
+	if(H?.mind)
+		var/datum/antagonist/vampirelord/V = H.mind.has_antag_datum(/datum/antagonist/vampirelord)
+		if(V && !V.isspawn)
+			V.on_death()
+
