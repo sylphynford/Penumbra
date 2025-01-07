@@ -1122,7 +1122,7 @@
 /obj/effect/proc_holder/spell/invoked/guidance
 	name = "Guidance"
 	desc = "A prayer so fervent that Psydon himself takes notice."
-	cost = 2
+	cost = 999
 	xp_gain = TRUE
 	releasedrain = 1
 	charge_max = 300 SECONDS
