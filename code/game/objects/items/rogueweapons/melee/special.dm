@@ -83,7 +83,7 @@
 				return
 
 			// Check if target is NOT a garrison role(+jester)
-			if(!(H.job in list("Dungeoneer", "Town Guard", "Sergeant at Arms", "Knight Banneret", "Knight Lieutenant", "Jester", "Warden", "Gatemaster", "Squire")))
+			if(!(H.job in list("Dungeoneer", "Town Guard", "Sergeant at Arms", "Knight Banneret", "Huskar", "Jester", "Warden", "Gatemaster", "Squire")))
 				to_chat(user, span_warning("This isn't one of my pawns!"))
 				return
 
