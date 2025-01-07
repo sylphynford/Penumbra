@@ -51,6 +51,14 @@
 
 	spill_embedded_objects()
 	
+	// Delete any decapitated vampire heads immediately
+	if(mind && (mind.has_antag_datum(/datum/antagonist/vampirelord) || mind.has_antag_datum(/datum/antagonist/vampire)))
+		for(var/obj/item/bodypart/head/H in world)
+			if(H.name == "[real_name]'s head")
+				H.throwing = FALSE
+				qdel(H)
+				break
+	
 	if(buckled)
 		buckled.unbuckle_mob(src,force=1)
 	
