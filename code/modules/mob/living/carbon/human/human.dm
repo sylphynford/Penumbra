@@ -1201,3 +1201,6 @@
 
 /mob/living/carbon/human/after_creation()
 	..()
+
+/mob/living/carbon/human/proc/remove_staked_trait()
+	REMOVE_TRAIT(src, TRAIT_STAKED, "stake")

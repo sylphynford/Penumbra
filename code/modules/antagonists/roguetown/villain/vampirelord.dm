@@ -1322,6 +1322,9 @@ GLOBAL_LIST_EMPTY(vampire_objects)
 	max_targets = 1
 
 /obj/effect/proc_holder/spell/targeted/transfix/cast(list/targets, mob/user = usr)
+	if(HAS_TRAIT(user, TRAIT_STAKED))
+		to_chat(user, span_warning("The stake in my heart prevents me from using my powers!"))
+		return FALSE
 	var/msg = input("Soothe them. Dominate them. Speak and they will succumb.", "Transfix") as text|null
 	if(length(msg) < 10)
 		to_chat(user, span_userdanger("This is not enough!"))
@@ -1407,6 +1410,9 @@ GLOBAL_LIST_EMPTY(vampire_objects)
 	max_targets = 0
 
 /obj/effect/proc_holder/spell/targeted/transfix/master/cast(list/targets, mob/user = usr)
+	if(HAS_TRAIT(user, TRAIT_STAKED))
+		to_chat(user, span_warning("The stake in my heart prevents me from using my powers!"))
+		return FALSE
 	var/msg = input("Soothe them. Dominate them. Speak and they will succumb.", "Transfix") as text|null
 	if(length(msg) < 10)
 		to_chat(user, span_userdanger("This is not enough!"))
