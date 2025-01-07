@@ -297,4 +297,4 @@
 	id = "Guidance"
 	alert_type = /atom/movable/screen/alert/status_effect/buff/guidance
 	effectedstats = list("speed" = 2, "endurance" = 2, "constitution" = 2, "fortune" = 1)
-	duration = 3 MINUTES
+	duration = 4 MINUTES
