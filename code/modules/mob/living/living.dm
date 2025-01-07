@@ -444,7 +444,6 @@
 			var/obj/item/bodypart/BP = C.get_bodypart(check_zone(used_limb))
 			C.grabbedby += O
 			BP.grabbedby += O
-			to_chat(world, "[bleed_rate]")
 			O.grabbed = C
 			O.grabbee = src
 			O.limb_grabbed = BP
