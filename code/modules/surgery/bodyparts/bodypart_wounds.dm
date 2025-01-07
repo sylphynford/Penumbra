@@ -183,10 +183,10 @@
 	var/total_dam = get_damage()
 	var/damage_dividend = (total_dam / max_damage)
 	var/resistance = HAS_TRAIT(owner, TRAIT_CRITICAL_RESISTANCE)
-	
+
 	// Prevent cutting weapons from causing fractures/dislocations
 	var/is_cutting = (bclass in list(BCLASS_CUT, BCLASS_CHOP, BCLASS_STAB, BCLASS_PICK))
-	
+
 	if(!is_cutting)
 		if(bclass in GLOB.dislocation_bclasses)
 			used = round(damage_dividend * 20 + (dam / 3 - 10 * resistance), 1)
@@ -197,7 +197,7 @@
 					attempted_wounds += /datum/wound/fracture
 				else
 					attempted_wounds += /datum/wound/dislocation
-					
+
 		if(bclass in GLOB.fracture_bclasses)
 			used = round(damage_dividend * 20 + (dam / 3) - 10 * resistance, 1)
 			if(user)
@@ -208,7 +208,7 @@
 			if(prob(used))
 				attempted_wounds += /datum/wound/dislocation
 				attempted_wounds += /datum/wound/fracture
-	
+
 	// Allow artery wounds for all appropriate weapons
 	if(bclass in GLOB.artery_bclasses)
 		used = round(damage_dividend * 20 + (dam / 3) - 10 * resistance, 1)

@@ -140,7 +140,7 @@
 	if(!M.buckled && !M.has_buckled_mobs())
 		var/mob_swap = FALSE
 		var/too_strong = (M.move_resist > move_force) //can't swap with immovable objects unless they help us
-		if(istype(M,/mob/living/simple_animal/hostile/retaliate)) 
+		if(istype(M,/mob/living/simple_animal/hostile/retaliate))
 			if(!M:aggressive)
 				mob_swap = TRUE
 		if(!they_can_move) //we have to physically move them
@@ -443,6 +443,8 @@
 			O.name = "[C]'s [parse_zone(used_limb)]"
 			var/obj/item/bodypart/BP = C.get_bodypart(check_zone(used_limb))
 			C.grabbedby += O
+			BP.grabbedby += O
+			to_chat(world, "[bleed_rate]")
 			O.grabbed = C
 			O.grabbee = src
 			O.limb_grabbed = BP
@@ -1562,11 +1564,11 @@
 /mob/living/proc/spreadFire(mob/living/L)
 	if(!istype(L))
 		return
-	
+
 	if(on_fire)
 		if(silver_fire)  // Don't spread silver fire
 			return
-		
+
 		if(L.on_fire) // If they were also on fire
 			var/firesplit = (fire_stacks + L.fire_stacks)/2
 			fire_stacks = firesplit
