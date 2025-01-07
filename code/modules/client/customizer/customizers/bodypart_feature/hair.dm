@@ -100,6 +100,7 @@
 /datum/customizer/bodypart_feature/hair/facial
 	abstract_type = /datum/customizer/bodypart_feature/hair/facial
 	name = "Facial Hair"
+	allows_disabling = TRUE
 
 /datum/customizer/bodypart_feature/hair/facial/is_allowed(datum/preferences/prefs)
 	return (prefs.gender == MALE)
