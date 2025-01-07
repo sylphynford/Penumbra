@@ -52,6 +52,7 @@ GLOBAL_LIST_EMPTY(vampire_objects)
 	var/cache_facial_dye
 	var/obj/effect/proc_holder/spell/targeted/shapeshift/bat/batform //attached to the datum itself to avoid cloning memes, and other duplicates
 	var/obj/effect/proc_holder/spell/targeted/shapeshift/gaseousform/gas
+	var/minions_raised = 0 // Track number of successful raises
 
 /datum/antagonist/vampirelord/examine_friendorfoe(datum/antagonist/examined_datum,mob/examiner,mob/examined)
 	if(istype(examined_datum, /datum/antagonist/vampirelord/lesser))
@@ -494,6 +495,9 @@ GLOBAL_LIST_EMPTY(vampire_objects)
 				B.nextlevel = VAMP_LEVEL_THREE
 			to_chat(owner, "<font color='red'>My power is returning. I can once again access my spells and raise the dead to serve me. I have also regained usage of my mist form.</font>")
 		if(2)
+			if(minions_raised < 1)
+				to_chat(owner, "<font color='red'>I must first raise a skeletal minion to serve me before I can grow stronger.</font>")
+				return
 			vamplevel = 3
 			for(var/obj/structure/vampire/necromanticbook/S in GLOB.vampire_objects)
 				S.unlocked = TRUE
@@ -507,6 +511,9 @@ GLOBAL_LIST_EMPTY(vampire_objects)
 				B.nextlevel = VAMP_LEVEL_FOUR
 			to_chat(owner, "<font color='red'>My dominion over others minds and my own body returns to me. I am nearing perfection. The armies of the dead shall now answer my call.</font>")
 		if(3)
+			if(minions_raised < 3)
+				to_chat(owner, "<font color='red'>I must command an army of the dead (3 skeletal minions) to achieve true power.</font>")
+				return
 			vamplevel = 4
 			owner.current.visible_message("<font color='red'>[owner.current] is enveloped in dark crimson, a horrific sound echoing in the area. They are evolved.</font>","<font color='red'>I AM ANCIENT, I AM THE LAND. EVEN THE SUN BOWS TO ME.</font>")
 			ascended = TRUE
@@ -1499,5 +1506,8 @@ GLOBAL_LIST_EMPTY(vampire_objects)
 	H.visible_message(span_warning("[H] rises with an unholy gleam in their eyes!"))
 	to_chat(H, span_userdanger("Darkness claims me as I rise to serve [user]!"))
 	playsound(H, 'sound/magic/magnet.ogg', 50, TRUE)
+	var/datum/antagonist/vampirelord/V = user.mind.has_antag_datum(/datum/antagonist/vampirelord)
+	if(V)
+		V.minions_raised++
 	return TRUE
 
