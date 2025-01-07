@@ -287,3 +287,14 @@
 	alert_type = /atom/movable/screen/alert/status_effect/buff/fortify
 	duration = 1 MINUTES
 
+	
+/atom/movable/screen/alert/status_effect/buff/guidance
+	name = "Guidance"
+	desc = "Psydon smiles at me"
+	icon_state = "buff"
+
+/datum/status_effect/buff/guidance
+	id = "Guidance"
+	alert_type = /atom/movable/screen/alert/status_effect/buff/guidance
+	effectedstats = list("speed" = 2, "endurance" = 2, "constitution" = 2, "fortune" = 1)
+	duration = 3 MINUTES

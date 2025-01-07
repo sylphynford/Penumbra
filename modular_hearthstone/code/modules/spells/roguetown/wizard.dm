@@ -1118,3 +1118,42 @@
 #undef PRESTI_CLEAN
 #undef PRESTI_SPARK
 #undef PRESTI_MOTE
+
+/obj/effect/proc_holder/spell/invoked/guidance
+	name = "Guidance"
+	desc = "A prayer so fervent that Psydon himself takes notice."
+	cost = 2
+	xp_gain = TRUE
+	releasedrain = 1
+	charge_max = 300 SECONDS
+	warnie = "spellwarning"
+	school = "transmutation"
+	chargedloop = /datum/looping_sound/invokegen
+	associated_skill = /datum/skill/magic/arcane
+
+/obj/effect/proc_holder/spell/invoked/guidance/cast(list/targets, mob/user)
+	var/atom/A = targets[1]
+	var/mob/living/spelltarget = A
+
+	if(/datum/patron/divine/astrata)
+	{
+		spelltarget.apply_status_effect(/datum/status_effect/buff/guidance)
+		playsound(get_turf(spelltarget), 'sound/pray.ogg', 80, TRUE, soundping = TRUE)
+
+		if(spelltarget != user)
+		{
+			user.visible_message("[user] lifts their hands toward the heavens and a palpable sense of something watching descends upon [spelltarget].")
+		}
+		else
+		{
+			user.visible_message("[user] lifts their hands toward the heavens and the air grows oppressive.")
+		}
+
+		return TRUE
+	}
+	else
+	{
+		// Psydon does not love those who do not love him, his gaze is one of indifference. Judement, perhaps.
+		user.visible_message("[user] lifts their hands toward the heavens and a palpable sense of something watching descends upon [spelltarget].")
+		return FALSE
+	}
