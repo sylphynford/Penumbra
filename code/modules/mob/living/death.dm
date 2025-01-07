@@ -41,6 +41,11 @@
 		if(VD && !VD.isspawn)
 			log_game("Vampire Lord [real_name] dusting - triggering spawn dusting")
 			VD.dust_all_spawns()
+			// Play sound and show message to all living players
+			for(var/mob/living/L in GLOB.player_list)
+				if(!L.stat) // Only living players
+					L.playsound_local(get_turf(L), 'sound/villain/draculadeath.ogg', 100, FALSE, pressure_affected = FALSE)
+					to_chat(L, span_userdanger("An ancient evil has been vanquished..."))
 	
 	death(TRUE)
 
