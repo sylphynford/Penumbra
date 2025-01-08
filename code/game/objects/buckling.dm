@@ -27,6 +27,8 @@
 	return mouse_buckle_handling(M, user)
 
 /atom/movable/proc/mouse_buckle_handling(mob/living/M, mob/living/user)
+	if(ismob(src))
+		return FALSE
 	if(can_buckle && istype(M) && istype(user))
 		if(user_buckle_mob(M, user))
 			return TRUE
