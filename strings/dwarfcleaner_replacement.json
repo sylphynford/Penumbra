@@ -1,7 +1,5 @@
 {
-
-
-    "dwarf": {
+    "full": {
  		"about": "aboot",
  		"admit": "admeet",
  		"admits": "admeets",
@@ -569,4 +567,16 @@
  		"yourself": "yersel",
  		"yourselves": "yersels"
  		}
+	"multiword": {
+		
+	},
+    "start": {
+
+    },
+    "end": {
+
+    },
+    "syllable": {
+
+    }
 }

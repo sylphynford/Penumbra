@@ -3,8 +3,8 @@
 	flag = MAGEAPPRENTICE
 	department_flag = YOUNGFOLK
 	faction = "Station"
-	total_positions = 2
-	spawn_positions = 2
+	total_positions = 1
+	spawn_positions = 1
 	zizo_roll = 75
 	allowed_races = RACES_ALL_KINDS
 	allowed_ages = list(AGE_YOUNG, AGE_ADULT)

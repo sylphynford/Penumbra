@@ -22,6 +22,118 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 		return FALSE
 	return runnable
 
+
+// Spice and Volf event
+/datum/round_event/roundstart/spice_and_volf
+	var/mob/living/carbon/human/chosen_one = null
+
+/datum/round_event/roundstart/spice_and_volf/apply_effect()
+	. = ..()
+	is_active = TRUE
+	
+	var/list/valid_candidates = list()
+	for(var/mob/living/carbon/human/H in GLOB.alive_mob_list)
+		if(H.mind && !H.mind.special_role)  // Only non-antagonists
+			valid_candidates += H
+			
+	if(!length(valid_candidates))
+		return
+		
+	chosen_one = pick(valid_candidates)
+	if(!chosen_one)
+		return
+	
+	// Add werewolf antag datum with custom objective
+	var/datum/antagonist/werewolf/W = new()
+	chosen_one.mind.add_antag_datum(W)
+	
+	if(W)
+		// Clear default objectives
+		W.objectives.Cut()
+		
+		// Add custom peaceful objective
+		var/datum/objective/custom/peaceful_wolf = new
+		peaceful_wolf.explanation_text = "Though you are afflicted by the zizonic curse of the wild, you have managed to tame the beast within. With your sanity in tact, you have sworn to use your true form only for good."
+		W.objectives += peaceful_wolf
+		
+		// Get hair color directly from the mob
+		var/hair_color = chosen_one.get_hair_color()
+		
+		// Add or modify tail organ
+		var/obj/item/organ/tail/tail
+		if(!chosen_one.getorganslot(ORGAN_SLOT_TAIL))
+			tail = new()
+			tail.Insert(chosen_one, TRUE, FALSE)
+		else
+			tail = chosen_one.getorganslot(ORGAN_SLOT_TAIL)
+		tail.set_accessory_type(/datum/sprite_accessory/tail/wolf)
+		tail.accessory_colors = hair_color
+		
+		// Add or modify ears organ
+		var/obj/item/organ/ears/ears
+		if(!chosen_one.getorganslot(ORGAN_SLOT_EARS))
+			ears = new()
+			ears.Insert(chosen_one, TRUE, FALSE)
+		else
+			ears = chosen_one.getorganslot(ORGAN_SLOT_EARS)
+		ears.set_accessory_type(/datum/sprite_accessory/ears/wolf)
+		ears.accessory_colors = hair_color
+		
+		// Wise wolf..
+		chosen_one.change_stat("intelligence", 4)
+		
+		// Register signal for food consumption
+		RegisterSignal(chosen_one, COMSIG_FOOD_EATEN, PROC_REF(on_food_consumed))
+		
+		// Update appearance
+		chosen_one.update_body()
+		chosen_one.regenerate_icons()
+		
+		// Notify player with larger red text after 4 seconds
+		addtimer(CALLBACK(GLOBAL_PROC, /proc/to_chat, chosen_one, "<span class='userdanger'><font size=5>Though you are afflicted by the zizonic curse of the wild, you have managed to tame the beast within. With your sanity in tact, you have sworn to use your true form only for good.</font></span>"), 4 SECONDS)
+
+/datum/round_event/roundstart/spice_and_volf/proc/on_food_consumed(datum/source, mob/living/carbon/human/eater, obj/item/food)
+	SIGNAL_HANDLER
+	
+	if(!istype(eater))
+		return
+		
+	if(!istype(food, /obj/item/reagent_containers/food/snacks/grown/apple))
+		return
+		
+	if(eater != chosen_one)
+		return
+		
+	addtimer(CALLBACK(src, .proc/apply_apple_effects, eater), 0)
+
+/datum/round_event/roundstart/spice_and_volf/proc/apply_apple_effects(mob/living/carbon/human/source)
+	if(!source || !is_active || source != chosen_one)
+		return
+		
+	// Heal 10 damage
+	source.apply_damage(-10, BRUTE)
+	source.apply_damage(-10, BURN)
+	
+	// Add mood buff
+	SEND_SIGNAL(source, COMSIG_ADD_MOOD_EVENT, "wolf_apple", /datum/mood_event/wolf_apple)
+	
+	// Visual feedback
+	to_chat(source, "<span class='notice'>The apple's sweetness fills me with vigor! It's delicious! I want more!</span>")
+	new /obj/effect/temp_visual/heal(get_turf(source), "#00ff00")
+
+// Custom mood event for apple consumption
+/datum/mood_event/wolf_apple
+	description = "That apple was especially delicious and healing!"
+	mood_change = 4
+	timeout = 3 MINUTES
+
+/datum/round_event_control/roundstart/spice_and_volf
+	name = "Spice and Volf"
+	typepath = /datum/round_event/roundstart/spice_and_volf
+	weight = 3
+	event_announcement = ""
+	runnable = TRUE
+
 // Six Sylphs event
 /datum/round_event/roundstart/six_sylphs
 
@@ -394,7 +506,7 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 	var/static/list/valid_jobs = list(
 		"Servant", "Squire", "Town Guard", "Dungeoneer", "Priest", 
 		"Inquisitor", "Occultist", "Monk", "Churchling", "Merchant",
-		"Shophand", "Town Elder", "Blacksmith", "Smithy Apprentice",
+		"Grabber", "Town Elder", "Blacksmith", "Smithy Apprentice",
 		"Artificer", "Soilson", "Tailor", "Innkeeper", "Cook",
 		"Bathmaster", "Taven Knave", "Bath Swain", "Bath Wench", "Tavern Wench", "Towner", "Maid", "Vagabond", "Templar"
 	)
@@ -490,86 +602,74 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 //Blackguards event
 
 /datum/antagonist/blackguard
-	name = "Blackguard"
-	roundend_category = "blackguards"
-	antagpanel_category = "Blackguard"
-	antag_moodlet = /datum/mood_event/focused
+	name = "Queen's Guard"
+	roundend_category = "Queen's Guard"
+	antagpanel_category = "Queen's Guard"
 	show_in_roundend = TRUE
 	
-/datum/antagonist/blackguard/on_gain()
-	. = ..()
-	if(owner && owner.current)
-		to_chat(owner.current, "<span class='warning'><B>You are a Blackguard mercenary. Your loyalties lie with coin rather than honor.</B></span>")
-		
-		if(ishuman(owner.current))
-			var/mob/living/carbon/human/H = owner.current
+	/datum/antagonist/blackguard/on_gain()
+		. = ..()
+		if(owner && owner.current)
+			to_chat(owner.current, "<span class='warning'><font size=4><B>You are a member of the Queen's Guard. Your loyalty lies with Queen Samantha, rather than the Baron. You have only been instructed to maintain order.</B></font></span>")
 			
-			// Remove noble trait
-			REMOVE_TRAIT(H, TRAIT_NOBLE, ROUNDSTART_TRAIT)
-			REMOVE_TRAIT(H, TRAIT_NOBLE, TRAIT_GENERIC)
-			
-			// Remove honorary title (Ser/Dame)
-			var/new_name = H.real_name
-			new_name = replacetext(new_name, "Ser ", "")
-			new_name = replacetext(new_name, "Dame ", "")
-			H.real_name = new_name
-			H.name = new_name
-			
-			// Update job titles
-			if(H.mind.assigned_role == "Knight Lieutenant")
-				H.mind.assigned_role = "Blackguard Lieutenant"
-				H.job = "Blackguard Lieutenant"
-			else if(H.mind.assigned_role == "Knight Banneret")
-				H.mind.assigned_role = "Blackguard Banneret"
-				H.job = "Blackguard Banneret"
-			
-			// Cancel adventurer setup
-			H.advsetup = FALSE
-			H.invisibility = 0
-			var/atom/movable/screen/advsetup/GET_IT_OUT = locate() in H.hud_used.static_inventory
-			qdel(GET_IT_OUT)
-			H.cure_blind("advsetup")
-			
-			H.dna.species.soundpack_m = new /datum/voicepack/male/knight()
-			
-			// Equipment handling
-			if(H.head) qdel(H.head)
-			if(H.wear_neck) qdel(H.wear_neck)
-			if(H.wear_armor) qdel(H.wear_armor)
-			if(H.wear_shirt) qdel(H.wear_shirt)
-			if(H.wear_pants) qdel(H.wear_pants)
-			if(H.gloves) qdel(H.gloves)
-			if(H.wear_wrists) qdel(H.wear_wrists)
-			if(H.shoes) qdel(H.shoes)
-			if(H.cloak) qdel(H.cloak)
-			if(H.backl) qdel(H.backl)
-			
-			// Equipment based on role
-			if(H.mind.assigned_role == "Blackguard Lieutenant")
-				// Lieutenant equipment
-				H.equip_to_slot_or_del(new /obj/item/clothing/head/roguetown/helmet/heavy/knight/black(H), SLOT_HEAD)
-				H.equip_to_slot_or_del(new /obj/item/clothing/neck/roguetown/chaincoif(H), SLOT_NECK)
-				H.equip_to_slot_or_del(new /obj/item/clothing/suit/roguetown/armor/plate/blkknight/death(H), SLOT_ARMOR)
-				H.equip_to_slot_or_del(new /obj/item/clothing/suit/roguetown/armor/chainmail(H), SLOT_SHIRT)
-				H.equip_to_slot_or_del(new /obj/item/clothing/under/roguetown/chainlegs/blk(H), SLOT_PANTS)
-				H.equip_to_slot_or_del(new /obj/item/clothing/gloves/roguetown/plate/blk(H), SLOT_GLOVES)
-				H.equip_to_slot_or_del(new /obj/item/clothing/wrists/roguetown/bracers(H), SLOT_WRISTS)
-				H.equip_to_slot_or_del(new /obj/item/clothing/shoes/roguetown/boots/armor/blk(H), SLOT_SHOES)
-				H.equip_to_slot_or_del(new /obj/item/clothing/cloak/tabard/blkknight(H), SLOT_CLOAK)
+			if(ishuman(owner.current))
+				var/mob/living/carbon/human/H = owner.current
+				
 
+				// Update job titles and add Ser title for Guard Captain if needed
+				if(H.mind.assigned_role == "Guard Captain")
+					H.mind.assigned_role = "Knight Lieutenant"
+					H.job = "Knight Lieutenant"
+					ADD_TRAIT(H, TRAIT_NOBLE, TRAIT_GENERIC)
 
-			else if(H.mind.assigned_role == "Blackguard Banneret")
-				// Banneret equipment - lighter armor variant
-				H.equip_to_slot_or_del(new /obj/item/clothing/head/roguetown/helmet/blacksteel/bucket(H), SLOT_HEAD)
-				H.equip_to_slot_or_del(new /obj/item/clothing/neck/roguetown/chaincoif(H), SLOT_NECK)
-				H.equip_to_slot_or_del(new /obj/item/clothing/suit/roguetown/armor/blacksteel/platechest(H), SLOT_ARMOR)
-				H.equip_to_slot_or_del(new /obj/item/clothing/suit/roguetown/armor/chainmail/hauberk(H), SLOT_SHIRT)
-				H.equip_to_slot_or_del(new /obj/item/clothing/under/roguetown/blacksteel/platelegs(H), SLOT_PANTS)
-				H.equip_to_slot_or_del(new /obj/item/clothing/gloves/roguetown/blacksteel/plategloves(H), SLOT_GLOVES)
-				H.equip_to_slot_or_del(new /obj/item/clothing/wrists/roguetown/bracers(H), SLOT_WRISTS)
-				H.equip_to_slot_or_del(new /obj/item/clothing/shoes/roguetown/boots/blacksteel/plateboots(H), SLOT_SHOES)
-				H.equip_to_slot_or_del(new /obj/item/clothing/cloak/cape/blkknight(H), SLOT_CLOAK)
-				H.equip_to_slot_or_del(new /obj/item/rogueweapon/sword/long/blackflamb(H), SLOT_BACK_L)
+					// Add Ser title if not present
+					if(!findtext(H.real_name, "Ser ") && !findtext(H.real_name, "Dame "))
+						H.real_name = "Ser [H.real_name]"
+						H.name = H.real_name
+				else if(H.mind.assigned_role == "Huskar")
+					H.mind.assigned_role = "Knight Captain"
+					H.job = "Knight Captain"
+				
+				
+				H.dna.species.soundpack_m = new /datum/voicepack/male/knight()
+				
+				// Equipment handling
+				if(H.head) qdel(H.head)
+				if(H.wear_neck) qdel(H.wear_neck)
+				if(H.wear_armor) qdel(H.wear_armor)
+				if(H.wear_shirt) qdel(H.wear_shirt)
+				if(H.wear_pants) qdel(H.wear_pants)
+				if(H.gloves) qdel(H.gloves)
+				if(H.wear_wrists) qdel(H.wear_wrists)
+				if(H.shoes) qdel(H.shoes)
+				if(H.cloak) qdel(H.cloak)
+				if(H.backl) qdel(H.backl)
+				
+				// Equipment based on role
+				if(H.mind.assigned_role == "Knight Lieutenant")
+					// Lieutenant equipment
+					H.equip_to_slot_or_del(new /obj/item/clothing/head/roguetown/helmet/heavy/knight/queensguard(H), SLOT_HEAD)
+					H.equip_to_slot_or_del(new /obj/item/clothing/neck/roguetown/chaincoif(H), SLOT_NECK)
+					H.equip_to_slot_or_del(new /obj/item/clothing/suit/roguetown/armor/plate(H), SLOT_ARMOR)
+					H.equip_to_slot_or_del(new /obj/item/clothing/suit/roguetown/armor/chainmail(H), SLOT_SHIRT)
+					H.equip_to_slot_or_del(new /obj/item/clothing/under/roguetown/chainlegs(H), SLOT_PANTS)
+					H.equip_to_slot_or_del(new /obj/item/clothing/gloves/roguetown/plate(H), SLOT_GLOVES)
+					H.equip_to_slot_or_del(new /obj/item/clothing/wrists/roguetown/bracers(H), SLOT_WRISTS)
+					H.equip_to_slot_or_del(new /obj/item/clothing/shoes/roguetown/boots/armor(H), SLOT_SHOES)
+					H.equip_to_slot_or_del(new /obj/item/clothing/cloak/cape/knight(H), SLOT_CLOAK)
+
+				else if(H.mind.assigned_role == "Knight Captain")
+					// Banneret equipment 
+					H.equip_to_slot_or_del(new /obj/item/clothing/head/roguetown/helmet/heavy/knight/queensguard(H), SLOT_HEAD)
+					H.equip_to_slot_or_del(new /obj/item/clothing/neck/roguetown/chaincoif(H), SLOT_NECK)
+					H.equip_to_slot_or_del(new /obj/item/clothing/suit/roguetown/armor/plate/halfplateroyalguard(H), SLOT_ARMOR)
+					H.equip_to_slot_or_del(new /obj/item/clothing/suit/roguetown/armor/chainmail/hauberk(H), SLOT_SHIRT)
+					H.equip_to_slot_or_del(new /obj/item/clothing/under/roguetown/platelegs(H), SLOT_PANTS)
+					H.equip_to_slot_or_del(new /obj/item/clothing/gloves/roguetown/plate(H), SLOT_GLOVES)
+					H.equip_to_slot_or_del(new /obj/item/clothing/wrists/roguetown/bracers(H), SLOT_WRISTS)
+					H.equip_to_slot_or_del(new /obj/item/clothing/shoes/roguetown/boots/armor(H), SLOT_SHOES)
+					H.equip_to_slot_or_del(new /obj/item/clothing/cloak/cape/blkknight(H), SLOT_CLOAK)
+					H.equip_to_slot_or_del(new /obj/item/rogueweapon/sword/long/blackflamb(H), SLOT_BACK_L)
 
 /datum/round_event/roundstart/blackguards/apply_effect()
 	. = ..()
@@ -584,7 +684,7 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 			continue
 			
 		// Check for original knight roles
-		if(H.mind.assigned_role in list("Knight Lieutenant", "Knight Banneret"))
+		if(H.mind.assigned_role in list("Guard Captain", "Huskar"))
 			H.mind.add_antag_datum(/datum/antagonist/blackguard)
 
 /datum/round_event/roundstart/blackguards/proc/on_mob_created(datum/source, mob/M)
@@ -600,14 +700,14 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 	if(!H?.mind?.assigned_role)
 		return
 		
-	if(H.mind.assigned_role in list("Knight Lieutenant", "Knight Banneret"))
+	if(H.mind.assigned_role in list("Guard Captain", "Huskar"))
 		H.mind.add_antag_datum(/datum/antagonist/blackguard)
 
 /datum/round_event_control/roundstart/blackguards
-	name = "Blackguards"
+	name = "Queen's Guard"
 	typepath = /datum/round_event/roundstart/blackguards
 	weight = 5
-	event_announcement = "With the Baron's finest knights slain in battle, he has been forced to hire Blackguard mercenaries to lead his forces. They are less loyal, but their skill and cruelty is well proven.."
+	event_announcement = "With the Baron's finest men slain in battle, he has been forced to rely on reinforcements from the capital, Queen Samantha's Knights. They are only loyal to the Queen, and have been instructed only to maintain order."
 	runnable = TRUE
 
 

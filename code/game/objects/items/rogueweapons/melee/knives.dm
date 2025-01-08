@@ -1,5 +1,3 @@
-
-
 /obj/item/rogueweapon/huntingknife
 	force = 12
 	possible_item_intents = list(/datum/intent/dagger/cut, /datum/intent/dagger/thrust, /datum/intent/dagger/chop)
@@ -57,6 +55,8 @@
 	chargetime = 0
 	clickcd = 8
 	item_d_type = "stab"
+
+	var/aimed_pen_bonus = 50 // Additional penetration when using aimed intent on limbs
 
 /datum/intent/dagger/thrust/pick
 	name = "icepick stab"
@@ -358,3 +358,19 @@
 		attack_verb = list("stubbed", "poked")
 		sharpness = IS_BLUNT
 		wdefense = 2
+
+/obj/item/rogueweapon/huntingknife/attack(mob/living/M, mob/living/user)
+	var/old_pen = 0
+	if(user.used_intent && istype(user.used_intent, /datum/intent/dagger/thrust))
+		var/datum/intent/dagger/thrust/thrust_intent = user.used_intent
+		if(istype(user.rmb_intent, /datum/rmb_intent/aimed))
+			if(user.zone_selected in list(BODY_ZONE_L_ARM, BODY_ZONE_R_ARM, BODY_ZONE_L_LEG, BODY_ZONE_R_LEG))
+				old_pen = thrust_intent.penfactor
+				thrust_intent.penfactor += thrust_intent.aimed_pen_bonus
+				user.visible_message(span_danger("[user] targets a seam in [M]'s armor!"))
+
+	. = ..()
+
+	if(old_pen > 0)
+		var/datum/intent/dagger/thrust/thrust_intent = user.used_intent
+		thrust_intent.penfactor = old_pen

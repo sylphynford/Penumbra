@@ -27,6 +27,8 @@
 	return mouse_buckle_handling(M, user)
 
 /atom/movable/proc/mouse_buckle_handling(mob/living/M, mob/living/user)
+	if(ismob(src))
+		return FALSE
 	if(can_buckle && istype(M) && istype(user))
 		if(user_buckle_mob(M, user))
 			return TRUE
@@ -119,6 +121,12 @@
 	if(!in_range(user, src) || !isturf(user.loc) || user.incapacitated() || M.anchored)
 		return FALSE
 
+	if(M != user && M.cmode && !M.incapacitated()) // Only do delay if target is both in combat mode AND not incapacitated
+		user.visible_message(span_warning("[user] starts to [buckleverb] [M] on [src]."),\
+			span_warning("I start to [buckleverb] [M] on [src]."))
+		if(!do_after(user, 20, target = src))
+			return FALSE
+
 	add_fingerprint(user)
 	. = buckle_mob(M, check_loc = check_loc)
 	if(.)
@@ -126,8 +134,8 @@
 			M.visible_message(span_notice("[M] [buckleverb]s on [src]."),\
 				span_notice("I [buckleverb] on [src]."))
 		else
-			M.visible_message(span_warning("[user] [buckleverb]s [M] on [src]!"),\
-				span_warning("[user] [buckleverb]s me on [src]!"))
+			M.visible_message(span_warning("[user] [buckleverb]s [M] on [src]."),\
+				span_warning("[user] [buckleverb]s me on [src]."))
 
 /atom/movable/proc/user_unbuckle_mob(mob/living/buckled_mob, mob/user)
 	var/mob/living/M = unbuckle_mob(buckled_mob)

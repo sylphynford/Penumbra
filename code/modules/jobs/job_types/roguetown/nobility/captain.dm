@@ -1,17 +1,16 @@
 /datum/job/roguetown/captain
-	title = "Knight Banneret"
+	title = "Guard Captain"
 	flag = GUARD_CAPTAIN
-	department_flag = NOBLEMEN
+	department_flag = GARRISON
 	faction = "Station"
 	total_positions = 1
 	spawn_positions = 1
-	zizo_roll = 100
-	allowed_races = NOBLE_RACES_TYPES
+	zizo_roll = 80
+	allowed_races = RACES_ALL_KINDS
 	allowed_sexes = list(MALE, FEMALE)
-	allowed_ages = list(AGE_ADULT, AGE_MIDDLEAGED, AGE_OLD)
-	tutorial = "The Knight Banneret is the Baron's most devoted servant, a position of trust earned through a lifetime of unwavering loyalty and proven skill. Answering only to the nobility, they oversee the defense of the realm and the enforcement of the court's decrees with ruthless efficiency. Among the commoners, they are both feared and respected as an incorruptible force, but it is also well known that their dedication has led them to commit terrible acts in the name of the Barony, deeds they view not as atrocities, but as necessary measures to uphold the order they believe in."
+	allowed_ages = list(AGE_ADULT, AGE_MIDDLEAGED)
+	tutorial = "You command the Town Guard to protect your Lord's holdings and ensure the preservation of its assets. You answer to the Baron, the Huskar, and the law. Discipline and train the Guardsmen from disorganized embarrassments into proud servants of the Baron's will."
 	display_order = JDO_GUARD_CAPTAIN
-	allowed_patrons = ALL_DIVINE_PATRONS
 	whitelist_req = FALSE
 
 	spells = list(/obj/effect/proc_holder/spell/self/convertrole/guard)
@@ -28,72 +27,53 @@
 	. = ..()
 	if(ishuman(L))
 		var/mob/living/carbon/human/H = L
-		if(istype(H.cloak, /obj/item/clothing/cloak/cape/guard))
+		if(istype(H.cloak, /obj/item/clothing/cloak/stabard/guard))
 			var/obj/item/clothing/S = H.cloak
 			var/index = findtext(H.real_name, " ")
 			if(index)
 				index = copytext(H.real_name, 1,index)
 			if(!index)
 				index = H.real_name
-			S.name = "banneret cape ([index])"
-		var/prev_real_name = H.real_name
-		var/prev_name = H.name
-		var/honorary = "Ser"
-		if(H.pronouns == SHE_HER || H.pronouns == THEY_THEM_F)
-			honorary = "Dame"
-		H.real_name = "[honorary] [prev_real_name]"
-		H.name = "[honorary] [prev_name]"
-
-		for(var/X in peopleknowme)
-			for(var/datum/mind/MF in get_minds(X))
-				if(MF.known_people)
-					MF.known_people -= prev_real_name
-					H.mind.person_knows_me(MF)
+			S.name = "guard tabard ([index])"
 
 /datum/outfit/job/roguetown/captain/pre_equip(mob/living/carbon/human/H)
 	..()
-	head = /obj/item/clothing/head/roguetown/helmet/bascinet/pigface
-	neck = /obj/item/clothing/neck/roguetown/chaincoif
-	armor = /obj/item/clothing/suit/roguetown/armor/plate/halfplateroyalguard
-	shirt = /obj/item/clothing/suit/roguetown/armor/chainmail
+	shirt = /obj/item/clothing/suit/roguetown/armor/chainmail/hauberk
+	armor = /obj/item/clothing/suit/roguetown/armor/plate/half
+	head = /obj/item/clothing/head/roguetown/helmet/sallet/visored
 	pants = /obj/item/clothing/under/roguetown/chainlegs
-	gloves = /obj/item/clothing/gloves/roguetown/plate
+	cloak = /obj/item/clothing/cloak/stabard/guard
 	wrists = /obj/item/clothing/wrists/roguetown/bracers
-	shoes = /obj/item/clothing/shoes/roguetown/boots/armor
-	belt = /obj/item/storage/belt/rogue/leather/plaquesilver
-	beltr = /obj/item/rogueweapon/mace/steel
-	beltl = /obj/item/rogueweapon/sword/sabre
-	cloak = /obj/item/clothing/cloak/cape/guard/
-	backl = /obj/item/rogueweapon/shield/tower/metal
+	gloves = /obj/item/clothing/gloves/roguetown/leather
+	neck = /obj/item/clothing/neck/roguetown/chaincoif
+	shoes = /obj/item/clothing/shoes/roguetown/boots
+	belt = /obj/item/storage/belt/rogue/leather/black
+	beltl = /obj/item/rogueweapon/mace/cudgel
+	beltr = /obj/item/storage/keyring/guardcastle
+	r_hand = /obj/item/rogueweapon/spear/billhook
 	backr = /obj/item/storage/backpack/rogue/satchel/black
-	backpack_contents = list(/obj/item/storage/keyring/sheriff = 1, /obj/item/rogueweapon/huntingknife/idagger/steel/special = 1)
+	backpack_contents = list(/obj/item/rope/chain = 1, /obj/item/rogueweapon/huntingknife/idagger/steel/special = 1, /obj/item/signal_horn = 1)
 	if(H.mind)
-		H.mind.adjust_skillrank(/datum/skill/combat/swords, 5, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/combat/polearms, 5, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/combat/wrestling, 5, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/combat/unarmed, 4, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/combat/maces, 4, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/combat/shields, 4, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/combat/crossbows, 3, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/combat/whipsflails, 2, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/combat/bows, 2, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/combat/polearms, 4, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/combat/maces, 3, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/combat/swords, 2, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/combat/knives, 2, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/misc/athletics, 4, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/misc/climbing, 2, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/misc/swimming, 2, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/misc/reading, 3, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/misc/riding, 3, TRUE)
-		H.change_stat("strength", 4)
-		H.change_stat("perception", 1)
-		H.change_stat("intelligence", 2)
-		H.change_stat("constitution", 2)
-		H.change_stat("endurance", 2)
-
-	H.dna.species.soundpack_m = new /datum/voicepack/male/knight()
-	ADD_TRAIT(H, TRAIT_NOBLE, TRAIT_GENERIC)
-	ADD_TRAIT(H, TRAIT_HEAVYARMOR, TRAIT_GENERIC)
-	ADD_TRAIT(H, TRAIT_STEELHEARTED, TRAIT_GENERIC)
-	H.verbs |= /mob/proc/haltyell
+		H.mind.adjust_skillrank(/datum/skill/combat/whipsflails, 2, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/combat/crossbows, 3, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/combat/bows, 3, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/combat/wrestling, 3, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/combat/unarmed, 3, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/misc/climbing, 3, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/misc/sneaking, 2, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/misc/reading, 1, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/misc/athletics, 3, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/misc/riding, 1, TRUE)
+		ADD_TRAIT(H, TRAIT_HEAVYARMOR, TRAIT_GENERIC)
+		ADD_TRAIT(H, TRAIT_GUARDSMAN, TRAIT_GENERIC)
+		H.change_stat("strength", 2)
+		H.change_stat("intelligence", 1)
+		H.change_stat("constitution", 1)
+		H.change_stat("endurance", 1)
 
 /obj/effect/proc_holder/spell/self/convertrole
 	name = "Recruit Beggar"
@@ -184,13 +164,3 @@
 	if(!.)
 		return
 	recruit.verbs |= /mob/proc/haltyell
-
-
-// used for blackguards event
-/datum/job/roguetown/blackguard_banneret
-	title = "Blackguard Banneret"
-	flag = GUARD_CAPTAIN
-	department_flag = NOBLEMEN
-	faction = "Station"
-	total_positions = 0
-	spawn_positions = 0

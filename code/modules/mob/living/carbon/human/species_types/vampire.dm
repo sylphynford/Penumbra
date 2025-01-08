@@ -135,6 +135,12 @@
 	die_with_shapeshifted_form =  FALSE
 	shapeshift_type = /mob/living/simple_animal/hostile/retaliate/bat
 
+/obj/effect/proc_holder/spell/targeted/shapeshift/bat/cast(list/targets, mob/user)
+	if(HAS_TRAIT(user, TRAIT_STAKED))
+		to_chat(user, span_warning("The stake in my heart prevents me from using my powers!"))
+		return FALSE
+	return ..()
+
 /obj/effect/proc_holder/spell/targeted/shapeshift/gaseousform
 	name = "Mist Form"
 	desc = ""
@@ -144,4 +150,10 @@
 	cooldown_min = 50
 	die_with_shapeshifted_form =  FALSE
 	shapeshift_type = /mob/living/simple_animal/hostile/retaliate/gaseousform
+
+/obj/effect/proc_holder/spell/targeted/shapeshift/gaseousform/cast(list/targets, mob/user)
+	if(HAS_TRAIT(user, TRAIT_STAKED))
+		to_chat(user, span_warning("The stake in my heart prevents me from using my powers!"))
+		return FALSE
+	return ..()
 

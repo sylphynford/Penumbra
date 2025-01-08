@@ -1,5 +1,5 @@
 /datum/job/roguetown/shophand
-	title = "Shophand"
+	title = "Grabber"
 	flag = SHOPHAND
 	department_flag = YOUNGFOLK
 	faction = "Station"
@@ -10,7 +10,7 @@
 	allowed_sexes = list(MALE, FEMALE)
 	allowed_ages = list(AGE_YOUNG, AGE_ADULT)
 
-	tutorial = "You work the largest store in the Peaks by grace of the Merchant who has shackled you to this drudgery. The work of stocking shelves and taking inventory for your employer is mind-numbing and repetitive--but at least you have a roof over your head and comfortable surroundings. With time, perhaps you will one day be more than a glorified servant."
+	tutorial = "Officially, you're the storehand—moving crates, restocking shelves, and keeping the merchant's shop in order. Unofficially, you're the muscle, making troublemakers think twice before crossing the merchant. Everyone knows it, though no one dares say it outright."
 
 	outfit = /datum/outfit/job/roguetown/shophand
 	display_order = JDO_SHOPHAND
@@ -32,6 +32,8 @@
 		beltr = /obj/item/storage/belt/rogue/pouch/coins/poor
 		beltl = /obj/item/storage/keyring/merchant
 		backr = /obj/item/storage/backpack/rogue/satchel
+		backpack_contents = list(/obj/item/rogueweapon/mace/cudgel = 1, /obj/item/rope/chain = 1)
+
 	else
 		pants = /obj/item/clothing/under/roguetown/tights
 		shirt = /obj/item/clothing/suit/roguetown/shirt/undershirt
@@ -40,6 +42,7 @@
 		beltr = /obj/item/storage/belt/rogue/pouch/coins/poor
 		beltl = /obj/item/storage/keyring/merchant
 		backr = /obj/item/storage/backpack/rogue/satchel
+		backpack_contents = list(/obj/item/rogueweapon/mace/cudgel = 1, /obj/item/rope/chain = 1)
 	if(H.mind)
 		H.mind.adjust_skillrank(/datum/skill/misc/stealing, 2, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/combat/maces, 3, TRUE)
@@ -49,11 +52,12 @@
 		H.mind.adjust_skillrank(/datum/skill/misc/medicine, 1, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/combat/knives, 2, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/combat/unarmed, 2, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/combat/wrestling, 2, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/combat/wrestling, 3, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/misc/athletics, 2, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/misc/lockpicking, 2, TRUE)
-		H.change_stat("intelligence", 1)
-		H.change_stat("fortune", 2)
+		H.change_stat("speed", 1)
+		H.change_stat("strength", 1)
+		H.change_stat("con", 1)
 		if(prob(33)) // (M EDIT: ugh... im not changing this yet w/e)
 			H.mind.adjust_skillrank(/datum/skill/combat/crossbows, 1, TRUE)
 		else if(prob(33))
@@ -61,4 +65,4 @@
 		else //the legendary shopARM
 			H.mind.adjust_skillrank(/datum/skill/combat/swords, 1, TRUE)
 			H.mind.adjust_skillrank(/datum/skill/combat/maces, 1, TRUE)
-			H.change_stat("strength", 1)
+			H.change_stat("strength", 2)

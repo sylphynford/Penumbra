@@ -48,6 +48,9 @@
 	if(!user.can_do_sex())
 		to_chat(user, "<span class='warning'>I can't do this.</span>")
 		return
+	if(HAS_TRAIT_FROM(user, TRAIT_PACIFISM, HUGBOX_TRAIT))
+		to_chat(user, "<span class='warning'>I can't do this while under protection.</span>")
+		return
 //	if(!target.client || !target.client.prefs || (target.client.prefs.sexable == FALSE)) // Don't bang someone that dosn't want it.
 //		to_chat(user, "<span class='warning'>[target] dosn't wish to be touched. (Their ERP preference under options)</span>")
 //		to_chat(target, "<span class='warning'>[user] failed to touch you. (Your ERP preference under options)</span>")

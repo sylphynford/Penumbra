@@ -122,8 +122,6 @@
 				selected_class = inquisitor_class
 			if("Mercenary")
 				selected_class = mercenary_class
-			if("Heir")
-				selected_class = heir_class
 		
 		// If a class is selected and the job has class options, layer the class outfit on top
 		if(selected_class && previewJob.advclass_cat_rolls?.len)
