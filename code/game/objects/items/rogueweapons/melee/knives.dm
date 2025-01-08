@@ -365,9 +365,17 @@
 		var/datum/intent/dagger/thrust/thrust_intent = user.used_intent
 		if(istype(user.rmb_intent, /datum/rmb_intent/aimed))
 			if(user.zone_selected in list(BODY_ZONE_L_ARM, BODY_ZONE_R_ARM, BODY_ZONE_L_LEG, BODY_ZONE_R_LEG))
-				old_pen = thrust_intent.penfactor
-				thrust_intent.penfactor += thrust_intent.aimed_pen_bonus
-				user.visible_message(span_danger("[user] targets a seam in [M]'s armor!"))
+				// Get knife skill level
+				var/knife_skill = user.mind?.get_skill_level(/datum/skill/combat/knives) || 0
+				// Base 10% chance of success, +10% per skill level
+				var/success_chance = 10 + (knife_skill * 10)
+				
+				if(prob(success_chance))
+					old_pen = thrust_intent.penfactor
+					thrust_intent.penfactor += thrust_intent.aimed_pen_bonus
+					user.visible_message(span_danger("[user] skillfully targets a seam in [M]'s armor!"))
+				else
+					user.visible_message(span_warning("[user] fails to find a weak point in [M]'s armor!"))
 
 	. = ..()
 
