@@ -192,12 +192,12 @@
 /datum/status_effect/debuff/devitalised
 	id = "devitalised"
 	alert_type = /atom/movable/screen/alert/status_effect/debuff/devitalised
-	effectedstats = list("fortune" = -3)
-	duration = 20 MINUTES
+	effectedstats = list("fortune" = -10, "constitution" = -5, "speed" = -5)
+	duration = 999 MINUTES
 
 /atom/movable/screen/alert/status_effect/debuff/devitalised
 	name = "Devitalised"
-	desc = "Something has been taken from me, and it will take time to recover."
+	desc = "A void festers within me leaving nothing but hollow echoes where I once felt whole. I am a psychopath driven only by cold logic and the absence of anything human."
 
 /datum/status_effect/debuff/vamp_dreams
 	id = "sleepytime"
