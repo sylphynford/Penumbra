@@ -744,6 +744,11 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/rp_prompt.txt"))
 		try_apply_character_post_equipment(humanc)
 	log_manifest(character.mind.key,character.mind,character,latejoin = TRUE)
 
+	// Apply hugbox protection to all latejoiners
+	if(ishuman(character))
+		var/mob/living/carbon/human/H = character
+		addtimer(CALLBACK(H, TYPE_PROC_REF(/mob/living/carbon/human, latejoin_hugboxing_start)), 1)
+
 /mob/dead/new_player/proc/AddEmploymentContract(mob/living/carbon/human/employee)
 	//TODO:  figure out a way to exclude wizards/nukeops/demons from this.
 	for(var/C in GLOB.employmentCabinets)
@@ -1020,3 +1025,26 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/rp_prompt.txt"))
 
 		return FALSE //This is the only case someone should actually be completely blocked from antag rolling as well
 	return TRUE
+
+/mob/living/carbon/human/proc/latejoin_hugboxing_start()
+	to_chat(src, span_warning("I will be in danger once I start moving."))
+	status_flags |= GODMODE
+	ADD_TRAIT(src, TRAIT_PACIFISM, HUGBOX_TRAIT)
+	RegisterSignal(src, COMSIG_MOVABLE_MOVED, PROC_REF(latejoin_hugboxing_moved))
+	if(GLOB.adventurer_hugbox_duration_still)
+		addtimer(CALLBACK(src, TYPE_PROC_REF(/mob/living/carbon/human, latejoin_hugboxing_end)), GLOB.adventurer_hugbox_duration_still)
+
+/mob/living/carbon/human/proc/latejoin_hugboxing_moved()
+	UnregisterSignal(src, COMSIG_MOVABLE_MOVED)
+	to_chat(src, span_danger("I have [DisplayTimeText(GLOB.adventurer_hugbox_duration)] to begone!"))
+	addtimer(CALLBACK(src, TYPE_PROC_REF(/mob/living/carbon/human, latejoin_hugboxing_end)), GLOB.adventurer_hugbox_duration)
+
+/mob/living/carbon/human/proc/latejoin_hugboxing_end()
+	if(QDELETED(src))
+		return
+	//hugbox already ended
+	if(!(status_flags & GODMODE))
+		return
+	status_flags &= ~GODMODE
+	REMOVE_TRAIT(src, TRAIT_PACIFISM, HUGBOX_TRAIT)
+	to_chat(src, span_danger("My joy is gone! Danger surrounds me."))
