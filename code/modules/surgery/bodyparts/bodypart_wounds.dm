@@ -120,9 +120,6 @@
 		return FALSE
 	var/do_crit = TRUE
 	if(ishuman(owner))
-		var/mob/living/carbon/human/human_owner = owner
-		if(human_owner.checkcritarmor(zone_precise, bclass))
-			return FALSE
 		if(owner.mind && get_damage() < max_damage/2) //No crits except if it hits a damage threshold on players.
 			if(owner.mobility_flags & MOBILITY_STAND && !owner.buckled) //Unless they're buckled or lying down.
 				do_crit = FALSE
