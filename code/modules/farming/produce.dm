@@ -97,11 +97,12 @@
 	var/list/bitten_names = list()
 
 /obj/item/reagent_containers/food/snacks/grown/apple/On_Consume(mob/living/eater)
-	..()
+	. = ..()
 	if(ishuman(eater))
 		var/mob/living/carbon/human/H = eater
 		if(!(H.real_name in bitten_names))
 			bitten_names += H.real_name
+		SEND_SIGNAL(eater, COMSIG_FOOD_EATEN, eater, src)
 
 /obj/item/reagent_containers/food/snacks/grown/apple/blockproj(mob/living/carbon/human/H)
 	testing("APPLEHITBEGIN")

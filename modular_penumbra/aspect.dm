@@ -82,12 +82,50 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 		// Wise wolf..
 		chosen_one.change_stat("intelligence", 4)
 		
+		// Register signal for food consumption
+		RegisterSignal(chosen_one, COMSIG_FOOD_EATEN, PROC_REF(on_food_consumed))
+		
 		// Update appearance
 		chosen_one.update_body()
 		chosen_one.regenerate_icons()
 		
-		// Notify player
-		addtimer(CALLBACK(GLOBAL_PROC, /proc/to_chat, chosen_one, "<span class='userdanger'><font size=5>Though you are afflicted by the zizonic curse of the wild, you have managed to tame the beast within. With your sanity in tact, you have sworn to use your true form only for good.</font></span>"), 10 SECONDS)
+		// Notify player with larger red text after 4 seconds
+		addtimer(CALLBACK(GLOBAL_PROC, /proc/to_chat, chosen_one, "<span class='userdanger'><font size=5>Though you are afflicted by the zizonic curse of the wild, you have managed to tame the beast within. With your sanity in tact, you have sworn to use your true form only for good.</font></span>"), 4 SECONDS)
+
+/datum/round_event/roundstart/spice_and_volf/proc/on_food_consumed(datum/source, mob/living/carbon/human/eater, obj/item/food)
+	SIGNAL_HANDLER
+	
+	if(!istype(eater))
+		return
+		
+	if(!istype(food, /obj/item/reagent_containers/food/snacks/grown/apple))
+		return
+		
+	if(eater != chosen_one)
+		return
+		
+	addtimer(CALLBACK(src, .proc/apply_apple_effects, eater), 0)
+
+/datum/round_event/roundstart/spice_and_volf/proc/apply_apple_effects(mob/living/carbon/human/source)
+	if(!source || !is_active || source != chosen_one)
+		return
+		
+	// Heal 10 damage
+	source.apply_damage(-10, BRUTE)
+	source.apply_damage(-10, BURN)
+	
+	// Add mood buff
+	SEND_SIGNAL(source, COMSIG_ADD_MOOD_EVENT, "wolf_apple", /datum/mood_event/wolf_apple)
+	
+	// Visual feedback
+	to_chat(source, "<span class='notice'>The apple's sweetness fills me with vigor! It's delicious! I want more!</span>")
+	new /obj/effect/temp_visual/heal(get_turf(source), "#00ff00")
+
+// Custom mood event for apple consumption
+/datum/mood_event/wolf_apple
+	description = "That apple was especially delicious and healing!"
+	mood_change = 4
+	timeout = 3 MINUTES
 
 /datum/round_event_control/roundstart/spice_and_volf
 	name = "Spice and Volf"
