@@ -197,7 +197,7 @@
 
 /atom/movable/screen/alert/status_effect/debuff/devitalised
 	name = "Devitalised"
-	desc = "A void festers within me leaving nothing but hollow echoes where I once felt whole."
+	desc = "A void festers within me leaving nothing but hollow echoes where I once felt whole. I am a psychopath driven only by cold logic and the absence of anything human."
 
 /datum/status_effect/debuff/vamp_dreams
 	id = "sleepytime"
