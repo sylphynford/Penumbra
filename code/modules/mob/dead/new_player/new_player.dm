@@ -1029,7 +1029,10 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/rp_prompt.txt"))
 /mob/living/carbon/human/proc/latejoin_hugboxing_start()
 	to_chat(src, span_warning("I will be in danger once I start moving."))
 	status_flags |= GODMODE
+	status_flags &= ~CANPUSH  // Prevent being grabbed
+	mobility_flags &= ~MOBILITY_PULL  // Prevent grabbing others
 	ADD_TRAIT(src, TRAIT_PACIFISM, HUGBOX_TRAIT)
+	ADD_TRAIT(src, TRAIT_PUSHIMMUNE, HUGBOX_TRAIT)
 	RegisterSignal(src, COMSIG_MOVABLE_MOVED, PROC_REF(latejoin_hugboxing_moved))
 	if(GLOB.adventurer_hugbox_duration_still)
 		addtimer(CALLBACK(src, TYPE_PROC_REF(/mob/living/carbon/human, latejoin_hugboxing_end)), GLOB.adventurer_hugbox_duration_still)
@@ -1046,5 +1049,8 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/rp_prompt.txt"))
 	if(!(status_flags & GODMODE))
 		return
 	status_flags &= ~GODMODE
+	status_flags |= CANPUSH  // Re-enable being grabbed
+	mobility_flags |= MOBILITY_PULL  // Re-enable grabbing others
 	REMOVE_TRAIT(src, TRAIT_PACIFISM, HUGBOX_TRAIT)
+	REMOVE_TRAIT(src, TRAIT_PUSHIMMUNE, HUGBOX_TRAIT)
 	to_chat(src, span_danger("My joy is gone! Danger surrounds me."))
