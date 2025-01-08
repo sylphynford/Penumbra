@@ -22,6 +22,80 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 		return FALSE
 	return runnable
 
+
+// Spice and Volf event
+/datum/round_event/roundstart/spice_and_volf
+	var/mob/living/carbon/human/chosen_one = null
+
+/datum/round_event/roundstart/spice_and_volf/apply_effect()
+	. = ..()
+	is_active = TRUE
+	
+	var/list/valid_candidates = list()
+	for(var/mob/living/carbon/human/H in GLOB.alive_mob_list)
+		if(H.mind && !H.mind.special_role)  // Only non-antagonists
+			valid_candidates += H
+			
+	if(!length(valid_candidates))
+		return
+		
+	chosen_one = pick(valid_candidates)
+	if(!chosen_one)
+		return
+	
+	// Add werewolf antag datum with custom objective
+	var/datum/antagonist/werewolf/W = new()
+	chosen_one.mind.add_antag_datum(W)
+	
+	if(W)
+		// Clear default objectives
+		W.objectives.Cut()
+		
+		// Add custom peaceful objective
+		var/datum/objective/custom/peaceful_wolf = new
+		peaceful_wolf.explanation_text = "Though you are afflicted by the zizonic curse of the wild, you have managed to tame the beast within. With your sanity in tact, you have sworn to use your true form only for good."
+		W.objectives += peaceful_wolf
+		
+		// Get hair color directly from the mob
+		var/hair_color = chosen_one.get_hair_color()
+		
+		// Add or modify tail organ
+		var/obj/item/organ/tail/tail
+		if(!chosen_one.getorganslot(ORGAN_SLOT_TAIL))
+			tail = new()
+			tail.Insert(chosen_one, TRUE, FALSE)
+		else
+			tail = chosen_one.getorganslot(ORGAN_SLOT_TAIL)
+		tail.set_accessory_type(/datum/sprite_accessory/tail/wolf)
+		tail.accessory_colors = hair_color
+		
+		// Add or modify ears organ
+		var/obj/item/organ/ears/ears
+		if(!chosen_one.getorganslot(ORGAN_SLOT_EARS))
+			ears = new()
+			ears.Insert(chosen_one, TRUE, FALSE)
+		else
+			ears = chosen_one.getorganslot(ORGAN_SLOT_EARS)
+		ears.set_accessory_type(/datum/sprite_accessory/ears/wolf)
+		ears.accessory_colors = hair_color
+		
+		// Wise wolf..
+		chosen_one.change_stat("intelligence", 4)
+		
+		// Update appearance
+		chosen_one.update_body()
+		chosen_one.regenerate_icons()
+		
+		// Notify player
+		addtimer(CALLBACK(GLOBAL_PROC, /proc/to_chat, chosen_one, "<span class='userdanger'><font size=5>Though you are afflicted by the zizonic curse of the wild, you have managed to tame the beast within. With your sanity in tact, you have sworn to use your true form only for good.</font></span>"), 10 SECONDS)
+
+/datum/round_event_control/roundstart/spice_and_volf
+	name = "Spice and Volf"
+	typepath = /datum/round_event/roundstart/spice_and_volf
+	weight = 3
+	event_announcement = ""
+	runnable = TRUE
+
 // Six Sylphs event
 /datum/round_event/roundstart/six_sylphs
 
