@@ -206,4 +206,3 @@
 		M.reagents.add_reagent(src, rand(1,3))
 		to_chat(M, span_small("I feel even worse..."))
 	return ..()
-	
