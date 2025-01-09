@@ -53,7 +53,9 @@
 /obj/structure/roguemachine/drugmachine/process()
 	if(recent_payments)
 		if(world.time > last_payout + rand(6 MINUTES,8 MINUTES))
-			var/amt = recent_payments * 0.25
+			var/amt = recent_payments * 0.10
+			if(drugrade_flags & DRUGRADE_MONEYA)
+				amt = recent_payments * 0.25
 			if(drugrade_flags & DRUGRADE_MONEYB)
 				amt = recent_payments * 0.50
 			recent_payments = 0
@@ -91,8 +93,32 @@
 		if(budget > 0)
 			budget2change(budget, usr)
 			budget = 0
+	if(href_list["refund"])
+		if(!usr.canUseTopic(src, BE_CLOSE) || locked)
+			return
+		var/obj/item/I = usr.get_active_held_item()
+		if(!I)
+			say("Hold the item you wish to refund!")
+			return
+		var/found_type
+		for(var/path in held_items)
+			if(istype(I, path))
+				found_type = path
+				break
+		if(found_type)
+			var/refund_amt = held_items[found_type]["PRICE"]
+			if(refund_amt)
+				budget += refund_amt
+				qdel(I)
+				playsound(loc, 'sound/misc/machinevomit.ogg', 100, TRUE, -1)
+				say("Refunded [refund_amt] MAMMON")
+				return attack_hand(usr)
+		say("Cannot refund this item!")
 	if(href_list["secrets"])
 		if(!usr.canUseTopic(src, BE_CLOSE) || locked)
+			return
+		var/mob/living/carbon/human/H = usr
+		if(H.job != "Bathmaster")
 			return
 		var/list/options = list()
 		options += "Withdraw Cut"
@@ -117,7 +143,6 @@
 					return
 				switch(select)
 					if("To Bank")
-						var/mob/living/carbon/human/H = usr
 						if(secret_budget <= 0)
 							say("No cut available to withdraw.")
 							return
@@ -162,42 +187,37 @@
 		return
 	user.changeNext_move(CLICK_CD_MELEE)
 	playsound(loc, 'sound/misc/beep.ogg', 100, FALSE, -1)
-	var/canread = user.can_read(src, TRUE)
 	var/contents
-
-	if(canread)
-		contents = "<center>PURITY - In the name of pleasure.<BR>"
-		contents += "Current Balance: [budget] MAMMON<BR>"
-		contents += "<a href='?src=[REF(src)];change=1'>\[Withdraw All\]</a><BR><BR>"
-	else
-		contents = "<center>[stars("PURITY - In the name of pleasure.")]<BR>"
-		contents += "[stars("Current Balance:")] [budget] [stars("MAMMON")]<BR>"
-		contents += "<a href='?src=[REF(src)];change=1'>[stars("\[Withdraw All\]")]</a><BR><BR>"
 
 	var/mob/living/carbon/human/H = user
 	if(H.job == "Bathmaster")
-		contents += "<center>"
-		if(canread)
-			contents += "<a href='?src=[REF(src)];secrets=1'>Secrets</a>"
-		else
-			contents += "<a href='?src=[REF(src)];secrets=1'>[stars("Secrets")]</a>"
-		contents += "</center>"
-
-	contents += "<BR>"
+		contents = "<a href='?src=[REF(src)];secrets=1'>Secrets</a><BR><BR>"
+	
+	contents += "<center>PURITY - In the name of pleasure.<BR>"
+	contents += "<b>MAMMON LOADED:</b> [budget]<BR>"
+	contents += "<a href='?src=[REF(src)];change=1'>\[Withdraw All\]</a>"
+	contents += " <a href='?src=[REF(src)];refund=1'>\[Refund Item\]</a>"
+	
+	if(H.job == "Bathmaster")
+		contents += " <a href='?src=[REF(src)];secrets=1'>\[Secrets\]</a>"
+	
+	contents += "<BR><BR></center>"
 
 	for(var/I in held_items)
+		// Skip enhanced versions and oils for users without TRAIT_DRUGENHANCER
+		if((!HAS_TRAIT(user, TRAIT_DRUGENHANCER)) && (findtext("[I]", "enhanced") || findtext("[I]", "oil")))
+			continue
+
 		var/price = FLOOR(held_items[I]["PRICE"] + (SStreasury.tax_value * held_items[I]["PRICE"]), 1)
+		if(drugrade_flags & DRUGRADE_NOTAX)
+			price = held_items[I]["PRICE"]
 		var/namer = held_items[I]["NAME"]
 		if(!price)
 			price = "0"
 		if(!namer)
 			held_items[I]["NAME"] = "thing"
 			namer = "thing"
-		if(canread)
-			contents += "[namer] ([price] MAMMON) <a href='?src=[REF(src)];buy=[I]'>\[BUY\]</a>"
-		else
-			contents += "[stars(namer)] ([stars(price)] [stars("MAMMON")]) <a href='?src=[REF(src)];buy=[I]'>[stars("\[BUY\]")]</a>"
-		contents += "<BR>"
+		contents += "[namer] ([price] MAMMON) <a href='?src=[REF(src)];buy=[I]'>\[BUY\]</a><BR>"
 
 	var/datum/browser/popup = new(user, "VENDORTHING", "", 370, 400)
 	popup.set_content(contents)
@@ -228,18 +248,21 @@
 	. = ..()
 	START_PROCESSING(SSroguemachine, src)
 	update_icon()
+	
+	// Set base prices once during initialization
 	held_items[/obj/item/reagent_containers/powder/spice] = list("PRICE" = rand(41,55),"NAME" = "chuckledust")
 	held_items[/obj/item/reagent_containers/powder/ozium] = list("PRICE" = rand(6,15),"NAME" = "ozium")
 	held_items[/obj/item/reagent_containers/powder/moondust] = list("PRICE" = rand(13,25),"NAME" = "moondust")
 	held_items[/obj/item/clothing/mask/cigarette/rollie/cannabis] = list("PRICE" = rand(12,18),"NAME" = "swampweed zig")
 	held_items[/obj/item/clothing/mask/cigarette/rollie/nicotine] = list("PRICE" = rand(5,10),"NAME" = "zig")
-/*	held_items[/obj/item/reagent_containers/glass/bottle/rogue/wine] = list("PRICE" = rand(35,77),"NAME" = "vino")
-	held_items[/obj/item/rogueweapon/huntingknife/idagger] = list("PRICE" = rand(20,33),"NAME" = "kinfe")
-	held_items[/obj/item/clothing/cloak/half] = list("PRICE" = rand(103,110),"NAME" = "black halfcloak")
-	held_items[/obj/item/clothing/gloves/roguetown/fingerless] = list("PRICE" = rand(16,31),"NAME" = "gloves with 6 holes")
-	held_items[/obj/item/clothing/head/roguetown/roguehood/black] = list("PRICE" = rand(43,45),"NAME" = "black hood")
-	held_items[/obj/item/gun/ballistic/revolver/grenadelauncher/crossbow] = list("PRICE" = rand(58,88),"NAME" = "crossed bow")
-	held_items[/obj/item/quiver/bolts] = list("PRICE" = rand(33,57),"NAME" = "quiver w/ bolts")*/
+
+	// Add enhanced versions with same prices
+	held_items[/obj/item/reagent_containers/powder/spice_enhanced] = list("PRICE" = rand(41,55),"NAME" = "enhanced chuckledust")
+	held_items[/obj/item/reagent_containers/powder/ozium_enhanced] = list("PRICE" = rand(6,15),"NAME" = "enhanced ozium")
+	held_items[/obj/item/reagent_containers/powder/moondust_enhanced] = list("PRICE" = rand(13,25),"NAME" = "enhanced moondust")
+	held_items[/obj/item/frost_oil] = list("PRICE" = (50),"NAME" = "frost Oil")
+	held_items[/obj/item/fire_oil] = list("PRICE" = (50),"NAME" = "fire Oil")
+	held_items[/obj/item/acid_oil] = list("PRICE" = (50),"NAME" = "acid oil")
 
 #undef DRUGRADE_MONEYA
 #undef DRUGRADE_MONEYB

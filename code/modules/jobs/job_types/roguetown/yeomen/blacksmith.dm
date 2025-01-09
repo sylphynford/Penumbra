@@ -17,7 +17,8 @@
 	max_pq = null
 	round_contrib_points = 3
 
-/datum/outfit/job/roguetown/armorsmith/pre_equip(mob/living/carbon/human/H)
+
+/datum/outfit/job/roguetown/armorsmith/pre_equip(var/mob/living/carbon/human/H)
 	..()
 	head = /obj/item/clothing/head/roguetown/hatfur
 	if(prob(50))
@@ -61,6 +62,10 @@
 	H.change_stat("intelligence", 1)
 	H.change_stat("endurance", 2)
 	H.change_stat("constitution", 2)
+
+
+	ADD_TRAIT(H, TRAIT_HEAVYARMOR, TRAIT_GENERIC)
+	ADD_TRAIT(H, TRAIT_MEDIUMARMOR, TRAIT_GENERIC)
 
 /datum/job/roguetown/weaponsmith
 	title = "Weaponsmith"
@@ -125,17 +130,21 @@
 	H.change_stat("endurance", 2)
 	H.change_stat("constitution", 2)
 
+	ADD_TRAIT(H, TRAIT_HEAVYARMOR, TRAIT_GENERIC)
+	ADD_TRAIT(H, TRAIT_MEDIUMARMOR, TRAIT_GENERIC)
+
+
 /datum/job/roguetown/blacksmith
-	title = "Blacksmith"
-	flag = BLACKSMITH
+	title = "Forgeworker"
+	flag = FORGEWORKER
 	department_flag = YEOMEN
 	faction = "Station"
-	total_positions = 2
-	spawn_positions = 2
+	total_positions = 4
+	spawn_positions = 4
 
 	allowed_races = RACES_ALL_KINDS
 	allowed_ages = list(AGE_ADULT, AGE_MIDDLEAGED, AGE_OLD)
-	tutorial = "You've studied for many decades under quite a number of master smiths. Whether it's cookware or tools of war, you're unmatched at the art of bending metal to your will."
+	tutorial = "You are the town’s lifeline to the resources it needs. Without your skill in gathering and smelting, there would be no tools, no weapons, and no progress."
 
 	outfit = /datum/outfit/job/roguetown/blacksmith
 	display_order = JDO_BLACKSMITH
@@ -152,8 +161,7 @@
 	if(prob(50))
 		head = /obj/item/clothing/head/roguetown/hatblu
 	if(H.mind)
-		H.mind.adjust_skillrank(/datum/skill/combat/axes, 2, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/combat/maces, 2, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/labor/mining, 3, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/combat/unarmed, 2, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/craft/crafting, 3, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/combat/wrestling, 3, TRUE)
@@ -167,6 +175,7 @@
 			H.mind.adjust_skillrank(/datum/skill/craft/armorsmithing, 1, TRUE)
 			H.mind.adjust_skillrank(/datum/skill/craft/weaponsmithing, 1, TRUE)
 			H.mind.adjust_skillrank(/datum/skill/craft/smelting, 1, TRUE)
+			H.mind.adjust_skillrank(/datum/skill/labor/mining, 1, TRUE)
 	if(H.pronouns == SHE_HER || H.pronouns == THEY_THEM_F)
 		pants = /obj/item/clothing/under/roguetown/trou
 		armor = /obj/item/clothing/suit/roguetown/shirt/dress/gen/random
@@ -174,9 +183,10 @@
 		backpack_contents = list(/obj/item/rogueweapon/hammer = 1, /obj/item/rogueweapon/tongs = 1)
 		shoes = /obj/item/clothing/shoes/roguetown/shortboots
 		belt = /obj/item/storage/belt/rogue/leather
+		backpack_contents = list(/obj/item/roguekey/blacksmith = 1)
 		cloak = /obj/item/clothing/cloak/apron/blacksmith
 		beltl = /obj/item/storage/belt/rogue/pouch/coins/poor
-		beltr = /obj/item/roguekey/blacksmith
+		beltr = /obj/item/rogueweapon/pick
 	else
 		pants = /obj/item/clothing/under/roguetown/trou
 		shoes = /obj/item/clothing/shoes/roguetown/boots/leather
@@ -184,11 +194,12 @@
 		backr = /obj/item/storage/backpack/rogue/satchel
 		backpack_contents = list(/obj/item/rogueweapon/hammer = 1, /obj/item/rogueweapon/tongs = 1)
 		belt = /obj/item/storage/belt/rogue/leather
+		backpack_contents = list(/obj/item/roguekey/blacksmith = 1)
 		beltl = /obj/item/storage/belt/rogue/pouch/coins/poor
-		beltr = /obj/item/roguekey/blacksmith
+		beltr = /obj/item/rogueweapon/pick
 		cloak = /obj/item/clothing/cloak/apron/blacksmith
 
-	H.change_stat("strength", 1)
-	H.change_stat("intelligence", 1)
-	H.change_stat("endurance", 2)
-	H.change_stat("constitution", 2)
+	H.change_stat("fortune", 5)
+
+	ADD_TRAIT(H, TRAIT_HEAVYARMOR, TRAIT_GENERIC)
+	ADD_TRAIT(H, TRAIT_MEDIUMARMOR, TRAIT_GENERIC)

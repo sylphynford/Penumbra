@@ -18,7 +18,7 @@
 	id = "foodbuff"
 	alert_type = /atom/movable/screen/alert/status_effect/buff/foodbuff
 	effectedstats = list("constitution" = 1,"endurance" = 1)
-	duration = 10 MINUTES
+	duration = 40 MINUTES
 
 /atom/movable/screen/alert/status_effect/buff/foodbuff
 	name = "Great Meal"
@@ -298,3 +298,69 @@
 	alert_type = /atom/movable/screen/alert/status_effect/buff/guidance
 	effectedstats = list("speed" = 2, "endurance" = 2, "constitution" = 2, "fortune" = 1)
 	duration = 4 MINUTES
+
+
+/datum/status_effect/buff/moondust_enhanced
+	id = "enhanced moondust"
+	alert_type = /atom/movable/screen/alert/status_effect/buff/druqks_enhanced
+	effectedstats = list("speed" = 3, "endurance" = 3, "intelligence" = -2)
+	duration = 600 SECONDS
+
+/datum/status_effect/buff/moondust_purest/nextmove_modifier()
+	return 0.8
+
+/datum/status_effect/buff/moondust_enhanced/on_apply()
+	. = ..()
+	owner.add_stress(/datum/stressevent/ozium)
+
+/datum/status_effect/buff/ozium_enhanced
+	id = "ozium"
+	alert_type = /atom/movable/screen/alert/status_effect/buff/druqks_enhanced
+	effectedstats = list("speed" = -5, "perception" = 2)
+	duration = 600 SECONDS
+
+/datum/status_effect/buff/ozium/on_apply()
+	. = ..()
+	owner.add_stress(/datum/stressevent/ozium)
+	ADD_TRAIT(owner, TRAIT_NOPAIN, TRAIT_GENERIC)
+
+/datum/status_effect/buff/ozium/on_remove()
+	owner.remove_stress(/datum/stressevent/ozium)
+	REMOVE_TRAIT(owner, TRAIT_NOPAIN, TRAIT_GENERIC)
+	. = ..()
+
+/atom/movable/screen/alert/status_effect/buff/druqks_enhanced
+	name = "High"
+	desc = ""
+	icon_state = "acid"
+
+/datum/status_effect/buff/druqks_enhanced
+	id = "druqks"
+	alert_type = /atom/movable/screen/alert/status_effect/buff/druqks_enhanced
+	effectedstats = list("intelligence" = 5,"speed" = 3,"fortune" = -5)
+	duration = 600 SECONDS
+
+/datum/status_effect/buff/druqks_enhanced/on_apply()
+	. = ..()
+	owner.add_stress(/datum/stressevent/high)
+	if(owner?.client)
+		if(owner.client.screen && owner.client.screen.len)
+			var/atom/movable/screen/plane_master/game_world/PM = locate(/atom/movable/screen/plane_master/game_world) in owner.client.screen
+			PM.backdrop(owner)
+			PM = locate(/atom/movable/screen/plane_master/game_world_fov_hidden) in owner.client.screen
+			PM.backdrop(owner)
+			PM = locate(/atom/movable/screen/plane_master/game_world_above) in owner.client.screen
+			PM.backdrop(owner)
+
+/datum/status_effect/buff/druqks_enhanced/on_remove()
+	owner.remove_stress(/datum/stressevent/high)
+	if(owner?.client)
+		if(owner.client.screen && owner.client.screen.len)
+			var/atom/movable/screen/plane_master/game_world/PM = locate(/atom/movable/screen/plane_master/game_world) in owner.client.screen
+			PM.backdrop(owner)
+			PM = locate(/atom/movable/screen/plane_master/game_world_fov_hidden) in owner.client.screen
+			PM.backdrop(owner)
+			PM = locate(/atom/movable/screen/plane_master/game_world_above) in owner.client.screen
+			PM.backdrop(owner)
+
+	. = ..()

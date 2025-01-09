@@ -140,7 +140,7 @@
 #define ARCHIVIST	(1<<1)
 #define ARMORSMITH	(1<<2)
 #define WEAPONSMITH (1<<3)
-#define BLACKSMITH  (1<<4)
+#define FORGEWORKER  (1<<4)
 #define ALCHEMIST	(1<<5)
 #define ARTIFICER	(1<<6)
 #define TAILOR		(1<<7)
