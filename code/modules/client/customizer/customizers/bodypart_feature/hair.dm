@@ -399,6 +399,8 @@
 
 /datum/customizer/bodypart_feature/hair/facial/humanoid
 	customizer_choices = list(/datum/customizer_choice/bodypart_feature/hair/facial/humanoid)
+	allows_disabling = TRUE
+	default_disabled = TRUE
 
 /datum/customizer_choice/bodypart_feature/hair/facial/humanoid
 	sprite_accessories = list(

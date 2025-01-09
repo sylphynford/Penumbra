@@ -17,9 +17,9 @@
 	switch(user.job)
 		if("Warden")
 			playsound(src, 'modular_hearthstone/sound/items/bogguardhorn.ogg', 100, TRUE)
-		if("Town Sheriff", "Town Guard")
+		if("Town Sheriff", "Town Guard", "Guard Captain")
 			playsound(src, 'modular_hearthstone/sound/items/watchhorn.ogg', 100, TRUE)
-		if("Sergeant at Arms", "Knight Lieutenant")
+		if("Sergeant at Arms", "Knight Lieutenant", "Huskar")
 			playsound(src, 'modular_hearthstone/sound/items/rghorn.ogg', 100, TRUE)
 		else
 			playsound(src, 'modular_hearthstone/sound/items/signalhorn.ogg', 100, TRUE)

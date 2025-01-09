@@ -5,7 +5,6 @@
         "beautiful": "schön",
         "big": "groß",
         "great": "groß",
-        "good bye": ["auf wiedersehen", "tschüss"],
         "goodbye": ["auf wiedersehen", "tschüss"],
         "idiot": "schweinhund",
         "dumb": "dummkopf",
@@ -74,6 +73,9 @@
         "fellow": "kollege",
         "colleague": "kollege"
     },
+	"multiword": {
+        "good bye": ["auf wiedersehen", "tschüss"]
+	},
     "start": {
 
     },

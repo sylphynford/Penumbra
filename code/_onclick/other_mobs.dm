@@ -160,6 +160,16 @@
 	if(user.mouth)
 		to_chat(user, span_warning("My mouth has something in it."))
 		return FALSE
+	if(user.IsImmobilized() || user.incapacitated() || user.has_status_effect(STATUS_EFFECT_STUN))
+		to_chat(user, span_warning("I can't bite while pinned down!"))
+		return FALSE
+	// Check if mouth is being grabbed
+	if(iscarbon(user))
+		var/mob/living/carbon/C = user
+		for(var/obj/item/grabbing/G in C.grabbedby)
+			if(G.sublimb_grabbed == BODY_ZONE_PRECISE_MOUTH)
+				to_chat(user, span_warning("My mouth is being grabbed!"))
+				return FALSE
 
 	var/datum/intent/bite/bitten = new()
 	if(checkdefense(bitten, user))

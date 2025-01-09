@@ -40,6 +40,8 @@ GLOBAL_LIST_EMPTY(preference_patrons)
 /datum/patron/proc/on_gain(mob/living/pious)
 	for(var/trait in mob_traits)
 		ADD_TRAIT(pious, trait, "[type]")
+		if(trait == TRAIT_CABAL && pious.mind)
+			GLOB.zizo_followers |= pious.mind
 	if(HAS_TRAIT(pious, TRAIT_XYLIX))
 		pious.grant_language(/datum/language/thievescant)
 	if (HAS_TRAIT(pious, TRAIT_CABAL))

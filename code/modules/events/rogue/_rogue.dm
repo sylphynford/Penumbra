@@ -49,6 +49,8 @@ GLOBAL_LIST_INIT(badomens, list())
 			used = "A tremble runs through the leylines of the realm. NEW DECK, MAJOR ARCANA: THE FOOL - UPRIGHT"
 		if(ASCEND_WAKENING)
 			used = "The sky begins to turn quicker. NEW OMEN, MAJOR ARCANA: THE HANGED MAN - REVERSED"
+		if(OMEN_ZIZO)
+			used = "Z is watching you."
 		if(ASCEND_ASCENDANT)
 			used = "A N##EW G$ $OD A@@AKENSS IN GORE AND S3%HIT - <span class='userdanger'>MAJOR ARCANA: THE TOWER - UPRIGHT</span>"
 	if(eventreason && used)

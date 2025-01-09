@@ -533,16 +533,18 @@
 		for(var/AC in atomrefs)
 			var/AD = "[AC] ([atomcounts[AC]])"
 			atomy[AD] = atomrefs[AC]
-	var/atom/AB = input(user, "What will I take?","Items on [src.name ? "\the [src.name]:" : "the floor:"]",null) as null|anything in atomy
-	if(!AB)
-		return
-	if(QDELETED(atomy[AB]))
-		return
-	if(atomy[AB].loc != src)
-		return
-	var/AE = atomy[AB]
-	user.used_intent = user.a_intent
-	user.UnarmedAttack(AE,1,params)
+		var/atom/AB = input(user, "What shall I take?","Items on [src.name ? "\the [src.name]:" : "the floor:"]",null) as null|anything in atomy
+		if(!AB)
+			return
+		if(QDELETED(atomy[AB]))
+			return
+		if(atomy[AB].loc != src)
+			return
+		if(!user.TurfAdjacent(src)) // Check if user can still reach the turf
+			return
+		var/AE = atomy[AB]
+		user.used_intent = user.a_intent
+		user.UnarmedAttack(AE,1,params)
 
 /mob/proc/ShiftMiddleClickOn(atom/A, params)
 	. = SEND_SIGNAL(src, COMSIG_MOB_MIDDLECLICKON, A)

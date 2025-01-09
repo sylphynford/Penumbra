@@ -304,7 +304,7 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/rp_prompt.txt"))
 			if(!inquisitor_exists)
 				to_chat(src, "<span class='warning'>There must be or have been an Inquisitor for you to join as Occultist!</span>")
 				return
-
+		/* Depreciated since Huskar was changed from the Consort's bodyguard into the Baron's knight.
 		if(href_list["SelectedJob"] == "Huskar")
 			// Check for consort
 			var/mob/living/carbon/human/consort
@@ -316,7 +316,7 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/rp_prompt.txt"))
 			if(!consort)
 				to_chat(src, "<span class='warning'>There must be a Consort for you to join as Huskar!</span>")
 				return
-
+		*/
 		if(!SSticker?.IsRoundInProgress())
 			to_chat(usr, span_danger("The round is either not ready, or has already finished..."))
 			return
@@ -608,8 +608,6 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/rp_prompt.txt"))
 					class_type = /datum/advclass/inquisitor
 				if("Mercenary")
 					class_type = /datum/advclass/mercenary
-				if("Heir")
-					class_type = /datum/advclass/heir
 				if("Occultist")
 					class_type = /datum/advclass/templar
 
@@ -652,8 +650,6 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/rp_prompt.txt"))
 							C.prefs.inquisitor_class = choice
 						if("Mercenary")
 							C.prefs.mercenary_class = choice
-						if("Heir")
-							C.prefs.heir_class = choice
 						if("Occultist")
 							C.prefs.templar_class = choice
 					C.prefs.save_preferences()
@@ -747,6 +743,11 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/rp_prompt.txt"))
 	if(humanc)
 		try_apply_character_post_equipment(humanc)
 	log_manifest(character.mind.key,character.mind,character,latejoin = TRUE)
+
+	// Apply hugbox protection to all latejoiners
+	if(ishuman(character))
+		var/mob/living/carbon/human/H = character
+		addtimer(CALLBACK(H, TYPE_PROC_REF(/mob/living/carbon/human, latejoin_hugboxing_start)), 1)
 
 /mob/dead/new_player/proc/AddEmploymentContract(mob/living/carbon/human/employee)
 	//TODO:  figure out a way to exclude wizards/nukeops/demons from this.
@@ -1024,3 +1025,32 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/rp_prompt.txt"))
 
 		return FALSE //This is the only case someone should actually be completely blocked from antag rolling as well
 	return TRUE
+
+/mob/living/carbon/human/proc/latejoin_hugboxing_start()
+	to_chat(src, span_warning("I will be in danger once I start moving."))
+	status_flags |= GODMODE
+	status_flags &= ~CANPUSH  // Prevent being grabbed
+	mobility_flags &= ~MOBILITY_PULL  // Prevent grabbing others
+	ADD_TRAIT(src, TRAIT_PACIFISM, HUGBOX_TRAIT)
+	ADD_TRAIT(src, TRAIT_PUSHIMMUNE, HUGBOX_TRAIT)
+	RegisterSignal(src, COMSIG_MOVABLE_MOVED, PROC_REF(latejoin_hugboxing_moved))
+	if(GLOB.adventurer_hugbox_duration_still)
+		addtimer(CALLBACK(src, TYPE_PROC_REF(/mob/living/carbon/human, latejoin_hugboxing_end)), GLOB.adventurer_hugbox_duration_still)
+
+/mob/living/carbon/human/proc/latejoin_hugboxing_moved()
+	UnregisterSignal(src, COMSIG_MOVABLE_MOVED)
+	to_chat(src, span_danger("I have [DisplayTimeText(GLOB.adventurer_hugbox_duration)] to begone!"))
+	addtimer(CALLBACK(src, TYPE_PROC_REF(/mob/living/carbon/human, latejoin_hugboxing_end)), GLOB.adventurer_hugbox_duration)
+
+/mob/living/carbon/human/proc/latejoin_hugboxing_end()
+	if(QDELETED(src))
+		return
+	//hugbox already ended
+	if(!(status_flags & GODMODE))
+		return
+	status_flags &= ~GODMODE
+	status_flags |= CANPUSH  // Re-enable being grabbed
+	mobility_flags |= MOBILITY_PULL  // Re-enable grabbing others
+	REMOVE_TRAIT(src, TRAIT_PACIFISM, HUGBOX_TRAIT)
+	REMOVE_TRAIT(src, TRAIT_PUSHIMMUNE, HUGBOX_TRAIT)
+	to_chat(src, span_danger("My joy is gone! Danger surrounds me."))

@@ -128,7 +128,6 @@
 	emote("fatigue", forced = TRUE)
 	if(hud_used)
 		var/matrix/skew = matrix()
-		skew.Scale(2)
 		var/matrix/newmatrix = skew
 		for(var/C in hud_used.plane_masters)
 			var/atom/movable/screen/plane_master/whole_screen = hud_used.plane_masters[C]

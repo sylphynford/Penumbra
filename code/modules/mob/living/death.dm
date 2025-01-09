@@ -35,19 +35,39 @@
 /mob/living/proc/spread_bodyparts()
 	return
 
-/mob/living/dust(just_ash, drop_items, force)
+/mob/living/dust(just_ash = FALSE, drop_items = TRUE, force = FALSE)
+	if(mind)
+		var/datum/antagonist/vampirelord/VD = mind.has_antag_datum(/datum/antagonist/vampirelord)
+		if(VD && !VD.isspawn)
+			log_game("Vampire Lord [real_name] dusting - triggering spawn dusting")
+			VD.dust_all_spawns()
+			// Play sound and show message to all living players
+			for(var/mob/living/L in GLOB.player_list)
+				if(!L.stat) // Only living players
+					L.playsound_local(get_turf(L), 'sound/villain/draculadeath.ogg', 100, FALSE, pressure_affected = FALSE)
+					to_chat(L, span_userdanger("An ancient evil has been vanquished..."))
+	
 	death(TRUE)
 
 	spill_embedded_objects()
-
+	
+	// Delete any decapitated vampire heads immediately
+	if(mind && (mind.has_antag_datum(/datum/antagonist/vampirelord) || mind.has_antag_datum(/datum/antagonist/vampire)))
+		for(var/obj/item/bodypart/head/H in world)
+			if(H.name == "[real_name]'s head")
+				H.throwing = FALSE
+				qdel(H)
+				break
+	
+	if(buckled)
+		buckled.unbuckle_mob(src,force=1)
+	
 	if(drop_items)
 		unequip_everything()
 	
-	if(buckled)
-		buckled.unbuckle_mob(src, force = TRUE)
-
 	dust_animation()
 	spawn_dust(just_ash)
+	
 	QDEL_IN(src,5) // since this is sometimes called in the middle of movement, allow half a second for movement to finish, ghosting to happen and animation to play. Looks much nicer and doesn't cause multiple runtimes.
 
 /mob/living/proc/dust_animation()

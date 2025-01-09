@@ -11,7 +11,7 @@
     warnie = "sydwarning"
     movement_interrupt = FALSE
     sound = 'sound/magic/churn.ogg'
-    invocation = "Noc blinds thee of thy sins!"
+    invocation = "Psydon blinds thee of thy sins!"
     invocation_type = "shout" //can be none, whisper, emote and shout
     associated_skill = /datum/skill/magic/holy
     antimagic_allowed = TRUE

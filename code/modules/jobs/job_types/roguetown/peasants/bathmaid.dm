@@ -53,6 +53,7 @@
 		H.change_stat("endurance", 2)
 	ADD_TRAIT(H, TRAIT_GOODLOVER, TRAIT_GENERIC)
 	ADD_TRAIT(H, TRAIT_EMPATH, TRAIT_GENERIC)
+	ADD_TRAIT(H, TRAIT_BEAUTIFUL, TRAIT_GENERIC)
 
 // Washing Implements
 
@@ -70,10 +71,6 @@
 	throw_range = 7
 	var/cleanspeed = 35 //slower than mop
 	var/uses = 10
-
-/obj/item/bath/soap/ComponentInitialize()
-	. = ..()
-	AddComponent(/datum/component/slippery, 80)
 
 /obj/item/bath/soap/examine(mob/user)
 	. = ..()

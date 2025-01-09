@@ -154,6 +154,12 @@
 			VDrinker.handle_vitae(400)
 	qdel(src)
 
+/obj/effect/proc_holder/spell/invoked/projectile/bloodsteal/cast(list/targets, mob/user)
+	if(HAS_TRAIT(user, TRAIT_STAKED))
+		to_chat(user, span_warning("The stake in my heart prevents me from using my powers!"))
+		return FALSE
+	return ..()
+
 /obj/effect/proc_holder/spell/invoked/projectile/fireball
 	name = "Fireball"
 	desc = "Shoot out a ball of fire that emits a light explosion on impact, setting the target alight."
