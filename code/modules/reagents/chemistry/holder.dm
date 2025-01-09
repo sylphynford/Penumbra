@@ -58,6 +58,7 @@
 	var/list/datum/reagent/addiction_list = new/list()
 	var/flags
 
+
 /datum/reagents/New(maximum=100, new_flags=0)
 	maximum_volume = maximum
 
@@ -97,6 +98,13 @@
 			data += "[R.type] ([round(R.volume, 0.1)]u)"
 			//Using types because SOME chemicals (I'm looking at you, chlorhydrate-beer) have the same names as other chemicals.
 	return english_list(data)
+
+/datum/reagents/proc/calculate_price()
+	var/total = 0
+	for(var/datum/reagent/reag in reagent_list)
+		if(reag.value)
+			total += reag.value * reag.volume
+	return ceil(total)
 
 /datum/reagents/proc/remove_any(amount = 1)
 	var/list/cached_reagents = reagent_list

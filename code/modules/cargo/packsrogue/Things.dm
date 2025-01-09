@@ -6,13 +6,13 @@
 
 /datum/supply_pack/rogue/Things/healthpotnew
 	name = "Health Potion"
-	cost = 10
+	cost = 45
 	contains = list(/obj/item/reagent_containers/glass/bottle/rogue/healthpotnew)
 
 
 /datum/supply_pack/rogue/Things/stampot
 	name = "Stamina potion"
-	cost = 10
+	cost = 25
 	contains = list(/obj/item/reagent_containers/glass/bottle/rogue/manapot)
 
 /datum/supply_pack/rogue/Things/chain

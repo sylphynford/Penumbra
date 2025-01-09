@@ -7,6 +7,7 @@
 	overdose_threshold = 45
 	metabolization_rate = 0.5 * REAGENTS_METABOLISM
 	alpha = 173
+	value = 0.5 // 23. Oz is bigger than volume.
 
 /datum/reagent/medicine/healthpot/on_mob_life(mob/living/carbon/M)
 	if(volume >= 60)
@@ -54,6 +55,7 @@
 	overdose_threshold = 45
 	metabolization_rate = 0.5 * REAGENTS_METABOLISM
 	alpha = 173
+	value = 1 // 45
 
 /datum/reagent/medicine/healthpotnew/on_mob_life(mob/living/carbon/M)
 	M.reagents.remove_reagent(/datum/reagent/medicine/healthpot, 100) //removes old health pot so you can't double-up
@@ -104,6 +106,7 @@
 	overdose_threshold = 45
 	metabolization_rate = 0.5 * REAGENTS_METABOLISM
 	alpha = 173
+	value = 0.5 // 23
 
 /datum/reagent/medicine/manapot/on_mob_life(mob/living/carbon/M)
 	M.rogstam_add(10)
