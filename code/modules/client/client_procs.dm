@@ -868,7 +868,16 @@ GLOBAL_LIST_EMPTY(external_rsc_urls)
 	set waitfor = 0 //we sleep when getting the intel, no need to hold up the client connection while we sleep
 	if (CONFIG_GET(string/ipintel_email))
 		var/datum/ipintel/res = get_ip_intel(address)
-		if (res.intel >= CONFIG_GET(number/ipintel_rating_bad))
+		if (res.intel >= 0.95) // 95% or higher proxy detection
+			if(!bunker_bypass_check()) // Check if they have bunker bypass
+				message_admins(span_adminnotice("Proxy Detection: [key_name_admin(src)] IP intel rated [res.intel*100]% likely to be a Proxy/VPN. Connection rejected."))
+				to_chat(src, {"<span class='danger'>Connection Error: Proxy/VPN detected. Please request whitelist access on our Discord server to continue.</span>
+				<br><span class='notice'>Join our Discord at [CONFIG_GET(string/discordurl)] to request access.</span>"})
+				qdel(src)
+				return
+			else
+				message_admins(span_adminnotice("Proxy Detection: [key_name_admin(src)] IP intel rated [res.intel*100]% likely to be a Proxy/VPN, but has bunker bypass. Connection allowed."))
+		else if (res.intel >= CONFIG_GET(number/ipintel_rating_bad))
 			message_admins(span_adminnotice("Proxy Detection: [key_name_admin(src)] IP intel rated [res.intel*100]% likely to be a Proxy/VPN."))
 		ip_intel = res.intel
 
