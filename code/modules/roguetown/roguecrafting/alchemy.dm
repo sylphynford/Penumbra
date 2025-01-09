@@ -48,18 +48,6 @@
 	reqs = list(/obj/item/ash = 1, /datum/reagent/water = 10, /obj/item/reagent_containers/food/snacks/rogue/meat/mince = 1)
 	craftdiff = 0
 
-/datum/crafting_recipe/roguetown/alchemy/jump_powder
-	name = "Leap Powder"
-	result = list(/obj/item/reagent_containers/powder/jump)
-	reqs = list(/obj/item/reagent_containers/food/snacks/crow/dead = 1, /obj/item/ash = 1) // Crows are pretty rare.
-	craftdiff = 4
-s
-/datum/crafting_recipe/roguetown/alchemy/penis_powder
-	name = "Bone Powder"
-	result = list(/obj/item/reagent_containers/powder/penis)
-	reqs = list(/obj/item/natural/bone = 1, /obj/item/ash = 1, /obj/item/organ/penis = 1) // where did u get this
-	craftdiff = 3
-
 /datum/crafting_recipe/roguetown/alchemy/manna_powder
 	name = "Manna Powder"
 	result = list(/obj/item/reagent_containers/powder/mana)
