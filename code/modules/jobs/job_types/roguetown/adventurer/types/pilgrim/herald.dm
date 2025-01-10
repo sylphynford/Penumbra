@@ -5,7 +5,6 @@
 	allowed_races = RACES_ALL_KINDS
 	outfit = /datum/outfit/job/roguetown/adventurer/herald
 	category_tags = list(CTAG_TOWNER)
-	traits_applied = list(TRAIT_NOBLE)
 	var/class_limit = 1
 
 /mob/living/carbon/human/var/last_herald_announce = 0
@@ -20,13 +19,27 @@
 		if(world.time < last_herald_announce + 600 SECONDS)
 			to_chat(src, span_warning("You must wait [round((last_herald_announce + 600 SECONDS - world.time)/600, 0.1)] minutes before making another announcement!"))
 			return FALSE
-		if(!istype(get_area(src), /area/rogue/indoors/town))
-			to_chat(src, span_warning("You need to be in town to make an announcement!"))
+		if(!istype(get_area(src), /area/rogue/indoors/town/tavern))
+			to_chat(src, span_warning("You need to be in the tavern to make an announcement!"))
 			return FALSE
-		priority_announce("[inputty]", "The Herald Proclaims", 'sound/misc/bell.ogg')
-		last_herald_announce = world.time
+			
+		visible_message(span_warning("[src] takes a deep breath, preparing to make an announcement."))
+		if(do_after(src, 30 SECONDS, target = src))
+			priority_announce("[inputty]", "The Herald Proclaims", 'sound/misc/bell.ogg')
+			last_herald_announce = world.time
+		else
+			to_chat(src, span_warning("Your announcement was interrupted!"))
+			return FALSE
 
 /datum/outfit/job/roguetown/adventurer/herald/pre_equip(mob/living/carbon/human/H)
+	..()
+	H.verbs += /mob/living/carbon/human/proc/heraldannouncement
+	H.mind.adjust_skillrank(/datum/skill/misc/reading, 3, TRUE)
+
+/datum/outfit/job/roguetown/adventurer/herald/pre_equip(mob/living/carbon/human/H)
+	..()
+	H.verbs += /mob/living/carbon/human/proc/heraldannouncement
+	H.mind.adjust_skillrank(/datum/skill/misc/reading, 3, TRUE)
 	..()
 	H.verbs += /mob/living/carbon/human/proc/heraldannouncement
 	H.mind.adjust_skillrank(/datum/skill/misc/reading, 3, TRUE)
