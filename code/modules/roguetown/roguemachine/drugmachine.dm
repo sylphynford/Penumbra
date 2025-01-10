@@ -257,9 +257,9 @@
 	held_items[/obj/item/clothing/mask/cigarette/rollie/nicotine] = list("PRICE" = rand(5,10),"NAME" = "zig")
 
 	// Add enhanced versions with same prices
-	held_items[/obj/item/reagent_containers/powder/spice_enhanced] = list("PRICE" = rand(41,55),"NAME" = "enhanced chuckledust")
-	held_items[/obj/item/reagent_containers/powder/ozium_enhanced] = list("PRICE" = rand(6,15),"NAME" = "enhanced ozium")
-	held_items[/obj/item/reagent_containers/powder/moondust_enhanced] = list("PRICE" = rand(13,25),"NAME" = "enhanced moondust")
+	held_items[/obj/item/reagent_containers/powder/spice_enhanced] = list("PRICE" = (41),"NAME" = "enhanced chuckledust")
+	held_items[/obj/item/reagent_containers/powder/ozium_enhanced] = list("PRICE" = (6),"NAME" = "enhanced ozium")
+	held_items[/obj/item/reagent_containers/powder/moondust_enhanced] = list("PRICE" = (13),"NAME" = "enhanced moondust")
 	held_items[/obj/item/frost_oil] = list("PRICE" = (50),"NAME" = "frost Oil")
 	held_items[/obj/item/fire_oil] = list("PRICE" = (50),"NAME" = "fire Oil")
 	held_items[/obj/item/acid_oil] = list("PRICE" = (50),"NAME" = "acid oil")
