@@ -190,6 +190,12 @@
 		var/obj/mecha/M = loc
 		return M.click_action(A,src,params)
 
+	if(has_buckled_mobs() && A.loc != loc)
+		for(var/mob/living/M in buckled_mobs)
+			if(pulling == M)
+				stop_pulling() // Cancel the grab if trying to move someone buckled to you
+				return
+
 	if(restrained())
 		changeNext_move(CLICK_CD_HANDCUFFED)   //Doing shit in cuffs shall be vey slow
 		RestrainedClickOn(A)
