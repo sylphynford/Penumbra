@@ -37,7 +37,8 @@
 	shirt = /obj/item/clothing/suit/roguetown/shirt/shortshirt
 	gloves = /obj/item/clothing/gloves/roguetown/fingerless
 	belt = /obj/item/storage/belt/rogue/leather
-	r_hand = /obj/item/handheld_bell
+	backl = /obj/item/storage/backpack/rogue/satchel
+	backpack_contents = list(/obj/item/handheld_bell = 1)
 	armor = /obj/item/clothing/suit/roguetown/armor/leather/vest
 	cloak = /obj/item/clothing/cloak/raincloak/blue
 	if(prob(50))
