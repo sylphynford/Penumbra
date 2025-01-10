@@ -108,10 +108,19 @@ GLOBAL_LIST_INIT(moldable_organs, list(BODY_ZONE_PRECISE_GROIN=list(ORGAN_SLOT_P
 		if(!length(organs))
 			to_chat(user, span_warning("There are no removable organs in [target]'s [parse_zone(target_zone)]!"))
 			return FALSE
+		
+		// Remove genital organs from the list of removable organs
 		for(var/obj/item/organ/found_organ as anything in organs)
+			if(found_organ.slot in list(ORGAN_SLOT_PENIS, ORGAN_SLOT_VAGINA, ORGAN_SLOT_BREASTS, ORGAN_SLOT_TESTICLES))
+				organs -= found_organ
+				continue
 			found_organ.on_find(user)
 			organs -= found_organ
 			organs[found_organ.name] = found_organ
+
+		if(!length(organs))
+			to_chat(user, span_warning("There are no removable organs in [target]'s [parse_zone(target_zone)]!"))
+			return FALSE
 
 		var/selected = input(user, "Remove which organ?", "PESTRA") as null|anything in sortList(organs)
 		if(QDELETED(user) || QDELETED(target) || !user.Adjacent(target) || (user.get_active_held_item() != tool))
