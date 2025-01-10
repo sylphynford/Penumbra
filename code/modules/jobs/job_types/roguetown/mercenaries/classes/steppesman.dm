@@ -49,7 +49,6 @@
 	H.change_stat("constitution", 1)
 	H.change_stat("endurance", 1)
 	H.change_stat("speed", 1)
-	ADD_TRAIT(H, TRAIT_CRITICAL_RESISTANCE, TRAIT_GENERIC)
 
 /datum/advclass/mercenary/steppesman/equipme(mob/living/carbon/human/H)
 	if(!H)

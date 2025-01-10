@@ -94,7 +94,7 @@
 /datum/outfit/job/roguetown/mercenary/grenzelhoft
 	name = "Grenzelhoft Mercenary"
 	
-	wrists = /obj/item/clothing/wrists/roguetown/bracers
+	wrists = /obj/item/clothing/wrists/roguetown/bracers/leather
 	belt = /obj/item/storage/belt/rogue/leather
 	beltl = /obj/item/flashlight/flare/torch
 	beltr = /obj/item/storage/belt/rogue/pouch/coins/poor
