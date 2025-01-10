@@ -305,3 +305,143 @@
 /datum/reagent/moondust_purest/overdose_start(mob/living/M)
 	M.playsound_local(M, 'sound/misc/heroin_rush.ogg', 100, FALSE)
 	M.visible_message(span_warning("Blood runs from [M]'s nose."))
+
+/obj/item/reagent_containers/powder/moondust_enhanced
+	name = "pure moondust"
+	desc = ""
+	icon = 'icons/roguetown/items/produce.dmi'
+	icon_state = "moondust"
+	possible_transfer_amounts = list()
+	volume = 15
+	list_reagents = list(/datum/reagent/moondust = 15)
+	grind_results = list(/datum/reagent/moondust = 15)
+	sellprice = 5
+
+/datum/reagent/moondust/overdose_process(mob/living/M)
+	M.adjustToxLoss(3, 0)
+	..()
+	. = 1
+
+/datum/reagent/moondust/on_mob_metabolize(mob/living/M)
+	M.flash_fullscreen("can_you_see")
+	animate(M.client, pixel_y = 1, time = 1, loop = -1, flags = ANIMATION_RELATIVE)
+	animate(pixel_y = -1, time = 1, flags = ANIMATION_RELATIVE)
+
+/datum/reagent/moondust/on_mob_end_metabolize(mob/living/M)
+	animate(M.client)
+
+/datum/reagent/moondust_enhanced/on_mob_life(mob/living/carbon/M)
+	narcolepsy_drug_up(M)
+	if(M.reagents.has_reagent(/datum/reagent/moondust_purest))
+		M.Sleeping(40, 0)
+	if(M.has_flaw(/datum/charflaw/addiction/junkie))
+		M.sate_addiction()
+	M.apply_status_effect(/datum/status_effect/buff/moondust_enhanced)
+	if(prob(10))
+		M.flash_fullscreen("whiteflash")
+	..()
+
+/datum/reagent/moondust/overdose_start(mob/living/M)
+	M.playsound_local(M, 'sound/misc/heroin_rush.ogg', 100, FALSE)
+	M.visible_message(span_warning("Blood runs from [M]'s nose."))
+
+/obj/item/reagent_containers/powder/ozium_enhanced
+	name = "pure powder"
+	desc = ""
+	icon = 'icons/roguetown/items/produce.dmi'
+	icon_state = "ozium"
+	possible_transfer_amounts = list()
+	volume = 15
+	list_reagents = list(/datum/reagent/ozium = 15)
+	grind_results = list(/datum/reagent/ozium = 15)
+	sellprice = 5
+
+/datum/reagent/ozium_enhanced
+	name = "pure ozium"
+	description = ""
+	color = "#60A584" // rgb: 96, 165, 132
+	overdose_threshold = 16
+	metabolization_rate = 0.2
+
+/datum/reagent/ozium/overdose_process(mob/living/M)
+	M.adjustToxLoss(3, 0)
+	..()
+	. = 1
+
+/datum/reagent/ozium/on_mob_life(mob/living/carbon/M)
+	if(M.has_flaw(/datum/charflaw/addiction/junkie))
+		M.sate_addiction()
+	M.apply_status_effect(/datum/status_effect/buff/ozium_enhanced)
+	..()
+
+/datum/reagent/ozium/overdose_start(mob/living/M)
+	M.playsound_local(M, 'sound/misc/heroin_rush.ogg', 100, FALSE)
+	M.visible_message(span_warning("Blood runs from [M]'s nose."))
+
+/obj/item/reagent_containers/powder/spice_enhanced
+	name = "pure spice"
+	desc = ""
+	icon = 'icons/roguetown/items/produce.dmi'
+	icon_state = "spice"
+	item_state = "spice"
+	possible_transfer_amounts = list()
+	volume = 15
+	list_reagents = list(/datum/reagent/druqks = 15)
+	grind_results = list(/datum/reagent/druqks = 15)
+	sellprice = 10
+
+/datum/reagent/druqks
+	name = "Drukqs"
+	description = ""
+	color = "#60A584" // rgb: 96, 165, 132
+	overdose_threshold = 16
+	metabolization_rate = 0.2
+
+/datum/reagent/druqks/overdose_process(mob/living/M)
+	M.adjustOrganLoss(ORGAN_SLOT_BRAIN, 2)
+	M.adjustToxLoss(3, 0)
+	..()
+	. = 1
+
+/datum/reagent/druqks/on_mob_life(mob/living/carbon/M)
+	M.set_drugginess(30)
+	if(prob(5))
+		if(M.gender == FEMALE)
+			M.emote(pick("twitch_s","giggle"))
+		else
+			M.emote(pick("twitch_s","chuckle"))
+	if(M.has_flaw(/datum/charflaw/addiction/junkie))
+		M.sate_addiction()
+	M.apply_status_effect(/datum/status_effect/buff/druqks_enhanced)
+	..()
+
+/atom/movable/screen/fullscreen/druqks
+	icon_state = "spa"
+	plane = FLOOR_PLANE
+	layer = ABOVE_OPEN_TURF_LAYER
+	blend_mode = 0
+	show_when_dead = FALSE
+
+/datum/reagent/druqks/overdose_start(mob/living/M)
+	M.visible_message(span_warning("Blood runs from [M]'s nose."))
+
+/datum/reagent/druqks/on_mob_metabolize(mob/living/M)
+	M.overlay_fullscreen("druqk", /atom/movable/screen/fullscreen/druqks)
+	M.set_drugginess(30)
+	M.update_body_parts_head_only()
+	if(M.client)
+		ADD_TRAIT(M, TRAIT_DRUQK, "based")
+		SSdroning.area_entered(get_area(M), M.client)
+//			if(M.client.screen && M.client.screen.len)
+//				var/atom/movable/screen/plane_master/game_world/PM = locate(/atom/movable/screen/plane_master/game_world) in M.client.screen
+//				PM.backdrop(M.client.mob)
+
+/datum/reagent/druqks/on_mob_end_metabolize(mob/living/M)
+	M.clear_fullscreen("druqk")
+	M.update_body_parts_head_only()
+	if(M.client)
+		REMOVE_TRAIT(M, TRAIT_DRUQK, "based")
+		SSdroning.play_area_sound(get_area(M), M.client)
+//		if(M.client.screen && M.client.screen.len)
+///			var/atom/movable/screen/plane_master/game_world/PM = locate(/atom/movable/screen/plane_master/game_world) in M.client.screen
+//			PM.backdrop(M.client.mob)

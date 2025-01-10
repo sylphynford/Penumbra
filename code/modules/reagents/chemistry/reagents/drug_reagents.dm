@@ -106,7 +106,7 @@
 
 /datum/reagent/drug/crank
 	name = "Crank"
-	description = "Reduces stun times by about 200%. If overdosed or addicted it will deal significant Toxin, Brute and Brain damage."
+	description = "Reduces stun times by about 200%, speeds the user up, and allows the user to quickly recover stamina while dealing a small amount of Brain damage. If overdosed or addicted it will deal significant Toxin, Brute and Brain damage."
 	reagent_state = LIQUID
 	color = "#FA00C8"
 	overdose_threshold = 20

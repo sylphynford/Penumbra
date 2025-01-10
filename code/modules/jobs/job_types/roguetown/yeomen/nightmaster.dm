@@ -7,7 +7,7 @@
 	spawn_positions = 1
 	f_title = "Bathmatron"
 	allowed_races = RACES_ALL_KINDS
-	tutorial = "You are renting out the bathhouse in a joint operation with the Innkeep. You provide security for the bathwenches and help them to find work--when you're not being a trouble-making rake that others suffer to tolerate."
+	tutorial = "You run the town’s bathhouse as a front for illicit dealings. Behind the guise of a humble overseer, you peddle drugs and control a network of workers, blending charm with calculated manipulation to play for power."
 	allowed_ages = list(AGE_ADULT, AGE_MIDDLEAGED, AGE_OLD)
 	allowed_sexes = list(MALE, FEMALE)
 	outfit = /datum/outfit/job/roguetown/niteman
@@ -27,6 +27,7 @@
 	beltl = /obj/item/storage/belt/rogue/pouch/coins/mid
 	pants = /obj/item/clothing/under/roguetown/trou/leather
 	ADD_TRAIT(H, TRAIT_GOODLOVER, TRAIT_GENERIC)
+	ADD_TRAIT(H, TRAIT_DRUGENHANCER, TRAIT_GENERIC)
 	if(H.mind)
 		H.mind.adjust_skillrank(/datum/skill/combat/wrestling, 4, TRUE) // Need the strongarm to wrestle people out of the baths
 		H.mind.adjust_skillrank(/datum/skill/combat/unarmed, 4, TRUE)

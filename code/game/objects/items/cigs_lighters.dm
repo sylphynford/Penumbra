@@ -1009,3 +1009,17 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 
 	if(reagents && reagents.total_volume)
 		hand_reagents()
+
+/obj/item/clothing/mask/cigarette/rollie/cannabis_enhanced
+	name = "enhanced cannabis rollie"
+	desc = ""
+	icon_state = "spliffoff"
+	icon_on = "spliffon"
+	icon_off = "spliffoff"
+	type_butt = /obj/item/cigbutt/roach
+	throw_speed = 0.5
+	item_state = "spliffoff"
+	smoketime = 600 // four minutes
+	chem_volume = 50
+	list_reagents = list(/datum/reagent/drug/space_drugs = 30)
+	muteinmouth = FALSE
