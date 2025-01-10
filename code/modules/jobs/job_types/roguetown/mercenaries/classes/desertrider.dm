@@ -45,8 +45,8 @@
 			H.set_blindness(0)
 			to_chat(H, span_warning("The Janissaries are the Empire's elite infantry units, wielding mace and shield. We do not break."))
 			if(H.mind)
-				H.mind.adjust_skillrank(/datum/skill/combat/maces, 4, TRUE)
-				H.mind.adjust_skillrank(/datum/skill/combat/shields, 3, TRUE)
+				H.mind.adjust_skillrank(/datum/skill/combat/maces, 3, TRUE)
+				H.mind.adjust_skillrank(/datum/skill/combat/shields, 2, TRUE)
 				H.mind.adjust_skillrank(/datum/skill/combat/wrestling, 3, TRUE)
 				H.mind.adjust_skillrank(/datum/skill/combat/unarmed, 3, TRUE)
 				H.mind.adjust_skillrank(/datum/skill/combat/polearms, 2, TRUE)
@@ -62,7 +62,7 @@
 				H.mind.adjust_skillrank(/datum/skill/misc/reading, 1, TRUE)
 			H.change_stat("strength", 2)
 			H.change_stat("endurance", 1)
-			H.change_stat("speed", 2)
+			H.change_stat("speed", 1)
 			var/obj/item/rogueweapon/shield/wood/shield = new(get_turf(H))
 			H.put_in_hands(shield)
 			var/obj/item/rogueweapon/mace/steel/mace = new(get_turf(H))
@@ -71,8 +71,8 @@
 			H.set_blindness(0)
 			to_chat(H, span_warning("Zybantian 'Blade Dancers' are famed and feared the world over. Their expertise in blades both long and short is well known..."))
 			if(H.mind)
-				H.mind.adjust_skillrank(/datum/skill/combat/swords, 4, TRUE)
-				H.mind.adjust_skillrank(/datum/skill/combat/knives, 3, TRUE)
+				H.mind.adjust_skillrank(/datum/skill/combat/swords, 3, TRUE)
+				H.mind.adjust_skillrank(/datum/skill/combat/knives, 2, TRUE)
 				H.mind.adjust_skillrank(/datum/skill/combat/whipsflails, 2, TRUE)
 				H.mind.adjust_skillrank(/datum/skill/combat/maces, 2, TRUE)
 				H.mind.adjust_skillrank(/datum/skill/combat/bows, 3, TRUE)
@@ -101,7 +101,7 @@
 	head = /obj/item/clothing/head/roguetown/roguehood/shalal
 	gloves = /obj/item/clothing/gloves/roguetown/angle
 	belt = /obj/item/storage/belt/rogue/leather/shalal
-	armor = /obj/item/clothing/suit/roguetown/armor/plate/scale
+	armor = /obj/item/clothing/suit/roguetown/armor/leather/studded
 	beltr = /obj/item/storage/belt/rogue/pouch/coins/poor
 	backr = /obj/item/storage/backpack/rogue/satchel/black
 	beltl = /obj/item/flashlight/flare/torch
