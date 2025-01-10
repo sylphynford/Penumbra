@@ -120,7 +120,7 @@
 	user.playsound_local(user, 'sound/misc/mat/end.ogg', 100)
 	last_ejaculation_time = world.time
 	SSticker.cums++
-	if(last_arousal_source && last_arousal_source != user)
+	if(last_arousal_source && last_arousal_source != user && last_arousal_source.sexcon.last_arousal_source == user)
 		after_intimate_climax(last_arousal_source)
 		cuckold_check(last_arousal_source)
 		last_arousal_source.sexcon.cuckold_check(user)
@@ -324,7 +324,7 @@
 	if(!can_ejaculate())
 		return FALSE
 	ejaculate()
-	if(last_arousal_source && last_arousal_source != user)
+	if(last_arousal_source && last_arousal_source != user && last_arousal_source.sexcon.last_arousal_source == user)
 		after_intimate_climax(last_arousal_source)
 		cuckold_check(last_arousal_source)
 		last_arousal_source.sexcon.cuckold_check(user)
