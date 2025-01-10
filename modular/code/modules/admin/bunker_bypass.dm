@@ -2,8 +2,6 @@ GLOBAL_LIST_INIT(bunker_bypasses, load_bypasses_from_file())
 
 /client/proc/bunker_bypass_check()
 	if (ckey in GLOB.bunker_bypasses)
-		GLOB.bunker_bypasses -= ckey
-		save_bypasses_to_file()
 		return TRUE
 	return FALSE
 
