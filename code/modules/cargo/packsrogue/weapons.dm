@@ -194,7 +194,16 @@
 					/obj/item/ammo_casing/caseless/rogue/bolt,
 					/obj/item/ammo_casing/caseless/rogue/bolt,
 					/obj/item/ammo_casing/caseless/rogue/bolt,
-				)
+					)
+	
+	/datum/supply_pack/rogue/weapons/bombs
+		name = "Bottle bombs"
+		cost = 50
+		contains = list(
+						/obj/item/bomb,
+						/obj/item/bomb,
+						/obj/item/bomb,
+					)
 /*
 /datum/supply_pack/rogue/weapons/Pbolts
 	name = "Poisoned Bolts"
