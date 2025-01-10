@@ -445,7 +445,7 @@ var/global/list/roguegamemodes = list("Rebellion", "Vampires and Werewolves", "E
 	restricted_jobs = list()
 
 /datum/game_mode/chaosmode/proc/pick_werewolves()
-	if(GLOB.player_list.len < 25)
+	if(GLOB.player_list.len < 40)
 		return
 
 	// Ideally we want adventurers/pilgrims/towners to roll it 
