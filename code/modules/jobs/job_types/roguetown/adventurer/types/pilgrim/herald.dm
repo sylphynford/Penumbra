@@ -20,6 +20,9 @@
 		if(world.time < last_herald_announce + 600 SECONDS)
 			to_chat(src, span_warning("You must wait [round((last_herald_announce + 600 SECONDS - world.time)/600, 0.1)] minutes before making another announcement!"))
 			return FALSE
+		if(!istype(get_area(src), /area/rogue/indoors/town))
+			to_chat(src, span_warning("You need to be in town to make an announcement!"))
+			return FALSE
 		priority_announce("[inputty]", "The Herald Proclaims", 'sound/misc/bell.ogg')
 		last_herald_announce = world.time
 
