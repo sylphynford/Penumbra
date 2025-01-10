@@ -255,6 +255,7 @@
 	held_items[/obj/item/reagent_containers/powder/moondust] = list("PRICE" = rand(13,25),"NAME" = "moondust")
 	held_items[/obj/item/clothing/mask/cigarette/rollie/cannabis] = list("PRICE" = rand(12,18),"NAME" = "swampweed zig")
 	held_items[/obj/item/clothing/mask/cigarette/rollie/nicotine] = list("PRICE" = rand(5,10),"NAME" = "zig")
+	held_items[/obj/item/slimepotion/lovepotion] = list("PRICE" = rand(10,20),"NAME" = "love potion")
 
 	// Add enhanced versions with same prices
 	held_items[/obj/item/reagent_containers/powder/spice_enhanced] = list("PRICE" = (41),"NAME" = "enhanced chuckledust")
