@@ -1484,6 +1484,12 @@ GLOBAL_LIST_EMPTY(vampire_objects)
 	H.revive(full_heal = TRUE, admin_revive = FALSE)
 	H.grab_ghost()
 	H.mind.add_antag_datum(/datum/antagonist/skeleton/knight)
+	
+	// Add them to the death knights list
+	var/datum/game_mode/chaosmode/C = SSticker.mode
+	if(istype(C))
+		C.deathknights |= H.mind
+	
 	H.mob_biotypes = MOB_UNDEAD
 	H.faction |= "undead"
 	H.can_do_sex = FALSE
@@ -1522,8 +1528,9 @@ GLOBAL_LIST_EMPTY(vampire_objects)
 	if(!istype(C))
 		return
 	
-	log_game("Attempting to dust vampire spawns")
+	log_game("Attempting to dust vampire spawns and death knights")
 	
+	// First handle vampire spawns
 	for(var/datum/mind/V in C.vampires)
 		log_game("Checking vampire: [V.current ? V.current.real_name : "NO CURRENT"]")
 		if(!V.current)
@@ -1538,6 +1545,23 @@ GLOBAL_LIST_EMPTY(vampire_objects)
 				log_game("Dusting vampire spawn: [H.real_name]")
 				to_chat(H, span_userdanger("My master has fallen! The dark power that sustained me crumbles!"))
 				H.visible_message(span_warning("[H] crumbles to ash as their master's power fades!"))
+				H.dust(TRUE, FALSE, TRUE)
+
+	// Now handle death knights
+	for(var/datum/mind/D in C.deathknights)
+		log_game("Checking death knight: [D.current ? D.current.real_name : "NO CURRENT"]")
+		if(!D.current)
+			continue
+		
+		var/datum/antagonist/skeleton/knight/knight_check = D.has_antag_datum(/datum/antagonist/skeleton/knight)
+		log_game("Knight check result: [knight_check ? "IS KNIGHT" : "NOT KNIGHT"]")
+		
+		if(knight_check)
+			var/mob/living/carbon/human/H = D.current
+			if(istype(H))
+				log_game("Dusting death knight: [H.real_name]")
+				to_chat(H, span_userdanger("My master has fallen! The dark power binding me fades away!"))
+				H.visible_message(span_warning("[H] crumbles to dust as their master's power fades!"))
 				H.dust(TRUE, FALSE, TRUE)
 
 /datum/antagonist/vampirelord/proc/on_death()
