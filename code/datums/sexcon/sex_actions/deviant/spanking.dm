@@ -2,7 +2,7 @@
 	name = "Spank them"
 	check_same_tile = FALSE
 	continous = TRUE
-	stamina_cost = 1.0
+	stamina_cost = 0.0
 	do_time = 1 SECONDS
 
 /datum/sex_action/spanking/shows_on_menu(mob/living/carbon/human/user, mob/living/carbon/human/target)
@@ -21,7 +21,7 @@
 
 /datum/sex_action/spanking/on_perform(mob/living/carbon/human/user, mob/living/carbon/human/target)
 	. = ..()
-	playsound(target, 'sound/misc/mat/slap.ogg', 50, TRUE, -1)
+	playsound(target, 'sound/foley/slap.ogg', 50, TRUE, -1)
 	
 	// Flash screen red based on force level
 	switch(user.sexcon.force) 
@@ -55,4 +55,3 @@
 /datum/sex_action/spanking/on_finish(mob/living/carbon/human/user, mob/living/carbon/human/target)
 	..()
 	user.visible_message(span_warning("[user] stops spanking [target]..."))
-
