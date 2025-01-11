@@ -1,5 +1,5 @@
 /datum/sex_action/spanking
-	name = "Spank"
+	name = "Spank them"
 	check_same_tile = FALSE
 	continous = TRUE
 	stamina_cost = 0
