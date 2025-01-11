@@ -1,6 +1,9 @@
 /datum/sex_action/spanking
 	name = "Spank them"
 	check_same_tile = FALSE
+	continous = TRUE
+	stamina_cost = 0.2
+	do_time = 0.5 SECONDS
 
 /datum/sex_action/spanking/shows_on_menu(mob/living/carbon/human/user, mob/living/carbon/human/target)
 	if(user == target)
@@ -10,8 +13,6 @@
 /datum/sex_action/spanking/can_perform(mob/living/user, mob/living/target)
 	if(user == target)
 		return FALSE
-	if(!get_location_accessible(target, BODY_ZONE_PRECISE_GROIN))
-		return FALSE
 	return TRUE
 
 /datum/sex_action/spanking/on_start(mob/living/carbon/human/user, mob/living/carbon/human/target)
@@ -19,13 +20,24 @@
 	user.visible_message(span_warning("[user] starts spanking [target]..."))
 
 /datum/sex_action/spanking/on_perform(mob/living/carbon/human/user, mob/living/carbon/human/target)
-	user.visible_message(user.sexcon.spanify_force("[user] [user.sexcon.get_generic_force_adjective()] spanks [target]!"))
-	playsound(user, 'sound/foley/slap.ogg', 50, TRUE)
+	. = ..()
+	playsound(target, 'sound/foley/slap.ogg', 50, TRUE, -1)
 	
-	// Flash the target's screen red briefly
-	if(target.client)
-		target.overlay_fullscreen("smash", /atom/movable/screen/fullscreen/flash, 3)
-		addtimer(CALLBACK(target, TYPE_PROC_REF(/mob, clear_fullscreen), "smash"), 0.5 SECONDS)
+	// Flash screen red based on force level
+	switch(user.sexcon.force) 
+		if(SEX_FORCE_LOW)
+			target.flash_fullscreen("redflash1")
+		if(SEX_FORCE_MID) 
+			target.flash_fullscreen("redflash2")
+		if(SEX_FORCE_HIGH)
+			target.flash_fullscreen("redflash3") 
+		if(SEX_FORCE_EXTREME)
+			target.flash_fullscreen("redflash3")
+	
+	addtimer(CALLBACK(target, TYPE_PROC_REF(/mob, clear_fullscreen), "redflash"), 0.5 SECONDS)
+	
+	var/force_text = user.sexcon.get_generic_force_adjective()
+	user.visible_message(span_warning("[user] [force_text] spanks [target]!"))
 
 	// Pain messages
 	to_chat(target, span_warning("It stings!"))
