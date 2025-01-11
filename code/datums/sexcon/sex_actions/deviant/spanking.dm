@@ -1,9 +1,11 @@
 /datum/sex_action/spanking
-	name = "Spank them"
+	name = "Spank"
 	check_same_tile = FALSE
 	continous = TRUE
-	stamina_cost = 0.0
+	stamina_cost = 0
 	do_time = 1 SECONDS
+	var/last_pain_sound = 0
+	var/pain_sound_cooldown = 3 SECONDS
 
 /datum/sex_action/spanking/shows_on_menu(mob/living/carbon/human/user, mob/living/carbon/human/target)
 	if(user == target)
@@ -36,8 +38,16 @@
 	
 	addtimer(CALLBACK(target, TYPE_PROC_REF(/mob, clear_fullscreen), "redflash"), 0.5 SECONDS)
 	
+	// Occasional pain sounds with proper emotes
+	if(world.time > last_pain_sound + pain_sound_cooldown && prob(25))
+		if(prob(50))
+			target.emote("whimpers", intentional = FALSE)
+		else
+			target.emote("groans", intentional = FALSE)
+		last_pain_sound = world.time
+	
 	var/force_text = user.sexcon.get_generic_force_adjective()
-	user.visible_message(span_warning("[user] [force_text] spanks [target]!"))
+	user.visible_message(user.sexcon.spanify_force("[user] [force_text] spanks [target]!"))
 
 	// Pain messages
 	to_chat(target, span_warning("It stings!"))
