@@ -60,7 +60,7 @@
 			M.next_paincrave = world.time + rand(35 MINUTES, 45 MINUTES)
 			target.remove_stress(/datum/stressevent/vice)
 			target.remove_status_effect(/datum/status_effect/debuff/addiction)
-			to_chat(target, span_blue("<b>The spanking satisfies your need for pain...</b>"))
+			to_chat(target, span_blue("<b>The ache is a reminder that I'm exactly where I want to be..</b>"))
 
 /datum/sex_action/spanking/on_finish(mob/living/carbon/human/user, mob/living/carbon/human/target)
 	..()
