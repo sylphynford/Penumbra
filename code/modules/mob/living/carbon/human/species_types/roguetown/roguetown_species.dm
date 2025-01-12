@@ -96,6 +96,11 @@
 		return message
 	if(message[1] == "*")
 		return message
+	//for emote*text messages
+	var/speech_index = 0
+	speech_index = findtext(message, "*")
+	if (!speech_index)
+		speech_index = 1; //if there's no asterisk then start it at the first character
 	message = "[message]"
 	var/list/message_words = splittext_char(message, regex("\[^(&#39;|\\w)\]+"))
 	for (var/key in message_words)
@@ -106,9 +111,9 @@
 			continue
 		if (islist(value))
 			value = pick(value)
-		message = replacetextEx(message, regex("\\b[uppertext(key)]\\b|\\A[uppertext(key)]\\b|\\b[uppertext(key)]\\Z|\\A[uppertext(key)]\\Z", "(\\w+)/g"), uppertext(value))
-		message = replacetextEx(message, regex("\\b[capitalize(key)]\\b|\\A[capitalize(key)]\\b|\\b[capitalize(key)]\\Z|\\A[capitalize(key)]\\Z", "(\\w+)/g"), capitalize(value))
-		message = replacetextEx(message, regex("\\b[key]\\b|\\A[key]\\b|\\b[key]\\Z|\\A[key]\\Z", "(\\w+)/g"), value)
+		message = replacetextEx(message, regex("\\b[uppertext(key)]\\b|\\A[uppertext(key)]\\b|\\b[uppertext(key)]\\Z|\\A[uppertext(key)]\\Z", "(\\w+)/g"), uppertext(value), speech_index)
+		message = replacetextEx(message, regex("\\b[capitalize(key)]\\b|\\A[capitalize(key)]\\b|\\b[capitalize(key)]\\Z|\\A[capitalize(key)]\\Z", "(\\w+)/g"), capitalize(value), speech_index)
+		message = replacetextEx(message, regex("\\b[key]\\b|\\A[key]\\b|\\b[key]\\Z|\\A[key]\\Z", "(\\w+)/g"), value, speech_index)
 	return message
 
 /proc/treat_message_accent(message, list/accent_list, chosen_regex)
@@ -118,6 +123,10 @@
 		return message
 	if(message[1] == "*")
 		return message
+	var/speech_index = 0
+	speech_index = findtext(message, "*")
+	if (!speech_index)
+		speech_index = 1;
 	message = "[message]"
 	for(var/key in accent_list)
 		var/value = accent_list[key]
@@ -127,23 +136,23 @@
 		switch(chosen_regex)
 			if(REGEX_FULLWORD)
 				// Full word regex (full world replacements)
-				message = replacetextEx(message, regex("\\b[uppertext(key)]\\b|\\A[uppertext(key)]\\b|\\b[uppertext(key)]\\Z|\\A[uppertext(key)]\\Z", "(\\w+)/g"), uppertext(value))
-				message = replacetextEx(message, regex("\\b[capitalize(key)]\\b|\\A[capitalize(key)]\\b|\\b[capitalize(key)]\\Z|\\A[capitalize(key)]\\Z", "(\\w+)/g"), capitalize(value))
-				message = replacetextEx(message, regex("\\b[key]\\b|\\A[key]\\b|\\b[key]\\Z|\\A[key]\\Z", "(\\w+)/g"), value)
+				message = replacetextEx(message, regex("\\b[uppertext(key)]\\b|\\A[uppertext(key)]\\b|\\b[uppertext(key)]\\Z|\\A[uppertext(key)]\\Z", "(\\w+)/g"), uppertext(value), speech_index)
+				message = replacetextEx(message, regex("\\b[capitalize(key)]\\b|\\A[capitalize(key)]\\b|\\b[capitalize(key)]\\Z|\\A[capitalize(key)]\\Z", "(\\w+)/g"), capitalize(value), speech_index)
+				message = replacetextEx(message, regex("\\b[key]\\b|\\A[key]\\b|\\b[key]\\Z|\\A[key]\\Z", "(\\w+)/g"), value, speech_index)
 			if(REGEX_STARTWORD)
 				// Start word regex (Some words that get different endings)
-				message = replacetextEx(message, regex("\\b[uppertext(key)]|\\A[uppertext(key)]", "(\\w+)/g"), uppertext(value))
-				message = replacetextEx(message, regex("\\b[capitalize(key)]|\\A[capitalize(key)]", "(\\w+)/g"), capitalize(value))
-				message = replacetextEx(message, regex("\\b[key]|\\A[key]", "(\\w+)/g"), value)
+				message = replacetextEx(message, regex("\\b[uppertext(key)]|\\A[uppertext(key)]", "(\\w+)/g"), uppertext(value), speech_index)
+				message = replacetextEx(message, regex("\\b[capitalize(key)]|\\A[capitalize(key)]", "(\\w+)/g"), capitalize(value), speech_index)
+				message = replacetextEx(message, regex("\\b[key]|\\A[key]", "(\\w+)/g"), value, speech_index)
 			if(REGEX_ENDWORD)
 				// End of word regex (Replaces last letters of words)
-				message = replacetextEx(message, regex("[uppertext(key)]\\b|[uppertext(key)]\\Z", "(\\w+)/g"), uppertext(value))
-				message = replacetextEx(message, regex("[key]\\b|[key]\\Z", "(\\w+)/g"), value)
+				message = replacetextEx(message, regex("[uppertext(key)]\\b|[uppertext(key)]\\Z", "(\\w+)/g"), uppertext(value), speech_index)
+				message = replacetextEx(message, regex("[key]\\b|[key]\\Z", "(\\w+)/g"), value, speech_index)
 			if(REGEX_ANY)
 				// Any regex (syllables)
 				// Careful about use of syllables as they will continually reapply to themselves, potentially canceling each other out
-				message = replacetextEx(message, uppertext(key), uppertext(value))
-				message = replacetextEx(message, key, value)
+				message = replacetextEx(message, uppertext(key), uppertext(value), speech_index)
+				message = replacetextEx(message, key, value, speech_index)
 
 	return message
 
