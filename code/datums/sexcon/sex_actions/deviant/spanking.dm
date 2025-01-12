@@ -53,15 +53,6 @@
 	to_chat(target, span_warning("It stings!"))
 	to_chat(target, span_danger("It hurts!"))
 
-	// Handle masochist satisfaction
-	if(target.has_flaw(/datum/charflaw/masochist))
-		var/datum/charflaw/masochist/M = target.get_flaw(/datum/charflaw/masochist)
-		if(M)
-			M.next_paincrave = world.time + rand(35 MINUTES, 45 MINUTES)
-			target.remove_stress(/datum/stressevent/vice)
-			target.remove_status_effect(/datum/status_effect/debuff/addiction)
-			to_chat(target, span_blue("<b>The ache is a reminder that I'm exactly where I want to be..</b>"))
-
 /datum/sex_action/spanking/on_finish(mob/living/carbon/human/user, mob/living/carbon/human/target)
 	..()
 	user.visible_message(span_warning("[user] stops spanking [target]..."))
