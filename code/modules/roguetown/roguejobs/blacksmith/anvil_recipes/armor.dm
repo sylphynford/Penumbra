@@ -441,3 +441,9 @@
 	req_bar = /obj/item/ingot/blacksteel
 	created_item = /obj/item/clothing/shoes/roguetown/boots/blacksteel/plateboots
 	craftdiff = 5
+
+/datum/anvil_recipe/armor/cursed_collar
+	name = "Cursed Collar"
+	req_bar = /obj/item/ingot/steel
+	created_item = /obj/item/clothing/neck/roguetown/cursed_collar
+	craftdiff = 3
