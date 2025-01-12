@@ -21,6 +21,7 @@
 	lord_family = TRUE
 	lord_rel_type = REL_TYPE_OFFSPRING
 	outfit = /datum/outfit/job/roguetown/prince
+	zizo_roll = 85
 
 /datum/outfit/job/roguetown/prince
 	name = "Heir"
