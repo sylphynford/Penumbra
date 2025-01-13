@@ -119,8 +119,8 @@
 		if(rand(1,20)==20)
 			if(newletter==" ")
 				newletter="...huuuhhh..."
-			if(newletter==".")
-				newletter=" *BURP*."
+			//if(newletter==".")
+			//	newletter=" *BURP*." //the asterisks really fuck with the chat and I cannot come up with a good solution right now
 		switch(rand(1,20))
 			if(1)
 				newletter+="'"

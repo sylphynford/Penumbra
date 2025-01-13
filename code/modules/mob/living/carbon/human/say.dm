@@ -1,5 +1,8 @@
 /mob/living/carbon/human/say_mod(input, message_mode)
 	verb_say = dna.species.say_mod
+	var/customsayverb = findtext_char(input, "*")
+	if(customsayverb)
+		return lowertext(copytext_char(input, 1, customsayverb))
 	if(slurring)
 		return "slurs"
 	else
