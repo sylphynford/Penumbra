@@ -617,9 +617,9 @@
 		if(SEX_FORCE_MID)
 			return 1.0
 		if(SEX_FORCE_HIGH)
-			return 2.0
+			return 1.5
 		if(SEX_FORCE_EXTREME)
-			return 3.0
+			return 2.0
 
 /datum/sex_controller/proc/get_speed_pain_multiplier(passed_speed)
 	switch(passed_speed)
