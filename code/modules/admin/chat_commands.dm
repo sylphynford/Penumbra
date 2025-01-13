@@ -117,3 +117,69 @@ GLOBAL_LIST(round_end_notifiees)
 /datum/tgs_chat_command/reload_admins/proc/ReloadAsync()
 	set waitfor = FALSE
 	load_admins()
+
+GLOBAL_LIST(round_end_role_notifiees)
+
+/datum/tgs_chat_command/endrole
+	name = "endrole"
+	help_text = "Sets a Discord role to be pinged when the round ends. Usage: endrole <role ID>"
+	admin_only = TRUE
+
+/datum/tgs_chat_command/endrole/Run(datum/tgs_chat_user/sender, params)
+	if(!params)
+		return "Please provide a role ID"
+		
+	// Clear existing role if no parameters
+	if(params == "clear")
+		LAZYINITLIST(GLOB.round_end_role_notifiees)
+		GLOB.round_end_role_notifiees.Cut()
+		return "Cleared all role notifications for round end"
+
+	// Validate that params contains only numbers
+	var/regex/number_check = regex(@"^\d+$")
+	if(!number_check.Find(params))
+		return "Invalid role ID. Please provide only the numeric role ID"
+
+	// Store the role ID
+	LAZYINITLIST(GLOB.round_end_role_notifiees) 
+	GLOB.round_end_role_notifiees[params] = TRUE
+	return "Role <@&[params]> will be notified when the round ends."
+
+GLOBAL_LIST_EMPTY(permanent_round_end_role_notifiees)
+
+/datum/tgs_chat_command/endrole
+	name = "endrole"
+	help_text = "Sets a Discord role to be pinged after every round ends. Usage: endrole <role ID>"
+	admin_only = TRUE
+
+/datum/tgs_chat_command/endrole/Run(datum/tgs_chat_user/sender, params)
+	if(!params)
+		return "Please provide a role ID"
+		
+	// Clear existing roles if requested
+	if(params == "clear")
+		GLOB.permanent_round_end_role_notifiees = list()
+		return "Cleared all role notifications for round end"
+
+	// List current roles if requested
+	if(params == "list")
+		if(!length(GLOB.permanent_round_end_role_notifiees))
+			return "No roles are currently set to be pinged at round end"
+		var/list/role_list = list()
+		for(var/role_id in GLOB.permanent_round_end_role_notifiees)
+			role_list += "<@&[role_id]>"
+		return "Current round end ping roles: [role_list.Join(", ")]"
+
+	// Validate that params contains only numbers
+	var/regex/number_check = regex(@"^\d+$")
+	if(!number_check.Find(params))
+		return "Invalid role ID. Please provide only the numeric role ID"
+
+	// Remove role if it already exists
+	if(params in GLOB.permanent_round_end_role_notifiees)
+		GLOB.permanent_round_end_role_notifiees -= params
+		return "Role <@&[params]> will no longer be notified when rounds end."
+
+	// Add the new role
+	GLOB.permanent_round_end_role_notifiees |= params
+	return "Role <@&[params]> will be notified when rounds end. Use '!tgs endrole list' to see all roles, or '!tgs endrole clear' to remove all roles."

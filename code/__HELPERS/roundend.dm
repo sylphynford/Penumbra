@@ -845,3 +845,28 @@ GLOBAL_VAR(roundstart_event_name)
 	parts += print_zizo_report()
 	
 	return parts.Join()
+
+/datum/controller/subsystem/ticker/proc/send_roundend_message()
+	var/round_end_message = ""
+	
+	// Add permanent role pings first
+	for(var/role_id in GLOB.permanent_round_end_role_notifiees)
+		round_end_message += "<@&[role_id]> "
+	
+	// Add one-time role pings
+	if(GLOB.round_end_role_notifiees?.len)
+		for(var/role_id in GLOB.round_end_role_notifiees)
+			round_end_message += "<@&[role_id]> "
+	
+	// Add individual pings
+	if(GLOB.round_end_notifiees?.len)
+		for(var/mention in GLOB.round_end_notifiees)
+			round_end_message += "[mention] "
+			
+	round_end_message += "The round has ended!"
+	
+	send2chat(new /datum/tgs_message_content(round_end_message), CONFIG_GET(string/chat_announce_new_game))
+	
+	// Clear one-time notifications
+	GLOB.round_end_role_notifiees = null
+	GLOB.round_end_notifiees = null
