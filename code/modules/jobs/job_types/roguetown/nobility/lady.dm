@@ -5,7 +5,7 @@
 	faction = "Station"
 	total_positions = 1
 	spawn_positions = 1
-	zizo_roll = 85
+	zizo_roll = 15
 	allowed_sexes = list(MALE, FEMALE)
 	allowed_races = NOBLE_RACES_TYPES
 

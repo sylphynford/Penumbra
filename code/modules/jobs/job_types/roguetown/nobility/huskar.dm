@@ -13,7 +13,7 @@
 	allowed_patrons = ALL_DIVINE_PATRONS
 	whitelist_req = TRUE
 	outfit = /datum/outfit/job/roguetown/huskar
-	zizo_roll = 1
+	zizo_roll = 99
 	give_bank_account = 26
 	noble_income = 16
 	min_pq = 0
