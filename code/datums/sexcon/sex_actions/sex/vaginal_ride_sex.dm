@@ -40,8 +40,8 @@
 		playsound(user, 'sound/misc/severed.ogg', 50, TRUE, ignore_walls = FALSE)
 		user.on_virgin_loss()
 
-	// Handle penetration effects for the rider
-	user.sexcon.handle_penetrative_action(target, user, 2.4, 7)
+	// Handle penetration effects for the rider - use target's penis size but rider's force/speed
+	user.sexcon.handle_penetrative_action(target, user, 2.4, 7, FALSE, user)
 	user.sexcon.handle_passive_ejaculation()
 
 	// Basic pleasure for the person being ridden - affected by rider's force/speed

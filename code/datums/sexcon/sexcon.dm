@@ -732,7 +732,7 @@
 		size_multiplier = penis.penis_size / 6.0
 	return size_multiplier
 
-/datum/sex_controller/proc/handle_penetrative_action(mob/living/carbon/human/penetrator, mob/living/carbon/human/receiver, base_arousal, base_pain, is_anal = FALSE)
+/datum/sex_controller/proc/handle_penetrative_action(mob/living/carbon/human/penetrator, mob/living/carbon/human/receiver, base_arousal, base_pain, is_anal = FALSE, mob/living/carbon/human/force_owner)
 	// Get size multiplier from the penetrator
 	var/size_multiplier = get_penis_size_multiplier(penetrator)
 	
@@ -745,4 +745,6 @@
 		final_arousal *= 0.5
 		final_pain *= 0.5
 		
-	receiver.sexcon.perform_sex_action(receiver, final_arousal, final_pain, TRUE)
+	// Use force_owner's settings if provided, otherwise use penetrator's
+	var/mob/living/carbon/human/settings_owner = force_owner ? force_owner : penetrator
+	receiver.sexcon.receive_sex_action(final_arousal, final_pain, FALSE, settings_owner.sexcon.force, settings_owner.sexcon.speed)

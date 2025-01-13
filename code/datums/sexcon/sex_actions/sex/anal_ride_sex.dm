@@ -32,8 +32,8 @@
 	user.visible_message(user.sexcon.spanify_force("[user] [user.sexcon.get_generic_force_adjective()] rides [target]."))
 	playsound(target, 'sound/misc/mat/segso.ogg', 50, TRUE, -2, ignore_walls = FALSE)
 
-	// Handle penetration effects for the rider
-	user.sexcon.handle_penetrative_action(target, user, 2.4, 9, TRUE)
+	// Handle penetration effects for the rider - use target's penis size but rider's force/speed
+	user.sexcon.handle_penetrative_action(target, user, 2.4, 9, TRUE, user)
 	user.sexcon.handle_passive_ejaculation()
 
 	// Basic pleasure for the person being ridden - affected by rider's force/speed
