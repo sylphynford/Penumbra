@@ -68,8 +68,8 @@ var/global/list/roguegamemodes = list("Rebellion", "Vampires and Werewolves", "E
 				total_alive++
 	
 	var/total_players = total_alive + total_dead
-	// If dead count is >= 60% of total players, initiate vote
-	if(total_players > 0 && (total_dead >= (total_players * 0.60)) && !death_vote_called && !roundvoteend)
+	// If dead count is >= 50% of total players, initiate vote
+	if(total_players > 0 && (total_dead >= (total_players * 0.50)) && !death_vote_called && !roundvoteend)
 		if(!SSvote.mode && SSticker.autovote) 
 			SSvote.initiate_vote("endround", "Zizo")
 			death_vote_called = TRUE
