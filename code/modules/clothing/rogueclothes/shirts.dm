@@ -378,3 +378,21 @@
 	desc = "A billowing tunic made of the finest silks and softest fabrics. Inlaid with golden thread, this is the height of fashion for the wealthiest of wearers."
 	icon_state = "stewardtunic"
 	item_state = "stewardtunic"
+
+/obj/item/clothing/suit/roguetown/shirt/dress/silkdress/baroness
+	name = "baroness dress"
+	desc = "An elegant dress befitting a noble lady, made of the finest silks."
+	icon_state = "baroness"
+	item_state = "baroness"
+	color = null
+	allowed_sex = list(FEMALE)
+	allowed_race = NON_DWARVEN_RACE_TYPES
+
+/obj/item/clothing/suit/roguetown/shirt/dress/silkdress/successor
+	name = "successor dress"
+	desc = "An elegant dress befitting a noble lady, made of the finest silks."
+	icon_state = "successor"
+	item_state = "successor"
+	color = null
+	allowed_sex = list(FEMALE)
+	allowed_race = NON_DWARVEN_RACE_TYPES

@@ -43,6 +43,11 @@
 			var/datum/antagonist/vampirelord/VD = mind.has_antag_datum(/datum/antagonist/vampirelord)
 			var/datum/antagonist/vampire/V = mind.has_antag_datum(/datum/antagonist/vampire)
 			if(VD || V)
+				log_game("Vampire death detected - VD: [VD ? "YES" : "NO"], isspawn: [VD ? VD.isspawn : "N/A"]") // Debug
+				if(VD)
+					if(!VD.isspawn)
+						log_game("Vampire Lord death detected - calling on_death()")
+						VD.dust_all_spawns() // Call directly instead of through on_death()
 				dust(just_ash=TRUE,drop_items=TRUE)
 				return
 		var/datum/antagonist/lich/L = mind.has_antag_datum(/datum/antagonist/lich)

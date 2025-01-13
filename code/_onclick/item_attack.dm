@@ -448,6 +448,8 @@
 				H.visible_message("<font color='red'>The stake pierces [H]'s heart!</font>")
 				to_chat(H, span_userdanger("The stake pierces my heart! I can't move!"))
 				H.Paralyze(600) // 60 seconds
+				ADD_TRAIT(H, TRAIT_STAKED, "stake")
+				addtimer(CALLBACK(H, TYPE_PROC_REF(/mob/living/carbon/human, remove_staked_trait)), 600)
 	return
 
 /mob/living/attacked_by(obj/item/I, mob/living/user)

@@ -8,7 +8,7 @@
 		return FALSE
 	return TRUE
 
-/datum/sex_action/cunnilingus/can_perform(mob/living/user, mob/living/target)
+/datum/sex_action/cunnilingus/can_perform(mob/living/carbon/human/user, mob/living/carbon/human/target)
 	if(user == target)
 		return FALSE
 	if(!get_location_accessible(target, BODY_ZONE_PRECISE_GROIN, TRUE))
@@ -23,6 +23,9 @@
 	user.visible_message(span_warning("[user] starts sucking [target]'s clit..."))
 
 /datum/sex_action/cunnilingus/on_perform(mob/living/carbon/human/user, mob/living/carbon/human/target)
+	user.sexcon.last_arousal_source = target
+	target.sexcon.last_arousal_source = user
+	
 	user.visible_message(user.sexcon.spanify_force("[user] [user.sexcon.get_generic_force_adjective()] sucks [target]'s clit..."))
 	user.make_sucking_noise()
 

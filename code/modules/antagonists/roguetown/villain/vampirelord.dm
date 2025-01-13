@@ -21,6 +21,8 @@ GLOBAL_LIST_EMPTY(vampire_objects)
 	rogue_enabled = TRUE
 	var/isspawn = FALSE
 	var/disguised = FALSE
+	var/exposed = FALSE //vamp got burnt and revealed
+	var/low_vitae = FALSE //vitae too low to disguise self
 	var/ascended = FALSE
 	var/starved = FALSE
 	var/sired = FALSE
@@ -28,12 +30,29 @@ GLOBAL_LIST_EMPTY(vampire_objects)
 	var/vitae = 2000
 	var/vmax = 2500
 	var/obj/structure/vampire/bloodpool/mypool
-	var/last_transform
 	var/cache_skin
-	var/cache_eyes
+	//in the future this shit is gonna inherit from the normal vampire antagonist, I honestly don't understand why it isn't like that in the first place
+	var/cache_pigment
+	var/cache_mcolor
+	var/cache_mcolor2
+	var/cache_mcolor3
+	var/cache_ear_color
+	var/cache_tail_color
+	var/cache_tail_feature_color
+	var/cache_frill_color
+	var/cache_snout_color
+	var/list/cache_chest_marking_color
+	var/cache_eye_color
+	var/cache_second_color
 	var/cache_hair
+	var/cache_facial
+	var/cache_hair_nat
+	var/cache_facial_nat
+	var/cache_hair_dye
+	var/cache_facial_dye
 	var/obj/effect/proc_holder/spell/targeted/shapeshift/bat/batform //attached to the datum itself to avoid cloning memes, and other duplicates
 	var/obj/effect/proc_holder/spell/targeted/shapeshift/gaseousform/gas
+	var/minions_raised = 0 // Track number of successful raises
 
 /datum/antagonist/vampirelord/examine_friendorfoe(datum/antagonist/examined_datum,mob/examiner,mob/examined)
 	if(istype(examined_datum, /datum/antagonist/vampirelord/lesser))
@@ -73,6 +92,8 @@ GLOBAL_LIST_EMPTY(vampire_objects)
 	owner.current.cmode_music = 'sound/music/combat_vamp.ogg'
 	var/obj/item/organ/eyes/eyes = owner.current.getorganslot(ORGAN_SLOT_EYES)
 	if(eyes)
+		cache_eye_color = eyes.eye_color
+		cache_second_color = eyes.second_color
 		eyes.Remove(owner.current,1)
 		QDEL_NULL(eyes)
 	eyes = new /obj/item/organ/eyes/night_vision/zombie
@@ -89,7 +110,8 @@ GLOBAL_LIST_EMPTY(vampire_objects)
 			mypool = mansion
 		equip_spawn()
 		greet()
-		addtimer(CALLBACK(owner.current, TYPE_PROC_REF(/mob/living/carbon/human, spawn_pick_class), "VAMPIRE SPAWN"), 5 SECONDS)
+		if(!sired)
+			addtimer(CALLBACK(owner.current, TYPE_PROC_REF(/mob/living/carbon/human, spawn_pick_class), "VAMPIRE SPAWN"), 5 SECONDS)
 	else
 		forge_vampirelord_objectives()
 		finalize_vampire()
@@ -114,12 +136,14 @@ GLOBAL_LIST_EMPTY(vampire_objects)
 		owner.person_knows_me(MF)
 
 	var/mob/living/carbon/human/H = owner.current
+	/* THIS ALREADY HAPPENS
 	var/obj/item/organ/eyes/eyes = owner.current.getorganslot(ORGAN_SLOT_EYES)
 	if(eyes)
 		eyes.Remove(owner.current,1)
 		QDEL_NULL(eyes)
 	eyes = new /obj/item/organ/eyes/night_vision/zombie
 	eyes.Insert(owner.current)
+	*/
 	H.equipOutfit(/datum/outfit/job/roguetown/vamplord)
 	H.set_patron(/datum/patron/inhumen/zizo)
 
@@ -140,7 +164,7 @@ GLOBAL_LIST_EMPTY(vampire_objects)
 	owner.current.ambushable = FALSE
 
 /mob/living/carbon/human/proc/spawn_pick_class()
-	var/list/classoptions = list("Bard", "Fisher", "Hunter", "Miner", "Peasant", "Woodcutter", "Cheesemaker", "Blacksmith", "Carpenter", "Rogue", "Treasure Hunter", "Mage")
+	var/list/classoptions = list("Bard", "Fisher", "Hunter", "Miner", "Farmer", "Woodcutter", "Cheesemaker", "Blacksmith", "Carpenter", "Rogue", "Treasure Hunter", "Mage")
 	var/list/visoptions = list()
 
 	for(var/T in 1 to 5)
@@ -152,6 +176,11 @@ GLOBAL_LIST_EMPTY(vampire_objects)
 	for(var/datum/advclass/A in SSrole_class_handler.sorted_class_categories[CTAG_ALLCLASS])
 		if(A.name == selected)
 			equipOutfit(A.outfit)
+			//so examining isn't a dead giveaway
+			//if (CTAG_TOWNER in A.category_tags) //dont actually have to do this
+			job = "Towner"
+			advjob = A.name
+			islatejoin = TRUE
 			return
 
 /datum/outfit/job/roguetown/vamplord/pre_equip(mob/living/carbon/human/H)
@@ -323,18 +352,40 @@ GLOBAL_LIST_EMPTY(vampire_objects)
 /datum/antagonist/vampirelord/proc/vamp_look()
 	var/mob/living/carbon/human/V = owner.current
 	cache_skin = V.skin_tone
-	cache_eyes = V.eye_color
-	cache_hair = V.hair_color
-	V.skin_tone = "c9d3de"
-	V.hair_color = "181a1d"
-	V.facial_hair_color = "181a1d"
-	V.eye_color = "ff0000"
-	V.update_body()
-	V.update_hair()
-	V.update_body_parts(redraw = TRUE)
+	var/datum/bodypart_feature/hair/head/Hair = V.get_bodypart_feature_of_slot(BODYPART_FEATURE_HAIR)
+	if (Hair)
+		cache_hair = Hair.accessory_colors
+		cache_hair_nat = Hair.natural_color
+		cache_hair_dye = Hair.hair_dye_color
+	var/datum/bodypart_feature/hair/facial/Facial = V.get_bodypart_feature_of_slot(BODYPART_FEATURE_FACIAL_HAIR)
+	if (Facial)
+		cache_facial = Facial.accessory_colors
+		cache_facial_nat = Facial.natural_color
+	if (MUTCOLORS in V.dna.species.species_traits)
+		cache_snout_color = V.get_organ_slot_color(ORGAN_SLOT_SNOUT)
+		cache_frill_color = V.get_organ_slot_color(ORGAN_SLOT_FRILLS)
+		cache_tail_feature_color = V.get_organ_slot_color(ORGAN_SLOT_TAIL_FEATURE)
+		cache_chest_marking_color = V.get_chest_scales()
+	if (V.dna)
+		cache_mcolor = V.dna.features["mcolor"]
+		cache_mcolor2 = V.dna.features["mcolor2"]
+		cache_mcolor3 = V.dna.features["mcolor3"]
+	cache_tail_color = V.get_organ_slot_color(ORGAN_SLOT_TAIL)
+	cache_pigment = V.get_organ_slot_color(ORGAN_SLOT_PENIS)
+	cache_ear_color = V.get_organ_slot_color(ORGAN_SLOT_EARS)
+	V.vampire_undisguise(src)
 	V.mob_biotypes = MOB_UNDEAD
 	if(isspawn)
-		V.vampire_disguise()
+		V.vampire_disguise(src)
+
+/datum/antagonist/vampirelord/proc/recover(mob/user)
+	var/mob/living/carbon/human/H = user
+	if (!H)
+		return
+	if(H.stat == DEAD)
+		return
+	to_chat(H, span_warning("I can once more assume a human visage."))
+	exposed= FALSE
 
 /datum/antagonist/vampirelord/on_life(mob/user)
 	if(!user)
@@ -346,7 +397,7 @@ GLOBAL_LIST_EMPTY(vampire_objects)
 		return
 
 	// Add burn damage check
-	if(H.getFireLoss() >= 150)
+	if(H.getFireLoss() >= 350)
 		to_chat(H, span_userdanger("Even my ancient form cannot withstand these flames!"))
 		H.visible_message(span_warning("[H] crumbles to ash!"))
 		H.dust(TRUE, FALSE, TRUE) // Force dusting, no gibbing, leave items
@@ -357,21 +408,32 @@ GLOBAL_LIST_EMPTY(vampire_objects)
 	if(ascended)
 		return
 	if(H.on_fire)
-		if(disguised)
-			last_transform = world.time
-			H.vampire_undisguise(src)
+		if (isspawn)
+			if (!exposed)
+				to_chat(H, span_notice("I cannot maintain my human visage!"))
+				H.vampire_undisguise(src)
+				exposed = TRUE
+				if(disguised)
+					to_chat(H, span_notice("My disguise fails!"))
+			addtimer(CALLBACK(src, PROC_REF(recover), user), 30 SECONDS, TIMER_UNIQUE|TIMER_OVERRIDE)
 		H.freak_out()
 
 	if(H.stat)
 		if(istype(H.loc, /obj/structure/closet/crate/coffin))
 			H.fully_heal()
 
-	if(vitae > 0)
-		H.blood_volume = BLOOD_VOLUME_NORMAL
+	if(vitae >= 0)
+		if (vitae > 0)
+			H.blood_volume = BLOOD_VOLUME_NORMAL
 		if(vitae < 200)
-			if(disguised)
-				to_chat(H, span_warning("My disguise fails!"))
+			if (!low_vitae && isspawn)
+				to_chat(H, span_notice("My vitae reserves are depleted. I cannot maintain my human visage!"))
+				low_vitae = TRUE
+				if(disguised)
+					to_chat(H, span_notice("My disguise fails!"))
 				H.vampire_undisguise(src)
+		else
+			low_vitae = FALSE
 
 /datum/antagonist/vampirelord/proc/handle_vitae(change, tribute)
 	var/tempcurrent = vitae
@@ -433,6 +495,9 @@ GLOBAL_LIST_EMPTY(vampire_objects)
 				B.nextlevel = VAMP_LEVEL_THREE
 			to_chat(owner, "<font color='red'>My power is returning. I can once again access my spells and raise the dead to serve me. I have also regained usage of my mist form.</font>")
 		if(2)
+			if(minions_raised < 1)
+				to_chat(owner, "<font color='red'>I must first raise a skeletal minion to serve me before I can grow stronger.</font>")
+				return
 			vamplevel = 3
 			for(var/obj/structure/vampire/necromanticbook/S in GLOB.vampire_objects)
 				S.unlocked = TRUE
@@ -446,6 +511,9 @@ GLOBAL_LIST_EMPTY(vampire_objects)
 				B.nextlevel = VAMP_LEVEL_FOUR
 			to_chat(owner, "<font color='red'>My dominion over others minds and my own body returns to me. I am nearing perfection. The armies of the dead shall now answer my call.</font>")
 		if(3)
+			if(minions_raised < 3)
+				to_chat(owner, "<font color='red'>I must command an army of the dead (3 skeletal minions) to achieve true power.</font>")
+				return
 			vamplevel = 4
 			owner.current.visible_message("<font color='red'>[owner.current] is enveloped in dark crimson, a horrific sound echoing in the area. They are evolved.</font>","<font color='red'>I AM ANCIENT, I AM THE LAND. EVEN THE SUN BOWS TO ME.</font>")
 			ascended = TRUE
@@ -1254,6 +1322,9 @@ GLOBAL_LIST_EMPTY(vampire_objects)
 	max_targets = 1
 
 /obj/effect/proc_holder/spell/targeted/transfix/cast(list/targets, mob/user = usr)
+	if(HAS_TRAIT(user, TRAIT_STAKED))
+		to_chat(user, span_warning("The stake in my heart prevents me from using my powers!"))
+		return FALSE
 	var/msg = input("Soothe them. Dominate them. Speak and they will succumb.", "Transfix") as text|null
 	if(length(msg) < 10)
 		to_chat(user, span_userdanger("This is not enough!"))
@@ -1339,6 +1410,9 @@ GLOBAL_LIST_EMPTY(vampire_objects)
 	max_targets = 0
 
 /obj/effect/proc_holder/spell/targeted/transfix/master/cast(list/targets, mob/user = usr)
+	if(HAS_TRAIT(user, TRAIT_STAKED))
+		to_chat(user, span_warning("The stake in my heart prevents me from using my powers!"))
+		return FALSE
 	var/msg = input("Soothe them. Dominate them. Speak and they will succumb.", "Transfix") as text|null
 	if(length(msg) < 10)
 		to_chat(user, span_userdanger("This is not enough!"))
@@ -1410,6 +1484,12 @@ GLOBAL_LIST_EMPTY(vampire_objects)
 	H.revive(full_heal = TRUE, admin_revive = FALSE)
 	H.grab_ghost()
 	H.mind.add_antag_datum(/datum/antagonist/skeleton/knight)
+	
+	// Add them to the death knights list
+	var/datum/game_mode/chaosmode/C = SSticker.mode
+	if(istype(C))
+		C.deathknights |= H.mind
+	
 	H.mob_biotypes = MOB_UNDEAD
 	H.faction |= "undead"
 	H.can_do_sex = FALSE
@@ -1438,5 +1518,62 @@ GLOBAL_LIST_EMPTY(vampire_objects)
 	H.visible_message(span_warning("[H] rises with an unholy gleam in their eyes!"))
 	to_chat(H, span_userdanger("Darkness claims me as I rise to serve [user]!"))
 	playsound(H, 'sound/magic/magnet.ogg', 50, TRUE)
+	var/datum/antagonist/vampirelord/V = user.mind.has_antag_datum(/datum/antagonist/vampirelord)
+	if(V)
+		V.minions_raised++
 	return TRUE
+
+/datum/antagonist/vampirelord/proc/dust_all_spawns()
+	var/datum/game_mode/chaosmode/C = SSticker.mode
+	if(!istype(C))
+		return
+	
+	log_game("Attempting to dust vampire spawns and death knights")
+	
+	// First handle vampire spawns
+	for(var/datum/mind/V in C.vampires)
+		log_game("Checking vampire: [V.current ? V.current.real_name : "NO CURRENT"]")
+		if(!V.current)
+			continue
+		
+		var/datum/antagonist/vampirelord/lesser/spawn_check = V.has_antag_datum(/datum/antagonist/vampirelord/lesser)
+		log_game("Spawn check result: [spawn_check ? "IS SPAWN" : "NOT SPAWN"]")
+		
+		if(spawn_check)
+			var/mob/living/carbon/human/H = V.current
+			if(istype(H))
+				log_game("Dusting vampire spawn: [H.real_name]")
+				to_chat(H, span_userdanger("My master has fallen! The dark power that sustained me crumbles!"))
+				H.visible_message(span_warning("[H] crumbles to ash as their master's power fades!"))
+				H.dust(TRUE, FALSE, TRUE)
+
+	// Now handle death knights
+	for(var/datum/mind/D in C.deathknights)
+		log_game("Checking death knight: [D.current ? D.current.real_name : "NO CURRENT"]")
+		if(!D.current)
+			continue
+		
+		var/datum/antagonist/skeleton/knight/knight_check = D.has_antag_datum(/datum/antagonist/skeleton/knight)
+		log_game("Knight check result: [knight_check ? "IS KNIGHT" : "NOT KNIGHT"]")
+		
+		if(knight_check)
+			var/mob/living/carbon/human/H = D.current
+			if(istype(H))
+				log_game("Dusting death knight: [H.real_name]")
+				to_chat(H, span_userdanger("My master has fallen! The dark power binding me fades away!"))
+				H.visible_message(span_warning("[H] crumbles to dust as their master's power fades!"))
+				H.dust(TRUE, FALSE, TRUE)
+
+/datum/antagonist/vampirelord/proc/on_death()
+	if(isspawn)
+		return // Don't trigger for vampire spawns
+	log_game("Vampire Lord [owner.current.real_name] died - triggering spawn dusting") // Debug log
+	dust_all_spawns()
+
+/datum/species/vampire/spec_death(gibbed, mob/living/carbon/human/H)
+	. = ..()
+	if(H?.mind)
+		var/datum/antagonist/vampirelord/V = H.mind.has_antag_datum(/datum/antagonist/vampirelord)
+		if(V && !V.isspawn)
+			V.on_death()
 

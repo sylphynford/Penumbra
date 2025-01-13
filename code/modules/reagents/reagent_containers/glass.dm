@@ -602,7 +602,9 @@
 					QDEL_NULL(grinded)
 					return
 				grinded.on_grind()
-				reagents.add_reagent_list(grinded.grind_results)
+				var/data = list()
+				data["quality"] = user.mind.get_skill_level(/datum/skill/misc/alchemy)
+				reagents.add_reagent_list(grinded.grind_results, data)
 				to_chat(user, span_notice("I break [grinded] into powder."))
 				QDEL_NULL(grinded)
 				return

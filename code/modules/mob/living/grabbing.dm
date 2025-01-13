@@ -84,9 +84,13 @@
 	if(isobj(grabbed))
 		var/obj/I = grabbed
 		I.grabbedby -= src
+		if(limb_grabbed)
+			limb_grabbed.grabbedby -= src
 	if(ismob(grabbed))
 		var/mob/M = grabbed
 		M.grabbedby -= src
+		if(limb_grabbed)
+			limb_grabbed.grabbedby -= src
 	if(isturf(grabbed))
 		var/turf/T = grabbed
 		T.grabbedby -= src

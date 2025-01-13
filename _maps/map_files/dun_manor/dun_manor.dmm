@@ -4964,8 +4964,8 @@
 /turf/open/transparent/openspace,
 /area/rogue/indoors/town/manor)
 "eHX" = (
-/obj/structure/chair/wood/rogue/throne,
-/turf/open/floor/rogue/wood,
+/obj/effect/landmark/start/huskar,
+/turf/open/floor/rogue/carpet/lord/left,
 /area/rogue/indoors/town/manor)
 "eIt" = (
 /obj/machinery/light/rogue/firebowl/stump,
@@ -5101,6 +5101,10 @@
 "eSe" = (
 /turf/open/floor/rogue/ruinedwood/herringbone,
 /area/rogue/indoors)
+"eSw" = (
+/obj/effect/landmark/start/huskar,
+/turf/open/floor/rogue/carpet/lord/right,
+/area/rogue/indoors/town/manor)
 "eTc" = (
 /obj/structure/bed/rogue,
 /turf/open/floor/rogue/ruinedwood{
@@ -8783,9 +8787,6 @@
 /obj/structure/closet/crate/roguecloset,
 /obj/item/reagent_containers/glass/bottle/rogue/healthpot,
 /obj/item/reagent_containers/food/snacks/rogue/crackerscooked,
-/obj/item/reagent_containers/food/snacks/rogue/crackerscooked,
-/obj/item/reagent_containers/food/snacks/rogue/crackerscooked,
-/obj/item/reagent_containers/food/snacks/rogue/crackerscooked,
 /turf/open/floor/rogue/blocks,
 /area/rogue/indoors/town/garrison)
 "iDm" = (
@@ -10809,7 +10810,6 @@
 "kIp" = (
 /obj/machinery/light/rogue/torchholder/l,
 /obj/structure/closet/crate/chest/old_crate,
-/obj/item/reagent_containers/glass/bottle/rogue/healthpot,
 /obj/item/reagent_containers/glass/bottle/rogue/healthpot,
 /obj/item/reagent_containers/glass/bottle/rogue/healthpot,
 /turf/open/floor/rogue/blocks,
@@ -12986,8 +12986,14 @@
 /turf/open/floor/rogue/blocks/stonered/tiny,
 /area/rogue/indoors/town/bath)
 "mIm" = (
-/obj/effect/landmark/start/huskar,
-/turf/open/floor/rogue/wood,
+/obj/structure/mineral_door/wood/fancywood{
+	name = "Heir's Apartment";
+	lockid = "heir";
+	locked = 1
+	},
+/turf/open/floor/rogue/ruinedwood{
+	icon_state = "weird1"
+	},
 /area/rogue/indoors/town/manor)
 "mIn" = (
 /obj/machinery/light/rogue/firebowl/stump,
@@ -14618,9 +14624,6 @@
 	},
 /area/rogue/indoors/town/magician)
 "ogx" = (
-/obj/item/reagent_containers/food/snacks/rogue/crackerscooked,
-/obj/item/reagent_containers/food/snacks/rogue/crackerscooked,
-/obj/item/reagent_containers/food/snacks/rogue/crackerscooked,
 /obj/item/reagent_containers/food/snacks/rogue/crackerscooked,
 /obj/structure/closet/crate/chest/old_crate,
 /obj/machinery/light/rogue/torchholder/c,
@@ -16820,7 +16823,8 @@
 "qhq" = (
 /obj/structure/mineral_door/wood/fancywood{
 	name = "Lord's Apartment";
-	lockid = "royal"
+	lockid = "royal";
+	locked = 1
 	},
 /turf/open/floor/rogue/ruinedwood{
 	icon_state = "weird1"
@@ -22836,10 +22840,6 @@
 "wyH" = (
 /obj/structure/closet/crate/roguecloset,
 /obj/item/reagent_containers/glass/bottle/rogue/healthpot,
-/obj/item/reagent_containers/food/snacks/rogue/crackerscooked,
-/obj/item/reagent_containers/food/snacks/rogue/crackerscooked,
-/obj/item/reagent_containers/food/snacks/rogue/crackerscooked,
-/obj/item/reagent_containers/food/snacks/rogue/crackerscooked,
 /turf/open/floor/rogue/blocks,
 /area/rogue/under/town/basement)
 "wyI" = (
@@ -67733,7 +67733,7 @@ iFR
 vcT
 xac
 fJE
-jQT
+kts
 fAW
 wKp
 cYQ
@@ -67891,7 +67891,7 @@ vcT
 apq
 xac
 foh
-nJG
+eHX
 jbx
 nJG
 nJG
@@ -68205,7 +68205,7 @@ vcT
 apq
 xac
 lHD
-boY
+eSw
 eTw
 boY
 boY
@@ -68517,8 +68517,8 @@ vyY
 fGv
 vcT
 xac
-eHX
-mIm
+jQT
+fAW
 fAW
 rQI
 lUr
@@ -93644,7 +93644,7 @@ vcT
 vcT
 vcT
 vcT
-mvF
+mIm
 vcT
 vcT
 vcT
@@ -94424,7 +94424,7 @@ qhb
 qhb
 nkZ
 vcT
-mvF
+mIm
 vcT
 vcT
 wSl
@@ -94740,7 +94740,7 @@ oKl
 hBv
 ntE
 jnW
-mvF
+mIm
 lbj
 dPO
 wLg

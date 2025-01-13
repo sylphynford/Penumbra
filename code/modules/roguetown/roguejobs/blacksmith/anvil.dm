@@ -21,6 +21,31 @@
 	if(hingot && hott)
 		. += span_warning("[hingot] is too hot to touch.")
 
+/obj/machinery/anvil/attack_right(mob/user)
+	if(.)
+		return
+	user.changeNext_move(CLICK_CD_MELEE)
+	if(!hingot.currecipe)
+		return
+	var/datum/anvil_recipe/recip = hingot.currecipe
+	var/obj/item/held_item = user.get_active_held_item()
+
+	if(recip.improving || !(recip.progress >= recip.max_progress))
+		return
+
+	if(!held_item || !istype(held_item, /obj/item/rogueweapon/hammer))
+		return
+
+	if(recip.get_final_quality() >= BLACKSMITH_LEVEL_LEGENDARY) // Anything past this has no benefits.
+		to_chat(user, span_warning("I can't improve this any further."))
+		return
+
+	to_chat(user, span_notice("You start improving the [hingot.currecipe.name]"))
+	recip.improving = TRUE
+	recip.progress = 0
+	return
+
+
 /obj/machinery/anvil/attackby(obj/item/W, mob/living/user, params)
 	if(istype(W, /obj/item/rogueweapon/tongs))
 		var/obj/item/rogueweapon/tongs/T = W
@@ -92,7 +117,7 @@
 					carbon_user.rogfat_add(max(40 - (used_str * 3), 0)*advance_multiplier)
 				var/total_chance = 7 * user.mind.get_skill_level(hingot.currecipe.appro_skill) * user.STAPER/10
 				var/breakthrough = 0
-				if(prob((1 + total_chance)*advance_multiplier)) //Small chance to flash
+				if(prob((1 + total_chance)*advance_multiplier) && !hingot.currecipe.improving) //Small chance to flash
 					user.flash_fullscreen("whiteflash")
 					var/datum/effect_system/spark_spread/S = new()
 					var/turf/front = get_turf(src)

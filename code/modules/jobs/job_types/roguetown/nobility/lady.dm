@@ -5,7 +5,7 @@
 	faction = "Station"
 	total_positions = 1
 	spawn_positions = 1
-	zizo_roll = 25
+	zizo_roll = 85
 	allowed_sexes = list(MALE, FEMALE)
 	allowed_races = NOBLE_RACES_TYPES
 
@@ -40,7 +40,7 @@
 	ADD_TRAIT(H, TRAIT_SEEPRICES, TRAIT_GENERIC)
 	ADD_TRAIT(H, TRAIT_NOBLE, TRAIT_GENERIC)
 	ADD_TRAIT(H, TRAIT_NUTCRACKER, TRAIT_GENERIC)
-//		SSticker.rulermob = H
+
 	if(H.pronouns == SHE_HER || H.pronouns == THEY_THEM_F)
 		beltl = /obj/item/storage/keyring/royal
 		neck = /obj/item/storage/belt/rogue/pouch/coins/rich
@@ -48,12 +48,8 @@
 		if(isdwarf(H))
 			armor = /obj/item/clothing/suit/roguetown/shirt/dress
 		else
-			if(prob(66))
-				armor = /obj/item/clothing/suit/roguetown/armor/armordress/alt
-			else
-				armor = /obj/item/clothing/suit/roguetown/armor/armordress
-		head = /obj/item/clothing/head/roguetown/hennin
-		pants = /obj/item/clothing/under/roguetown/tights/stockings/silk/random	//Added Silk Stockings for the female nobles
+			armor = /obj/item/clothing/suit/roguetown/shirt/dress/silkdress/baroness
+		pants = /obj/item/clothing/under/roguetown/tights/stockings/silk/random
 		id = /obj/item/clothing/ring/silver
 		shoes = /obj/item/clothing/shoes/roguetown/shortboots
 	else

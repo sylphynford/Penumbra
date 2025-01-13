@@ -1,3 +1,6 @@
+/mob/living/carbon/human
+	var/datum/patron/inhumen/zizo/zizo_patron = null
+
 /datum/patron/inhumen/zizo/verb/remember_friends()
 	set name = "Remember Friends"
 	set category = "CULTIST"
@@ -36,6 +39,9 @@
 	if(ishuman(pious))
 		var/mob/living/carbon/human/H = pious
 		H.verbs |= /datum/patron/inhumen/zizo/verb/remember_friends
+		if(!H.mind?.has_antag_datum(/datum/antagonist/vampirelord))
+			H.verbs |= /datum/patron/inhumen/zizo/verb/create_omen
+			H.zizo_patron = src
 
 /datum/patron/inhumen/zizo/on_loss(mob/living/pious)
 	. = ..()
@@ -43,6 +49,8 @@
 		var/mob/living/carbon/human/H = pious
 		REMOVE_TRAIT(H, TRAIT_CABAL, "[type]")
 		H.verbs -= /datum/patron/inhumen/zizo/verb/remember_friends
+		H.verbs -= /datum/patron/inhumen/zizo/verb/create_omen
+		H.zizo_patron = null
 
 /datum/patron/inhumen/zizo/verb/cabal_message()
 	set name = "Send Cabal Message"
@@ -186,3 +194,109 @@
 	for(var/mob/living/carbon/human/member in GLOB.human_list)
 		if(HAS_TRAIT(member, TRAIT_CABAL) && member != H && member != target)
 			to_chat(member, "<span class='cultlarge'><font size='3'>[target] has been punished by the Cabal Leader!</font></span>")
+
+/datum/patron/inhumen/zizo/verb/create_omen()
+	set name = "Create Omen"
+	set category = "CULTIST"
+	set desc = "Perform a ritual with other followers to create an omen of Zizo's power."
+
+	var/mob/living/carbon/human/H = usr
+	if(!istype(H))
+		return
+	
+	if(!H.mind)
+		return
+
+	if(!HAS_TRAIT(H, TRAIT_CABAL))
+		to_chat(H, span_warning("Only followers of Zizo may use this power."))
+		return
+
+	if(H.mind.has_antag_datum(/datum/antagonist/vampirelord))
+		to_chat(H, span_warning("Your vampiric nature prevents you from participating in this ritual."))
+		return
+
+	var/datum/patron/inhumen/zizo/patron = H.vars["zizo_patron"]
+	if(!patron)
+		to_chat(H, span_warning("Something went wrong with the ritual. (ERROR: No patron datum)"))
+		return
+
+	// Check for nearby Zizo followers
+	var/list/nearby_followers = list()
+	for(var/mob/living/carbon/human/nearby in orange(1, H))
+		if(!HAS_TRAIT(nearby, TRAIT_CABAL))
+			continue
+		if(nearby.mind?.has_antag_datum(/datum/antagonist/vampirelord))
+			continue
+		if(nearby.stat >= UNCONSCIOUS)
+			continue
+		nearby_followers += nearby
+
+	if(length(nearby_followers) < 2)
+		to_chat(H, span_warning("The ritual requires three followers of Zizo standing together. (Only found [length(nearby_followers) + 1] including you)"))
+		return
+
+	// Check for the staff
+	var/obj/item/rogueweapon/woodstaff/aries/staff = locate() in view(1, H)
+	if(!staff)
+		to_chat(H, span_warning("The ritual requires a Staff of the Shepherd placed before you."))
+		return
+
+	// Start the ritual
+	H.visible_message(span_warning("[H] raises their arms and begins chanting in an otherworldly tongue!"), \
+					span_cultlarge("You begin the ritual to create an omen of Zizo's power..."))
+
+	// Alert other participants
+	for(var/mob/living/carbon/human/participant in nearby_followers)
+		to_chat(participant, span_cultlarge("Join the ritual by staying close to [H]!"))
+
+	// Visual effect
+	new /obj/effect/temp_visual/cult/sparks(get_turf(staff))
+	
+	// Start the ritual timer with correct callback
+	if(!do_after(H, 200, target = staff, extra_checks = CALLBACK(patron, PROC_REF(check_ritual_conditions), H, nearby_followers, staff)))
+		to_chat(H, span_warning("The ritual has been interrupted!"))
+		return
+
+	// Complete the ritual
+	staff.visible_message(span_warning("The [staff] glows with an unholy light before crumbling to ash!"))
+	
+	// Randomly choose between haunts and goblin invasion
+	if(prob(50))
+		var/datum/round_event/rogue/haunts/E = new()
+		E.start()
+	else
+		var/datum/round_event/rogue/gobinvade/E = new()
+		E.start()
+	
+	priority_announce("Z is watching you.", "Bad Omen", 'sound/misc/evilevent.ogg')
+	qdel(staff)
+
+	// Visual effect for completion
+	for(var/mob/living/carbon/human/participant in nearby_followers + H)
+		new /obj/effect/temp_visual/cult/sparks(get_turf(participant))
+		to_chat(participant, span_cultlarge("The ritual is complete! Zizo's power grows!"))
+
+/datum/patron/inhumen/zizo/proc/check_ritual_conditions(mob/living/carbon/human/user, list/initial_followers, obj/item/rogueweapon/woodstaff/aries/staff)
+	if(QDELETED(staff))
+		return FALSE
+		
+	// Check if staff is still nearby
+	if(!(staff in view(1, user)))
+		return FALSE
+
+	// Count current nearby followers
+	var/list/current_followers = list()
+	for(var/mob/living/carbon/human/nearby in orange(1, user))
+		if(!HAS_TRAIT(nearby, TRAIT_CABAL))
+			continue
+		if(nearby.mind?.has_antag_datum(/datum/antagonist/vampirelord))
+			continue
+		if(nearby.stat >= UNCONSCIOUS)
+			continue
+		current_followers += nearby
+
+	// Check if we still have enough followers
+	if(length(current_followers) < 2)
+		return FALSE
+
+	return TRUE

@@ -7,3 +7,4 @@
 #define ASCEND_FIRST "ascendantone"
 #define ASCEND_WAKENING "ascendanttwo"
 #define ASCEND_ASCENDANT "ascendantfinal"
+#define OMEN_ZIZO "zizo"

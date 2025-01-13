@@ -175,7 +175,6 @@ GLOBAL_LIST_EMPTY(chosen_names)
 	var/squire_class = null
 	var/inquisitor_class = null
 	var/mercenary_class = null
-	var/heir_class = null
 	var/templar_class = null
 
 /datum/preferences/New(client/C)
@@ -997,8 +996,6 @@ Slots: [job.spawn_positions]</span>
 						selected_class = inquisitor_class
 					if("Mercenary")
 						selected_class = mercenary_class
-					if("Heir")
-						selected_class = heir_class
 					if("Occultist") 
 						selected_class = templar_class
 				HTML += "[selected_class ? selected_class : "Random"]"
@@ -2297,8 +2294,6 @@ Slots: [job.spawn_positions]</span>
 							class_type = /datum/advclass/inquisitor
 						if("Mercenary")
 							class_type = /datum/advclass/mercenary
-						if("Heir")
-							class_type = /datum/advclass/heir
 						if("Occultist") 
 							class_type = /datum/advclass/templar
 
@@ -2329,8 +2324,6 @@ Slots: [job.spawn_positions]</span>
 								inquisitor_class = (choice == "Random" ? null : choice)
 							if("Mercenary")
 								mercenary_class = (choice == "Random" ? null : choice)
-							if("Heir")
-								heir_class = (choice == "Random" ? null : choice)
 							if("Occultist")
 								templar_class = (choice == "Random" ? null : choice)
 

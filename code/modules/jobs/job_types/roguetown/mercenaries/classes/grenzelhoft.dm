@@ -51,7 +51,7 @@
 				H.mind.adjust_skillrank(/datum/skill/combat/crossbows, 2, TRUE)
 				H.mind.adjust_skillrank(/datum/skill/combat/wrestling, 3, TRUE)
 				H.mind.adjust_skillrank(/datum/skill/combat/unarmed, 2, TRUE)
-				H.mind.adjust_skillrank(/datum/skill/combat/swords, 4, TRUE)
+				H.mind.adjust_skillrank(/datum/skill/combat/swords, 3, TRUE)
 				H.mind.adjust_skillrank(/datum/skill/combat/shields, 1, TRUE)
 				H.mind.adjust_skillrank(/datum/skill/combat/polearms, 2, TRUE)
 				H.mind.adjust_skillrank(/datum/skill/combat/whipsflails, 2, TRUE)
@@ -77,7 +77,7 @@
 				H.mind.adjust_skillrank(/datum/skill/combat/wrestling, 3, TRUE)
 				H.mind.adjust_skillrank(/datum/skill/combat/unarmed, 2, TRUE)
 				H.mind.adjust_skillrank(/datum/skill/combat/swords, 2, TRUE)
-				H.mind.adjust_skillrank(/datum/skill/combat/polearms, 4, TRUE)
+				H.mind.adjust_skillrank(/datum/skill/combat/polearms, 3, TRUE)
 				H.mind.adjust_skillrank(/datum/skill/combat/whipsflails, 2, TRUE)
 				H.mind.adjust_skillrank(/datum/skill/combat/knives, 2, TRUE)
 				H.mind.adjust_skillrank(/datum/skill/misc/reading, 1, TRUE)
@@ -94,14 +94,14 @@
 /datum/outfit/job/roguetown/mercenary/grenzelhoft
 	name = "Grenzelhoft Mercenary"
 	
-	wrists = /obj/item/clothing/wrists/roguetown/bracers
+	wrists = /obj/item/clothing/wrists/roguetown/bracers/leather
 	belt = /obj/item/storage/belt/rogue/leather
 	beltl = /obj/item/flashlight/flare/torch
 	beltr = /obj/item/storage/belt/rogue/pouch/coins/poor
 	neck = /obj/item/clothing/neck/roguetown/gorget
 	shirt = /obj/item/clothing/suit/roguetown/shirt/grenzelhoft
 	head = /obj/item/clothing/head/roguetown/grenzelhofthat
-	armor = /obj/item/clothing/suit/roguetown/armor/blacksteel/cuirass
+	armor = /obj/item/clothing/suit/roguetown/armor/leather/heavy/belted
 	pants = /obj/item/clothing/under/roguetown/grenzelpants
 	shoes = /obj/item/clothing/shoes/roguetown/grenzelhoft
 	gloves = /obj/item/clothing/gloves/roguetown/grenzelgloves
