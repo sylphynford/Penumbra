@@ -93,8 +93,6 @@ GLOBAL_LIST_INIT(department_radio_keys, list(
 		//The filter doesn't act on the sanitized message, but the raw message.
 		ic_blocked = TRUE
 
-	if(sanitize)
-		message = trim(copytext(sanitize(message), 1, MAX_MESSAGE_LEN))
 	if(!message || message == "")
 		return
 
@@ -118,15 +116,18 @@ GLOBAL_LIST_INIT(department_radio_keys, list(
 
 	if(message_mode == MODE_ADMIN)
 		if(client)
+			message = trim(copytext(sanitize(message), 1, MAX_MESSAGE_LEN))
 			client.cmd_admin_say(message)
 		return
 
 	if(message_mode == MODE_DEADMIN)
 		if(client)
+			message = trim(copytext(sanitize(message), 1, MAX_MESSAGE_LEN))
 			client.dsay(message)
 		return
 
 	if(stat == DEAD)
+		original_message = trim(copytext(sanitize(message), 1, MAX_MESSAGE_LEN))
 		say_dead(original_message)
 		return
 
@@ -194,7 +195,7 @@ GLOBAL_LIST_INIT(department_radio_keys, list(
 	else
 		src.log_talk(message, LOG_SAY, forced_by=forced)
 
-	message = treat_message(message) // unfortunately we still need this
+	
 	var/sigreturn = SEND_SIGNAL(src, COMSIG_MOB_SAY, args)
 	if (sigreturn & COMPONENT_UPPERCASE_SPEECH)
 		message = uppertext(message)
@@ -231,8 +232,12 @@ GLOBAL_LIST_INIT(department_radio_keys, list(
 
 	if(pressure < ONE_ATMOSPHERE*0.4) //Thin air, let's italicise the message
 		spans |= SPAN_ITALICS
-
-
+	message = treat_message(message) // unfortunately we still need this
+	if(sanitize)
+		message = trim(copytext(sanitize(message), 1, MAX_MESSAGE_LEN))
+	if(!message || message == "")
+		return
+	
 	send_speech(message, message_range, src, bubble_type, spans, language, message_mode, original_message)
 
 	if(succumbed)
@@ -269,7 +274,7 @@ GLOBAL_LIST_INIT(department_radio_keys, list(
 			deaf_message = "<span class='name'>[speaker]</span> [speaker.verb_say] something but you cannot hear [speaker.p_them()]."
 			deaf_type = 1
 	else
-		deaf_message = span_notice("I can't hear yourself!")
+		deaf_message = span_notice("You can't hear yourself!")
 		deaf_type = 2 // Since you should be able to hear myself without looking
 
 	// Create map text prior to modifying message for goonchat
