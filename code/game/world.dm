@@ -489,3 +489,6 @@ GLOBAL_VAR(restart_counter)
 		call_ext(dll, "auxtools_shutdown")()
 
 	. = ..()
+
+/world/proc/load_mode()
+	load_round_end_roles()

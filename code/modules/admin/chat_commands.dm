@@ -147,6 +147,19 @@ GLOBAL_LIST(round_end_role_notifiees)
 
 GLOBAL_LIST_EMPTY(permanent_round_end_role_notifiees)
 
+/proc/load_round_end_roles()
+	var/json_file = file("data/round_end_roles.json")
+	if(fexists(json_file))
+		var/list/json_data = json_decode(file2text(json_file))
+		if(islist(json_data))
+			GLOB.permanent_round_end_role_notifiees = json_data.Copy()
+
+/proc/save_round_end_roles()
+	var/json_file = file("data/round_end_roles.json")
+	if(GLOB.permanent_round_end_role_notifiees)
+		fdel(json_file)
+		WRITE_FILE(json_file, json_encode(GLOB.permanent_round_end_role_notifiees))
+
 /datum/tgs_chat_command/endrole
 	name = "endrole"
 	help_text = "Sets a Discord role to be pinged after every round ends. Usage: endrole <role ID>"
@@ -159,6 +172,7 @@ GLOBAL_LIST_EMPTY(permanent_round_end_role_notifiees)
 	// Clear existing roles if requested
 	if(params == "clear")
 		GLOB.permanent_round_end_role_notifiees = list()
+		save_round_end_roles()
 		return "Cleared all role notifications for round end"
 
 	// List current roles if requested
@@ -178,8 +192,10 @@ GLOBAL_LIST_EMPTY(permanent_round_end_role_notifiees)
 	// Remove role if it already exists
 	if(params in GLOB.permanent_round_end_role_notifiees)
 		GLOB.permanent_round_end_role_notifiees -= params
+		save_round_end_roles()
 		return "Role <@&[params]> will no longer be notified when rounds end."
 
 	// Add the new role
 	GLOB.permanent_round_end_role_notifiees |= params
+	save_round_end_roles()
 	return "Role <@&[params]> will be notified when rounds end. Use '!tgs endrole list' to see all roles, or '!tgs endrole clear' to remove all roles."
