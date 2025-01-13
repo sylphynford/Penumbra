@@ -44,7 +44,8 @@ GLOBAL_VAR_INIT(herald_spawned, FALSE)
 	..()
 	H.verbs += /mob/living/carbon/human/proc/heraldannouncement
 	H.mind.adjust_skillrank(/datum/skill/misc/reading, 3, TRUE)
-	
+	H.mind.adjust_skillrank(/datum/skill/combat/improvised, 2, TRUE)
+
 	head = /obj/item/clothing/head/roguetown/bardhat
 	shoes = /obj/item/clothing/shoes/roguetown/boots
 	pants = /obj/item/clothing/under/roguetown/tights/random

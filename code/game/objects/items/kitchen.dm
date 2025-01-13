@@ -93,6 +93,7 @@
 	attack_verb = list("cleaved", "slashed", "stabbed", "sliced", "torn", "ripped", "diced", "cut")
 	w_class = WEIGHT_CLASS_NORMAL
 	custom_price = 60
+	associated_skill = /datum/skill/combat/improvised
 
 /obj/item/kitchen/knife/combat
 	name = "combat knife"
@@ -103,6 +104,7 @@
 	throwforce = 20
 	attack_verb = list("slashed", "stabbed", "sliced", "torn", "ripped", "cut")
 	bayonet = TRUE
+
 
 /obj/item/kitchen/knife/combat/survival
 	name = "survival knife"
@@ -159,6 +161,7 @@
 	w_class = WEIGHT_CLASS_NORMAL
 	attack_verb = list("bashed", "battered", "bludgeoned", "thrashed", "whacked")
 	custom_price = 20
+	associated_skill = /datum/skill/combat/improvised
 
 /obj/item/kitchen/rollingpin/suicide_act(mob/living/carbon/user)
 	user.visible_message(span_suicide("[user] begins flattening [user.p_their()] head with \the [src]! It looks like [user.p_theyre()] trying to commit suicide!"))

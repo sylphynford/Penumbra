@@ -32,6 +32,7 @@
 		H.mind.adjust_skillrank(/datum/skill/misc/stealing, 3, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/misc/lockpicking, 1, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/misc/climbing, 2, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/combat/improvised, 2, TRUE)
 		H.change_stat("strength", -1)
 		H.change_stat("speed", 1)
 		H.change_stat("intelligence", 1)

@@ -123,3 +123,13 @@
 	"...a terrible lizard spews fire unto you. And yet, you stand fast, for you wield a tower's worth of metal...",
 	"...the half-moon crest upon your shield shines, even in the bright of day. You catch a gleam on it, and reflexively pull it upwards. An arrow bounces off..."
 	)
+
+/datum/skill/combat/improvised
+	name = "Improvised Weapons"
+	dreams = list(
+		"...the tavern chair splinters as you bring it down on your attacker's head. In the chaos of the brawl, anything can become a weapon in the right hands...",
+		"...you grasp the broken bottle's jagged edge, its surface gleaming in the moonlight. The bandits laugh at your 'weapon' until you show them just how deadly common glass can be...",
+		"...your master hands you a broom. 'A warrior's mind sees beyond the intended purpose,' he says. After years of practice, you understand - everything is a weapon if you're creative enough...",
+		"...surrounded by the mob, you grab what's nearest - a heavy iron pot. The ringing sound it makes against their skulls is almost musical...",
+		"...the nobleman sneers at your farming tool, but his expression changes when your pitchfork pins his expensive sword to the ground. Sometimes the simplest tools are the deadliest..."
+	)

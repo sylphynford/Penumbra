@@ -36,6 +36,7 @@
 		H.mind.adjust_skillrank(/datum/skill/misc/medicine, 4, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/misc/sewing, 3, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/misc/alchemy, 2, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/combat/improvised, 2, TRUE)
 		H.change_stat("intelligence", 2)
 		H.change_stat("fortune", 1)
 		if(H.age == AGE_OLD)

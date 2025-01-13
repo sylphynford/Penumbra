@@ -15,6 +15,7 @@
 	reagent_flags = OPENCONTAINER
 	throwforce = 10
 	volume = 99
+	associated_skill = /datum/skill/combat/improvised
 
 /obj/item/reagent_containers/glass/bucket/pot/update_icon()
 	cut_overlays()

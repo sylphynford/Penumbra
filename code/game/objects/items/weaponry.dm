@@ -395,6 +395,7 @@ for further reading, please see: https://github.com/tgstation/tgstation/pull/301
 	icon = 'icons/obj/wizard.dmi'
 	icon_state = "broom"
 	resistance_flags = FLAMMABLE
+	associated_skill = /datum/skill/combat/improvised
 
 /obj/item/staff/stick
 	name = "stick"
@@ -409,6 +410,7 @@ for further reading, please see: https://github.com/tgstation/tgstation/pull/301
 	throw_speed = 2
 	throw_range = 5
 	w_class = WEIGHT_CLASS_SMALL
+	associated_skill = /datum/skill/combat/improvised
 
 /obj/item/ectoplasm
 	name = "ectoplasm"

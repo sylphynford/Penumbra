@@ -14,6 +14,7 @@
 	drop_sound = 'sound/foley/dropsound/shovel_drop.ogg'
 	wdefense = 5
 	ingsize = 3
+	associated_skill = /datum/skill/combat/improvised
 
 /obj/item/cooking/pan/examine(mob/user)
 	. = ..()

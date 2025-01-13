@@ -33,6 +33,7 @@
 		H.mind.adjust_skillrank(/datum/skill/craft/armorsmithing, 3, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/craft/smelting, 3, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/misc/reading, 2, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/combat/improvised, 2, TRUE)
 		if(H.age == AGE_OLD)
 			H.mind.adjust_skillrank(/datum/skill/craft/blacksmithing, 1, TRUE)
 			H.mind.adjust_skillrank(/datum/skill/craft/armorsmithing, 1, TRUE)

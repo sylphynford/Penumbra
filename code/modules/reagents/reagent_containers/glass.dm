@@ -8,6 +8,7 @@
 	spillable = TRUE
 	possible_item_intents = list(INTENT_POUR, /datum/intent/fill, INTENT_SPLASH, INTENT_GENERIC)
 	resistance_flags = ACID_PROOF
+	associated_skill = /datum/skill/combat/improvised
 
 /datum/intent/fill
 	name = "fill"

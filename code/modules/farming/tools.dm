@@ -5,6 +5,7 @@
 	gripped_intents = list(/datum/intent/flailthresh,MACE_STRIKE)
 	name = "thresher"
 	desc = "A shredding tool for farmers."
+	associated_skill = /datum/skill/combat/improvised
 	icon_state = "flail"
 	icon = 'icons/roguetown/weapons/tools.dmi'
 	item_state = "mace_greyscale"
@@ -66,6 +67,7 @@
 	slot_flags = ITEM_SLOT_HIP
 	max_blade_int = 50
 	smeltresult = /obj/item/ingot/iron
+	associated_skill = /datum/skill/combat/improvised
 
 /obj/item/rogueweapon/sickle/getonmobprop(tag)
 	. = ..()
@@ -94,6 +96,7 @@
 	smeltresult = /obj/item/ingot/iron
 	var/hoe_damage = null //the durability damage recieved for every work cycle
 	var/work_time = 3 SECONDS // the time it takes to make new soil or till soil
+	associated_skill = /datum/skill/combat/improvised
 
 /obj/item/rogueweapon/hoe/stone
 	force = 7
@@ -107,7 +110,7 @@
 	max_integrity = 100
 	hoe_damage = 25
 	work_time = 15 SECONDS
-
+	associated_skill = /datum/skill/combat/improvised
 
 /obj/item/rogueweapon/hoe/getonmobprop(tag)
 	. = ..()
@@ -254,6 +257,8 @@
 	slot_flags = ITEM_SLOT_BACK
 	drop_sound = 'sound/foley/dropsound/wooden_drop.ogg'
 	smeltresult = /obj/item/ingot/iron
+	associated_skill = /datum/skill/combat/improvised
+
 /obj/item/rogueweapon/pitchfork/getonmobprop(tag)
 	. = ..()
 	if(tag)

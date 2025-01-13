@@ -277,6 +277,7 @@
 //	custom_materials = list(/datum/material/iron = 2000)
 	var/break_chance = 23 //Likely hood of smashing the chair.
 	var/obj/structure/chair/origin_type = /obj/structure/chair
+	associated_skill = /datum/skill/combat/improvised
 
 /obj/item/chair/suicide_act(mob/living/carbon/user)
 	user.visible_message(span_suicide("[user] begins hitting [user.p_them()]self with \the [src]! It looks like [user.p_theyre()] trying to commit suicide!"))
