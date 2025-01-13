@@ -33,16 +33,14 @@
 	user.visible_message(user.sexcon.spanify_force("[user] [user.sexcon.get_generic_force_adjective()] fucks [target]'s ass."))
 	playsound(target, 'sound/misc/mat/segso.ogg', 50, TRUE, -2, ignore_walls = FALSE)
 
+	// Basic pleasure for the giver
 	user.sexcon.perform_sex_action(user, 2, 0, TRUE)
 	if(user.sexcon.check_active_ejaculation())
 		user.visible_message(span_love("[user] cums into [target]'s butt!"))
 		user.sexcon.cum_into()
-		user.virginity = FALSE
 
-	if(user.sexcon.considered_limp())
-		user.sexcon.perform_sex_action(target, 1.2, 4, FALSE)
-	else
-		user.sexcon.perform_sex_action(target, 2.4, 9, FALSE)
+	// Handle penetration effects for the receiver - use penetrator's force/speed
+	target.sexcon.receive_sex_action(2.4, 9, FALSE, user.sexcon.force, user.sexcon.speed)
 	target.sexcon.handle_passive_ejaculation()
 
 /datum/sex_action/anal_sex/on_finish(mob/living/carbon/human/user, mob/living/carbon/human/target)

@@ -168,7 +168,12 @@
 			arousal_modifier = ", slickened with arousal"
 		if(20 to 50)
 			arousal_modifier = ", wet with arousal"
-	return "<font color='#e9a8d1'>a [vagina_type][arousal_modifier]</font>"
+	
+	var/virginity_text = ""
+	if(H.virginity)
+		virginity_text = ". Her <font color='#f14c5a'>purity</font> is intact"
+	
+	return "<font color='#e9a8d1'>a [vagina_type][arousal_modifier]</font>[virginity_text]"
 
 /datum/mob_descriptor/breasts
 	name = "breasts"

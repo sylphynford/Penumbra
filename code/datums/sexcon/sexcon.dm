@@ -36,6 +36,10 @@
 	. = ..()
 
 /datum/sex_controller/proc/is_spent()
+	// Women with only vaginas have no refractory period
+	if(user.getorganslot(ORGAN_SLOT_VAGINA) && !user.getorganslot(ORGAN_SLOT_PENIS))
+		return FALSE
+	// Everyone else follows normal refractory rules
 	if(charge < CHARGE_FOR_CLIMAX)
 		return TRUE
 	return FALSE
@@ -151,10 +155,13 @@
 	var/empty = (charge < CHARGE_FOR_CLIMAX)
 	charge = clamp(amount, 0, SEX_MAX_CHARGE)
 	var/after_empty = (charge < CHARGE_FOR_CLIMAX)
-	if(empty && !after_empty)
-		to_chat(user, span_notice("I feel like I'm not so spent anymore"))
-	if(!empty && after_empty)
-		to_chat(user, span_notice("I'm spent!"))
+	
+	// Only show spent messages if they have a penis (or both organs)
+	if(user.getorganslot(ORGAN_SLOT_PENIS))
+		if(empty && !after_empty)
+			to_chat(user, span_notice("I feel like I'm not so spent anymore"))
+		if(!empty && after_empty)
+			to_chat(user, span_notice("I'm spent!"))
 
 /datum/sex_controller/proc/adjust_charge(amount)
 	set_charge(charge + amount)
@@ -162,7 +169,9 @@
 /datum/sex_controller/proc/handle_charge(dt)
 	if(user.has_flaw(/datum/charflaw/addiction/lovefiend))
 		dt *= 2
-	adjust_charge(dt * CHARGE_RECHARGE_RATE)
+	// Women with only vaginas don't lose charge
+	if(!user.getorganslot(ORGAN_SLOT_VAGINA) || user.getorganslot(ORGAN_SLOT_PENIS))
+		adjust_charge(dt * CHARGE_RECHARGE_RATE)
 	if(is_spent())
 		if(arousal > 60)
 			to_chat(user, span_warning("I'm too spent!"))
@@ -212,9 +221,41 @@
 	action_target.sexcon.receive_sex_action(arousal_amt, pain_amt, giving, force, speed)
 
 /datum/sex_controller/proc/receive_sex_action(arousal_amt, pain_amt, giving, applied_force, applied_speed)
-	arousal_amt *= get_force_pleasure_multiplier(applied_force, giving)
-	pain_amt *= get_force_pain_multiplier(applied_force)
-	pain_amt *= get_speed_pain_multiplier(applied_speed)
+	// Get penis size multiplier if applicable (6 inches = 1.0x)
+	var/size_multiplier = 1.0
+	if(!giving && last_arousal_source)
+		var/obj/item/organ/penis/penis = last_arousal_source.getorganslot(ORGAN_SLOT_PENIS)
+		if(penis)
+			// Only apply size multiplier for penetrative actions
+			var/is_penetrative = FALSE
+			if(istype(current_action, /datum/sex_action/vaginal_sex) || \
+			   istype(current_action, /datum/sex_action/anal_sex) || \
+			   istype(current_action, /datum/sex_action/vaginal_ride_sex) || \
+			   istype(current_action, /datum/sex_action/anal_ride_sex))
+				is_penetrative = TRUE
+
+			if(is_penetrative)
+				// Examples:
+				// 3 inch = 0.5x multiplier
+				// 6 inch = 1.0x multiplier
+				// 12 inch = 2.0x multiplier
+				size_multiplier = penis.penis_size / 6.0
+
+	// Apply size multiplier first
+	arousal_amt *= size_multiplier 
+	pain_amt *= size_multiplier
+
+	// For riding actions, use the rider's (user's) force/speed settings
+	// For normal penetration, use the penetrator's (last_arousal_source's) force/speed settings
+	var/is_riding = istype(current_action, /datum/sex_action/vaginal_ride_sex) || istype(current_action, /datum/sex_action/anal_ride_sex)
+	if(is_riding)
+		arousal_amt *= get_force_pleasure_multiplier(force, giving)
+		pain_amt *= get_force_pain_multiplier(force)
+		pain_amt *= get_speed_pain_multiplier(speed)
+	else
+		arousal_amt *= get_force_pleasure_multiplier(applied_force, giving)
+		pain_amt *= get_force_pain_multiplier(applied_force)
+		pain_amt *= get_speed_pain_multiplier(applied_speed)
 
 	if(user.stat == DEAD)
 		arousal_amt = 0
@@ -683,3 +724,25 @@
 	// Check both participants' marriages
 	check_marriage(partner, user, partner_family)
 	check_marriage(user, partner, user_family)
+
+/datum/sex_controller/proc/get_penis_size_multiplier(mob/living/carbon/human/penis_owner)
+	var/size_multiplier = 1.0
+	var/obj/item/organ/penis/penis = penis_owner.getorganslot(ORGAN_SLOT_PENIS)
+	if(penis)
+		size_multiplier = penis.penis_size / 6.0
+	return size_multiplier
+
+/datum/sex_controller/proc/handle_penetrative_action(mob/living/carbon/human/penetrator, mob/living/carbon/human/receiver, base_arousal, base_pain, is_anal = FALSE)
+	// Get size multiplier from the penetrator
+	var/size_multiplier = get_penis_size_multiplier(penetrator)
+	
+	// Apply size multiplier to receiver's pleasure/pain
+	var/final_arousal = base_arousal * size_multiplier
+	var/final_pain = base_pain * size_multiplier
+	
+	// If penetrator is limp, reduce values
+	if(penetrator.sexcon.considered_limp())
+		final_arousal *= 0.5
+		final_pain *= 0.5
+		
+	receiver.sexcon.perform_sex_action(receiver, final_arousal, final_pain, TRUE)

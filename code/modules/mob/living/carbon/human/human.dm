@@ -1204,3 +1204,19 @@
 
 /mob/living/carbon/human/proc/remove_staked_trait()
 	REMOVE_TRAIT(src, TRAIT_STAKED, "stake")
+
+/mob/living/carbon/human/proc/on_virgin_loss()
+	virginity = FALSE
+	flash_fullscreen("redflash3")
+	bleed(3)
+	if(mind)
+		switch(mind.assigned_role)
+			if("Priest")
+				add_stress(/datum/stressevent/virginchurch)
+				// adjust_triumphs(-2)
+			if("Monk")
+				add_stress(/datum/stressevent/virginchurch)
+				// adjust_triumphs(-3)
+			if("Cleric")
+				add_stress(/datum/stressevent/virginchurch)
+				// adjust_triumphs(-2)

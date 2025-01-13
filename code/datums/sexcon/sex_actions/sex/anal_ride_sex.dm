@@ -32,17 +32,15 @@
 	user.visible_message(user.sexcon.spanify_force("[user] [user.sexcon.get_generic_force_adjective()] rides [target]."))
 	playsound(target, 'sound/misc/mat/segso.ogg', 50, TRUE, -2, ignore_walls = FALSE)
 
-	if(target.sexcon.considered_limp())
-		user.sexcon.perform_sex_action(user, 1.2, 4, TRUE)
-	else
-		user.sexcon.perform_sex_action(user, 2.4, 9, TRUE)
+	// Handle penetration effects for the rider
+	user.sexcon.handle_penetrative_action(target, user, 2.4, 9, TRUE)
 	user.sexcon.handle_passive_ejaculation()
 
-	user.sexcon.perform_sex_action(target, 2, 4, FALSE)
+	// Basic pleasure for the person being ridden - affected by rider's force/speed
+	target.sexcon.receive_sex_action(2.0, 4, FALSE, user.sexcon.force, user.sexcon.speed)
 	if(target.sexcon.check_active_ejaculation())
 		target.visible_message(span_love("[target] cums into [user]'s butt!"))
 		target.sexcon.cum_into()
-		target.virginity = FALSE
 
 /datum/sex_action/anal_ride_sex/on_finish(mob/living/carbon/human/user, mob/living/carbon/human/target)
 	user.visible_message(span_warning("[user] gets off [target]."))

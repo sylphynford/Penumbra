@@ -251,32 +251,8 @@
 		user.emote("embed", forced = TRUE)
 	playsound(owner, list('sound/misc/mat/insert (1).ogg','sound/misc/mat/insert (2).ogg'), 20, TRUE, ignore_walls = FALSE)
 	owner.visible_message("<span class='[!user.cmode ? "love" : "warning"]'>[owner] taffs [user].</span>")
-	if(ishuman(user))
-		var/mob/living/carbon/human/H = user
-		if(H.virginity)
-			user.visible_message("<span class='warning'>[user] loses [user.p_their()] purity!</span>")
-			H.flash_fullscreen("redflash3")
-			H.on_virgin_loss()
-			log_combat(user, owner, "deflowered(ERP)", src)
 	START_PROCESSING(SSsex, user.sexcon)
 	START_PROCESSING(SSsex, src)
-
-/mob/living/carbon/human
-	var/virginity = FALSE
-
-/mob/living/carbon/human/proc/on_virgin_loss()
-	virginity = FALSE
-	if(mind)
-		switch(mind.assigned_role)
-			if("Priest")
-				add_stress(/datum/stressevent/virginchurch)
-				// adjust_triumphs(-2)
-			if("Monk")
-				add_stress(/datum/stressevent/virginchurch)
-				// adjust_triumphs(-3)
-			if("Cleric")
-				add_stress(/datum/stressevent/virginchurch)
-				// adjust_triumphs(-2)
 
 /datum/sex_controller/proc/begin_assfuck(mob/living/user)
 	if(!user)
@@ -976,20 +952,20 @@
 							stop_fucking()
 						if(adjust_horny(3, usedsource))
 							stop_fucking()
-	if(riding)
-		if(riding.sexcon.weeating == owner)
-			var/datum/sex_controller/D = riding.sexcon
-			doing = TRUE
-			if(world.time > D.lasteat + max(D.eatspeed + rand(-3,3), 1))
-				D.lasteat = world.time
-				if(D.eatspeed != initial(D.eatspeed))
-					if(!riding.rogfat_add(1, "gag", FALSE))
+		if(riding)
+			if(riding.sexcon.weeating == owner)
+				var/datum/sex_controller/D = riding.sexcon
+				doing = TRUE
+				if(world.time > D.lasteat + max(D.eatspeed + rand(-3,3), 1))
+					D.lasteat = world.time
+					if(D.eatspeed != initial(D.eatspeed))
+						if(!riding.rogfat_add(1, "gag", FALSE))
+							stop_riding()
+					playsound(D.owner, pick('sound/misc/mat/girlmouth (1).ogg','sound/misc/mat/girlmouth (2).ogg'), 100, TRUE, -2, ignore_walls = FALSE)
+					if(prob(33))
+						owner.visible_message("<span class='[!owner.cmode ? "love" : "warning"]'>[owner] rides [riding]'s face.</span>")
+					if(adjust_horny(3, "suckedoff"))
 						stop_riding()
-				playsound(D.owner, pick('sound/misc/mat/girlmouth (1).ogg','sound/misc/mat/girlmouth (2).ogg'), 100, TRUE, -2, ignore_walls = FALSE)
-				if(prob(33))
-					owner.visible_message("<span class='[!owner.cmode ? "love" : "warning"]'>[owner] rides [riding]'s face.</span>")
-				if(adjust_horny(3, "suckedoff"))
-					stop_riding()
 	if(eatingus)
 		if(eatingus.sexcon.weeating != owner)
 			eatingus = null
@@ -1203,8 +1179,6 @@
 				owner.sate_addiction()
 			if(ishuman(owner))
 				var/mob/living/carbon/human/H = owner
-				if(H.virginity)
-					H.on_virgin_loss()
 				if(fucking && fucking.cmode)
 					var/wuzantag
 					if(H.mind)
@@ -1224,8 +1198,6 @@
 
 			if(ishuman(owner))
 				var/mob/living/carbon/human/H = owner
-				if(H.virginity)
-					H.on_virgin_loss()
 			var/husbando
 			if(fucking && !fucking.cmode)
 				var/yee
@@ -1274,8 +1246,6 @@
 				owner.sate_addiction()
 			if(ishuman(owner))
 				var/mob/living/carbon/human/H = owner
-				if(H.virginity)
-					H.on_virgin_loss()
 				if(fucking)
 					var/wuzantag
 					if(H.mind)

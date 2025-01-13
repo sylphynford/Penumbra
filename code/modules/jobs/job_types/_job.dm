@@ -176,6 +176,17 @@
 	if(!ishuman(H))
 		return
 
+	var/mob/living/carbon/human/human = H
+	if(human.getorganslot(ORGAN_SLOT_VAGINA))
+		if(human.age == AGE_YOUNG)
+			human.virginity = TRUE
+		else if(human.age == AGE_ADULT && prob(75))
+			human.virginity = TRUE
+		else if(human.age == AGE_MIDDLEAGED && prob(35))
+			human.virginity = TRUE
+		else if(human.age == AGE_OLD && prob(5))
+			human.virginity = TRUE
+
 	if(zizo_roll && H.client?.prefs?.selected_patron && istype(H.client.prefs.selected_patron, /datum/patron/inhumen/zizo))
 		if(prob(zizo_roll))
 			to_chat(H, span_warning("Heresy roll failed. You are NOT a cultist."))
