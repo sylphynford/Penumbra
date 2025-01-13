@@ -170,7 +170,7 @@
 			arousal_modifier = ", wet with arousal"
 	
 	var/virginity_text = ""
-	if(H.virginity)
+	if(H.virginity && (isobserver(usr) || (get_dist(usr, H) <= 1))) // Show virginity if ghost or adjacent
 		virginity_text = ". Her <font color='#f14c5a'>purity</font> is intact"
 	
 	return "<font color='#e9a8d1'>a [vagina_type][arousal_modifier]</font>[virginity_text]"
