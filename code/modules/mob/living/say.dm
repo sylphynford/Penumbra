@@ -201,7 +201,13 @@ GLOBAL_LIST_INIT(department_radio_keys, list(
 		message = uppertext(message)
 	if(!message)
 		return
-
+	//apply various speech filters only on dialogue
+	var/speech_index = 0
+	speech_index = findtext(message, "*")
+	if (speech_index)
+		message = "[copytext(message, 1, speech_index)]*[treat_message(copytext(message, speech_index+1))]"
+	else
+		message = treat_message(message) // apply speech filters after accent
 	spans |= speech_span
 
 	if(language)
@@ -232,7 +238,6 @@ GLOBAL_LIST_INIT(department_radio_keys, list(
 
 	if(pressure < ONE_ATMOSPHERE*0.4) //Thin air, let's italicise the message
 		spans |= SPAN_ITALICS
-	message = treat_message(message) // unfortunately we still need this
 	if(sanitize)
 		message = trim(copytext(sanitize(message), 1, MAX_MESSAGE_LEN))
 	if(!message || message == "")
