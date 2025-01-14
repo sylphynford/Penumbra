@@ -384,7 +384,7 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 	item_state = "spliffoff"
 	smoketime = 120 // four minutes
 	chem_volume = 50
-	list_reagents = null
+	list_reagents = list(/datum/reagent/drug/nicotine = 30)
 	muteinmouth = FALSE
 
 /obj/item/clothing/mask/cigarette/rollie/Initialize()
