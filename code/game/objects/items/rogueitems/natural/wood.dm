@@ -167,6 +167,7 @@
 	gripped_intents = null
 	slot_flags = ITEM_SLOT_MOUTH|ITEM_SLOT_HIP
 	lumber_amount = 0
+	associated_skill = /datum/skill/combat/improvised
 
 /obj/item/grown/log/tree/stake/silver
 	name = "silver stake"
@@ -179,6 +180,7 @@
 	resistance_flags = FIRE_PROOF
 	experimental_inhand = TRUE
 	anvilrepair = TRUE
+	associated_skill = /datum/skill/combat/improvised
 
 /obj/item/grown/log/tree/stake/silver/getonmobprop(tag)
 	if(tag)
