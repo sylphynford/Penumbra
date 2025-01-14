@@ -39,7 +39,9 @@
 		H.mind.adjust_skillrank(/datum/skill/labor/mining, 3, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/craft/smelting, 2, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/misc/reading, 1, TRUE)
-		H.change_stat("fortune", 5)
+		H.mind.adjust_skillrank(/datum/skill/combat/improvised, 3, TRUE)
+		H.change_stat("fortune", 1)
+		
 		ADD_TRAIT(H, TRAIT_NOCSIGHT, TRAIT_GENERIC)
 		ADD_TRAIT(H, TRAIT_HEAVYARMOR, TRAIT_GENERIC)
 		ADD_TRAIT(H, TRAIT_MEDIUMARMOR, TRAIT_GENERIC)

@@ -473,19 +473,19 @@ GLOBAL_LIST_EMPTY(vampire_objects)
 			vamplevel = 1
 			batform = new
 			owner.current.AddSpell(batform)
+			owner.current.AddSpell(new /obj/effect/proc_holder/spell/invoked/raise_vampire_dead) // Moved from level 2 to level 1
 			for(var/obj/structure/vampire/portalmaker/S in GLOB.vampire_objects)
 				S.unlocked = TRUE
 			for(var/S in MOBSTATS)
 				owner.current.change_stat(S, 2)
 			for(var/obj/structure/vampire/bloodpool/B in GLOB.vampire_objects)
 				B.nextlevel = VAMP_LEVEL_TWO
-			to_chat(owner, "<font color='red'>I am refreshed and have grown stronger. The visage of the bat is once again available to me. I can also once again access my portals.</font>")
+			to_chat(owner, "<font color='red'>I am refreshed and have grown stronger. The visage of the bat is once again available to me. I can also once again access my portals and raise the dead to serve me.</font>")
 		if(1)
 			vamplevel = 2
 			owner.current.verbs |= /mob/living/carbon/human/proc/vamp_regenerate
 			owner.current.AddSpell(new /obj/effect/proc_holder/spell/invoked/projectile/bloodsteal)
 			owner.current.AddSpell(new /obj/effect/proc_holder/spell/invoked/projectile/bloodlightning)
-			owner.current.AddSpell(new /obj/effect/proc_holder/spell/invoked/raise_vampire_dead)
 			owner.adjust_skillrank(/datum/skill/magic/blood, 3, TRUE)
 			gas = new
 			owner.current.AddSpell(gas)
@@ -493,7 +493,7 @@ GLOBAL_LIST_EMPTY(vampire_objects)
 				owner.current.change_stat(S, 2)
 			for(var/obj/structure/vampire/bloodpool/B in GLOB.vampire_objects)
 				B.nextlevel = VAMP_LEVEL_THREE
-			to_chat(owner, "<font color='red'>My power is returning. I can once again access my spells and raise the dead to serve me. I have also regained usage of my mist form.</font>")
+			to_chat(owner, "<font color='red'>My power is returning. I can once again access my spells. I have also regained usage of my mist form.</font>")
 		if(2)
 			if(minions_raised < 1)
 				to_chat(owner, "<font color='red'>I must first raise a skeletal minion to serve me before I can grow stronger.</font>")
@@ -772,8 +772,16 @@ GLOBAL_LIST_EMPTY(vampire_objects)
 				lord.handle_vitae(-1000)
 				if(istype(choice, /obj/item/clothing/neck/roguetown/portalamulet))
 					var/obj/item/clothing/neck/roguetown/portalamulet/A = choice
+					var/turf/T = get_turf(A)
+					// If worn, remove it first
+					if(ismob(A.loc))
+						var/mob/M = A.loc
+						M.dropItemToGround(A, TRUE)
+					// If in a container, move it out
+					else if(!isturf(A.loc))
+						A.forceMove(T)
 					A.uses -= 1
-					var/obj/effect/landmark/vteleportdestination/VR = new(A.loc)
+					var/obj/effect/landmark/vteleportdestination/VR = new(T)
 					VR.amuletname = A.name
 					create_portal_return(A.name, 3000)
 					user.playsound_local(get_turf(src), 'sound/misc/portalactivate.ogg', 100, FALSE, pressure_affected = FALSE)
@@ -794,9 +802,16 @@ GLOBAL_LIST_EMPTY(vampire_objects)
 				lord.handle_vitae(-1000)
 				if(istype(choice, /obj/item/clothing/neck/roguetown/portalamulet))
 					var/obj/item/clothing/neck/roguetown/portalamulet/A = choice
+					var/turf/T = get_turf(A)
+					// If worn, remove it first
+					if(ismob(A.loc))
+						var/mob/M = A.loc
+						M.dropItemToGround(A, TRUE)
+					// If in a container, move it out
+					else if(!isturf(A.loc))
+						A.forceMove(T)
 					A.uses -= 1
-					var/turf/G = get_turf(A)
-					new /obj/effect/landmark/vteleportsenddest(G.loc)
+					new /obj/effect/landmark/vteleportsenddest(T)
 					if(A.uses <= 0)
 						A.visible_message("[A] shatters!")
 						qdel(A)

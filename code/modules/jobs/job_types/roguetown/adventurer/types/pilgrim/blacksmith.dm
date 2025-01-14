@@ -45,7 +45,8 @@
 		H.mind.adjust_skillrank(/datum/skill/craft/armorsmithing, 3, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/craft/weaponsmithing, 3, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/craft/smelting, 3, TRUE)
-	
+		H.mind.adjust_skillrank(/datum/skill/combat/improvised, 3, TRUE)
+		
 		H.change_stat("strength", 1)
 		H.change_stat("endurance", 2)
 		H.change_stat("constitution", 1)

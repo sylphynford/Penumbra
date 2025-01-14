@@ -21,6 +21,7 @@
 	H.mind.adjust_skillrank(/datum/skill/craft/cooking, 3, TRUE)
 	H.mind.adjust_skillrank(/datum/skill/labor/farming, 2, TRUE)
 	H.mind.adjust_skillrank(/datum/skill/misc/medicine, 1, TRUE)
+	H.mind.adjust_skillrank(/datum/skill/combat/improvised, 2, TRUE)
 	mouth = /obj/item/rogueweapon/huntingknife
 	belt = /obj/item/storage/belt/rogue/leather
 	pants = /obj/item/clothing/under/roguetown/tights/random
