@@ -27,7 +27,7 @@
 	return mouse_buckle_handling(M, user)
 
 /atom/movable/proc/mouse_buckle_handling(mob/living/M, mob/living/user)
-	if(ismob(src))
+	if(ismob(src) && !istype(src, /mob/living/simple_animal))  // this is for saigas and the like
 		return FALSE
 	if(can_buckle && istype(M) && istype(user))
 		if(user_buckle_mob(M, user))
