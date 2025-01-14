@@ -24,6 +24,8 @@
 
 //	if(has_inspect_verb || (obj_integrity < max_integrity))
 //		. += span_notice("<a href='?src=[REF(src)];inspect=1'>Inspect</a>")
+	if(associated_skill == /datum/skill/combat/improvised)
+		. += "It looks like it could be used as an improvised weapon..."
 
 	var/real_value = get_real_price()
 	if(real_value > 0)
