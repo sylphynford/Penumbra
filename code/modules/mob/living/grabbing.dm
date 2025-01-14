@@ -579,6 +579,9 @@
 				var/spawn_count = 0
 				for(var/datum/mind/V in mode.vampires)
 					if(V.has_antag_datum(/datum/antagonist/vampirelord/lesser))
+						var/mob/dead/observer/Dead = V.current
+						if (!Dead)
+							continue
 						spawn_count++
 				if(spawn_count >= 2)
 					to_chat(user, span_warning("I cannot control more spawns."))
