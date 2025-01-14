@@ -773,13 +773,6 @@ GLOBAL_LIST_EMPTY(vampire_objects)
 				if(istype(choice, /obj/item/clothing/neck/roguetown/portalamulet))
 					var/obj/item/clothing/neck/roguetown/portalamulet/A = choice
 					var/turf/T = get_turf(A)
-					// If worn, remove it first
-					if(ismob(A.loc))
-						var/mob/M = A.loc
-						M.dropItemToGround(A, TRUE)
-					// If in a container, move it out
-					else if(!isturf(A.loc))
-						A.forceMove(T)
 					A.uses -= 1
 					var/obj/effect/landmark/vteleportdestination/VR = new(T)
 					VR.amuletname = A.name
@@ -803,13 +796,6 @@ GLOBAL_LIST_EMPTY(vampire_objects)
 				if(istype(choice, /obj/item/clothing/neck/roguetown/portalamulet))
 					var/obj/item/clothing/neck/roguetown/portalamulet/A = choice
 					var/turf/T = get_turf(A)
-					// If worn, remove it first
-					if(ismob(A.loc))
-						var/mob/M = A.loc
-						M.dropItemToGround(A, TRUE)
-					// If in a container, move it out
-					else if(!isturf(A.loc))
-						A.forceMove(T)
 					A.uses -= 1
 					new /obj/effect/landmark/vteleportsenddest(T)
 					if(A.uses <= 0)
