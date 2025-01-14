@@ -628,15 +628,39 @@
 	if(vitae_check < 500)
 		to_chat(src, span_warning("I need at least 500 vitae to regenerate. (Current: [vitae_check])"))
 		return
+	if(on_fire)
+		to_chat(src, span_warning("I cannot regenerate while on fire!"))
+		return
 	
+	if(has_status_effect(/datum/status_effect/vampire_regen))
+		to_chat(src, span_warning("I am already regenerating!"))
+		return
+
 	to_chat(src, span_greentext("! REGENERATE !"))
 	src.playsound_local(get_turf(src), 'sound/misc/vampirespell.ogg', 100, FALSE, pressure_affected = FALSE)
 	if(VD)
 		VD.handle_vitae(-500)
 	else if(VL)
 		VL.handle_vitae(-500)
-	fully_heal()
-	regenerate_limbs()
+
+	apply_status_effect(/datum/status_effect/vampire_regen)
+
+/datum/status_effect/vampire_regen
+	id = "vampire_regen"
+	duration = 10 SECONDS
+	alert_type = /atom/movable/screen/alert/status_effect/vampire_regen
+
+/datum/status_effect/vampire_regen/on_remove()
+	var/mob/living/carbon/human/H = owner
+	if(!istype(H))
+		return
+	H.fully_heal()
+	H.regenerate_limbs()
+
+/atom/movable/screen/alert/status_effect/vampire_regen
+	name = "Vampiric Regeneration"
+	desc = "Your flesh is gathering power to knit itself back together..."
+	icon_state = "regenerate" // You may need to change this to an appropriate icon state
 
 /mob/living/carbon/human/proc/vampire_infect()
 	if(!mind)
