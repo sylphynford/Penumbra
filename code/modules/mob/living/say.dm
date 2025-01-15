@@ -277,7 +277,7 @@ GLOBAL_LIST_INIT(department_radio_keys, list(
 		message = group1 + message
 	if (group3)
 		message = message + group3
-	message = replacetextEx(message, regex("(///(.*?)///)|(//(.*?)//)|(/(.*?)/)", "g"), /proc/format_dialogue_html)
+	message = replacetextEx(message, regex(@"(///([^/]+?)///)|(//([^/]+?)//)|(/([^/]+?)/)", "g"), /proc/format_dialogue_html)
 	return message
 
 //replace designated player formatting characters with their corresponding html tags
