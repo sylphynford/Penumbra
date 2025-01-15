@@ -474,13 +474,14 @@ GLOBAL_LIST_EMPTY(vampire_objects)
 			batform = new
 			owner.current.AddSpell(batform)
 			owner.current.AddSpell(new /obj/effect/proc_holder/spell/invoked/raise_vampire_dead) // Moved from level 2 to level 1
+			owner.current.verbs |= /mob/living/carbon/human/proc/vampire_teleport // Add teleport ability
 			for(var/obj/structure/vampire/portalmaker/S in GLOB.vampire_objects)
 				S.unlocked = TRUE
 			for(var/S in MOBSTATS)
 				owner.current.change_stat(S, 2)
 			for(var/obj/structure/vampire/bloodpool/B in GLOB.vampire_objects)
 				B.nextlevel = VAMP_LEVEL_TWO
-			to_chat(owner, "<font color='red'>I am refreshed and have grown stronger. The visage of the bat is once again available to me. I can also once again access my portals and raise the dead to serve me.</font>")
+			to_chat(owner, "<font color='red'>I am refreshed and have grown stronger. The visage of the bat is once again available to me. I can also once again access my portals, raise the dead to serve me, and teleport to my amulets.</font>")
 		if(1)
 			vamplevel = 2
 			owner.current.verbs |= /mob/living/carbon/human/proc/vamp_regenerate
@@ -1577,4 +1578,48 @@ GLOBAL_LIST_EMPTY(vampire_objects)
 		var/datum/antagonist/vampirelord/V = H.mind.has_antag_datum(/datum/antagonist/vampirelord)
 		if(V && !V.isspawn)
 			V.on_death()
+
+/mob/living/carbon/human/proc/vampire_teleport()
+	set name = "Teleport to Amulet"
+	set category = "VAMPIRE"
+	
+	var/datum/antagonist/vampirelord/lord = mind.has_antag_datum(/datum/antagonist/vampirelord)
+	if(!lord)
+		return
+	
+	if(HAS_TRAIT(src, TRAIT_STAKED))
+		to_chat(src, span_warning("The stake in my heart prevents me from using my powers!"))
+		return
+		
+	if(!lord.mypool.check_withdraw(-1000))
+		to_chat(src, "I lack the vitae for this power.")
+		return
+		
+	var/list/possible_amulets = list()
+	for(var/obj/item/clothing/neck/roguetown/portalamulet/P in GLOB.vampire_objects)
+		possible_amulets[P.name] = P
+		
+	if(!length(possible_amulets))
+		to_chat(src, "There are no amulets to teleport to.")
+		return
+		
+	var/amulet_name = input(src, "Choose an amulet to teleport to", "Teleport") as null|anything in possible_amulets
+	if(!amulet_name)
+		return
+		
+	var/obj/item/clothing/neck/roguetown/portalamulet/chosen = possible_amulets[amulet_name]
+	if(!chosen || QDELETED(chosen))
+		to_chat(src, "That amulet no longer exists.")
+		return
+		
+	visible_message(span_warning("[src] begins to fade into crimson mist!"))
+	to_chat(src, span_notice("I begin channeling my power to teleport..."))
+	
+	if(do_after(src, 100, target = src))
+		lord.handle_vitae(-1000)
+		playsound(get_turf(src), 'sound/magic/magnet.ogg', 50, TRUE)
+		visible_message(span_warning("[src] dissolves into crimson mist!"))
+		forceMove(get_turf(chosen))
+		playsound(get_turf(src), 'sound/magic/magnet.ogg', 50, TRUE)
+		visible_message(span_warning("[src] materializes from crimson mist!"))
 
