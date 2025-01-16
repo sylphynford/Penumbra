@@ -134,8 +134,8 @@ GLOBAL_LIST_INIT(department_radio_keys, list(
 	if(check_emote(original_message, forced) || !can_speak_basic(original_message, ignore_spam, forced))
 		return
 
-	if(check_whisper(original_message, forced) || !can_speak_basic(original_message, ignore_spam, forced))
-		return
+	//if(check_whisper(original_message, forced) || !can_speak_basic(original_message, ignore_spam, forced))
+	//	return
 	//RATWOOD SUBTLER START
 	if(check_subtler(original_message, forced) || !can_speak_basic(original_message, ignore_spam, forced))
 		return
@@ -242,7 +242,7 @@ GLOBAL_LIST_INIT(department_radio_keys, list(
 		message = trim(copytext(sanitize(message), 1, MAX_MESSAGE_LEN))
 
 	//allow player to format their speech
-	message = replacetextEx(message, regex("^(/*)(.*?)(/*)$"), /proc/format_dialogue)
+	message = replacetextEx(message, regex(@"^([/+]*)(.*?)([/+]*)$"), /proc/format_dialogue)
 
 	if(!message || message == "")
 		return
@@ -278,6 +278,7 @@ GLOBAL_LIST_INIT(department_radio_keys, list(
 	if (group3)
 		message = message + group3
 	message = replacetextEx(message, regex(@"(///([^/]+?)///)|(//([^/]+?)//)|(/([^/]+?)/)", "g"), /proc/format_dialogue_html)
+	message = replacetextEx(message, regex(@"(\+([^+]+?)\+)", "g"), /proc/format_dialogue_html_2)
 	return message
 
 //replace designated player formatting characters with their corresponding html tags
@@ -288,6 +289,10 @@ GLOBAL_LIST_INIT(department_radio_keys, list(
 		return "<b>" + group4 + "</b>"
 	else if (group1)
 		return "<i><b>" + group2 + "</b></i>"
+	return match
+/proc/format_dialogue_html_2(match, group1, group2)
+	if (group1)
+		return "<b>" + group2 + "</b>"
 	return match
 
 /datum/species/proc/get_span_language(datum/language/message_language)
