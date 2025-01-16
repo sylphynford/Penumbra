@@ -1,7 +1,7 @@
 /datum/job/roguetown/shophand
 	title = "Grabber"
 	flag = SHOPHAND
-	department_flag = YOUNGFOLK
+	department_flag = PEASANTS
 	faction = "Station"
 	total_positions = 2
 	spawn_positions = 2
