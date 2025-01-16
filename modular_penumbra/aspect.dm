@@ -130,7 +130,7 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 /datum/round_event_control/roundstart/spice_and_volf
 	name = "Spice and Volf"
 	typepath = /datum/round_event/roundstart/spice_and_volf
-	weight = 3
+	weight = 1
 	event_announcement = ""
 	runnable = TRUE
 
