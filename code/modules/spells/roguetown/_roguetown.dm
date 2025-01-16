@@ -57,6 +57,13 @@
 		return FALSE
 	if(!can_cast(caller) || !cast_check(FALSE, ranged_ability_user))
 		return FALSE
+	
+	if(movement_interrupt && check_movement_interrupt(caller))
+		to_chat(caller, span_warning("I need to stand still to cast this spell!"))
+		start_recharge()
+		deactivate(caller)
+		return FALSE
+	
 	if(perform(list(target), TRUE, user = ranged_ability_user))
 		return TRUE
 
