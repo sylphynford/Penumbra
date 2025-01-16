@@ -704,13 +704,13 @@ GLOBAL_LIST_INIT(spells, typesof(/obj/effect/proc_holder/spell)) //needed for th
 	// Get the user's current position
 	var/turf/start_loc = get_turf(user)
 	
-	// Sleep for the cast time, checking if they move
-	if(chargetime)
-		var/start_time = world.time
-		while(world.time < start_time + chargetime)
-			if(get_turf(user) != start_loc)
-				return TRUE
-			sleep(1)
+	// Check for movement with a fixed short delay
+	var/check_time = 5
+	var/start_time = world.time
+	while(world.time < start_time + check_time)
+		if(get_turf(user) != start_loc)
+			return TRUE
+		sleep(1)
 	
 	return FALSE
 
