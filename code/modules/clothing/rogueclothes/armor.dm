@@ -419,11 +419,12 @@
 /obj/item/clothing/suit/roguetown/armor/gambeson/otavan
 	slot_flags = ITEM_SLOT_ARMOR|ITEM_SLOT_SHIRT
 	name = "fencer gambeson"
-	desc = "A large shirt with heavy padding meant to be used below armor."
+	desc = "A large shirt with mail lacing meant to be used below armor."
 	icon_state = "fancygamb"
+	do_sound_chain = TRUE
 	body_parts_covered = CHEST|GROIN|LEGS|ARMS|VITALS
-	armor = list("blunt" = 60, "slash" = 40, "stab" = 50, "bullet" = 25, "laser" = 0,"energy" = 0, "bomb" = 0, "bio" = 0, "rad" = 0, "fire" = 0, "acid" = 0)
-	prevent_crits = list(BCLASS_CUT,BCLASS_BLUNT)
+	armor = list("blunt" = 60, "slash" = 100, "stab" = 80, "bullet" = 20, "laser" = 0,"energy" = 0, "bomb" = 0, "bio" = 0, "rad" = 0, "fire" = 0, "acid" = 0)
+	prevent_crits = list(BCLASS_CUT, BCLASS_STAB, BCLASS_CHOP, BCLASS_BLUNT)
 	blocksound = SOFTUNDERHIT
 	blade_dulling = DULLING_BASHCHOP
 	break_sound = 'sound/foley/cloth_rip.ogg'
