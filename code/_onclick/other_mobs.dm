@@ -200,7 +200,7 @@
 			nodmg = TRUE
 			next_attack_msg += " <span class='warning'>Armor stops the damage.</span>"
 
-	var/datum/wound/caused_wound
+	var/datum/wound/caused_wound = null
 	if(!nodmg)
 		caused_wound = affecting.bodypart_attacked_by(BCLASS_BITE, dam2do, user, user.zone_selected, crit_message = TRUE)
 	visible_message(span_danger("[user] bites [src]'s [parse_zone(user.zone_selected)]![next_attack_msg.Join()]"), \
@@ -214,10 +214,9 @@
 			if(istype(user.dna.species, /datum/species/werewolf))
 				if(prob(30))
 					user.werewolf_feed(src, 10)
-			if(user.mind.has_antag_datum(/datum/antagonist/zombie))
-				var/datum/antagonist/zombie/existing_zomble = mind?.has_antag_datum(/datum/antagonist/zombie)
-				if(caused_wound?.zombie_infect_attempt() && !existing_zomble)
-					user.mind.adjust_triumphs(1)
+			// Only check for zombie infection if we actually caused a wound
+			if(caused_wound && user.mind.has_antag_datum(/datum/antagonist/zombie))
+				return
 
 	var/obj/item/grabbing/bite/B = new()
 	user.equip_to_slot_or_del(B, SLOT_MOUTH)

@@ -184,6 +184,8 @@
 	zombie.update_body()
 	zombie.cmode_music = 'sound/music/combat_weird.ogg'
 
+	// Reduce strength by 3
+	zombie.STASTR = max(zombie.STASTR - 3, 1)
 
 	// This is the original first commit values for it, aka 5-7
 	zombie.STASPD = rand(5,7)
@@ -285,6 +287,9 @@
 
 /// Use this to attempt to add the zombie antag datum to a human
 /mob/living/carbon/human/proc/zombie_check()
+	return FALSE // Completely disable zombie infection
+	
+	/* Original code left commented out for easy restoration later
 	if(!mind)
 		return
 	var/already_zombie = mind.has_antag_datum(/datum/antagonist/zombie)
@@ -299,12 +304,16 @@
 	if(HAS_TRAIT(src, TRAIT_ZOMBIE_IMMUNE))
 		return
 	return mind.add_antag_datum(/datum/antagonist/zombie)
+	*/
 
 /**
  * This occurs when one zombie infects a living human, going into instadeath from here is kind of shit and confusing
  * We instead just transform at the end
  */
 /mob/living/carbon/human/proc/zombie_infect_attempt()
+	return FALSE // Completely disable zombie infection
+	
+	/* Original code left commented out for easy restoration later
 	var/datum/antagonist/zombie/zombie_antag = zombie_check()
 	if(!zombie_antag)
 		return
@@ -315,6 +324,7 @@
 	vomit(1, blood = TRUE, stun = FALSE)
 	addtimer(CALLBACK(src, PROC_REF(wake_zombie)), 1 MINUTES)
 	return zombie_antag
+	*/
 
 /mob/living/carbon/human/proc/wake_zombie()
 	var/datum/antagonist/zombie/zombie_antag = mind?.has_antag_datum(/datum/antagonist/zombie)
