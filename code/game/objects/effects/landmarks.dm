@@ -271,13 +271,13 @@ INITIALIZE_IMMEDIATE(/obj/effect/landmark)
 	icon_state = "arrow"
 
 /obj/effect/landmark/start/shophand
-	name = "Shophand"
-	icon_state = "arrow"
-
-/obj/effect/landmark/start/grabber
 	name = "Grabber"
 	icon_state = "arrow"
 
+/*/obj/effect/landmark/start/grabber
+	name = "Grabber"
+	icon_state = "arrow"
+*/
 
 /obj/effect/landmark/start/innkeep
 	name = "Innkeep"
