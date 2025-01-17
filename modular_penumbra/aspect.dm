@@ -1105,7 +1105,7 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 /datum/round_event_control/roundstart/eternal_night
 	name = "Magician's Curse"
 	typepath = /datum/round_event/roundstart/eternal_night
-	weight = 2
+	weight = 0
 	event_announcement = "The sky has been darkened by inhumen magicks..."
 	runnable = TRUE
 
@@ -1143,7 +1143,7 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 /datum/round_event_control/roundstart/wealthy_benefactor
 	name = "Wealthy Benefactor"
 	typepath = /datum/round_event/roundstart/wealthy_benefactor
-	weight = 10
+	weight = 5
 	event_announcement = ""
 	runnable = TRUE
 
@@ -1267,7 +1267,7 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 /datum/round_event_control/roundstart/great_lover
 	name = "Great Lover"
 	typepath = /datum/round_event/roundstart/great_lover
-	weight = 10
+	weight = 5
 	event_announcement = ""
 	runnable = TRUE
 
@@ -1385,7 +1385,7 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 /datum/round_event_control/roundstart/eternal_day
 	name = "Eternal Day"
 	typepath = /datum/round_event/roundstart/eternal_day
-	weight = 2
+	weight = 0
 	event_announcement = "The sun refuses to set..."
 	runnable = TRUE
 
