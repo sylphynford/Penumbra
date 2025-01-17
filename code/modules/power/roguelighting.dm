@@ -14,6 +14,8 @@
 	var/mode = "day"
 	light_depth = 0
 	light_height = 0
+	var/eternal_night = FALSE
+	var/eternal_day = FALSE
 
 /obj/effect/sunlight/Initialize()
 	light_color = pick("#dbbfbf", "#ddd7bd", "#add1b0", "#a4c0ca", "#ae9dc6", "#d09fbf")
@@ -41,6 +43,9 @@
 #endif
 
 /obj/effect/sunlight/proc/update()
+	if(eternal_night || eternal_day)
+		return
+	
 	if(mode == GLOB.tod)
 		return
 	mode = GLOB.tod

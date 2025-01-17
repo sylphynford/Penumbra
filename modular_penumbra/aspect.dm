@@ -1093,19 +1093,19 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 	. = ..()
 	is_active = TRUE
 	
-	// Set permanent nighttime
-	GLOB.todoverride = "night"
-	
 	// Initial sunlight setup
 	for(var/obj/effect/sunlight/S in GLOB.sunlights)
 		S.light_power = 0
+		S.light_color = pick("#100a18", "#0c0412", "#0f0012")
 		S.set_light(0)
+		// Prevent sunlight from updating
+		S.eternal_night = TRUE
 		STOP_PROCESSING(SStodchange, S)
 
 /datum/round_event_control/roundstart/eternal_night
 	name = "Magician's Curse"
 	typepath = /datum/round_event/roundstart/eternal_night
-	weight = 0
+	weight = 2
 	event_announcement = "The sky has been darkened by inhumen magicks..."
 	runnable = TRUE
 
@@ -1372,20 +1372,19 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 	. = ..()
 	is_active = TRUE
 	
-	// Set permanent daytime
-	GLOB.todoverride = "day"
-	
 	// Initial sunlight setup
 	for(var/obj/effect/sunlight/S in GLOB.sunlights)
 		S.light_power = 1
 		S.light_color = pick("#dbbfbf", "#ddd7bd", "#add1b0", "#a4c0ca", "#ae9dc6", "#d09fbf")
 		S.set_light(S.brightness)
+		// Prevent sunlight from updating
+		S.eternal_day = TRUE
 		STOP_PROCESSING(SStodchange, S)
 
 /datum/round_event_control/roundstart/eternal_day
 	name = "Eternal Day"
 	typepath = /datum/round_event/roundstart/eternal_day
-	weight = 0
+	weight = 2
 	event_announcement = "The sun refuses to set..."
 	runnable = TRUE
 
