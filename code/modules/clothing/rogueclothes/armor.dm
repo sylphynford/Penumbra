@@ -152,6 +152,10 @@
 					var/mob/living/carbon/H = user
 					H.update_inv_armor()
 
+/obj/item/clothing/suit/roguetown/armor/otavan/nocorset
+	icon_state = "fancyhalfplate"
+	adjustable = CANT_CADJUST
+
 /obj/item/clothing/suit/roguetown/armor/plate/bikini
 	name = "half-plate bikini"
 	desc = "Half plate in bikini form, still just as protective somehow. Save for the stomach."

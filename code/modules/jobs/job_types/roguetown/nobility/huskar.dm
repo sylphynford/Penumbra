@@ -46,19 +46,35 @@
 
 /datum/outfit/job/roguetown/huskar/pre_equip(mob/living/carbon/human/H)
 	..()
-	belt = /obj/item/storage/belt/rogue/leather
-	beltl = /obj/item/rogueweapon/sword/sabre
-	beltr = /obj/item/rogueweapon/mace/steel
-	neck = /obj/item/clothing/neck/roguetown/fencerguard
-	shirt = /obj/item/clothing/suit/roguetown/armor/gambeson/otavan
-	head = /obj/item/clothing/head/roguetown/helmet/otavan
-	armor = /obj/item/clothing/suit/roguetown/armor/otavan
-	pants = /obj/item/clothing/under/roguetown/trou/otavan
-	shoes = /obj/item/clothing/shoes/roguetown/otavan
-	gloves = /obj/item/clothing/gloves/roguetown/otavan
-	backr = /obj/item/storage/backpack/rogue/satchel/black
-	backl = /obj/item/rogueweapon/shield/tower/metal
-	backpack_contents = list(/obj/item/rogueweapon/huntingknife/idagger/steel/special = 1, /obj/item/storage/keyring/sheriff, /obj/item/storage/belt/rogue/pouch/coins/rich = 1)
+	if(H.gender == FEMALE)
+		belt = /obj/item/storage/belt/rogue/leather/black
+		beltl = /obj/item/rogueweapon/sword/long
+		beltr = /obj/item/rogueweapon/mace/steel
+		neck = /obj/item/clothing/neck/roguetown/fencerguard
+		shirt = /obj/item/clothing/suit/roguetown/armor/gambeson/otavan
+		head = /obj/item/clothing/head/roguetown/helmet/otavan
+		armor = /obj/item/clothing/suit/roguetown/armor/otavan
+		pants = /obj/item/clothing/under/roguetown/trou/otavan
+		shoes = /obj/item/clothing/shoes/roguetown/otavan
+		gloves = /obj/item/clothing/gloves/roguetown/otavan
+		backr = /obj/item/storage/backpack/rogue/satchel/black
+		backl = /obj/item/rogueweapon/shield/tower/metal
+		backpack_contents = list(/obj/item/rogueweapon/huntingknife/idagger/steel/special = 1, /obj/item/storage/keyring/sheriff, /obj/item/storage/belt/rogue/pouch/coins/rich = 1)
+	else
+		belt = /obj/item/storage/belt/rogue/leather/black
+		beltl = /obj/item/rogueweapon/sword/long
+		beltr = /obj/item/rogueweapon/mace/steel
+		neck = /obj/item/clothing/neck/roguetown/fencerguard
+		shirt = /obj/item/clothing/suit/roguetown/armor/chainmail/hauberk
+		head = /obj/item/clothing/head/roguetown/helmet/otavan
+		armor = /obj/item/clothing/suit/roguetown/armor/otavan/nocorset
+		pants = /obj/item/clothing/under/roguetown/trou/otavan
+		shoes = /obj/item/clothing/shoes/roguetown/boots/armor
+		gloves = /obj/item/clothing/gloves/roguetown/chain
+		backr = /obj/item/storage/backpack/rogue/satchel/black
+		backl = /obj/item/rogueweapon/shield/tower/metal
+		backpack_contents = list(/obj/item/rogueweapon/huntingknife/idagger/steel/special = 1, /obj/item/storage/keyring/sheriff, /obj/item/storage/belt/rogue/pouch/coins/rich = 1)
+
 	if(H.mind)
 		H.mind.adjust_skillrank(/datum/skill/combat/maces, 4, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/combat/crossbows, 3, TRUE)
