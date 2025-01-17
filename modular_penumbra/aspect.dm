@@ -616,16 +616,20 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 				var/mob/living/carbon/human/H = owner.current
 				
 
-				// Update job titles and add Ser title for Guard Captain if needed
+				// Update job titles and add Ser/Dame title for Guard Captain if needed
 				if(H.mind.assigned_role == "Guard Captain")
 					H.mind.assigned_role = "Knight Lieutenant"
 					H.job = "Knight Lieutenant"
 					ADD_TRAIT(H, TRAIT_NOBLE, TRAIT_GENERIC)
 
-					// Add Ser title if not present
-					if(!findtext(H.real_name, "Ser ") && !findtext(H.real_name, "Dame "))
-						H.real_name = "Ser [H.real_name]"
-						H.name = H.real_name
+					// Add appropriate title based on gender
+					if(H.gender == FEMALE)
+						if(!findtext(H.real_name, "Dame "))
+							H.real_name = "Dame [H.real_name]"
+					else
+						if(!findtext(H.real_name, "Ser "))
+							H.real_name = "Ser [H.real_name]"
+					H.name = H.real_name
 				else if(H.mind.assigned_role == "Huskar")
 					H.mind.assigned_role = "Knight Captain"
 					H.job = "Knight Captain"
@@ -1088,7 +1092,7 @@ GLOBAL_DATUM_INIT(SSroundstart_events, /datum/controller/subsystem/roundstart_ev
 /datum/round_event/roundstart/eternal_night/apply_effect()
 	. = ..()
 	is_active = TRUE
-
+	
 	// Set permanent nighttime
 	GLOB.todoverride = "night"
 	
