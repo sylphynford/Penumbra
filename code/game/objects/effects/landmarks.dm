@@ -296,7 +296,7 @@ INITIALIZE_IMMEDIATE(/obj/effect/landmark)
 	icon_state = "arrow"
 
 /obj/effect/landmark/start/blacksmith
-	name = "Blacksmith"
+	name = "Forgeworker"
 	icon_state = "arrow"
 
 /obj/effect/landmark/start/tailor
