@@ -471,17 +471,15 @@ GLOBAL_LIST_EMPTY(vampire_objects)
 	switch(vamplevel)
 		if(0)
 			vamplevel = 1
-			batform = new
-			owner.current.AddSpell(batform)
-			owner.current.AddSpell(new /obj/effect/proc_holder/spell/invoked/raise_vampire_dead) // Moved from level 2 to level 1
-			owner.current.verbs |= /mob/living/carbon/human/proc/vampire_teleport // Add teleport ability
+			owner.current.AddSpell(new /obj/effect/proc_holder/spell/invoked/raise_vampire_dead) 
+			owner.current.verbs |= /mob/living/carbon/human/proc/vampire_teleport
 			for(var/obj/structure/vampire/portalmaker/S in GLOB.vampire_objects)
 				S.unlocked = TRUE
 			for(var/S in MOBSTATS)
 				owner.current.change_stat(S, 2)
 			for(var/obj/structure/vampire/bloodpool/B in GLOB.vampire_objects)
 				B.nextlevel = VAMP_LEVEL_TWO
-			to_chat(owner, "<font color='red'>I am refreshed and have grown stronger. The visage of the bat is once again available to me. I can also once again access my portals, raise the dead to serve me, and teleport to my amulets.</font>")
+			to_chat(owner, "<font color='red'>I am refreshed and have grown stronger. I can now raise the dead to serve me, access my portals, and teleport to my amulets.</font>")
 		if(1)
 			vamplevel = 2
 			owner.current.verbs |= /mob/living/carbon/human/proc/vamp_regenerate
@@ -517,6 +515,8 @@ GLOBAL_LIST_EMPTY(vampire_objects)
 				return
 			vamplevel = 4
 			owner.current.visible_message("<font color='red'>[owner.current] is enveloped in dark crimson, a horrific sound echoing in the area. They are evolved.</font>","<font color='red'>I AM ANCIENT, I AM THE LAND. EVEN THE SUN BOWS TO ME.</font>")
+			batform = new
+			owner.current.AddSpell(batform)
 			ascended = TRUE
 			C.ascended = TRUE
 			for(var/datum/mind/thrall in C.vampires)
