@@ -977,7 +977,7 @@ Slots: [job.spawn_positions]</span>
 			HTML += "</a></td></tr>"
 
 			// Add advclass selection for jobs with advanced classes
-			if(job.advclass_cat_rolls?.len && job_preferences[job.title] != null && job.title != "Towner" && job.title != "Vagabond")
+			if(job.advclass_cat_rolls?.len && job_preferences[job.title] != null && job.title != "Towner" && job.title != "Vagabond" && job.title != "Adventurer")
 				HTML += "<tr bgcolor='#000000'><td width='60%' align='right'>"
 				HTML += "Class:</td><td><a href='?_src_=prefs;preference=advclass;job=[rank]'>"
 				var/selected_class

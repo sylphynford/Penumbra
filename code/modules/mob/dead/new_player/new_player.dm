@@ -575,7 +575,7 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/rp_prompt.txt"))
 	var/datum/job/latejoin_job = SSjob.GetJob(rank)
 	if(latejoin_job?.advclass_cat_rolls?.len)
 		var/client/C = src.client
-		if(rank == "Towner" || rank == "Vagabond")
+		if(rank == "Towner" || rank == "Vagabond" || rank == "Adventurer")
 			var/inquisitor_class
 			for(var/mob/living/carbon/human/inq in GLOB.human_list)
 				if(inq.mind?.assigned_role == "Inquisitor")

@@ -13,7 +13,7 @@
 	bypass_lastclass = TRUE
 	bypass_jobban = FALSE
 
-	advclass_cat_rolls = list(CTAG_PILGRIM = 20, CTAG_ADVENTURER = 1)
+	advclass_cat_rolls = list(CTAG_PILGRIM = 20)
 	PQ_boost_divider = 10
 
 	announce_latejoin = FALSE

@@ -5,8 +5,6 @@
 	allowed_sexes = list(MALE, FEMALE)
 	allowed_races = RACES_ALL_KINDS
 	outfit = /datum/outfit/job/roguetown/adventurer/monk
-	traits_applied = list(TRAIT_DODGEEXPERT)
-	pickprob = 1
 
 	vampcompat = FALSE
 
@@ -42,4 +40,3 @@
 		H.change_stat("endurance", 1)
 		H.change_stat("speed", 2)
 		H.change_stat("perception", -1)
-		ADD_TRAIT(H, TRAIT_DODGEEXPERT, TRAIT_GENERIC)
