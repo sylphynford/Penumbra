@@ -47,6 +47,23 @@
 	var/cache_facial_dye
 	var/starved = FALSE
 	var/obj/effect/proc_holder/spell/targeted/shapeshift/bat/batform //attached to the datum itself to avoid cloning memes, and other duplicates
+	var/list/victims = list()
+
+/datum/antagonist/vampire/proc/try_drain(mob/living/victim, amount, vitae_bank)
+	var/found = FALSE
+	for (var/datum/drainedmemory/memory in victims)
+		if (victim == memory.victim)
+			found = TRUE
+			if ((memory.vitae_drained + amount) > vitae_bank)
+				return FALSE
+			memory.vitae_drained += min(amount, max(0, vitae_bank - memory.vitae_drained))
+			break
+	if (!found)
+		var/datum/drainedmemory/new_memory = new /datum/drainedmemory
+		new_memory.victim = victim
+		new_memory.vitae_drained += min(amount, max(0, vitae_bank - new_memory.vitae_drained))
+		victims += new_memory
+	return TRUE
 
 /datum/antagonist/vampire/proc/handle_vitae(change)
 	var/tempcurrent = vitae
