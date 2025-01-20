@@ -496,22 +496,18 @@
 				C.blood_volume = max(C.blood_volume-45, 0)
 				if(ishuman(C))
 					var/mob/living/carbon/human/H = C
-					if(H.vitae_bank <= 0)
-						to_chat(user, span_warning("This blood is stale to me."))
-						return
 					var/vitae_to_drain = 500
+					var/vitae_cap = 5000
 					if(H.virginity)
 						vitae_to_drain = 750
-						to_chat(user, "<span class='love'>Virgin blood, delicious!</span>")
-					
-					// Cap the drain amount by what's available in vitae_bank
-					vitae_to_drain = min(vitae_to_drain, H.vitae_bank)
-					H.vitae_bank = max(0, H.vitae_bank - vitae_to_drain)
-					
-					if(vitae_to_drain > 0)
-						VDrinker.handle_vitae(vitae_to_drain)
+						vitae_cap = 7500 //virgins give more vitae
+					if (!VDrinker.try_drain(H, vitae_to_drain, vitae_cap))
+						to_chat(user, span_warningbig("This blood is stale to me."))
+						//return //just stop the vitae from rising, don't return and prevent the vampire from drinking since they need to drink to sire new spawn
 					else
-						to_chat(user, span_warning("This blood is stale to me."))
+						VDrinker.handle_vitae(vitae_to_drain)
+						if (H.virginity)
+							to_chat(user, "<span class='love'>Virgin blood, delicious!</span>")
 		else if(VDrinkerBasic)
 			if(zomwerewolf)
 				to_chat(user, span_danger("I'm going to puke..."))
@@ -522,22 +518,18 @@
 				C.blood_volume = max(C.blood_volume-45, 0)
 				if(ishuman(C))
 					var/mob/living/carbon/human/H = C
-					if(H.vitae_bank <= 0)
-						to_chat(user, span_warning("This blood is stale to me."))
-						return
 					var/vitae_to_drain = 500
+					var/vitae_cap = 5000
 					if(H.virginity)
 						vitae_to_drain = 750
-						to_chat(user, "<span class='love'>Virgin blood, delicious!</span>")
-					
-					// Cap the drain amount by what's available in vitae_bank
-					vitae_to_drain = min(vitae_to_drain, H.vitae_bank)
-					H.vitae_bank = max(0, H.vitae_bank - vitae_to_drain)
-					
-					if(vitae_to_drain > 0)
-						VDrinkerBasic.handle_vitae(vitae_to_drain)
+						vitae_cap = 7500
+					if (!VDrinkerBasic.try_drain(H, vitae_to_drain, vitae_cap))
+						to_chat(user, span_warningbig("This blood is stale to me."))
+						//return //just stop the vitae from rising, don't return and prevent the vampire from drinking since they need to drink to sire new spawn
 					else
-						to_chat(user, span_warning("This blood is stale to me."))
+						VDrinkerBasic.handle_vitae(vitae_to_drain)
+						if (H.virginity)
+							to_chat(user, "<span class='love'>Virgin blood, delicious!</span>")
 		else
 			to_chat(user, "<span class='warning'>I'm going to puke...</span>")
 			addtimer(CALLBACK(user, TYPE_PROC_REF(/mob/living/carbon, vomit), 0, TRUE), rand(8 SECONDS, 15 SECONDS))
