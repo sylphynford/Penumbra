@@ -17,6 +17,7 @@
 	var/obj/item/natural/dirtclod/heldclod
 	smeltresult = /obj/item/ingot/iron
 	max_blade_int = 50
+	associated_skill = /datum/skill/combat/improvised
 
 /obj/item/rogueweapon/shovel/Destroy()
 	if(heldclod)
