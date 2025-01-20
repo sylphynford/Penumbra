@@ -15,7 +15,7 @@
 /datum/outfit/job/roguetown/adventurer/bard/pre_equip(mob/living/carbon/human/H)
 	..() // The entertaining jack of all trades, uniquely handy with crossbows and swords. They're incredibly well travelled, can sneak, steal and survive on their own.
 	H.adjust_blindness(-3)
-	var/classes = list("Bard","Skald","Arcanist","Hymnist") //Azure Peak Edit for Hymnist
+	var/classes = list("Bard","Skald","Arcanist") //Azure Peak Edit for Hymnist
 	var/classchoice = input("Choose your archetypes", "Available archetypes") as anything in classes
 
 	switch(classchoice)
