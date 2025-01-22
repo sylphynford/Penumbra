@@ -6909,6 +6909,7 @@
 "gJj" = (
 /obj/structure/closet/crate/drawer/random,
 /obj/machinery/light/rogue/wallfire/candle/l,
+/obj/item/scomstone/bad,
 /turf/open/floor/rogue/ruinedwood{
 	icon_state = "weird1"
 	},
@@ -11124,10 +11125,10 @@
 /area/rogue/indoors/town/church/chapel)
 "kTg" = (
 /obj/structure/mineral_door/wood{
-	name = "Head Butler's Quarters";
+	name = "Huskar's Quarters";
 	icon_state = "wcv";
 	locked = 1;
-	lockid = "manor"
+	lockid = "sheriff"
 	},
 /turf/open/floor/rogue/ruinedwood{
 	icon_state = "weird1"
@@ -17517,7 +17518,6 @@
 /area/rogue/under/town/basement)
 "qRB" = (
 /obj/structure/roguemachine/scomm/r,
-/obj/effect/landmark/start/butler,
 /turf/open/floor/rogue/ruinedwood{
 	icon_state = "weird1"
 	},
