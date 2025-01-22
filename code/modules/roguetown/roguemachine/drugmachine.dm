@@ -262,8 +262,8 @@
 	held_items[/obj/item/reagent_containers/powder/ozium_enhanced] = list("PRICE" = (6),"NAME" = "enhanced ozium")
 	held_items[/obj/item/reagent_containers/powder/moondust_enhanced] = list("PRICE" = (13),"NAME" = "enhanced moondust")
 	held_items[/obj/item/frost_oil] = list("PRICE" = (50),"NAME" = "frost Oil")
-	held_items[/obj/item/fire_oil] = list("PRICE" = (50),"NAME" = "fire Oil")
-	held_items[/obj/item/acid_oil] = list("PRICE" = (50),"NAME" = "acid oil")
+	held_items[/obj/item/fire_oil] = list("PRICE" = (100),"NAME" = "fire Oil")
+	held_items[/obj/item/acid_oil] = list("PRICE" = (150),"NAME" = "acid oil")
 
 #undef DRUGRADE_MONEYA
 #undef DRUGRADE_MONEYB
