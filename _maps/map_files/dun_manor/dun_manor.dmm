@@ -116,7 +116,6 @@
 	dir = 4
 	},
 /obj/item/roguebin/water,
-/obj/machinery/light/rogue/wallfire/candle,
 /turf/open/floor/rogue/ruinedwood{
 	icon_state = "weird1"
 	},
@@ -1794,14 +1793,6 @@
 /obj/structure/mirror,
 /turf/open/floor/rogue/ruinedwood/herringbone,
 /area/rogue/indoors)
-"bEz" = (
-/obj/structure/chair/wood/rogue/fancy{
-	icon_state = "chair1";
-	dir = 4
-	},
-/obj/machinery/light/rogue/wallfire/candle/l,
-/turf/open/floor/carpet/stellar,
-/area/rogue/indoors/town/magician)
 "bEC" = (
 /obj/machinery/light/rogue/torchholder/r,
 /turf/open/floor/rogue/ruinedwood/spiral,
@@ -6769,7 +6760,6 @@
 /obj/structure/closet/crate/chest/neu,
 /obj/item/rogueweapon/hoe,
 /obj/item/rogueweapon/thresher,
-/obj/machinery/light/rogue/wallfire/candle/l,
 /turf/open/floor/rogue/cobble,
 /area/rogue/indoors/town/magician)
 "gzW" = (
@@ -14798,11 +14788,12 @@
 /turf/open/floor/rogue/hexstone,
 /area/rogue/indoors/town/bath)
 "orK" = (
-/obj/structure/roguewindow/openclose{
-	icon_state = "woodwindowdir";
+/obj/structure/roguewindow/openclose/reinforced{
 	dir = 1
 	},
-/turf/closed/wall/mineral/rogue/stonebrick,
+/turf/open/floor/rogue/ruinedwood{
+	icon_state = "weird1"
+	},
 /area/rogue/indoors/town/manor)
 "orU" = (
 /obj/item/reagent_containers/food/snacks/crow{
@@ -15010,8 +15001,7 @@
 /turf/open/floor/rogue/ruinedwood/herringbone,
 /area/rogue/indoors)
 "ozE" = (
-/obj/structure/roguewindow/openclose{
-	icon_state = "woodwindowdir";
+/obj/structure/roguewindow/openclose/reinforced{
 	dir = 1
 	},
 /turf/open/floor/rogue/ruinedwood{
@@ -17402,13 +17392,16 @@
 	dir = 8
 	},
 /obj/structure/flora/ausbushes/ppflowers,
-/obj/machinery/light/rogue/wallfire/candle/r,
 /turf/open/floor/rogue/grass,
 /area/rogue/indoors/town/magician)
 "qLS" = (
-/obj/machinery/light/rogue/wallfire/candle/l,
-/turf/open/floor/rogue/ruinedwood/platform,
-/area/rogue/indoors/town/magician)
+/obj/structure/closet/crate/roguecloset,
+/obj/item/dildo/steel{
+	name = "barbed dildo"
+	},
+/obj/item/bodypart/head/larva,
+/turf/open/floor/carpet/royalblack,
+/area/rogue/indoors/town/manor)
 "qMb" = (
 /obj/structure/table/wood{
 	icon_state = "longtable";
@@ -24973,8 +24966,7 @@
 /turf/open/floor/rogue/cobblerock,
 /area/rogue/outdoors/rtfield)
 "ymf" = (
-/obj/structure/roguewindow/openclose{
-	icon_state = "woodwindowdir";
+/obj/structure/roguewindow/openclose/reinforced{
 	dir = 1
 	},
 /turf/open/floor/rogue/wood,
@@ -90976,7 +90968,7 @@ qRB
 raP
 dPO
 fjC
-khn
+qLS
 vcT
 fAW
 fAW
@@ -115313,7 +115305,7 @@ mag
 mag
 mag
 lhn
-bEz
+nmj
 nmj
 eZg
 nGn
@@ -116100,7 +116092,7 @@ fRC
 rDF
 lhn
 lhn
-rfr
+lhn
 oOv
 mag
 qLu
@@ -117356,7 +117348,7 @@ oYc
 tbN
 suy
 suy
-qLS
+suy
 mgy
 ooN
 ooN
