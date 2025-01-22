@@ -5302,7 +5302,7 @@
 	locked = 1;
 	lockid = "tower"
 	},
-/turf/open/floor/rogue/wood,
+/turf/open/floor/rogue/carpet,
 /area/rogue/indoors/town/magician)
 "fbW" = (
 /obj/structure/table/wood{
@@ -15023,9 +15023,7 @@
 /obj/structure/roguewindow/openclose/reinforced{
 	dir = 1
 	},
-/turf/open/floor/rogue/ruinedwood{
-	icon_state = "weird1"
-	},
+/turf/open/floor/rogue/hexstone,
 /area/rogue/indoors/town/magician)
 "oAa" = (
 /obj/structure/mirror{
@@ -15532,6 +15530,14 @@
 	},
 /turf/open/floor/rogue/twig/platform,
 /area/rogue/indoors/shelter/woods)
+"oZl" = (
+/obj/structure/mineral_door/wood{
+	icon_state = "wcv";
+	locked = 1;
+	lockid = "tower"
+	},
+/turf/open/floor/rogue/tile/masonic,
+/area/rogue/indoors/town/magician)
 "oZv" = (
 /turf/open/water/cleanshallow,
 /area/rogue/under/cave)
@@ -16108,9 +16114,7 @@
 	lockid = "tower";
 	name = "ritual chamber"
 	},
-/turf/open/floor/rogue/ruinedwood{
-	icon_state = "weird1"
-	},
+/turf/open/floor/rogue/hexstone,
 /area/rogue/indoors/town/magician)
 "pAt" = (
 /obj/structure/closet/crate/roguecloset,
@@ -24376,7 +24380,7 @@
 	locked = 1;
 	lockid = "tower"
 	},
-/turf/open/floor/rogue/cobble,
+/turf/open/floor/rogue/hexstone,
 /area/rogue/indoors/town/magician)
 "xJI" = (
 /turf/open/water/bath,
@@ -25054,7 +25058,7 @@
 /obj/structure/roguewindow/openclose/reinforced{
 	dir = 1
 	},
-/turf/open/floor/rogue/wood,
+/turf/open/floor/rogue/tile/masonic,
 /area/rogue/indoors/town/magician)
 "ymg" = (
 /turf/open/water/cleanshallow,
@@ -116809,7 +116813,7 @@ xJG
 rnW
 uOA
 uOA
-xJG
+oZl
 aVs
 uOA
 uOA
