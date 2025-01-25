@@ -16,7 +16,7 @@
     associated_skill = /datum/skill/magic/holy
     antimagic_allowed = TRUE
     charge_max = 15 SECONDS
-    devotion_cost = 15
+    devotion_cost = 0
 
 /obj/effect/proc_holder/spell/invoked/blindness/cast(list/targets, mob/user = usr)
 	if(isliving(targets[1]))
