@@ -267,6 +267,9 @@
 	held_items[/obj/item/acid_oil] = list("PRICE" = (150),"NAME" = "acid oil")
 	held_items[/obj/item/lockpickring] = list("PRICE" = (15), "NAME" = "oil infused lockpicks")
 	held_items[/obj/item/storage/belt/rogue/surgery_bag/full] = list("PRICE" = (75), "NAME" = "enhanced medical bag")
+	held_items[/obj/item/gun/ballistic/revolver/grenadelauncher/crossbow] = list("PRICE" = (30), "NAME" = "enhanced crossbow")
+	held_items[/obj/item/ammo_casing/caseless/rogue/bolt] = list("PRICE" = rand(5, 15), "NAME" = "enhanced bolt")
+	held_items[/obj/item/ammo_casing/caseless/rogue/bolt/pyro] = list("PRICE" = rand(15,35), "NAME" = "oil covered incendiary bolt")
 
 #undef DRUGRADE_MONEYA
 #undef DRUGRADE_MONEYB
