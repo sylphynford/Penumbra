@@ -391,8 +391,8 @@
 	item_state = "spice"
 	possible_transfer_amounts = list()
 	volume = 15
-	list_reagents = list(/datum/reagent/druqks = 15)
-	grind_results = list(/datum/reagent/druqks = 15)
+	list_reagents = list(/datum/reagent/druqks = 16)
+	grind_results = list(/datum/reagent/druqks = 16)
 	sellprice = 10
 
 /datum/reagent/druqks
