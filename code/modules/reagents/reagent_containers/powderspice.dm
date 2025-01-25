@@ -45,6 +45,7 @@
 	if(M.has_flaw(/datum/charflaw/addiction/junkie))
 		M.sate_addiction()
 	M.apply_status_effect(/datum/status_effect/buff/druqks)
+	M.rogstam_add(25)
 	..()
 
 /atom/movable/screen/fullscreen/druqks
