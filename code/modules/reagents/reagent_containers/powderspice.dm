@@ -252,6 +252,7 @@
 	if(M.has_flaw(/datum/charflaw/addiction/junkie))
 		M.sate_addiction()
 	M.apply_status_effect(/datum/status_effect/buff/moondust)
+	M.rogstam_add(5)
 	if(prob(10))
 		M.flash_fullscreen("whiteflash")
 	..()
