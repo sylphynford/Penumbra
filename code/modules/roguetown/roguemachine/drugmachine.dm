@@ -265,6 +265,7 @@
 	held_items[/obj/item/fire_oil] = list("PRICE" = (100),"NAME" = "fire Oil")
 	held_items[/obj/item/acid_oil] = list("PRICE" = (150),"NAME" = "acid oil")
 	held_items[/obj/item/lockpickring] = list("PRICE" = (15), "NAME" = "oil infused lockpicks")
+	held_items[/obj/item/storage/belt/rogue/surgery_bag/full] = list("PRICE" = (75), "NAME" = "enhanced medical bag")
 
 #undef DRUGRADE_MONEYA
 #undef DRUGRADE_MONEYB
