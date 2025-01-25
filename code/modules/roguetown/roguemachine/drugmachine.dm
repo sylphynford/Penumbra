@@ -264,6 +264,7 @@
 	held_items[/obj/item/frost_oil] = list("PRICE" = (50),"NAME" = "frost Oil")
 	held_items[/obj/item/fire_oil] = list("PRICE" = (100),"NAME" = "fire Oil")
 	held_items[/obj/item/acid_oil] = list("PRICE" = (150),"NAME" = "acid oil")
+	held_items[/obj/item/lockpickring] = list("PRICE" = (15), "NAME" = "oil infused lockpicks")
 
 #undef DRUGRADE_MONEYA
 #undef DRUGRADE_MONEYB
