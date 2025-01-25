@@ -9456,6 +9456,13 @@
 	},
 /turf/open/floor/rogue/grassyel,
 /area/rogue/outdoors/town)
+"jlX" = (
+/obj/structure/roguemachine/drugmachine{
+	pixel_y = 32;
+	density = 0
+	},
+/turf/open/floor/rogue/hexstone,
+/area/rogue/indoors/town/bath)
 "jlY" = (
 /obj/structure/rack/rogue,
 /obj/item/clothing/wrists/roguetown/bracers/leather,
@@ -21286,11 +21293,12 @@
 /turf/closed/wall/mineral/rogue/pipe,
 /area/rogue/indoors)
 "uGz" = (
-/obj/structure/roguemachine/drugmachine{
-	pixel_y = 32;
-	density = 0
+/obj/structure/roguemachine/atm{
+	mammonsiphoned = 250;
+	pixel_y = 0;
+	pixel_x = -32
 	},
-/turf/open/floor/rogue/blocks/stonered,
+/turf/open/floor/rogue/hexstone,
 /area/rogue/indoors/town/bath)
 "uHq" = (
 /obj/structure/flora/roguegrass/bush,
@@ -28824,7 +28832,7 @@ gFr
 hqB
 ngC
 ngC
-ngC
+uGz
 dhw
 soL
 puG
@@ -28978,7 +28986,7 @@ tyl
 hpC
 fVT
 kAA
-ngC
+jlX
 ngC
 ngC
 ngC
@@ -29764,7 +29772,7 @@ umZ
 umZ
 kAA
 kAA
-uGz
+pUC
 ktR
 ktR
 aPv
