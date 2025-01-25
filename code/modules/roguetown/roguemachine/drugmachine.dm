@@ -272,6 +272,7 @@
 	held_items[/obj/item/ammo_casing/caseless/rogue/bolt/pyro] = list("PRICE" = rand(15,35), "NAME" = "oil covered incendiary bolt")
 	held_items[/obj/item/reagent_containers/glass/bottle/rogue/poison] = list("PRICE" = rand(15, 35), "NAME" = "enhanced poison")
 	held_items[/obj/item/book/granter/spell_points] = list("PRICE" = rand(100, 500), "NAME" = "tome of forbidden arcynery")
+	held_items[/obj/item/reagent_containers/glass/bottle/rogue/sleepy] = list("PRICE" = rand(10, 35), "NAME" = "sleeping oil")
 
 #undef DRUGRADE_MONEYA
 #undef DRUGRADE_MONEYB
