@@ -357,8 +357,8 @@
 	icon_state = "ozium"
 	possible_transfer_amounts = list()
 	volume = 15
-	list_reagents = list(/datum/reagent/ozium = 15)
-	grind_results = list(/datum/reagent/ozium = 15)
+	list_reagents = list(/datum/reagent/ozium_enhanced = 15)
+	grind_results = list(/datum/reagent/ozium_enhanced = 15)
 	sellprice = 5
 
 /datum/reagent/ozium_enhanced
