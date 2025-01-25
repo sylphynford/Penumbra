@@ -270,6 +270,7 @@
 	held_items[/obj/item/gun/ballistic/revolver/grenadelauncher/crossbow] = list("PRICE" = (30), "NAME" = "enhanced crossbow")
 	held_items[/obj/item/ammo_casing/caseless/rogue/bolt] = list("PRICE" = rand(5, 15), "NAME" = "enhanced bolt")
 	held_items[/obj/item/ammo_casing/caseless/rogue/bolt/pyro] = list("PRICE" = rand(15,35), "NAME" = "oil covered incendiary bolt")
+	held_items[/obj/item/reagent_containers/glass/bottle/rogue/poison] = list("PRICE" = rand(15, 35), "NAME" = "enhanced poison")
 
 #undef DRUGRADE_MONEYA
 #undef DRUGRADE_MONEYB
