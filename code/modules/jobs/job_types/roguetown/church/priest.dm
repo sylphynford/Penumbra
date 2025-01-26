@@ -65,6 +65,7 @@
 	H.verbs |= /mob/living/carbon/human/proc/coronate_lord
 	H.verbs |= /mob/living/carbon/human/proc/churchexcommunicate
 	H.verbs |= /mob/living/carbon/human/proc/churchannouncement
+	H.verbs |= /mob/living/carbon/human/proc/psydonconversion
 
 //	ADD_TRAIT(H, TRAIT_NOBLE, TRAIT_GENERIC)
 
@@ -154,6 +155,29 @@
 			to_chat(src, span_warning("I need to do this from the chapel."))
 			return FALSE
 		priority_announce("[inputty]", title = "The Priest Speaks", sound = 'sound/misc/bell.ogg')
+
+/mob/living/carbon/human/proc/psydonconversion()
+	set name = "Conversion"
+	set category = "Priest"
+	//Don't actually check the convertee's faith so that this can't be used to meta it.
+	if(!istype(get_area(src), /area/rogue/indoors/town/church/chapel))
+		to_chat(src, span_warning("I need to do this in the chapel."))
+		return 
+	var/obj/item/grabbing/I = get_active_held_item()
+	var/mob/living/carbon/human/H
+	if(!istype(I) || !ishuman(I.grabbed))
+		return
+	H = I.grabbed
+	if(H == src)
+		to_chat(src, span_warning("I hold the shepherd's crook."))
+		return
+	if(alert("Do you accept PSYDON as your Lord and Saviour?", "", "Yes", "No") == "Yes")
+		H.set_patron(new /datum/patron/divine/astrata)
+		H.say("I bear witness there is no god but Psydon, and Queen Samantha I is his Annointed Monarch.")
+	else
+		H.emote(pick("gasp","gag","choke"))
+		to_chat(H, span_warning("You feel a sense of unease..."))
+	
 
 /obj/effect/proc_holder/spell/self/convertrole/templar
 	name = "Recruit Templar"
