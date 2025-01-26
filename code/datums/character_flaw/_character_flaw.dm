@@ -400,11 +400,15 @@ GLOBAL_LIST_INIT(character_flaws, list(
 	else
 		// Been conscious for ~10 minutes (whatever is the conscious timer)
 		if(last_unconsciousness + concious_timer < world.time)
-			drugged_up = FALSE
+			//drugged_up = FALSE No idea why you'd lose your high at this point in the process.
 			to_chat(user, span_blue("I'm getting drowsy..."))
 			user.emote("yawn", forced = TRUE)
-			next_sleep = world.time + rand(7 SECONDS, 11 SECONDS)
-			do_sleep = TRUE
+			if(!drugged_up)
+				next_sleep = world.time + rand(7 SECONDS, 11 SECONDS)
+				do_sleep = TRUE
+			else
+				drugged_up = FALSE
+				to_chat(user, span_info("Potent drugs keep me awake. I need more."))
 
 /proc/narcolepsy_drug_up(mob/living/living)
 	var/datum/charflaw/narcoleptic/narco = living.get_flaw(/datum/charflaw/narcoleptic)
