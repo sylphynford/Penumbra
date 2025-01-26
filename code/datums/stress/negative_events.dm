@@ -55,6 +55,12 @@
 	stressadd_per_extra_stack = 2
 	desc = span_red("Butchery.")
 
+/datum/stressevent/viewdismember/can_apply(mob/living/user)
+	if(user.has_flaw(/datum/charflaw/sadist))
+		user.add_stress(/datum/stressevent/viewdismembersadist)
+		return FALSE
+	return TRUE
+
 /datum/stressevent/fviewdismember
 	timer = 1 MINUTES
 	max_stacks = 10
