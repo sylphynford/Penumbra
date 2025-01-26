@@ -162,3 +162,10 @@
 	stressadd = -3
 	desc = span_blue("An absolutely exquisite vintage. Indubitably.")
 	timer = 10 MINUTES
+
+/datum/stressevent/viewdismembersadist
+	stressadd = -2
+	max_stacks = 5
+	stressadd_per_extra_stack = -2
+	timer = 15 MINUTES
+	desc = span_blue("Butchery.")
