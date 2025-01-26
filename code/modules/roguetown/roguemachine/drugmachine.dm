@@ -254,7 +254,9 @@
 	held_items[/obj/item/reagent_containers/powder/ozium] = list("PRICE" = rand(6,15),"NAME" = "ozium")
 	held_items[/obj/item/reagent_containers/powder/moondust] = list("PRICE" = rand(13,25),"NAME" = "moondust")
 	held_items[/obj/item/clothing/mask/cigarette/rollie/cannabis] = list("PRICE" = rand(12,18),"NAME" = "swampweed zig")
+	held_items[/obj/item/reagent_containers/food/snacks/grown/rogue/sweetleafdry] = list("PRICE" = rand(12,18), "NAME" = "dry swampweed")
 	held_items[/obj/item/clothing/mask/cigarette/rollie/nicotine] = list("PRICE" = rand(5,10),"NAME" = "zig")
+	held_items[/obj/item/reagent_containers/food/snacks/grown/rogue/pipeweeddry] = list("PRICE" = rand(5,10), "dry westleach leaf")
 	held_items[/obj/item/slimepotion/lovepotion] = list("PRICE" = rand(80,100),"NAME" = "love potion")
 	held_items[/obj/item/clothing/head/roguetown/menacing/bandit] = list("PRICE" = rand(5, 25), "NAME" = "ne'er do 'ell mask")
 
