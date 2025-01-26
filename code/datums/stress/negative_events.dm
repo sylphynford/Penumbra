@@ -58,6 +58,7 @@
 /datum/stressevent/viewdismember/can_apply(mob/living/user)
 	if(user.has_flaw(/datum/charflaw/sadist))
 		user.add_stress(/datum/stressevent/viewdismembersadist)
+		user.sate_addiction()
 		return FALSE
 	return TRUE
 
