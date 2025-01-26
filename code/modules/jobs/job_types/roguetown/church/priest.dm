@@ -159,6 +159,7 @@
 /mob/living/carbon/human/proc/psydonconversion()
 	set name = "Conversion"
 	set category = "Priest"
+	
 	//Don't actually check the convertee's faith so that this can't be used to meta it.
 	if(!istype(get_area(src), /area/rogue/indoors/town/church/chapel))
 		to_chat(src, span_warning("I need to do this in the chapel."))
@@ -169,11 +170,18 @@
 		return
 	H = I.grabbed
 	if(H == src)
-		to_chat(src, span_warning("I hold the shepherd's crook."))
+		to_chat(src, span_warning("I am the Shepherd."))
 		return
-	if(alert("Do you accept PSYDON as your Lord and Saviour?", "", "Yes", "No") == "Yes")
+
+	/obj/item/rogueweapon/woodstaff/aries = locate() in user.held_items
+	if(!required_item)
+		to_chat(src, span_warning("I must hold my shepherd's crook.."))
+		return
+		
+	if(alert(H, "Do you accept PSYDON as your Lord and Saviour?", "PSYDON", "Yes", "No") == "Yes")
 		H.set_patron(new /datum/patron/divine/astrata)
 		H.say("I bear witness there is no god but Psydon, and Queen Samantha I is his Annointed Monarch.")
+		to_chat(H, span_notice("You submit before PSYDON"))
 	else
 		H.emote(pick("gasp","gag","choke"))
 		to_chat(H, span_warning("You feel a sense of unease..."))
