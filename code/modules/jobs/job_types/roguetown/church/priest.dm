@@ -161,9 +161,6 @@
 	set category = "Priest"
 	
 	//Don't actually check the convertee's faith so that this can't be used to meta it.
-	if(!istype(get_area(src), /area/rogue/indoors/town/church/chapel))
-		to_chat(src, span_warning("I need to do this in the chapel."))
-		return 
 	var/obj/item/grabbing/I = get_active_held_item()
 	var/mob/living/carbon/human/H
 	if(!istype(I) || !ishuman(I.grabbed))

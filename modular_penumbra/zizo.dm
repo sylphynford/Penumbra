@@ -121,6 +121,7 @@
 		ADD_TRAIT(chosen, TRAIT_CABAL_LEADER, TRAIT_GENERIC)
 		chosen.verbs += /datum/patron/inhumen/zizo/verb/cabal_message
 		chosen.verbs += /datum/patron/inhumen/zizo/verb/punish_follower
+		chosen.verbs += /datum/patron/inhumen/zizo/verb/zizoconvert
 		to_chat(chosen, "<span class='cultlarge'><font size='5'><b>You have been chosen as the Leader of the Cabal! Use your power to guide your followers to victory over the Psydonite fools.</b></font></span>")
 		log_game("Chose [chosen.real_name] as Cabal Leader")
 	else
@@ -300,3 +301,57 @@
 		return FALSE
 
 	return TRUE
+
+/datum/patron/inhumen/zizo/verb/zizoconvert()
+		set name = "Conversion"
+		set category = "CULTIST"
+		set desc = "Lend a fool a spark of Zizo's knowledge."
+
+		var/mob/living/carbon/human/user = usr
+		if(!istype(user))
+			return
+
+	var/list/valid_targets = list()
+	for(var/mob/living/carbon/human/H in oview(1, user))
+		if(H != user && H.health > 0 && HAS_TRAIT)
+			valid_targets[H.name] = H
+
+	if(!length(valid_targets))
+		to_chat(user, span_warning("There are no valid targets nearby."))
+		return
+	
+	var/target_name
+	if(length(valid_targets) == 1)
+		target_name = valid_targets[1]
+	else
+		target_name = input(user, "Choose a fool to convert.", "ZIZOFRENIA") as null|anything in valid_targets
+		if(!target_name)
+			return
+	
+	var/mob/living/carbon/human/target = valid_targets[target_name]
+	if(QDELETED(target) || target.health <= 0)
+		to_chat(user, span_warning("He's dead!"))
+		return
+
+	// Validate divine status
+	if(istype(target.patron, /datum/patron/inhumen/zizo))
+		to_chat(user, span_warning("This one already knows the TRUTH."))
+		return
+
+	// Begin conversion
+	user.visible_message(span_notice("[user] places a hand upon [target]'s forehead..."))
+	
+	var/initial_user_loc = user.loc
+	var/initial_target_loc = target.loc
+	
+	if(!do_after(user, 15, target = target, extra_checks = CALLBACK(GLOBAL_PROC, .proc/conversion_checks, user, target, initial_user_loc, initial_target_loc)))
+		to_chat(user, span_warning("The conversion ritual has been interrupted!"))
+		return
+
+	// Complete conversion
+	target.patron = new /datum/patron/inhumen/zizo()
+	
+	to_chat(target, span_notice("A phantasmagoria of runic inscriptions, a pulsating mass of flesh in a cage of mirrors. A flesh-lid opens and you feel its gaze upon you. A wave of nausea washes over you, your head throbs and in a filament of agony you realize the TRUTH."))
+	target.emote("painscream", forced = TRUE)
+	to_chat(user, span_notice("[target.name] has been ILLUMINATED!"))
+
