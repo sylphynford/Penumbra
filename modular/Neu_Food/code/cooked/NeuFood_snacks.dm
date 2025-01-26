@@ -90,7 +90,7 @@
 	list_reagents = list(/datum/reagent/consumable/nutriment = SNACK_DECENT)
 	tastes = list("fried cackleberry" = 1)
 	name = "fried cackleberry"
-	desc = "A favorite dish among Astratans."
+	desc = "A favorite dish among Pysdonites."
 	icon_state = "friedegg"
 	portable = FALSE
 	faretype = FARE_POOR
