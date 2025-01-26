@@ -27,12 +27,12 @@
 /datum/crafting_recipe/roguetown/alchemy/moon
 	name = "Moondust"
 	result = list(/obj/item/reagent_containers/powder/moondust)
-	reqs = list(/obj/item/ash = 2, /obj/item/reagent_containers/food/snacks/grown/rogue/pipeweeddry = 1, /datum/reagent/berrypoison = 2)
+	reqs = list(/obj/item/ash = 1, /obj/item/reagent_containers/food/snacks/grown/rogue/pipeweeddry = 1, /datum/reagent/berrypoison = 1)
 	craftdiff = 2
 
 /datum/crafting_recipe/roguetown/alchemy/moon
 	name = "3x Moondust"
-	result = list(/obj/item/reagent_containers/powder/moondust)
+	result = list(/obj/item/reagent_containers/powder/moondust,/obj/item/reagent_containers/powder/moondust,/obj/item/reagent_containers/powder/moondust)
 	reqs = list(/obj/item/ash = 3, /obj/item/reagent_containers/food/snacks/grown/rogue/pipeweeddry = 2, /datum/reagent/berrypoison = 3)
 	craftdiff = 3
 
