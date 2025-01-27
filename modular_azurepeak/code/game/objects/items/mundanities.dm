@@ -99,7 +99,7 @@
 /obj/item/mundane/puzzlebox/impossible/Initialize()
 	. = ..()
 	dice_roll = rand(11,20)
-	fluff_desc = pick("It, frankly, looks nearly impossible.","Its centerpiece is that of Astrata banishing a heretic from this world.","Without doubt, this is rather befuddling.","It looks arcane and nearly-impossible.","Why do I feel like I could try for hours and not succeed at this?","Even a bored archivist would probably have trouble with this one.","It looks nearly impossible.")
+	fluff_desc = pick("It, frankly, looks nearly impossible.","Its centerpiece is that of PSYDON banishing a heretic from this world.","Without doubt, this is rather befuddling.","It looks arcane and nearly-impossible.","Why do I feel like I could try for hours and not succeed at this?","Even a bored archivist would probably have trouble with this one.","It looks nearly impossible.")
 	desc += " [fluff_desc]"
 
 /obj/item/mundane/puzzlebox/impossible/attack_self(mob/living/user)
