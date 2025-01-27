@@ -12,7 +12,7 @@
     sound = 'sound/magic/churn.ogg'
     invocation = "Turn a blind eye!"
     invocation_type = "shout" //can be none, whisper, emote and shout
-    associated_skill = /datum/skill/magic/holy
+    associated_skill = /datum/skill/magic/arcane
     antimagic_allowed = TRUE
     charge_max = 15 SECONDS
     devotion_cost = 15
