@@ -205,7 +205,7 @@
 
 	for(var/I in held_items)
 		// Skip enhanced versions and oils for users without TRAIT_DRUGENHANCER
-		if((!HAS_TRAIT(user, TRAIT_DRUGENHANCER)) && (findtext("[I]", "enhanced") || findtext("[I]", "oil")))
+		if((!HAS_TRAIT(user, TRAIT_DRUGENHANCER)) && (findtext("[I]", "enhanced") || findtext("[I]", "oil") || findtext("[I]", "forbidden")))
 			continue
 
 		var/price = FLOOR(held_items[I]["PRICE"] + (SStreasury.tax_value * held_items[I]["PRICE"]), 1)
@@ -254,8 +254,11 @@
 	held_items[/obj/item/reagent_containers/powder/ozium] = list("PRICE" = rand(6,15),"NAME" = "ozium")
 	held_items[/obj/item/reagent_containers/powder/moondust] = list("PRICE" = rand(13,25),"NAME" = "moondust")
 	held_items[/obj/item/clothing/mask/cigarette/rollie/cannabis] = list("PRICE" = rand(12,18),"NAME" = "swampweed zig")
+	held_items[/obj/item/reagent_containers/food/snacks/grown/rogue/sweetleafdry] = list("PRICE" = rand(12,18), "NAME" = "dry swampweed")
 	held_items[/obj/item/clothing/mask/cigarette/rollie/nicotine] = list("PRICE" = rand(5,10),"NAME" = "zig")
+	held_items[/obj/item/reagent_containers/food/snacks/grown/rogue/pipeweeddry] = list("PRICE" = rand(5,10), "dry westleach leaf")
 	held_items[/obj/item/slimepotion/lovepotion] = list("PRICE" = rand(80,100),"NAME" = "love potion")
+	held_items[/obj/item/clothing/head/roguetown/menacing/bandit] = list("PRICE" = rand(5, 25), "NAME" = "ne'er do 'ell mask")
 
 	// Add enhanced versions with same prices
 	held_items[/obj/item/reagent_containers/powder/spice_enhanced] = list("PRICE" = (41),"NAME" = "enhanced chuckledust")
@@ -264,6 +267,14 @@
 	held_items[/obj/item/frost_oil] = list("PRICE" = (50),"NAME" = "frost Oil")
 	held_items[/obj/item/fire_oil] = list("PRICE" = (100),"NAME" = "fire Oil")
 	held_items[/obj/item/acid_oil] = list("PRICE" = (150),"NAME" = "acid oil")
+	held_items[/obj/item/lockpickring] = list("PRICE" = (15), "NAME" = "oil infused lockpicks")
+	held_items[/obj/item/storage/belt/rogue/surgery_bag/full] = list("PRICE" = (75), "NAME" = "enhanced medical bag")
+	held_items[/obj/item/gun/ballistic/revolver/grenadelauncher/crossbow] = list("PRICE" = (30), "NAME" = "enhanced crossbow")
+	held_items[/obj/item/ammo_casing/caseless/rogue/bolt] = list("PRICE" = rand(5, 15), "NAME" = "enhanced bolt")
+	held_items[/obj/item/ammo_casing/caseless/rogue/bolt/pyro] = list("PRICE" = rand(15,35), "NAME" = "oil covered incendiary bolt")
+	held_items[/obj/item/reagent_containers/glass/bottle/rogue/poison] = list("PRICE" = rand(15, 35), "NAME" = "enhanced poison")
+	held_items[/obj/item/book/granter/spell_points] = list("PRICE" = rand(100, 500), "NAME" = "tome of forbidden arcynery")
+	held_items[/obj/item/reagent_containers/glass/bottle/rogue/sleepy] = list("PRICE" = rand(10, 35), "NAME" = "sleeping oil")
 
 #undef DRUGRADE_MONEYA
 #undef DRUGRADE_MONEYB

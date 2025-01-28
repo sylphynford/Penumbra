@@ -14,6 +14,8 @@
 	high_threshold_passed = span_warning("I feel some sort of constriction around my chest as my breathing becomes shallow and rapid.")
 	now_fixed = span_warning("My lungs seem to once again be able to hold air.")
 	high_threshold_cleared = span_info("The constriction around my chest loosens as my breathing calms down.")
+	sellprice = 70
+	static_price = FALSE
 
 	//Breath damage
 

@@ -5,6 +5,8 @@
 	icon_state = "spice"
 	item_state = "spice"
 	possible_transfer_amounts = list()
+	list_reagents = list(/datum/reagent/druqks = 66)
+	grind_results = list(/datum/reagent/druqks = 66)
 	volume = 15
 	sellprice = 10
 
@@ -43,6 +45,7 @@
 	if(M.has_flaw(/datum/charflaw/addiction/junkie))
 		M.sate_addiction()
 	M.apply_status_effect(/datum/status_effect/buff/druqks)
+	M.rogstam_add(25)
 	..()
 
 /atom/movable/screen/fullscreen/druqks
@@ -249,6 +252,7 @@
 	if(M.has_flaw(/datum/charflaw/addiction/junkie))
 		M.sate_addiction()
 	M.apply_status_effect(/datum/status_effect/buff/moondust)
+	M.rogstam_add(5)
 	if(prob(10))
 		M.flash_fullscreen("whiteflash")
 	..()
@@ -298,6 +302,7 @@
 	if(M.has_flaw(/datum/charflaw/addiction/junkie))
 		M.sate_addiction()
 	M.apply_status_effect(/datum/status_effect/buff/moondust_purest)
+	M.rogstam_add(10)
 	if(prob(20))
 		M.flash_fullscreen("whiteflash")
 	..()
@@ -313,8 +318,8 @@
 	icon_state = "moondust"
 	possible_transfer_amounts = list()
 	volume = 15
-	list_reagents = list(/datum/reagent/moondust = 15)
-	grind_results = list(/datum/reagent/moondust = 15)
+	list_reagents = list(/datum/reagent/moondust_purest = 15)
+	grind_results = list(/datum/reagent/moondust_purest = 15)
 	sellprice = 5
 
 /datum/reagent/moondust/overdose_process(mob/living/M)
@@ -352,8 +357,8 @@
 	icon_state = "ozium"
 	possible_transfer_amounts = list()
 	volume = 15
-	list_reagents = list(/datum/reagent/ozium = 15)
-	grind_results = list(/datum/reagent/ozium = 15)
+	list_reagents = list(/datum/reagent/ozium_enhanced = 15)
+	grind_results = list(/datum/reagent/ozium_enhanced = 15)
 	sellprice = 5
 
 /datum/reagent/ozium_enhanced
@@ -386,8 +391,8 @@
 	item_state = "spice"
 	possible_transfer_amounts = list()
 	volume = 15
-	list_reagents = list(/datum/reagent/druqks = 15)
-	grind_results = list(/datum/reagent/druqks = 15)
+	list_reagents = list(/datum/reagent/druqks = 16)
+	grind_results = list(/datum/reagent/druqks = 16)
 	sellprice = 10
 
 /datum/reagent/druqks

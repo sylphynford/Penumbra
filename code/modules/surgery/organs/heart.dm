@@ -12,6 +12,8 @@
 	high_threshold_passed = span_warning("Something inside my chest hurts, and the pain isn't subsiding. You notice myself breathing far faster than before.")
 	now_fixed = span_info("My heart begins to beat again.")
 	high_threshold_cleared = span_info("The pain in my chest has died down, and my breathing becomes more relaxed.")
+	sellprice = 100
+	static_price = FALSE
 
 	// Heart attack code is in code/modules/mob/living/carbon/human/life.dm
 	var/beating = 1
