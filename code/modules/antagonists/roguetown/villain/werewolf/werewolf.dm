@@ -130,7 +130,7 @@
 	blocksound = SOFTHIT
 	blade_dulling = DULLING_BASHCHOP
 	sewrepair = FALSE
-	max_integrity = INFINITY //Its integrity carries over each transformation, so this should be infinite since their skin keeps 'regenerating'
+	max_integrity = 550
 	item_flags = DROPDEL
 
 /obj/item/rogueweapon/werewolf_claw/Initialize()
