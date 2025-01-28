@@ -303,17 +303,17 @@
 	return TRUE
 
 /datum/patron/inhumen/zizo/verb/zizoconvert()
-		set name = "Conversion"
-		set category = "CULTIST"
-		set desc = "Lend a fool a spark of Zizo's knowledge."
+	set name = "Conversion"
+	set category = "CULTIST"
+	set desc = "Lend a fool a spark of Zizo's knowledge."
 
-		var/mob/living/carbon/human/user = usr
-		if(!istype(user))
-			return
+	var/mob/living/carbon/human/user = usr
+	if(!istype(user))
+		return
 
 	var/list/valid_targets = list()
 	for(var/mob/living/carbon/human/H in oview(1, user))
-		if(H != user && H.health > 0 && HAS_TRAIT)
+		if(H != user && H.health > 0 && !HAS_TRAIT(H, TRAIT_CABAL))
 			valid_targets[H.name] = H
 
 	if(!length(valid_targets))

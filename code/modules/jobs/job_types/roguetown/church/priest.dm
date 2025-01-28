@@ -170,7 +170,7 @@
 		to_chat(src, span_warning("I am the Shepherd."))
 		return
 
-	/obj/item/rogueweapon/woodstaff/aries = locate() in user.held_items
+	var/obj/item/rogueweapon/woodstaff/aries/required_item = locate() in H.held_items
 	if(!required_item)
 		to_chat(src, span_warning("I must hold my shepherd's crook.."))
 		return
