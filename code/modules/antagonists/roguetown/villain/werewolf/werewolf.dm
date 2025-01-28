@@ -132,8 +132,4 @@
 	sewrepair = FALSE
 	max_integrity = 550
 	item_flags = DROPDEL
-
-/obj/item/rogueweapon/werewolf_claw/Initialize()
-	. = ..()
-	ADD_TRAIT(src, TRAIT_NODROP, TRAIT_GENERIC)
-	ADD_TRAIT(src, TRAIT_NOEMBED, TRAIT_GENERIC)
+	
