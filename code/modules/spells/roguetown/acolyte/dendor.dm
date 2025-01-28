@@ -13,7 +13,7 @@
 	invocation = "The Treefather commands thee, be fruitful!"
 	invocation_type = "shout" //can be none, whisper, emote and shout
 	miracle = TRUE
-	devotion_cost = 20
+	devotion_cost = 0
 
 /obj/effect/proc_holder/spell/targeted/blesscrop/cast(list/targets,mob/user = usr)
 	. = ..()
@@ -45,7 +45,7 @@
 	invocation = "Be still and calm, brotherbeast."
 	invocation_type = "whisper" //can be none, whisper, emote and shout
 	miracle = TRUE
-	devotion_cost = 20
+	devotion_cost = 0
 
 /obj/effect/proc_holder/spell/targeted/beasttame/cast(list/targets,mob/user = usr)
 	. = ..()
@@ -70,7 +70,7 @@
 	associated_skill = /datum/skill/magic/holy
 	invocation = "Treefather light the way."
 	invocation_type = "whisper" //can be none, whisper, emote and shout
-	devotion_cost = 30
+	devotion_cost = 0
 
 /obj/effect/proc_holder/spell/targeted/conjure_glowshroom/cast(list/targets, mob/user = usr)
 	. = ..()

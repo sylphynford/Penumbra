@@ -8,7 +8,7 @@
 	req_items = list(/obj/item/clothing/neck/roguetown/psicross)
 	associated_skill = /datum/skill/magic/holy
 	miracle = TRUE
-	devotion_cost = 10
+	devotion_cost = 0
 	var/list/near_death_lines = list(
 		"A haze begins to envelop me, but then suddenly recedes, as if warded back by some great light...",
 		"A terrible weight bears down upon me, as if the wyrld itself were crushing me with its heft...",
@@ -76,7 +76,7 @@
 	invocation = "PSYDON rebukes!"
 	invocation_type = "shout" //can be none, whisper, emote and shout
 	miracle = TRUE
-	devotion_cost = 20
+	devotion_cost = 0
 
 /obj/effect/proc_holder/spell/targeted/abrogation/cast(list/targets, mob/living/user = usr)
 	. = ..()

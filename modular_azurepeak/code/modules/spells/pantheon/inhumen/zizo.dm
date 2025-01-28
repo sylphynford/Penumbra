@@ -16,7 +16,7 @@
 
 /obj/effect/proc_holder/spell/invoked/projectile/profane/miracle
 	miracle = TRUE
-	devotion_cost = 15
+	devotion_cost = 0
 	associated_skill = /datum/skill/magic/holy
 
 /obj/effect/proc_holder/spell/invoked/projectile/profane/fire_projectile(mob/living/user, atom/target)
@@ -90,7 +90,7 @@
 
 /obj/effect/proc_holder/spell/invoked/raise_lesser_undead/miracle
 	miracle = TRUE
-	devotion_cost = 75
+	devotion_cost = 0
 	cabal_affine = TRUE
 
 // T3: Rituos (usable once per sleep cycle, allows you to choose any 1 arcane spell to use for the duration w/ an associated devotion cost. each time you change it, 1 of your limbs is skeletonized, if all of your limbs are skeletonized, you gain access to arcane magic. continuing to use rituos after being fully skeletonized gives you additional spellpoints). Gives you the MOB_UNDEAD flag (needed for skeletonize to work) on first use.
@@ -127,7 +127,7 @@
 
 /obj/effect/proc_holder/spell/invoked/rituos/miracle
 	miracle = TRUE
-	devotion_cost = 120
+	devotion_cost = 0
 	associated_skill = /datum/skill/magic/holy
 
 /obj/effect/proc_holder/spell/invoked/rituos/proc/check_ritual_progress(mob/living/carbon/user)

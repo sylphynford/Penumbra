@@ -10,7 +10,7 @@
 	chargetime = 0
 	releasedrain = 5
 	miracle = TRUE
-	devotion_cost = 5
+	devotion_cost = 0
 	chargedloop = /datum/looping_sound/invokegen
 	associated_skill = /datum/skill/magic/holy
 	hand_path = /obj/item/melee/touch_attack/orison

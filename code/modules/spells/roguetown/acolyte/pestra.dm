@@ -56,7 +56,7 @@
 	antimagic_allowed = TRUE
 	charge_max = 60 SECONDS //attaching a limb is pretty intense
 	miracle = TRUE
-	devotion_cost = 20
+	devotion_cost = 0
 
 /obj/effect/proc_holder/spell/invoked/attach_bodypart/proc/get_organs(mob/living/target, mob/living/user)
 	var/list/missing_organs = list(
@@ -155,7 +155,7 @@
 	antimagic_allowed = TRUE
 	charge_max = 2 MINUTES
 	miracle = TRUE
-	devotion_cost = 30
+	devotion_cost = 0
 	/// Amount of PQ gained for curing zombos
 	var/unzombification_pq = PQ_GAIN_UNZOMBIFY
 
