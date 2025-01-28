@@ -108,7 +108,7 @@
 	W.mind.skill_experience = list()
 	W.grant_language(/datum/language/beast)
 
-	W.base_intents = list(INTENT_HELP, INTENT_DISARM, INTENT_GRAB)
+	W.base_intents = list(INTENT_HELP, INTENT_DISARM, INTENT_GRAB, /datum/intent/unarmed/wwolf)
 	W.update_a_intents()
 
 	to_chat(W, span_userdanger("I transform into a horrible beast!"))

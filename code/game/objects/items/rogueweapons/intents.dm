@@ -516,3 +516,16 @@
 	candodge = TRUE
 	canparry = TRUE
 	item_d_type = "stab"
+
+/datum/intent/unarmed/wwolf
+	name = "claw"
+	icon_state = "inchop"
+	attack_verb = list("claws", "mauls", "eviscerates")
+	animname = "cut"
+	blade_class = BCLASS_CHOP
+	hitsound = "genslash"
+	penfactor = 30
+	candodge = TRUE
+	canparry = TRUE
+	miss_text = "slashes the air!"
+	miss_sound = "bluntwooshlarge"
