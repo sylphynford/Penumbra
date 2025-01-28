@@ -175,6 +175,8 @@
 			return "BEHIND"
 		if(BODY_ADJ_LAYER)
 			return "ADJ"
+		if(BODY_LAYER)
+			return "FRONT"
 		if(BODY_FRONT_LAYER)
 			return "FRONT"
 		if(BODY_FRONT_FRONT_LAYER)
