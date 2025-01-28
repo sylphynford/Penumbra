@@ -130,7 +130,7 @@
 	blocksound = SOFTHIT
 	blade_dulling = DULLING_BASHCHOP
 	sewrepair = FALSE
-	max_integrity = 550
+	max_integrity = INFINITY //Its integrity carries over each transformation, so this should be infinite since their skin keeps 'regenerating'
 	item_flags = DROPDEL
 
 /datum/intent/simple/werewolf
