@@ -262,13 +262,11 @@
 /datum/reagent/potion/sleepy
 	name = "Sleeping Potion"
 	description = "An oily substance which induces sleep into its imbibers."
-	silent_toxin = TRUE
 	reagent_state = LIQUID
-	color = "#210707" 
-	toxpwr = 0
-	metabolization_rate = 1.5 * REAGENTS_METABOLISM
+	color = "#210707"
+	metabolization_rate = 0.5 * REAGENTS_METABOLISM
+	min_volume = 5
 
 /datum/reagent/potion/sleepy/on_mob_life(mob/living/carbon/M)
-			M.Sleeping(40, 0) //Sleep for as long as you've got units of sleepy in you.
-			. = 1
-	..()
+	M.Sleeping(40, 0) //Sleep for as long as you've got units of sleepy in you.
+	return ..()

@@ -1,4 +1,3 @@
-
 /obj/item/reagent_containers/glass/bottle/rogue/healthpot
 	list_reagents = list(/datum/reagent/medicine/healthpot = 45)
 
@@ -21,7 +20,7 @@
 	list_reagents = list(/datum/reagent/water = 48)
 
 /obj/item/reagent_containers/glass/bottle/rogue/sleepy
-	list_reagents = list(/datum/reagent/medicine/sleepy = 15)
+	list_reagents = list(/datum/reagent/potion/sleepy = 15)
 
 //////////////////////////
 /// ALCOHOLIC BOTTLES ///
