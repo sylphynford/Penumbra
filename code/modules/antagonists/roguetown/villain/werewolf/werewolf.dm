@@ -133,51 +133,6 @@
 	max_integrity = INFINITY //Its integrity carries over each transformation, so this should be infinite since their skin keeps 'regenerating'
 	item_flags = DROPDEL
 
-/datum/intent/simple/werewolf
-	name = "claw"
-	icon_state = "inchop"
-	blade_class = BCLASS_CHOP
-	attack_verb = list("claws", "mauls", "eviscerates")
-	animname = "chop"
-	hitsound = "genslash"
-	penfactor = 50
-	candodge = TRUE
-	canparry = TRUE
-	miss_text = "slashes the air!"
-	miss_sound = "bluntwooshlarge"
-	item_d_type = "slash"
-
-/obj/item/rogueweapon/werewolf_claw
-	name = "Verevolf Claw"
-	desc = ""
-	item_state = null
-	lefthand_file = null
-	righthand_file = null
-	icon = 'icons/roguetown/weapons/32.dmi'
-	max_blade_int = 900
-	max_integrity = 900
-	force = 25
-	block_chance = 0
-	wdefense = 2
-	armor_penetration = 15
-	associated_skill = /datum/skill/combat/unarmed
-	wlength = WLENGTH_NORMAL
-	w_class = WEIGHT_CLASS_BULKY
-	can_parry = TRUE
-	sharpness = IS_SHARP
-	parrysound = "bladedmedium"
-	swingsound = BLADEWOOSH_MED
-	possible_item_intents = list(/datum/intent/simple/werewolf)
-	parrysound = list('sound/combat/parry/parrygen.ogg')
-	embedding = list("embedded_pain_multiplier" = 0, "embed_chance" = 0, "embedded_fall_chance" = 0)
-	item_flags = DROPDEL
-
-/obj/item/rogueweapon/werewolf_claw/right
-	icon_state = "claw_r"
-
-/obj/item/rogueweapon/werewolf_claw/left
-	icon_state = "claw_l"
-
 /obj/item/rogueweapon/werewolf_claw/Initialize()
 	. = ..()
 	ADD_TRAIT(src, TRAIT_NODROP, TRAIT_GENERIC)
