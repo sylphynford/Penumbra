@@ -2,7 +2,6 @@
 /obj/effect/proc_holder/spell/invoked/blindness
     name = "Blindness"
     overlay_state = "blindness"
-    req_items = list(/obj/item/clothing/neck/roguetown/psicross)
     releasedrain = 30
     chargedrain = 0
     chargetime = 0
@@ -11,9 +10,9 @@
     warnie = "sydwarning"
     movement_interrupt = FALSE
     sound = 'sound/magic/churn.ogg'
-    invocation = "Psydon blinds thee of thy sins!"
+    invocation = "Turn a blind eye!"
     invocation_type = "shout" //can be none, whisper, emote and shout
-    associated_skill = /datum/skill/magic/holy
+    associated_skill = /datum/skill/magic/arcane
     antimagic_allowed = TRUE
     charge_max = 15 SECONDS
     devotion_cost = 0
