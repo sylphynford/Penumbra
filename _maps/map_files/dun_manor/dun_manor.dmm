@@ -9061,9 +9061,6 @@
 /turf/open/floor/rogue/woodturned,
 /area/rogue/outdoors/town/roofs)
 "iSr" = (
-/mob/living/simple_animal/hostile/rogue/dragger{
-	name = "xarphas"
-	},
 /obj/effect/decal/cleanable/coom,
 /turf/open/floor/rogue/hexstone,
 /area/rogue/indoors/town/magician)
@@ -12778,6 +12775,12 @@
 	icon_state = "plating2"
 	},
 /area/rogue/indoors/town/dwarfin)
+"mwM" = (
+/mob/living/simple_animal/hostile/retaliate/rogue/bogtroll{
+	name = "xarphas"
+	},
+/turf/open/floor/rogue/hexstone,
+/area/rogue/indoors/town/magician)
 "mwX" = (
 /obj/item/roguebin/water,
 /turf/open/floor/rogue/blocks,
@@ -115870,7 +115873,7 @@ mag
 mag
 uEl
 iSr
-fmc
+mwM
 efp
 fmc
 uOA
