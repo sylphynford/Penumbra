@@ -9061,10 +9061,10 @@
 /turf/open/floor/rogue/woodturned,
 /area/rogue/outdoors/town/roofs)
 "iSr" = (
-/mob/living/simple_animal/hostile/rogue/dragger{
+/obj/effect/decal/cleanable/coom,
+/mob/living/simple_animal/hostile/rogue/dragger/pet{
 	name = "xarphas"
 	},
-/obj/effect/decal/cleanable/coom,
 /turf/open/floor/rogue/hexstone,
 /area/rogue/indoors/town/magician)
 "iSx" = (

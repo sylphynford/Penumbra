@@ -281,6 +281,9 @@ GLOBAL_VAR_INIT(underworld_coins, 0)
 				span_danger("\The [src] paralyzes me!"))
 		emote("laugh")
 
+/mob/living/simple_animal/hostile/rogue/dragger/pet
+	pass_flags = PASSTABLE
+
 /obj/effect/landmark/underworldsafe/Crossed(atom/movable/AM, oldloc)
 	if(istype(AM, /mob/living/simple_animal/hostile/rogue/dragger))
 		for(var/mob/living/carbon/human/A in view(4))
