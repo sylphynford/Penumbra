@@ -474,9 +474,10 @@
 		if (!(MUTCOLORS_PARTSONLY in dna.species.species_traits))
 			set_organ_slot_color(ORGAN_SLOT_TAIL, "#c9d3de")
 			set_organ_slot_color(ORGAN_SLOT_EARS, "#c9d3de")
-		var/obj/item/organ/ears/Ear = getorganslot(ORGAN_SLOT_EARS)
-		if (Ear.accessory_type == /datum/sprite_accessory/ears/human)
-			set_organ_slot_color(ORGAN_SLOT_EARS, "#c9d3de")
+		else
+			var/obj/item/organ/ears/Ear = getorganslot(ORGAN_SLOT_EARS)
+			if (Ear.accessory_type == /datum/sprite_accessory/ears/human)
+				set_organ_slot_color(ORGAN_SLOT_EARS, "#c9d3de")
 	set_hair_color("#181a1d", "#181a1d", "#181a1d", update = FALSE)
 	set_facial_hair_color("#181a1d", "#181a1d", "#181a1d", update = FALSE)
 	
