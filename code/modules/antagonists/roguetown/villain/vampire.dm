@@ -456,8 +456,8 @@
 	else
 		set_skin_tone("c9d3de", update = FALSE)
 		if (!(MUTCOLORS_PARTSONLY in dna.species.species_traits))
-			set_organ_slot_color(ORGAN_SLOT_TAIL, "c9d3de")
-			set_organ_slot_color(ORGAN_SLOT_EARS, "c9d3de")
+			set_organ_slot_color(ORGAN_SLOT_TAIL, "#c9d3de")
+			set_organ_slot_color(ORGAN_SLOT_EARS, "#c9d3de")
 	set_hair_color("#181a1d", "#181a1d", "#181a1d", update = FALSE)
 	set_facial_hair_color("#181a1d", "#181a1d", "#181a1d", update = FALSE)
 	
