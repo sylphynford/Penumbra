@@ -1,4 +1,3 @@
-
 /datum/job/roguetown/priest
 	title = "Priest"
 	flag = PRIEST
@@ -12,6 +11,7 @@
 	allowed_patrons = ALL_DIVINE_PATRONS
 	allowed_sexes = list(MALE, FEMALE)
 	allowed_ages = list(AGE_ADULT, AGE_MIDDLEAGED, AGE_OLD)
+	family_blacklisted = TRUE
 
 	tutorial = "The Divine is all that matters in a world of the immoral, and you will preach His wisdom to any who still heed His will. The faithless are growing in number. It is up to you to shepard them toward a God-fearing future; for you are a priest of PSYDON."
 	whitelist_req = FALSE

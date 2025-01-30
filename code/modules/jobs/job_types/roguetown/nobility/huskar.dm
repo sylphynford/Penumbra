@@ -24,7 +24,7 @@
 	outfit = /datum/outfit/job/roguetown/huskar
 
 	cmode_music = 'sound/music/combat_knight.ogg'
-	family_blacklisted = TRUE
+	family_blacklisted = FALSE
 
 /datum/job/roguetown/huskar/after_spawn(mob/living/L, mob/M, latejoin = TRUE)
 	. = ..()
