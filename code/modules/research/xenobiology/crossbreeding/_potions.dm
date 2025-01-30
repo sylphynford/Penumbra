@@ -93,10 +93,12 @@ Slimecrossing Potions
 	if(!do_after(user, 50, target = M))
 		return
 	to_chat(user, span_notice("I feed [M] the love potion!"))
-	to_chat(M, span_notice("I develop feelings for [user], and anyone [user.p_they()] like."))
-	if(M.mind)
-		M.mind.store_memory("You are in love with [user].")
+	to_chat(M, span_notice("I develop a sudden, overwhelming infatuation with [user]. My heart pounds as warm feelings flood through me."))
 	M.faction |= "[REF(user)]"
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(H.sexcon)
+			H.sexcon.adjust_arousal(85)
 	M.apply_status_effect(STATUS_EFFECT_INLOVE, user)
 	qdel(src)
 

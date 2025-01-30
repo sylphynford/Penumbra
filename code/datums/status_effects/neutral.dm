@@ -69,7 +69,7 @@
 
 /datum/status_effect/in_love
 	id = "in_love"
-	duration = -1
+	duration = 15 MINUTES
 	status_type = STATUS_EFFECT_UNIQUE
 	alert_type = /atom/movable/screen/alert/status_effect/in_love
 	var/mob/living/date
@@ -78,12 +78,17 @@
 	. = ..()
 	if(.)
 		date = love_interest
-	linked_alert.desc = ""
+		linked_alert.desc = "You NEED to see [date]."
 
 /datum/status_effect/in_love/tick()
-	if(date)
-		new /obj/effect/temp_visual/love_heart/invisible(get_turf(date.loc), owner)
+	if(!date)
+		return
+	
+	new /obj/effect/temp_visual/love_heart/invisible(get_turf(date.loc), owner)
 
+/datum/status_effect/in_love/on_remove()
+	to_chat(owner, span_notice("Your feelings for [date] suddenly slip away. All that is left is an empty, hollow pit of disappointment and melancholy."))
+	return ..()
 
 /datum/status_effect/throat_soothed
 	id = "throat_soothed"
