@@ -168,6 +168,10 @@
 	name = "wood elf ears"
 	accessory_type = /datum/sprite_accessory/ears/elfw
 
+/obj/item/organ/ears/lizard
+	name = "lizard ears"
+	accessory_type = null
+
 /obj/item/organ/ears/tiefling
 	name = "tiefling ears"
 	accessory_type = /datum/sprite_accessory/ears/elfw
