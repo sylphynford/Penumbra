@@ -29,6 +29,7 @@
 	var/bang_protect = 0
 	// Multiplier for both long term and short term ear damage
 	var/damage_multiplier = 1
+	accessory_type = /datum/sprite_accessory/ears/human
 
 /obj/item/organ/ears/Insert(mob/living/carbon/M, special, drop_if_replaced)
 	. = ..()
@@ -166,6 +167,10 @@
 /obj/item/organ/ears/elfw
 	name = "wood elf ears"
 	accessory_type = /datum/sprite_accessory/ears/elfw
+
+/obj/item/organ/ears/lizard
+	name = "lizard ears"
+	accessory_type = null
 
 /obj/item/organ/ears/tiefling
 	name = "tiefling ears"

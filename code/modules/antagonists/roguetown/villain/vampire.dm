@@ -304,6 +304,10 @@
 			if (!(MUTCOLORS_PARTSONLY in dna.species.species_traits))
 				set_organ_slot_color(ORGAN_SLOT_TAIL, V.cache_tail_color)
 				set_organ_slot_color(ORGAN_SLOT_EARS, V.cache_ear_color)
+			else
+				var/obj/item/organ/ears/Ear = getorganslot(ORGAN_SLOT_EARS)
+				if (Ear.accessory_type == /datum/sprite_accessory/ears/human)
+					set_organ_slot_color(ORGAN_SLOT_EARS, V.cache_ear_color)
 			set_hair_color(V.cache_hair, V.cache_hair_nat, V.cache_hair_dye, update = FALSE)
 			set_facial_hair_color(V.cache_facial, V.cache_facial_nat, V.cache_facial_dye, update = FALSE)
 			
@@ -351,6 +355,10 @@
 			if (!(MUTCOLORS_PARTSONLY in dna.species.species_traits))
 				set_organ_slot_color(ORGAN_SLOT_TAIL, VL.cache_tail_color)
 				set_organ_slot_color(ORGAN_SLOT_EARS, VL.cache_ear_color)
+			else
+				var/obj/item/organ/ears/Ear = getorganslot(ORGAN_SLOT_EARS)
+				if (Ear.accessory_type == /datum/sprite_accessory/ears/human)
+					set_organ_slot_color(ORGAN_SLOT_EARS, VL.cache_ear_color)
 			set_hair_color(VL.cache_hair, VL.cache_hair_nat, VL.cache_hair_dye, update = FALSE)
 			set_facial_hair_color(VL.cache_facial, VL.cache_facial_nat, VL.cache_hair_dye, update = FALSE)
 			
@@ -387,6 +395,10 @@
 		if (!(MUTCOLORS_PARTSONLY in dna.species.species_traits))
 			set_organ_slot_color(ORGAN_SLOT_TAIL, VD.cache_tail_color)
 			set_organ_slot_color(ORGAN_SLOT_EARS, VD.cache_ear_color)
+		else
+			var/obj/item/organ/ears/Ear = getorganslot(ORGAN_SLOT_EARS)
+			if (Ear.accessory_type == /datum/sprite_accessory/ears/human)
+				set_organ_slot_color(ORGAN_SLOT_EARS, VD.cache_ear_color)
 		set_hair_color(VD.cache_hair, VD.cache_hair_nat, VD.cache_hair_dye, update = FALSE)
 		set_facial_hair_color(VD.cache_facial, VD.cache_facial_nat, VD.cache_facial_dye, update = FALSE)
 		if(VD.cache_eye_color && dna)
@@ -411,6 +423,10 @@
 		if (!(MUTCOLORS_PARTSONLY in dna.species.species_traits))
 			set_organ_slot_color(ORGAN_SLOT_TAIL, VL.cache_tail_color)
 			set_organ_slot_color(ORGAN_SLOT_EARS, VL.cache_ear_color)
+		else
+			var/obj/item/organ/ears/Ear = getorganslot(ORGAN_SLOT_EARS)
+			if (Ear.accessory_type == /datum/sprite_accessory/ears/human)
+				set_organ_slot_color(ORGAN_SLOT_EARS, VL.cache_ear_color)
 		set_hair_color(VL.cache_hair, VL.cache_hair_nat, VL.cache_hair_dye, update = FALSE)
 		set_facial_hair_color(VL.cache_facial, VL.cache_facial_nat, VL.cache_facial_dye, update = FALSE)
 		if(VL.cache_eye_color && dna)
@@ -456,8 +472,12 @@
 	else
 		set_skin_tone("c9d3de", update = FALSE)
 		if (!(MUTCOLORS_PARTSONLY in dna.species.species_traits))
-			set_organ_slot_color(ORGAN_SLOT_TAIL, "c9d3de")
-			set_organ_slot_color(ORGAN_SLOT_EARS, "c9d3de")
+			set_organ_slot_color(ORGAN_SLOT_TAIL, "#c9d3de")
+			set_organ_slot_color(ORGAN_SLOT_EARS, "#c9d3de")
+		else
+			var/obj/item/organ/ears/Ear = getorganslot(ORGAN_SLOT_EARS)
+			if (Ear.accessory_type == /datum/sprite_accessory/ears/human)
+				set_organ_slot_color(ORGAN_SLOT_EARS, "#c9d3de")
 	set_hair_color("#181a1d", "#181a1d", "#181a1d", update = FALSE)
 	set_facial_hair_color("#181a1d", "#181a1d", "#181a1d", update = FALSE)
 	

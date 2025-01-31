@@ -297,6 +297,11 @@
 	icon_state = "elfw"
 	color_key_defaults = list(KEY_SKIN_COLOR)
 
+/datum/sprite_accessory/ears/human
+	name = "Human"
+	icon_state = "human"
+	color_key_defaults = list(KEY_SKIN_COLOR)
+
 /datum/sprite_accessory/ears/halforc
 	name = "Half Orc"
 	icon = 'icons/mob/sprite_accessory/halforc.dmi'
