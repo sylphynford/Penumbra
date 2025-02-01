@@ -468,7 +468,10 @@ There are several things that need to be remembered:
 			//add sleeve overlays, then offset
 			var/list/sleeves = list()
 			if(gloves.sleeved && armsindex > 0)
-				sleeves = get_sleeves_layer(gloves,armsindex,GLOVESLEEVE_LAYER)
+				if((gender == FEMALE && !dna.species.use_m) || dna.species.use_f)
+					sleeves = get_sleeves_layer(gloves,armsindex,GLOVESLEEVE_LAYER, customi = racecustom)
+				else
+					sleeves = get_sleeves_layer(gloves,armsindex,GLOVESLEEVE_LAYER)
 
 			if(sleeves)
 				for(var/X in sleeves)
@@ -1641,7 +1644,7 @@ generate/load female uniform sprites matching all previously decided variables
 
 	return standing
 
-/mob/living/carbon/proc/get_sleeves_layer(obj/item/I,sleeveindex,layer2use)
+/mob/living/carbon/proc/get_sleeves_layer(obj/item/I,sleeveindex,layer2use,customi=null)
 	if(!I)
 		return
 	var/list/sleeves = list()
@@ -1656,6 +1659,8 @@ generate/load female uniform sprites matching all previously decided variables
 	var/racecustom
 	if(dna.species.custom_clothes)
 		racecustom = dna.species.clothes_id
+	if (customi) //just use the normal female textures with offsets since they line up anyway
+		racecustom = null
 	var/index = "[I.icon_state][((gender == FEMALE && !dna.species.use_m)|| dna.species.use_f) ? "_f" : ""][racecustom ? "_[racecustom]" : ""]"
 	var/static/list/bloody_r = list()
 	var/static/list/bloody_l = list()

@@ -1300,6 +1300,7 @@
 /datum/sprite_accessory/hair/chest
 	abstract_type = /datum/sprite_accessory/hair/chest
 	icon = 'icons/mob/sprite_accessory/hair/human_chest_hair.dmi'
+	layer = BODY_LAYER
 
 /datum/sprite_accessory/hair/chest/is_visible(obj/item/organ/organ, obj/item/bodypart/bodypart, mob/living/carbon/owner)
 	return is_human_part_visible(owner, HIDEJUMPSUIT)

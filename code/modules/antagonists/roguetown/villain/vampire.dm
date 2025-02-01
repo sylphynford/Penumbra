@@ -41,10 +41,14 @@
 	var/cache_second_color
 	var/cache_hair
 	var/cache_facial
+	var/cache_chest
 	var/cache_hair_nat
 	var/cache_facial_nat
+	var/cache_chest_nat
 	var/cache_hair_dye
 	var/cache_facial_dye
+	var/cache_chest_dye
+
 	var/starved = FALSE
 	var/obj/effect/proc_holder/spell/targeted/shapeshift/bat/batform //attached to the datum itself to avoid cloning memes, and other duplicates
 	var/list/victims = list()
@@ -146,6 +150,11 @@
 			cache_facial = Facial.accessory_colors
 			cache_facial_nat = Facial.natural_color
 			cache_facial_dye = Facial.hair_dye_color
+		var/datum/bodypart_feature/hair/chest/Chest = H.get_bodypart_feature_of_slot(BODYPART_FEATURE_CHEST_HAIR)
+		if (Chest)
+			cache_chest = Chest.accessory_colors
+			cache_chest_nat = Chest.natural_color
+			cache_chest_dye = Chest.hair_dye_color
 		if (MUTCOLORS in H.dna.species.species_traits)
 			cache_snout_color = H.get_organ_slot_color(ORGAN_SLOT_SNOUT)
 			cache_frill_color = H.get_organ_slot_color(ORGAN_SLOT_FRILLS)
@@ -310,6 +319,7 @@
 					set_organ_slot_color(ORGAN_SLOT_EARS, V.cache_ear_color)
 			set_hair_color(V.cache_hair, V.cache_hair_nat, V.cache_hair_dye, update = FALSE)
 			set_facial_hair_color(V.cache_facial, V.cache_facial_nat, V.cache_facial_dye, update = FALSE)
+			set_chest_hair_color(V.cache_chest, V.cache_chest_nat, V.cache_chest_dye, update = FALSE)
 			
 			if(V.cache_eye_color && dna)
 				var/datum/organ_dna/eyes/eyes_dna = dna.organ_dna[ORGAN_SLOT_EYES]
@@ -361,6 +371,7 @@
 					set_organ_slot_color(ORGAN_SLOT_EARS, VL.cache_ear_color)
 			set_hair_color(VL.cache_hair, VL.cache_hair_nat, VL.cache_hair_dye, update = FALSE)
 			set_facial_hair_color(VL.cache_facial, VL.cache_facial_nat, VL.cache_hair_dye, update = FALSE)
+			set_chest_hair_color(VL.cache_chest, VL.cache_chest_nat, VL.cache_chest_dye, update = FALSE)
 			
 			if(VL.cache_eye_color && dna)
 				var/datum/organ_dna/eyes/eyes_dna = dna.organ_dna[ORGAN_SLOT_EYES]
@@ -401,6 +412,7 @@
 				set_organ_slot_color(ORGAN_SLOT_EARS, VD.cache_ear_color)
 		set_hair_color(VD.cache_hair, VD.cache_hair_nat, VD.cache_hair_dye, update = FALSE)
 		set_facial_hair_color(VD.cache_facial, VD.cache_facial_nat, VD.cache_facial_dye, update = FALSE)
+		set_chest_hair_color(VD.cache_chest, VD.cache_chest_nat, VD.cache_chest_dye, update = FALSE)
 		if(VD.cache_eye_color && dna)
 			var/datum/organ_dna/eyes/eyes_dna = dna.organ_dna[ORGAN_SLOT_EYES]
 			var/obj/item/organ/eyes/E = getorganslot(ORGAN_SLOT_EYES)
@@ -429,6 +441,7 @@
 				set_organ_slot_color(ORGAN_SLOT_EARS, VL.cache_ear_color)
 		set_hair_color(VL.cache_hair, VL.cache_hair_nat, VL.cache_hair_dye, update = FALSE)
 		set_facial_hair_color(VL.cache_facial, VL.cache_facial_nat, VL.cache_facial_dye, update = FALSE)
+		set_chest_hair_color(VL.cache_chest, VL.cache_chest_nat, VL.cache_chest_dye, update = FALSE)
 		if(VL.cache_eye_color && dna)
 			var/datum/organ_dna/eyes/eyes_dna = dna.organ_dna[ORGAN_SLOT_EYES]
 			var/obj/item/organ/eyes/E = getorganslot(ORGAN_SLOT_EYES)
@@ -480,7 +493,7 @@
 				set_organ_slot_color(ORGAN_SLOT_EARS, "#c9d3de")
 	set_hair_color("#181a1d", "#181a1d", "#181a1d", update = FALSE)
 	set_facial_hair_color("#181a1d", "#181a1d", "#181a1d", update = FALSE)
-	
+	set_chest_hair_color("#181a1d", "#181a1d", "#181a1d", update = FALSE)
 	if(dna)
 		var/datum/organ_dna/eyes/eyes_dna = dna.organ_dna[ORGAN_SLOT_EYES]
 		var/obj/item/organ/eyes/E = getorganslot(ORGAN_SLOT_EYES)
@@ -864,8 +877,12 @@
 
 /mob/living/carbon/human/proc/set_hair_color(n_hair_color, n_natural_color, n_dye_color, update = TRUE)
 	var/datum/bodypart_feature/hair/head/Hair = get_bodypart_feature_of_slot(BODYPART_FEATURE_HAIR)
+	var/obj/item/organ/vagina/Vagina = getorganslot(ORGAN_SLOT_VAGINA)
 	if (Hair)
 		Hair.set_color(n_hair_color, n_natural_color, n_dye_color)
+	if (Vagina)
+		if (Vagina.accessory_type == /datum/sprite_accessory/vagina/hairy)
+			set_organ_slot_color(ORGAN_SLOT_VAGINA, n_hair_color)
 	if (update)
 		update_hair()
 
@@ -887,5 +904,12 @@
 	var/datum/bodypart_feature/hair/facial/Facial = get_bodypart_feature_of_slot(BODYPART_FEATURE_FACIAL_HAIR)
 	if (Facial)
 		Facial.set_gradient(n_natural_gradient, n_dye_gradient)
+	if (update)
+		update_hair()
+
+/mob/living/carbon/human/proc/set_chest_hair_color(n_hair_color, n_natural_color, n_dye_color, update = TRUE)
+	var/datum/bodypart_feature/hair/chest/Hair = get_bodypart_feature_of_slot(BODYPART_FEATURE_CHEST_HAIR)
+	if (Hair)
+		Hair.set_color(n_hair_color, n_natural_color, n_dye_color)
 	if (update)
 		update_hair()

@@ -4,22 +4,15 @@
 /datum/species/halfling/lightfoot
 	name = "Halfling"
 	id = "halflingl"
-	desc = "<b>Dwarf</b><br>\
-	Dwarves are a peoples defined by their relentless dedication. \
-	From a young age, many are drawn to a single skill, an art, or a craft, \
-	and once that passion takes root, it becomes their world. \
-	This obsession often shapes their identity, and their days are measured not by time \
-	but by the progress they make in perfecting their craft. \
-	It is this unwavering tenacity, this single-mindedness, that marks them as a race \
-	of tireless builders, creators, and warriors, forever bound to the pursuits they choose \
-	with unshakable resolve.<br><br>\
-	When the tide of necromantic magic swept across the world, the dwarves struggled to adapt, \
-	they were too rooted in tradition, their minds too locked into the repetition of their chosen paths, \
-	to pivot quickly or effectively. They sought to confront the new threat with the same tools \
-	and tactics that had worked for centuries, unable to break from their rigid approaches. \
-	In the aftermath, many dwarves, unable to reclaim their lost homes or rebuild what was shattered, \
-	sought refuge among the humans.<br><br>\
-	+1 Constitution."
+	desc = "<b>Halfling</b><br>\
+	Half as tall, twice as brave. Halflings are a race which greatly resemble the humens \
+	of the realm and indeed their hillocks and burrows can usually be found within or near \
+	humen settlements. Aside from their dimunitive statures, halflings sport large, round ears \
+	and a great love of festivities and music, being jovial yet stubborn creatures. \
+	Halflings have uncanny luck and a knack for cloak-and-dagger. Fortune tends to favor them, \
+	whether it be found through happenstance or in the purses of passers-by. Like the dwarves, they \
+	are highly fond of drink though they can hold their liquor nowhere near as well.<br><br> \
+	+2 Fortune, -1 Consitution, -1 Strength."
 
 	skin_tone_wording = "Ancestry"
 
@@ -46,16 +39,16 @@
 	offset_features = list(
 		OFFSET_ID = list(0,0), OFFSET_GLOVES = list(0,-4), OFFSET_WRISTS = list(0,-5),\
 		OFFSET_CLOAK = list(0,0), OFFSET_FACEMASK = list(0,-5), OFFSET_HEAD = list(0,-5), \
-		OFFSET_FACE = list(0,-5), OFFSET_BELT = list(0,-5), OFFSET_BACK = list(0,-5), \
+		OFFSET_FACE = list(0,-5), OFFSET_BELT = list(0,-4), OFFSET_BACK = list(0,-5), \
 		OFFSET_NECK = list(0,-5), OFFSET_MOUTH = list(0,-5), OFFSET_PANTS = list(0,0), \
 		OFFSET_SHIRT = list(0,0), OFFSET_ARMOR = list(0,0), OFFSET_HANDS = list(0,-5), \
 		OFFSET_ID_F = list(0,-5), OFFSET_GLOVES_F = list(0,-5), OFFSET_WRISTS_F = list(0,-6), OFFSET_HANDS_F = list(0,-6), \
 		OFFSET_CLOAK_F = list(0,-1), OFFSET_FACEMASK_F = list(0,-6), OFFSET_HEAD_F = list(0,-6), \
-		OFFSET_FACE_F = list(0,-6), OFFSET_BELT_F = list(0,-5), OFFSET_BACK_F = list(0,-5), \
+		OFFSET_FACE_F = list(0,-6), OFFSET_BELT_F = list(0,-4), OFFSET_BACK_F = list(0,-6), \
 		OFFSET_NECK_F = list(0,-6), OFFSET_MOUTH_F = list(0,-6), OFFSET_PANTS_F = list(0,0), \
 		OFFSET_SHIRT_F = list(0,-1), OFFSET_ARMOR_F = list(0,-1), OFFSET_UNDIES = list(0,-4), OFFSET_UNDIES_F = list(0,-4), \
 		)
-	race_bonus = list(STAT_INTELLIGENCE = 1, STAT_CONSTITUTION = -1)
+	race_bonus = list(STAT_FORTUNE = 2, STAT_CONSTITUTION = -1, STAT_STRENGTH = -1)
 	enflamed_icon = "widefire"
 	organs = list(
 		ORGAN_SLOT_BRAIN = /obj/item/organ/brain,
