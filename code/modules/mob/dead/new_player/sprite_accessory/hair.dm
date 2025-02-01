@@ -1297,6 +1297,25 @@
 	name = "Sideburns (Mutton Chops)"
 	icon_state = "mutton"
 
+/datum/sprite_accessory/hair/chest
+	abstract_type = /datum/sprite_accessory/hair/chest
+	icon = 'icons/mob/sprite_accessory/hair/human_chest_hair.dmi'
+
+/datum/sprite_accessory/hair/chest/is_visible(obj/item/organ/organ, obj/item/bodypart/bodypart, mob/living/carbon/owner)
+	return is_human_part_visible(owner, HIDEJUMPSUIT)
+
+/datum/sprite_accessory/hair/chest/shaved
+	name = "Shaved"
+	icon_state = null
+
+/datum/sprite_accessory/hair/chest/full
+	name = "Full"
+	icon_state = "full"
+
+/datum/sprite_accessory/hair/chest/dwarf
+	name = "Full (Dwarf)"
+	icon_state = "dwarf_full"
+
 /datum/sprite_accessory/hair/head/vox
 	abstract_type = /datum/sprite_accessory/hair/head/vox
 	icon = 'icons/mob/sprite_accessory/hair/vox_hair.dmi'

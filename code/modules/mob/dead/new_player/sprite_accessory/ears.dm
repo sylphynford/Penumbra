@@ -300,6 +300,16 @@
 /datum/sprite_accessory/ears/human
 	name = "Human"
 	icon_state = "human"
+/datum/sprite_accessory/ears/gnome
+	name = "Gnome"
+	icon = 'icons/mob/sprite_accessory/gnome.dmi'
+	icon_state = "gnome"
+	color_key_defaults = list(KEY_SKIN_COLOR)
+
+/datum/sprite_accessory/ears/halfling
+	name = "Halfling"
+	icon = 'icons/mob/sprite_accessory/halfling.dmi'
+	icon_state = "halfling"
 	color_key_defaults = list(KEY_SKIN_COLOR)
 
 /datum/sprite_accessory/ears/halforc

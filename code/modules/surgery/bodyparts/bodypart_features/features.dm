@@ -31,6 +31,11 @@
 	feature_slot = BODYPART_FEATURE_FACIAL_HAIR
 	body_zone = BODY_ZONE_HEAD
 
+/datum/bodypart_feature/hair/chest
+	name = "Chest Hair"
+	feature_slot = BODYPART_FEATURE_CHEST_HAIR
+	body_zone = BODY_ZONE_CHEST
+
 /datum/bodypart_feature/face_detail
 	name = "Face Detail"
 	feature_slot = BODYPART_FEATURE_FACE_DETAIL
