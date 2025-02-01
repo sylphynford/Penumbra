@@ -167,6 +167,14 @@
 	name = "wood elf ears"
 	accessory_type = /datum/sprite_accessory/ears/elfw
 
+/obj/item/organ/ears/gnome
+	name = "gnome ears"
+	accessory_type = /datum/sprite_accessory/ears/gnome
+
+/obj/item/organ/ears/halfling
+	name = "halfling ears"
+	accessory_type = /datum/sprite_accessory/ears/halfling
+
 /obj/item/organ/ears/tiefling
 	name = "tiefling ears"
 	accessory_type = /datum/sprite_accessory/ears/elfw

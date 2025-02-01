@@ -1,8 +1,8 @@
 /mob/living/carbon/human/proc/get_hair_color()
 	var/datum/bodypart_feature/hair/feature = get_bodypart_feature_of_slot(BODYPART_FEATURE_HAIR)
 	if(!feature)
-		return "FFFFFF"
-	return feature.hair_color
+		return "#FFFFFF"
+	return feature.accessory_colors
 
 /mob/living/carbon/human/proc/get_facial_hair_color()
 	var/datum/bodypart_feature/hair/feature = get_bodypart_feature_of_slot(BODYPART_FEATURE_FACIAL_HAIR)

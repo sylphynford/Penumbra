@@ -529,14 +529,16 @@ GLOBAL_LIST_EMPTY(roundstart_races)
 
 
 #ifdef MATURESERVER
+/*
 		if(H.dna.species.hairyness)
 			var/mutable_appearance/bodyhair_overlay
 			if(H.gender == MALE)
 				bodyhair_overlay = mutable_appearance(H.dna.species.limbs_icon_m, "[H.dna.species.hairyness]", -BODY_LAYER)
 			else
 				bodyhair_overlay = mutable_appearance(H.dna.species.limbs_icon_f, "[H.dna.species.hairyness]", -BODY_LAYER)
-			bodyhair_overlay.color = "#" + H.hair_color
+			bodyhair_overlay.color = H.get_hair_color()
 			standing += bodyhair_overlay
+*/
 #endif
 
 	if(standing.len)

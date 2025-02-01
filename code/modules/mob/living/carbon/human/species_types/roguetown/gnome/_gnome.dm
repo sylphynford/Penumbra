@@ -7,7 +7,7 @@
 	max_age = 200
 	languages = list(
 		/datum/language/common,
-		/datum/language/dwarvish
+		/datum/language/elvish
 	)
 
 /datum/species/gnome/on_species_gain(mob/living/carbon/C, datum/species/old_species)
@@ -16,7 +16,7 @@
 
 /datum/species/gnome/after_creation(mob/living/carbon/C)
 	..()
-	to_chat(C, "<span class='info'>I can speak Dwarfish with ,d before my speech.</span>")
+	to_chat(C, "<span class='info'>I can speak Elfish with ,e before my speech.</span>")
 
 /datum/species/gnome/on_species_loss(mob/living/carbon/C)
 	. = ..()

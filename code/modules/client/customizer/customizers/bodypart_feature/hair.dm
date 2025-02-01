@@ -88,6 +88,8 @@
 
 /datum/customizer_entry/hair/facial
 
+/datum/customizer_entry/hair/chest
+
 /datum/customizer/bodypart_feature/hair/head
 	abstract_type = /datum/customizer/bodypart_feature/hair/head
 	name = "Hair"
@@ -104,11 +106,24 @@
 /datum/customizer/bodypart_feature/hair/facial/is_allowed(datum/preferences/prefs)
 	return (prefs.gender == MALE)
 
+/datum/customizer/bodypart_feature/hair/chest
+	abstract_type = /datum/customizer/bodypart_feature/hair/chest
+	name = "Chest Hair"
+
+/datum/customizer/bodypart_feature/hair/chest/is_allowed(datum/preferences/prefs)
+	return (prefs.gender == MALE)
+
 /datum/customizer_choice/bodypart_feature/hair/facial
 	abstract_type = /datum/customizer_choice/bodypart_feature/hair/facial
 	name = "Facial Hair"
 	feature_type = /datum/bodypart_feature/hair/facial
 	customizer_entry_type = /datum/customizer_entry/hair/facial
+
+/datum/customizer_choice/bodypart_feature/hair/chest
+	abstract_type = /datum/customizer_choice/bodypart_feature/hair/chest
+	name = "Chest Hair"
+	feature_type = /datum/bodypart_feature/hair/chest
+	customizer_entry_type = /datum/customizer_entry/hair/chest
 
 /datum/customizer/bodypart_feature/hair/head/humanoid
 	customizer_choices = list(/datum/customizer_choice/bodypart_feature/hair/head/humanoid)
@@ -400,7 +415,6 @@
 /datum/customizer/bodypart_feature/hair/facial/humanoid
 	customizer_choices = list(/datum/customizer_choice/bodypart_feature/hair/facial/humanoid)
 	allows_disabling = TRUE
-	default_disabled = TRUE
 
 /datum/customizer_choice/bodypart_feature/hair/facial/humanoid
 	sprite_accessories = list(
@@ -456,7 +470,7 @@
 
 /datum/customizer_choice/bodypart_feature/hair/facial/humanoid/on_randomize_entry(datum/customizer_entry/entry, datum/preferences/prefs)
 	var/datum/customizer_entry/hair/hair_entry = entry
-	var/color = pick(HAIR_COLOR_LIST)
+	var/color = prefs.get_hair_color()
 	hair_entry.hair_color = color
 
 /datum/customizer/bodypart_feature/hair/facial/humanoid/shaved_default
@@ -464,6 +478,60 @@
 
 /datum/customizer_choice/bodypart_feature/hair/facial/humanoid/shaved_default/get_random_accessory(datum/customizer_entry/entry, datum/preferences/prefs)
 	return /datum/sprite_accessory/hair/facial/shaved
+
+/datum/customizer/bodypart_feature/hair/chest/humanoid
+	customizer_choices = list(/datum/customizer_choice/bodypart_feature/hair/chest/humanoid)
+	allows_disabling = TRUE
+
+/datum/customizer_choice/bodypart_feature/hair/chest/humanoid
+	sprite_accessories = list(
+		/datum/sprite_accessory/hair/chest/shaved,
+		/datum/sprite_accessory/hair/chest/full,
+		)
+
+/datum/customizer_choice/bodypart_feature/hair/chest/humanoid/get_random_accessory(datum/customizer_entry/entry, datum/preferences/prefs)
+	if(prefs.gender == MALE)
+		return pick(sprite_accessories)
+	else
+		return /datum/sprite_accessory/hair/chest/shaved
+
+/datum/customizer_choice/bodypart_feature/hair/chest/humanoid/on_randomize_entry(datum/customizer_entry/entry, datum/preferences/prefs)
+	var/datum/customizer_entry/hair/hair_entry = entry
+	var/color = prefs.get_hair_color()
+	hair_entry.hair_color = color
+
+/datum/customizer/bodypart_feature/hair/chest/humanoid/shaved_default
+	customizer_choices = list(/datum/customizer_choice/bodypart_feature/hair/chest/humanoid/shaved_default)
+
+/datum/customizer_choice/bodypart_feature/hair/chest/humanoid/shaved_default/get_random_accessory(datum/customizer_entry/entry, datum/preferences/prefs)
+	return /datum/sprite_accessory/hair/chest/shaved
+
+/datum/customizer/bodypart_feature/hair/chest/dwarf
+	customizer_choices = list(/datum/customizer_choice/bodypart_feature/hair/chest/dwarf)
+	allows_disabling = TRUE
+
+/datum/customizer_choice/bodypart_feature/hair/chest/dwarf
+	sprite_accessories = list(
+		/datum/sprite_accessory/hair/chest/shaved,
+		/datum/sprite_accessory/hair/chest/dwarf,
+		)
+
+/datum/customizer_choice/bodypart_feature/hair/chest/dwarf/get_random_accessory(datum/customizer_entry/entry, datum/preferences/prefs)
+	if(prefs.gender == MALE)
+		return pick(sprite_accessories)
+	else
+		return /datum/sprite_accessory/hair/chest/shaved
+
+/datum/customizer_choice/bodypart_feature/hair/chest/dwarf/on_randomize_entry(datum/customizer_entry/entry, datum/preferences/prefs)
+	var/datum/customizer_entry/hair/hair_entry = entry
+	var/color = prefs.get_hair_color()
+	hair_entry.hair_color = color
+
+/datum/customizer/bodypart_feature/hair/chest/dwarf/shaved_default
+	customizer_choices = list(/datum/customizer_choice/bodypart_feature/hair/chest/dwarf/shaved_default)
+
+/datum/customizer_choice/bodypart_feature/hair/chest/dwarf/shaved_default/get_random_accessory(datum/customizer_entry/entry, datum/preferences/prefs)
+	return /datum/sprite_accessory/hair/chest/shaved
 
 /datum/customizer/bodypart_feature/hair/head/humanoid/vulpkian
 	customizer_choices = list(/datum/customizer_choice/bodypart_feature/hair/head/humanoid/vulpkian)
