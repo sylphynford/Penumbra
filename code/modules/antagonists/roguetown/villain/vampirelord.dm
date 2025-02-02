@@ -46,10 +46,13 @@ GLOBAL_LIST_EMPTY(vampire_objects)
 	var/cache_second_color
 	var/cache_hair
 	var/cache_facial
+	var/cache_chest
 	var/cache_hair_nat
 	var/cache_facial_nat
+	var/cache_chest_nat
 	var/cache_hair_dye
 	var/cache_facial_dye
+	var/cache_chest_dye
 	var/obj/effect/proc_holder/spell/targeted/shapeshift/bat/batform //attached to the datum itself to avoid cloning memes, and other duplicates
 	var/obj/effect/proc_holder/spell/targeted/shapeshift/gaseousform/gas
 	var/minions_raised = 0 // Track number of successful raises
@@ -383,6 +386,12 @@ GLOBAL_LIST_EMPTY(vampire_objects)
 	if (Facial)
 		cache_facial = Facial.accessory_colors
 		cache_facial_nat = Facial.natural_color
+		cache_facial_dye = Facial.hair_dye_color
+	var/datum/bodypart_feature/hair/chest/Chest = V.get_bodypart_feature_of_slot(BODYPART_FEATURE_CHEST_HAIR)
+	if (Chest)
+		cache_chest = Chest.accessory_colors
+		cache_chest_nat = Chest.natural_color
+		cache_chest_dye = Chest.hair_dye_color
 	if (MUTCOLORS in V.dna.species.species_traits)
 		cache_snout_color = V.get_organ_slot_color(ORGAN_SLOT_SNOUT)
 		cache_frill_color = V.get_organ_slot_color(ORGAN_SLOT_FRILLS)

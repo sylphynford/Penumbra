@@ -19,6 +19,8 @@
 	/datum/species/demihuman,\
 	/datum/species/halforc,\
 	/datum/species/goblinp,\
+	/datum/species/gnome/woodland,\
+	/datum/species/halfling/lightfoot,\
 )
 
 #define RACES_CHURCH list(\
@@ -38,6 +40,8 @@
 	/datum/species/anthromorphsmall,\
 	/datum/species/demihuman,\
 	/datum/species/goblinp,\
+	/datum/species/gnome/woodland,\
+	/datum/species/halfling/lightfoot,\
 )
 
 #define RACES_ALLPLUSKOBOLD list(\
@@ -61,6 +65,8 @@
 	/datum/species/demihuman,\
 	/datum/species/halforc,\
 	/datum/species/goblinp,\
+	/datum/species/gnome/woodland,\
+	/datum/species/halfling/lightfoot,\
 )
 
 #define RACES_RESPECTED \
@@ -72,7 +78,9 @@
 	/datum/species/lupian,\
 	/datum/species/vulpkanin,\
 	/datum/species/moth,\
-	/datum/species/dracon,
+	/datum/species/dracon,\
+	/datum/species/gnome/woodland,\
+	/datum/species/halfling/lightfoot,
 
 #define RACES_TOLERATED \
 	/datum/species/elf/dark,\
@@ -103,6 +111,8 @@
 	/datum/species/elf/wood,\
 	/datum/species/dwarf/mountain,\
 	/datum/species/demihuman,\
+	/datum/species/gnome/woodland,\
+	/datum/species/halfling/lightfoot,\
 )
 
 #define CLOTHED_RACES_TYPES list(\
@@ -126,6 +136,8 @@
 	/datum/species/halforc,\
 	/datum/species/kobold,\
 	/datum/species/goblinp,\
+	/datum/species/gnome/woodland,\
+	/datum/species/halfling/lightfoot,\
 )
 // Non-dwarf non-kobold non-goblin mostly
 #define NON_DWARVEN_RACE_TYPES list(\
