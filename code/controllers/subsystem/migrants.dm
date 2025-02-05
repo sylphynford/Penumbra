@@ -7,11 +7,14 @@ SUBSYSTEM_DEF(migrants)
 	var/time_until_next_wave = 10 SECONDS
 	var/wave_timer = 0
 
+	var/special_wave_type = null
+
 	var/time_between_waves = 10 SECONDS
 	var/time_between_fail_wave = 90 SECONDS
 	var/wave_wait_time = 30 SECONDS
 
 	var/list/spawned_waves = list()
+	var/conditional_wave
 	var/list/role_assignments = list() // Track assignments per role type
 	var/consecutive_failures = 0 // Track consecutive failed attempts
 
@@ -35,6 +38,7 @@ SUBSYSTEM_DEF(migrants)
 
 /datum/controller/subsystem/migrants/proc/process_current_wave(dt)
 	wave_timer -= dt
+
 	if(wave_timer > 0)
 		return
 	// Try and spawn wave
@@ -58,7 +62,7 @@ SUBSYSTEM_DEF(migrants)
 	// Check if we need to keep the wave going for unfilled roles
 	var/datum/migrant_wave/wave = MIGRANT_WAVE(current_wave)
 	var/total_roles = wave.get_roles_amount()
-	
+
 	// Change wave if all roles are filled or we've had 2 consecutive failures
 	if(total_roles <= 0 || consecutive_failures >= 2)
 		consecutive_failures = 0
@@ -73,7 +77,7 @@ SUBSYSTEM_DEF(migrants)
 		time_until_next_wave = time_between_waves
 	else
 		// Keep the wave going for remaining roles
-		
+
 		wave_timer = time_between_fail_wave
 		role_assignments.Cut() // Reset role assignments for next attempt
 		update_ui() // Update UI to show remaining available roles
@@ -87,7 +91,7 @@ SUBSYSTEM_DEF(migrants)
 		var/amount = wave.roles[role_type]
 		for(var/i in 1 to amount)
 			assignments += new /datum/migrant_assignment(role_type)
-	/// Shuffle assignments so role rolling is not consistent  
+	/// Shuffle assignments so role rolling is not consistent
 	assignments = shuffle(assignments)
 
 	var/list/active_migrants = get_active_migrants()
@@ -103,7 +107,7 @@ SUBSYSTEM_DEF(migrants)
 			break
 		if(assignment.client)
 			continue
-			
+
 		var/list/priority = get_priority_players(active_migrants, assignment.role_type)
 		if(!length(priority))
 			continue
@@ -111,7 +115,7 @@ SUBSYSTEM_DEF(migrants)
 		// Track assignments per role type
 		if(!role_assignments[assignment.role_type])
 			role_assignments[assignment.role_type] = list()
-			
+
 		// Shuffle and pick randomly from valid candidates
 		priority = shuffle(priority)
 		var/slots_available = wave.roles[assignment.role_type] - length(role_assignments[assignment.role_type])
@@ -192,6 +196,8 @@ SUBSYSTEM_DEF(migrants)
 
 	message_admins("MIGRANTS: Spawned wave: [wave.name] (players: [spawned_count]) at [ADMIN_VERBOSEJMP(spawn_location)]")
 
+	if(wave.type == special_wave_type)
+		special_wave_type = null
 	unset_all_active_migrants()
 
 	return TRUE
@@ -336,6 +342,11 @@ SUBSYSTEM_DEF(migrants)
 	time_until_next_wave = time_between_fail_wave
 
 /datum/controller/subsystem/migrants/proc/roll_wave()
+
+	// Special waves take priority.
+	if(special_wave_type)
+		return special_wave_type
+
 	var/list/available_weighted_waves = list()
 
 	var/active_migrants = get_active_migrant_amount()
@@ -344,6 +355,8 @@ SUBSYSTEM_DEF(migrants)
 	for(var/wave_type in GLOB.migrant_waves)
 		var/datum/migrant_wave/wave = MIGRANT_WAVE(wave_type)
 		if(!wave.can_roll)
+			continue
+		if(wave.unique)
 			continue
 		if(!isnull(wave.min_active) && active_migrants < wave.min_active)
 			continue

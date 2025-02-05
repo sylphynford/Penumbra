@@ -30,12 +30,18 @@
 	var/spawn_on_location = TRUE
 	/// Original role counts that we can reset to
 	var/list/original_roles = list()
+	//  Should this be deleted after?
+	var/unique = FALSE
 
 /datum/migrant_wave/proc/get_roles_amount()
 	var/amount = 0
 	for(var/role_type in roles)
 		amount += roles[role_type]
 	return amount
+
+// Used by late party. Return true if condition is met.
+/datum/migrant_wave/proc/check_condition()
+	return FALSE
 
 /datum/migrant_wave/New()
 	. = ..()
